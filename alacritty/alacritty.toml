@@ -1,0 +1,11 @@
+[general]
+import = [
+    "~/.config/alacritty/themes/themes/dawnfox.toml", 
+]
+
+[window]
+option_as_alt =  "Both"
+
+[font]
+size = 14.0
+normal = { family = "Explex Console NF", style = "Regular" }
