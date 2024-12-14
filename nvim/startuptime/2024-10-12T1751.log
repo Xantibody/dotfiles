@@ -1,0 +1,296 @@
+Extra options: []
+Measured: 10 times
+
+Total Average: 69.171800 msec
+Total Max:     76.957000 msec
+Total Min:     61.075000 msec
+
+  AVERAGE       MAX       MIN
+------------------------------
+63.635900 71.740000 55.593000: /Users/usr0200777/.config/nvim/init.lua
+44.877100 47.354000 42.417000: require('config.lazy')
+18.739800 24.363000 11.404000: require('config.options')
+ 4.496500  5.291000  3.820000: require('telescope._extensions.smart_open')
+ 3.997900  4.672000  3.368000: require('telescope._extensions.smart_open.picker')
+ 2.301300  2.707000  1.895000: require('telescope.pickers')
+ 2.260600  6.260000  0.086000: require('lspconfig.util')
+ 2.113300  3.003000  1.226000: require('telescope.config')
+ 2.094200  4.762000  0.246000: require('telescope')
+ 1.550800  1.931000  1.330000: require('fidget')
+ 1.410200  1.724000  1.277000: /Users/usr0200777/.local/share/nvim/lazy/gruvbox.nvim/colors/gruvbox.lua
+ 1.373800  4.255000  0.869000: expanding arguments
+ 1.295100  1.659000  1.113000: require('vim.lsp')
+ 1.142100  1.783000  0.823000: /Users/usr0200777/.local/share/nvim/lazy/diffview.nvim/plugin/diffview.lua
+ 1.082200  1.703000  0.781000: require('diffview.bootstrap')
+ 1.057400  1.629000  0.697000: /Users/usr0200777/.local/share/nvim/lazy/rest.nvim/plugin/rest-nvim.lua
+ 1.023700  1.376000  0.738000: require('fidget.progress')
+ 1.001800  1.084000  0.932000: reading ShaDa
+ 0.919300  1.420000  0.675000: /Users/usr0200777/.local/share/nvim/lazy/rest.nvim/ftdetect/http.lua
+ 0.908200  1.173000  0.783000: require('sqlite.db')
+ 0.899000  1.502000  0.510000: require('telescope._extensions.smart_open.display.make_display')
+ 0.872700  1.383000  0.640000: require('vim.filetype')
+ 0.841400  1.167000  0.649000: require('mason')
+ 0.803800  0.886000  0.709000: BufEnter autocommands
+ 0.801100  1.216000  0.626000: require('telescope.actions')
+ 0.740600  0.872000  0.677000: require('sqlite.defs')
+ 0.690200  1.207000  0.346000: require('nvim-web-devicons')
+ 0.661500  1.090000  0.469000: require('plenary.async')
+ 0.603500  1.086000  0.366000: require('vim.treesitter')
+ 0.580100  0.961000  0.413000: require('diffview.logger')
+ 0.576900  0.904000  0.348000: require('telescope.sorters')
+ 0.555200  0.964000  0.376000: require('hardtime')
+ 0.551800  0.614000  0.512000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/matchit.vim
+ 0.547800  0.671000  0.468000: require('lualine')
+ 0.544100  0.571000  0.496000: require('lazy.view.commands')
+ 0.532400  1.116000  0.275000: require('lsp-file-operations')
+ 0.510500  0.998000  0.313000: require('vim.treesitter.languagetree')
+ 0.466100  0.675000  0.327000: require('vim.lsp.protocol')
+ 0.463100  0.576000  0.426000: /Users/usr0200777/.local/share/nvim/lazy/vim-fugitive/plugin/fugitive.vim
+ 0.463100  0.493000  0.421000: require('lazy.manage')
+ 0.459000  0.902000  0.056000: require('plenary.strings')
+ 0.440700  0.618000  0.364000: require('telescope._extensions.smart_open.finder.finder')
+ 0.436400  0.477000  0.390000: require('vim._defaults')
+ 0.432400  0.682000  0.318000: require('fidget.progress.handle')
+ 0.413500  0.493000  0.336000: require('mason-core.platform')
+ 0.393300  0.456000  0.360000: require('lazy.core.loader')
+ 0.387900  0.590000  0.198000: require('nvim-web-devicons.icons-default')
+ 0.374800  0.574000  0.241000: require('lspconfig')
+ 0.370100  0.407000  0.331000: require('lazy.manage.runner')
+ 0.367400  0.608000  0.288000: require('mason-registry')
+ 0.366000  0.595000  0.271000: require('fidget.notification')
+ 0.335500  0.686000  0.200000: require('vim.treesitter.query')
+ 0.334200  0.458000  0.174000: require('plenary.path')
+ 0.331500  0.629000  0.231000: require('telescope.utils')
+ 0.331300  0.345000  0.315000: inits 3
+ 0.329500  0.528000  0.231000: require('plenary.async.async')
+ 0.317600  0.510000  0.148000: require('lspconfig.configs.jdtls')
+ 0.309700  0.341000  0.280000: sourcing vimrc file(s)
+ 0.300600  0.348000  0.263000: require('lazy')
+ 0.291200  0.468000  0.188000: require('lspconfig.configs')
+ 0.282900  0.339000  0.240000: /Users/usr0200777/.local/share/nvim/lazy/denops.vim/plugin/denops.vim
+ 0.274300  0.367000  0.229000: require('gruvbox')
+ 0.270900  0.569000  0.155000: require('diffview.async')
+ 0.269500  0.483000  0.190000: require('fidget.progress.display')
+ 0.266900  0.488000  0.154000: require('which-key')
+ 0.265600  0.842000  0.095000: require('plenary.log')
+ 0.263200  0.950000  0.059000: require('lsp-file-operations.log')
+ 0.259900  0.442000  0.191000: require('plenary.popup')
+ 0.259600  0.475000  0.185000: require('plenary.async.tests')
+ 0.255900  0.314000  0.196000: require('telescope._extensions.smart_open.dbclient')
+ 0.251800  0.314000  0.229000: locale set
+ 0.249400  0.343000  0.201000: require('hardtime.util')
+ 0.248200  0.286000  0.218000: require('lazy.core.plugin')
+ 0.241300  0.440000  0.112000: require('fidget.progress.lsp')
+ 0.239900  0.417000  0.178000: require('sqlite.parser')
+ 0.212700  0.271000  0.132000: require('rest-nvim.autocmds')
+ 0.206000  0.294000  0.172000: require('vim.lsp.util')
+ 0.205800  0.281000  0.163000: require('mason.api.command')
+ 0.204300  0.397000  0.141000: require('plenary.async.util')
+ 0.198500  0.267000  0.165000: require('lazy.manage.task')
+ 0.198400  0.331000  0.143000: require('vim.lsp.handlers')
+ 0.193900  0.240000  0.101000: require('vim.diagnostic')
+ 0.193000  0.240000  0.170000: require('smart-open.matching.multithread.create')
+ 0.192500  0.211000  0.179000: init lua interpreter
+ 0.190700  0.398000  0.141000: require('fidget.integration')
+ 0.183500  0.343000  0.136000: require('mason-core.fs')
+ 0.179200  0.425000  0.104000: require('plenary.job')
+ 0.177900  0.284000  0.132000: require('plenary.vararg')
+ 0.177400  0.197000  0.166000: /Users/usr0200777/.local/share/nvim/lazy/auto-pairs/plugin/auto-pairs.vim
+ 0.173100  0.229000  0.141000: require('mason-lspconfig')
+ 0.166000  0.237000  0.055000: require('telescope.log')
+ 0.165600  0.202000  0.142000: require('lazy.core.meta')
+ 0.164500  0.199000  0.130000: require('mason-lspconfig.mappings.server')
+ 0.163000  0.417000  0.059000: require('sqlite.stmt')
+ 0.160800  0.347000  0.104000: require('mason-lspconfig.api.command')
+ 0.157100  0.174000  0.148000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/syntax/syntax.vim
+ 0.154400  0.175000  0.141000: inits 1
+ 0.149400  0.199000  0.111000: require('lazy.stats')
+ 0.146100  0.224000  0.052000: require('lazy.core.handler.ft')
+ 0.142600  0.152000  0.132000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/netrwPlugin.vim
+ 0.142200  0.266000  0.096000: require('smart-open')
+ 0.141200  0.223000  0.122000: require('vim.loader')
+ 0.140500  0.257000  0.096000: require('fidget.spinner')
+ 0.140100  0.266000  0.090000: require('plenary.async.control')
+ 0.135100  0.289000  0.098000: require('fidget.notification.model')
+ 0.133100  0.139000  0.127000: init highlight
+ 0.126400  0.185000  0.099000: require('cmp_nvim_lsp')
+ 0.125300  0.295000  0.101000: require('telescope.actions.set')
+ 0.124500  0.178000  0.099000: require('vim.lsp._changetracking')
+ 0.122600  0.232000  0.094000: require('telescope._extensions.smart_open.file_scanner')
+ 0.114600  0.248000  0.062000: require('which-key.config')
+ 0.114000  0.202000  0.080000: /Users/usr0200777/.local/share/nvim/lazy/telescope.nvim/plugin/telescope.lua
+ 0.111400  0.151000  0.069000: require('vim.lsp.rpc')
+ 0.111300  0.185000  0.092000: require('hardtime.command')
+ 0.111200  0.175000  0.087000: require('plenary.vararg.rotate')
+ 0.106600  0.134000  0.080000: require('diffview.utils')
+ 0.105900  0.194000  0.088000: require('telescope.entry_manager')
+ 0.105600  0.135000  0.089000: require('mason-core.functional.function')
+ 0.105600  0.147000  0.072000: require('mason-core.functional')
+ 0.105000  0.148000  0.068000: require('vim.lsp.buf')
+ 0.103100  0.120000  0.092000: require('vim._init_packages')
+ 0.102400  0.243000  0.046000: require('vim.treesitter.language')
+ 0.102400  0.133000  0.090000: require('mason-lspconfig.lspconfig_hook')
+ 0.102000  0.125000  0.090000: require('telescope.pickers.entry_display')
+ 0.096500  0.130000  0.087000: require('vim.uri')
+ 0.095200  0.125000  0.067000: require('vim.lsp.log')
+ 0.094800  0.177000  0.023000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/filetype.lua
+ 0.093900  0.152000  0.076000: require('hardtime.log')
+ 0.090600  0.111000  0.080000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim
+ 0.089900  0.134000  0.061000: require('fidget.commands')
+ 0.089200  0.105000  0.072000: require('lazy.core.util')
+ 0.089100  0.191000  0.047000: require('sqlite.utils')
+ 0.088200  0.145000  0.059000: require('telescope.mappings')
+ 0.087900  0.159000  0.057000: require('sqlite.json')
+ 0.086400  0.113000  0.047000: require('plenary.bit')
+ 0.086200  0.229000  0.045000: require('diffview.ffi')
+ 0.085300  0.144000  0.061000: require('telescope._extensions.smart_open.display.format_filepath')
+ 0.083200  0.310000  0.044000: require('telescope.pickers.scroller')
+ 0.083200  0.128000  0.055000: require('lazy.core.fragments')
+ 0.083100  0.088000  0.078000: /Users/usr0200777/.local/share/nvim/lazy/denops.vim/autoload/denops.vim
+ 0.083000  0.150000  0.055000: require('vim.iter')
+ 0.082400  0.107000  0.072000: require('lazy.core.config')
+ 0.081800  0.121000  0.065000: require('lazy.pkg')
+ 0.080900  0.246000  0.043000: require('plenary.compat')
+ 0.080600  0.108000  0.063000: require('lazy.core.handler.keys')
+ 0.080300  0.136000  0.055000: require('fidget.notification.window')
+ 0.080200  0.147000  0.057000: require('vim.version')
+ 0.079300  0.137000  0.053000: require('lazy.core.handler.event')
+ 0.078600  0.137000  0.052000: require('rest-nvim.commands')
+ 0.078600  0.108000  0.060000: require('hardtime.config')
+ 0.077500  0.153000  0.055000: require('fidget.spinner.patterns')
+ 0.077000  0.139000  0.046000: require('diffview.lazy')
+ 0.076200  0.109000  0.052000: require('telescope._extensions.smart_open.weights')
+ 0.076000  0.203000  0.043000: require('telescope.actions.state')
+ 0.075900  0.112000  0.053000: require('lualine_require')
+ 0.075400  0.138000  0.049000: require('fidget.logger')
+ 0.073900  0.128000  0.062000: require('vim.lsp.completion')
+ 0.073800  0.112000  0.060000: require('lualine.utils.mode')
+ 0.073300  0.264000  0.044000: require('fidget.integration.nvim-tree')
+ 0.072900  0.098000  0.055000: require('lazy.core.handler.cmd')
+ 0.072000  0.115000  0.050000: require('telescope._extensions.smart_open.buffers')
+ 0.071700  0.160000  0.045000: require('vim.treesitter._range')
+ 0.070600  0.151000  0.048000: require('plenary.window.border')
+ 0.069900  0.096000  0.048000: require('lspconfig.configs.ts_ls')
+ 0.069900  0.132000  0.047000: require('mason-core.async')
+ 0.069400  0.091000  0.051000: require('fidget.notification.view')
+ 0.069400  0.106000  0.052000: require('lazy.manage.process')
+ 0.068900  0.107000  0.054000: require('lspconfig.manager')
+ 0.068100  0.130000  0.043000: /Users/usr0200777/.local/share/nvim/lazy/nvim-lspconfig/plugin/lspconfig.lua
+ 0.067900  0.075000  0.062000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/matchparen.vim
+ 0.067800  0.084000  0.048000: require('mason-core.functional.table')
+ 0.067600  0.101000  0.054000: require('telescope._extensions.smart_open.history')
+ 0.067400  0.070000  0.062000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/gzip.vim
+ 0.067300  0.111000  0.044000: require('plenary.window')
+ 0.067200  0.122000  0.049000: require('diffview.oop')
+ 0.067200  0.150000  0.049000: require('sqlite.assert')
+ 0.067100  0.086000  0.055000: require('lazy.async')
+ 0.066800  0.141000  0.048000: require('fidget.poll')
+ 0.066500  0.149000  0.042000: require('mason-core.functional.number')
+ 0.066400  0.145000  0.044000: require('telescope.actions.utils')
+ 0.066100  0.108000  0.046000: require('plenary.functional')
+ 0.066000  0.104000  0.050000: require('mason-core.functional.list')
+ 0.065000  0.145000  0.043000: require('plenary.async.structs')
+ 0.064900  0.089000  0.046000: require('smart-open.util')
+ 0.064600  0.108000  0.043000: require('mason-core.functional.relation')
+ 0.064200  0.093000  0.053000: require('vim.highlight')
+ 0.064000  0.075000  0.058000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/rplugin.vim
+ 0.063200  0.110000  0.049000: require('lspconfig.configs.marksman')
+ 0.063100  0.092000  0.045000: require('mason-core.functional.string')
+ 0.062600  0.081000  0.052000: require('lazy.core.handler')
+ 0.062600  0.086000  0.051000: require('mason-core.log')
+ 0.062400  0.079000  0.053000: require('diffview.control')
+ 0.062200  0.094000  0.047000: require('diffview.events')
+ 0.062000  0.087000  0.049000: require('telescope._extensions')
+ 0.061200  0.118000  0.049000: event init
+ 0.061200  0.067000  0.058000: require('vim._editor')
+ 0.060800  0.095000  0.048000: require('lazy.terminal')
+ 0.060400  0.070000  0.051000: require('telescope._extensions.smart_open.default_config')
+ 0.060200  0.081000  0.045000: require('fidget.integration.xcodebuild-nvim')
+ 0.060000  0.095000  0.047000: require('lspconfig.configs.rust_analyzer')
+ 0.059700  0.115000  0.044000: require('vim.func._memoize')
+ 0.059500  0.077000  0.047000: require('lspconfig.async')
+ 0.059000  0.077000  0.048000: require('cmp_nvim_lsp.source')
+ 0.058700  0.083000  0.042000: require('plenary.errors')
+ 0.058600  0.082000  0.042000: require('mason-core.EventEmitter')
+ 0.058400  0.094000  0.044000: require('telescope.state')
+ 0.058300  0.091000  0.043000: require('telescope.deprecated')
+ 0.058000  0.144000  0.046000: require('telescope.actions.mt')
+ 0.057700  0.085000  0.046000: require('vim.lsp.sync')
+ 0.057200  0.085000  0.047000: require('lspconfig.configs.lua_ls')
+ 0.057000  0.084000  0.043000: require('smart-open.util.table')
+ 0.056800  0.112000  0.046000: require('lspconfig.configs.pylsp')
+ 0.056700  0.094000  0.043000: require('plenary.tbl')
+ 0.056100  0.076000  0.048000: require('mason-core.path')
+ 0.055400  0.089000  0.047000: require('lspconfig.configs.yamlls')
+ 0.055200  0.076000  0.042000: require('mason-core.optional')
+ 0.055000  0.090000  0.042000: require('fidget.options')
+ 0.054900  0.072000  0.047000: require('mason-registry.sources')
+ 0.054600  0.068000  0.047000: require('mason.settings')
+ 0.054600  0.091000  0.041000: require('mason-lspconfig.settings')
+ 0.054500  0.077000  0.044000: require('smart-open.util.combine_display')
+ 0.054100  0.100000  0.044000: require('telescope.pickers.highlights')
+ 0.054000  0.076000  0.045000: require('diffview.mock')
+ 0.053400  0.083000  0.041000: require('vim.func')
+ 0.053200  0.075000  0.044000: require('lspconfig.configs.bashls')
+ 0.052800  0.099000  0.042000: require('smart-open.actions')
+ 0.052800  0.059000  0.050000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/zipPlugin.vim
+ 0.052400  0.056000  0.048000: require('telescope.debounce')
+ 0.052300  0.123000  0.041000: require('telescope.pickers.multi')
+ 0.051800  0.078000  0.046000: require('telescope.config.resolve')
+ 0.051600  0.080000  0.041000: require('smart-open.entry.create')
+ 0.051600  0.078000  0.040000: require('mason-lspconfig.server_config_extensions')
+ 0.051600  0.061000  0.041000: require('sqlite')
+ 0.051500  0.101000  0.034000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/man.lua
+ 0.051100  0.083000  0.042000: require('telescope.pickers.window')
+ 0.051000  0.070000  0.043000: require('telescope.pickers.layout')
+ 0.050500  0.074000  0.041000: require('mason-core.async.uv')
+ 0.050500  0.086000  0.037000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/editorconfig.lua
+ 0.050100  0.110000  0.029000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/osc52.lua
+ 0.050100  0.082000  0.042000: require('mason-core.functional.data')
+ 0.049300  0.058000  0.045000: require('hardtime.report')
+ 0.049000  0.078000  0.042000: early init
+ 0.048900  0.077000  0.042000: opening buffers
+ 0.048200  0.053000  0.042000: require('mason-core.functional.logic')
+ 0.048200  0.085000  0.042000: require('smart-open.matching.multithread.process')
+ 0.048100  0.059000  0.043000: require('telescope.algos.linked_list')
+ 0.047600  0.070000  0.041000: require('smart-open.util.splitlines')
+ 0.047600  0.097000  0.034000: /Users/usr0200777/.local/share/nvim/lazy/which-key.nvim/plugin/which-key.lua
+ 0.047500  0.075000  0.041000: require('smart-open.util.virtual_name')
+ 0.047400  0.069000  0.040000: require('mason-lspconfig.notify')
+ 0.047100  0.060000  0.042000: require('plenary.popup.utils')
+ 0.043400  0.046000  0.041000: require('telescope.from_entry')
+ 0.043000  0.097000  0.030000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/tohtml.lua
+ 0.042700  0.046000  0.040000: require('smart-open.util.priority_insert')
+ 0.042300  0.069000  0.033000: /Users/usr0200777/.local/share/nvim/lazy/cmp-nvim-lsp/after/plugin/cmp_nvim_lsp.lua
+ 0.037500  0.043000  0.035000: /Users/usr0200777/.local/share/nvim/lazy/vim-highlightedyank/plugin/highlightedyank.vim
+ 0.035800  0.040000  0.034000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/tarPlugin.vim
+ 0.029200  0.033000  0.026000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/syntax/synload.vim
+ 0.025500  0.030000  0.024000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/shada.vim
+ 0.024600  0.031000  0.022000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/ftplugin.vim
+ 0.021700  0.023000  0.021000: require('vim.shared')
+ 0.021600  0.059000  0.015000: require('vim.fs')
+ 0.020900  0.025000  0.019000: /Users/usr0200777/.local/share/nvim/lazy/denops.vim/plugin/denops/debug.vim
+ 0.020200  0.023000  0.017000: /Users/usr0200777/.local/share/nvim/lazy/vim-markdown/ftdetect/markdown.vim
+ 0.019000  0.028000  0.012000: require('ffi')
+ 0.017000  0.030000  0.014000: --- NVIM STARTED ---
+ 0.016800  0.018000  0.016000: require('vim._options')
+ 0.016600  0.019000  0.016000: require('vim.inspect')
+ 0.015100  0.022000  0.011000: /Users/usr0200777/.local/share/nvim/lazy/vim-be-good/plugin/vim-be-good.vim
+ 0.014500  0.016000  0.013000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/indent.vim
+ 0.014500  0.021000  0.011000: /Users/usr0200777/.local/share/nvim/lazy/nvim-web-devicons/plugin/nvim-web-devicons.vim
+ 0.014200  0.018000  0.012000: /Users/usr0200777/.local/share/nvim/lazy/plenary.nvim/plugin/plenary.vim
+ 0.013600  0.020000  0.011000: /Users/usr0200777/.local/share/nvim/lazy/vim-qfreplace/plugin/qfreplace.vim
+ 0.011800  0.015000  0.011000: init first window
+ 0.007900  0.009000  0.007000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/spellfile.vim
+ 0.007200  0.008000  0.007000: /Users/usr0200777/nvim-macos-arm64/share/nvim/runtime/plugin/tutor.vim
+ 0.007000  0.010000  0.006000: clear screen
+ 0.006200  0.007000  0.005000: inits 2
+ 0.006000  0.016000  0.004000: /Users/usr0200777/.local/share/nvim/lazy/vim-fugitive/ftdetect/fugitive.vim
+ 0.005400  0.006000  0.004000: require('vim.keymap')
+ 0.004600  0.006000  0.004000: window checked
+ 0.004300  0.005000  0.004000: /Users/usr0200777/.local/share/nvim/lazy/denops.vim/autoload/denops/_internal/conf.vim
+ 0.002700  0.008000  0.002000: init default mappings & autocommands
+ 0.002500  0.003000  0.002000: require('vim.F')
+ 0.002400  0.003000  0.002000: parsing arguments
+ 0.001000  0.001000  0.001000: editing files in windows
+ 0.000000  0.000000  0.000000: --- NVIM STARTING ---
