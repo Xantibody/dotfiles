@@ -32,6 +32,7 @@ return {
         "ts_ls",
         "bashls",
         "terraformls",
+        "astro"
       },
 
       Automatic_installed = true,

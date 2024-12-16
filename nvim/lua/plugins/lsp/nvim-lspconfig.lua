@@ -120,6 +120,12 @@ return {
       on_attach = on_attach,
     })
 
+    --astro settings
+    lspconfig["astro"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
     -- local iccheck = require("lua.plugins.lsp.custom.iccheck")
 
     -- --motoki settings
