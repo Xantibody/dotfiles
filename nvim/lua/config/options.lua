@@ -8,6 +8,7 @@ local options = {
   relativenumber = true,
   number = true,
   clipboard = "unnamedplus",
+  termguicolors = true,
   spell = true,
   spelllang = { "en_us" },
 }
