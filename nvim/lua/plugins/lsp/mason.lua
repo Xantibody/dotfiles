@@ -37,5 +37,12 @@ return {
 
       Automatic_installed = true,
     })
+
+    require('mason-null-ls').setup({
+      ensure_installed = {
+        -- 'textlint'
+      },
+      handlers = {},
+    })
   end
 }
