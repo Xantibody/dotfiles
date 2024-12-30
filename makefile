@@ -1,4 +1,4 @@
-.PHONY: neovim alacritty tmux
+.PHONY: neovim alacritty tmux 
 
 neovim: ## Init neovim
 	@echo "Setting neovim..."
@@ -15,10 +15,4 @@ alacritty: ## Init alacritty
 	@echo "Setting alacritty..."
 	test -L ${HOME}/.config/$@/alacritty.toml || rm -rf ${HOME}/.config/$@/$@.toml
 	ln -vsf $(CURDIR)/$@/alacritty.toml ${HOME}/.config/$@/alacritty.toml
-	@echo "Done."
-
-textlint: ## Init textlint
-	@echo "Setting textlint..."
-	test -L ${HOME}/.textlintrc  || rm -rf ${HOME}/.textlintrc
-	ln -vsf $(CURDIR)/.textlintrc ${HOME}/.textlintrc
 	@echo "Done."

@@ -126,6 +126,27 @@ return {
       on_attach = on_attach,
     })
 
+    --efm settings
+    lspconfig["efm"].setup({
+      init_options = { documentFormatting = true },
+      settings = {
+        rootMarkers = { ".git/", '.textlintrc' },
+        languages = {
+          lua = {
+            {
+              formatCommand = "lua-format -i",
+            }
+          },
+          markdown = {
+            lintCommand = 'npx --no-install textlint -f unix --stdin --stdin-filename ${INPUT}',
+            lintFormats = { '%f:%l:%c: %m [%trror/%r]' },
+            rootMarkers = { '.textlintrc' }
+          }
+        }
+      }
+    })
+
+
     -- local iccheck = require("lua.plugins.lsp.custom.iccheck")
 
     -- --motoki settings
