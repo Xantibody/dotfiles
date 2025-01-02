@@ -128,9 +128,19 @@ return {
 
     --efm settings
     lspconfig["efm"].setup({
-      init_options = { documentFormatting = true },
+      init_options = {
+        documentFormatting = true,
+      },
+      filetypes = {
+        'lua',
+        'markdown',
+        'markdown.mdx',
+      },
       settings = {
-        rootMarkers = { ".git/", '.textlintrc' },
+        rootMarkers = {
+          ".git/",
+          '.textlintrc',
+        },
         languages = {
           lua = {
             {
@@ -141,7 +151,7 @@ return {
             lintCommand = 'npx --no-install textlint -f unix --stdin --stdin-filename ${INPUT}',
             lintFormats = { '%f:%l:%c: %m [%trror/%r]' },
             rootMarkers = { '.textlintrc' }
-          }
+          },
         }
       }
     })
