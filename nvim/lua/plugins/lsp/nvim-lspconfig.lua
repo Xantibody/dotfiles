@@ -126,6 +126,11 @@ return {
       on_attach = on_attach,
     })
 
+    -- lspconfig["tinymist"].setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    -- })
+    --
     --efm settings
     lspconfig["efm"].setup({
       init_options = {

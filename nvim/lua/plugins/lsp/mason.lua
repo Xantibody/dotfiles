@@ -33,7 +33,8 @@ return {
         "bashls",
         "terraformls",
         "astro",
-        "efm"
+        "efm",
+        "tinymist",
       },
       Automatic_installed = true,
     })
