@@ -14,7 +14,8 @@ local options = {
   foldtext = "v:lua.vim.treesitter.foldtext()",
   foldmethod = "expr",
   foldexpr = "v:lua.vim.treesitter.foldexpr()",
-  foldlevel = 1
+  foldlevel = 1,
+  guifont = "Explex Console NF"
 }
 
 -- this loop config setting

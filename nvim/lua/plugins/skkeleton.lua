@@ -6,7 +6,7 @@ return {
     vim.fn['skkeleton#config']({
       eggLikeNewline = true,
       registerConvertResult = true,
-      globalDictionaries = { '/Users/usr0200777/Library/Application Support/AquaSKK/SKK-JISYO.L' }
+      globalDictionaries = { '~/.skk/SKK-JISYO.L' }
     })
 
     vim.keymap.set('i', '<C-j>', '<Plug>(skkeleton-enable)')
