@@ -170,7 +170,7 @@ return {
       callback = function()
         vim.lsp.start({
           capabilities = capabilities,
-          cmd = { "/Users/usr0200777/.config/test/iccheck", "lsp" },
+          cmd = { "~/.iccheck/iccheck", "lsp" },
           name = 'iccheck',
           root_dir = vim.fn.getcwd(),
         })
