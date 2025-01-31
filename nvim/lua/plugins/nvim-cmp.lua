@@ -3,7 +3,7 @@ return {
   event = "InsertEnter",
   dependencies = {
     "onsails/lspkind.nvim",
-
+    -- snipet config
     {
       'L3MON4D3/LuaSnip',
       build = (function()
@@ -28,6 +28,7 @@ return {
         },
       },
     },
+    "saadparwaiz1/cmp_luasnip",
 
     -- cmp install
     "hrsh7th/cmp-nvim-lsp",
@@ -44,8 +45,7 @@ return {
 
     "hrsh7th/cmp-cmdline",
     "hrsh7th/cmp-emoji",
-
-    "saadparwaiz1/cmp_luasnip",
+    "chrisgrieser/cmp-nerdfont",
 
   },
   config = function()
@@ -81,7 +81,8 @@ return {
         { name = "buffer",   priority = 1000 },
         { name = "path",     priority = 1000 },
         { name = "spell",    priority = 1000 },
-        { name = "copilot",  priority = 900 },
+        { name = "nerdfont", priority = 900 },
+        { name = "copilot",  priority = 800 },
         { name = "emoji",    priority = 100 },
       },
 
@@ -99,6 +100,7 @@ return {
             spell = "[Spell]",
             copilot = "[Copilot]",
             emoji = "[Emoji]",
+            nerdfont = "[NF]"
           })
         })
       }
