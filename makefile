@@ -1,4 +1,4 @@
-.PHONY: neovim alacritty tmux 
+.PHONY: neovim alacritty tmux fish
 
 neovim: ## Init neovim
 	@echo "Setting neovim..."
@@ -16,3 +16,10 @@ alacritty: ## Init alacritty
 	test -L ${HOME}/.config/$@/alacritty.toml || rm -rf ${HOME}/.config/$@/$@.toml
 	ln -vsf $(CURDIR)/$@/alacritty.toml ${HOME}/.config/$@/alacritty.toml
 	@echo "Done."
+
+fish: ## Init fish
+	@echo "Setting fish..."
+	test -L ${HOME}/.config/$@/config.fish || rm -rf ${HOME}/.config/$@/config.fish
+	ln -vsf $(CURDIR)/$@/config.fish ${HOME}/.config/$@/config.fish
+	@echo "Done."
+

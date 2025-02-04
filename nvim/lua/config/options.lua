@@ -15,10 +15,17 @@ local options = {
   foldmethod = "expr",
   foldexpr = "v:lua.vim.treesitter.foldexpr()",
   foldlevel = 1,
-  guifont = "Explex Console NF"
+  guifont = "Explex Console NF",
+  colorcolumn = { 80, 100, 120 },
+  scrolloff = 5,
+  sidescrolloff = 8,
+  wrap = false,
+  list = true,
 }
 
 -- this loop config setting
 for k, v in pairs(options) do
   vim.opt[k] = v
 end
+
+vim.opt.listchars:append({ space = "_", eol = "♪" })

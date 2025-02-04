@@ -11,5 +11,5 @@ startup_mode = "fullscreen"
 size = 14.0
 normal = { family = "Explex Console NF", style = "Regular" }
 
- [env]
+[env]
  TERM = "alacritty"

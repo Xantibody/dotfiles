@@ -165,12 +165,13 @@ return {
     -- local iccheck = require("lua.plugins.lsp.custom.iccheck")
 
     -- --motoki settings
+    local home_path = os.getenv("HOME")
     vim.api.nvim_create_autocmd('BufReadPost', {
       desc = 'LSP: iccheck',
       callback = function()
         vim.lsp.start({
           capabilities = capabilities,
-          cmd = { "~/.iccheck/iccheck", "lsp" },
+          cmd = { home_path .. "/.iccheck/iccheck", "lsp" },
           name = 'iccheck',
           root_dir = vim.fn.getcwd(),
         })
