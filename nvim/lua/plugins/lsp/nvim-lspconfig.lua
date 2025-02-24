@@ -126,11 +126,12 @@ return {
       on_attach = on_attach,
     })
 
-    -- lspconfig["tinymist"].setup({
-    --   capabilities = capabilities,
-    --   on_attach = on_attach,
-    -- })
-    --
+    --typst setting
+    lspconfig["tinymist"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
     --efm settings
     lspconfig["efm"].setup({
       init_options = {
@@ -153,7 +154,7 @@ return {
             }
           },
           markdown = {
-            lintCommand = 'npx --no-install textlint -f unix --stdin --stdin-filename ${INPUT}',
+            lintCommand = 'pnpm --no-install textlint -f unix --stdin --stdin-filename ${INPUT}',
             lintFormats = { '%f:%l:%c: %m [%trror/%r]' },
             rootMarkers = { '.textlintrc' }
           },
@@ -161,6 +162,15 @@ return {
       }
     })
 
+    lspconfig.helm_ls.setup {
+      settings = {
+        ['helm-ls'] = {
+          yamlls = {
+            path = "yaml-language-server",
+          }
+        }
+      }
+    }
 
     -- local iccheck = require("lua.plugins.lsp.custom.iccheck")
 

@@ -35,6 +35,7 @@ return {
         "astro",
         "efm",
         "tinymist",
+        "helm_ls"
       },
       Automatic_installed = true,
     })
