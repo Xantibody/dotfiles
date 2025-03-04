@@ -3,7 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { 
-  input
+  inputs,
   config, 
   pkgs, 
   ... 
@@ -13,47 +13,20 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      <home-manager/nixos>
-    ];
+      # <home-manager/nixos>
+    ]
 
    # 環境に応じてインポートするモジュールを変更してください
   ++ (with inputs.nixos-hardware.nixosModules; [
      common-cpu-amd
      common-gpu-nvidia
      common-pc-ssd
-   ]);
+   ])
    # xremapのNixOS modulesを使えるようにする
    ++ [
      inputs.xremap.nixosModules.default
-   ]
+   ];
 
-  home-manager.users.raizawa = {
-    home.stateVersion = "24.11";
-    home.file  = {
-        ".config/nvim/init.lua" = {
-          source = /home/raizawa/Repo/dotfiles/nvim/init.lua;
-      };
-        ".config/nvim/lua" = {
-          source = /home/raizawa/Repo/dotfiles/nvim/lua;
-          recursive = true;
-      };
-        ".config/nvim/fplugin" = {
-          source = /home/raizawa/Repo/dotfiles/nvim/fplugin;
-          recursive = true;
-      };
-        ".config/tumx/tmux.conf" = {
-          source = /home/raizawa/Repo/dotfiles/tmux/tmux.conf;
-      };
-        ".config/alacritty/alacritty.toml" = {
-          source = /home/raizawa/Repo/dotfiles/alacritty/alacritty.toml;
-      };
-        ".config/fish/config.fish" = {
-          source = /home/raizawa/Repo/dotfiles/fish/config.fish;
-      };
-      
-      shell = pkgs.fish;
-    };
-  };
 
   programs = {
     git = {
@@ -68,7 +41,7 @@
     starship = {
       enable = true;
     };
-  } 
+  }; 
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -168,6 +141,8 @@
     alacritty
 
     neovim
+    unzip
+
     git
     tmux
     tmuxPlugins.sensible
