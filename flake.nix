@@ -5,14 +5,24 @@
   xremap.url = "github:xremap/nix-flake"; 
   home-manager.url = "github:nix-community/home-manager";
   home-manager.inputs.nixpkgs.follows = "nixpkgs";
+  alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
   };
 
-  outputs = inputs@{nixpkgs, home-manager, ...}: {
+  outputs = inputs@{
+  nixpkgs, 
+  home-manager,
+  alacritty-theme,
+  ...
+  }: {
     nixosConfigurations = {
       nixos = inputs.nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           ./configuration.nix
+            ({ config, pkgs, ...}: {
+            # install the overlay
+            nixpkgs.overlays = [ alacritty-theme.overlays.default ];
+          })
         ];
         specialArgs = {
          inherit inputs; # `inputs = inputs;`と等しい

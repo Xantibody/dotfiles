@@ -53,5 +53,11 @@
       ];
     };
     
+    alacritty = {
+      enable = true;
+      # use a color scheme from the overlay
+      settings.general.import = [ pkgs.alacritty-theme.dawn_fox ];
+      };
+    };
   };
 }
