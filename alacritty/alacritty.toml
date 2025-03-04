@@ -13,3 +13,6 @@ normal = { family = "Explex Console NF", style = "Regular" }
 
 [env]
  TERM = "alacritty"
+
+[terminal]
+shell = "fish"
