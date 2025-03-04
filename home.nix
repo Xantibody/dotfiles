@@ -24,12 +24,19 @@
         ".config/alacritty/alacritty.toml" = {
           source = ./alacritty/alacritty.toml;
       };
+        ".config/alacritty/theme/theme/dawnfox.toml" = {
+          source = "${pkgs.alacritty-theme}/dawnfox.toml";
+      };
         ".config/fish/config.fish" = {
           source = ./fish/config.fish;
       };
     };
+    packages = with pkgs; [
+      bat
+      eza
+      alacritty-theme
+    ];
   };
-
   programs = {
     git = {
       enable = true;
@@ -51,13 +58,6 @@
         efm-langserver
         lua-language-server
       ];
-    };
-    
-    alacritty = {
-      enable = true;
-      # use a color scheme from the overlay
-      settings.general.import = [ pkgs.alacritty-theme.dawn_fox ];
-      };
     };
   };
 }
