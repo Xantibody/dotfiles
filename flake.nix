@@ -5,13 +5,17 @@
   xremap.url = "github:xremap/nix-flake"; 
   home-manager.url = "github:nix-community/home-manager";
   home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
   alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
+
+  pleckjp.url = "github:ryota2357/PleckJP"; # PleckJP
   };
 
   outputs = inputs@{
   nixpkgs, 
   home-manager,
   alacritty-theme,
+  pleckjp,
   ...
   }: {
     nixosConfigurations = {
@@ -33,6 +37,7 @@
          };
          extraSpecialArgs = {
            inherit inputs;
+           inherit pleckjp;
          };
          modules = [
            ./home.nix

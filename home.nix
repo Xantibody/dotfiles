@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 
 {
@@ -35,13 +35,17 @@
       bat
       eza
       alacritty-theme
-    ];
+    ]
+    ++ [
+      inputs.pleckjp.packages.${pkgs.system}.default
+    ]
+    ;
   };
   programs = {
     git = {
       enable = true;
       userName = "Xantibody";
-      userEmail = "Zeku.bushinryu38@gmail.com";
+      userEmail = "zeku.bushinryu38@gmail.com";
     };
 
     neovim = {
