@@ -13,20 +13,26 @@
         system = "x86_64-linux";
         modules = [
           ./configuration.nix
-          home-manager.nixosModules.home-manager
-            {
-             home-manager.useGlobalPkgs = true;
-             home-manager.useUserPackages = true;
-             home-manager.users.raizawa = import ./home.nix;
-
-             # Optionally, use home-manager.extraSpecialArgs to pass
-             # arguments to home.nix
-           }
         ];
         specialArgs = {
          inherit inputs; # `inputs = inputs;`と等しい
         };
       };
     };
+     homeConfigurations = {
+       myHome = inputs.home-manager.lib.homeManagerConfiguration {
+         pkgs = import inputs.nixpkgs {
+           system = "x86_64-linux";
+           config.allowUnfree = true; # プロプライエタリなパッケージを許可
+         };
+         extraSpecialArgs = {
+           inherit inputs;
+         };
+         modules = [
+           ./home.nix
+         ];
+       };
+    };
   };
+
 }

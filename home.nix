@@ -1,11 +1,11 @@
 { config, pkgs, ... }:
 
 
-  {
-    home.username = "raizawa";
-    home.homeDirectory = "/home/raizawa";
-    home.stateVersion = "24.11";
-    home.file  = {
+  home = rec {
+    username = "raizawa";
+    homeDirectory = "/home/${username}";
+    stateVersion = "24.11";
+    file  = {
         ".config/nvim/init.lua" = {
           source = ./nvim/init.lua;
       };
@@ -26,6 +26,5 @@
         ".config/fish/config.fish" = {
           source = ./fish/config.fish;
       };
-      
     };
   }

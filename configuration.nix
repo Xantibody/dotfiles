@@ -46,6 +46,7 @@
      };
   }; 
 
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -209,8 +210,16 @@ fonts.packages = with pkgs; [
   nix = {
     settings = {
       experimental-features = ["nix-command" "flakes"];
+      auto-optimise-store = true; # Nix store optimise
+    };
+   # garbage collection
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
     };
   };
+
   # xremapでキー設定をいい感じに変更
  services.xremap = {
    userName = "raizawa";
