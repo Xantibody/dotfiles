@@ -32,12 +32,6 @@
     git = {
       enable = true;
     };
-    neovim = {
-      enable = true;
-      defaultEditor = true; # $EDITOR=nvimに設定
-      viAlias = true;
-      vimAlias = true;
-    };
     starship = {
       enable = true;
     };

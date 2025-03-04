@@ -29,4 +29,29 @@
       };
     };
   };
+
+  programs = {
+    git = {
+      enable = true;
+      userName = "Xantibody";
+      userEmail = "Zeku.bushinryu38@gmail.com";
+    };
+
+    neovim = {
+      enable = true;
+      defaultEditor = true; # $EDITOR=nvimに設定
+      viAlias = true;
+      vimAlias = true;
+      extraPackages = with pkgs; [
+        ripgrep
+        biome
+        
+        #LSP
+        rust-analyzer
+        efm-langserver
+        lua-language-server
+      ];
+    };
+    
+  };
 }
