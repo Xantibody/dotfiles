@@ -1,31 +1,31 @@
 { config, pkgs, ... }:
 
+
   {
-    home.username = "raziawa";
+    home.username = "raizawa";
     home.homeDirectory = "/home/raizawa";
     home.stateVersion = "24.11";
     home.file  = {
         ".config/nvim/init.lua" = {
-          source = /home/raizawa/Repo/dotfiles/nvim/init.lua;
+          source = ./nvim/init.lua;
       };
         ".config/nvim/lua" = {
-          source = /home/raizawa/Repo/dotfiles/nvim/lua;
+          source = ./nvim/lua;
           recursive = true;
       };
         ".config/nvim/fplugin" = {
-          source = /home/raizawa/Repo/dotfiles/nvim/fplugin;
+          source = ./nvim/fplugin;
           recursive = true;
       };
         ".config/tumx/tmux.conf" = {
-          source = /home/raizawa/Repo/dotfiles/tmux/tmux.conf;
+          source = ./tmux/tmux.conf;
       };
         ".config/alacritty/alacritty.toml" = {
-          source = /home/raizawa/Repo/dotfiles/alacritty/alacritty.toml;
+          source = ./alacritty/alacritty.toml;
       };
         ".config/fish/config.fish" = {
-          source = /home/raizawa/Repo/dotfiles/fish/config.fish;
+          source = ./fish/config.fish;
       };
       
     };
-      shell = pkgs.fish;
-  };
+  }

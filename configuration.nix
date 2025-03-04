@@ -19,14 +19,14 @@
    # 環境に応じてインポートするモジュールを変更してください
   ++ (with inputs.nixos-hardware.nixosModules; [
      common-cpu-amd
-     common-gpu-nvidia
+     common-gpu-amd
      common-pc-ssd
+     # <nixos-hardware/lenovo/thinkpad/e14/amd> 多分これ
    ])
    # xremapのNixOS modulesを使えるようにする
    ++ [
      inputs.xremap.nixosModules.default
    ];
-
 
   programs = {
     git = {
@@ -41,6 +41,9 @@
     starship = {
       enable = true;
     };
+    fish = {
+      enable = true;
+     };
   }; 
 
   # Bootloader.
@@ -127,6 +130,7 @@
     packages = with pkgs; [
     #  thunderbird
     ];
+    shell = pkgs.fish;
   };
 
   # Install firefox.
