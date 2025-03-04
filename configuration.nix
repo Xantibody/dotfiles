@@ -191,9 +191,6 @@
   system.stateVersion = "24.11"; # Did you read the comment?
 
 
-  services.fprintd.enable = true;
-  services.fprintd.tod.enable = true;
-  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix-550a;
   # security.pam.services.login.fprintAuth = true;
 
 fonts.packages = with pkgs; [
@@ -215,32 +212,40 @@ fonts.packages = with pkgs; [
   };
 
   # xremapでキー設定をいい感じに変更
- services.xremap = {
-   userName = "raizawa";
-   serviceMode = "system";
-   config = {
-     modmap = [
-       {
-         name = "change CapsLock key to ctl";
-         remap = {
-           CapsLock = "Ctrl_L";
+ services = {
+   xremap = {
+     userName = "raizawa";
+     serviceMode = "system";
+     config = {
+       modmap = [
+         {
+           name = "change CapsLock key to ctl";
+           remap = {
+             CapsLock = "Ctrl_L";
+           };
+         }
+       ];
+       keymap = [
+         {
+           # Ctrl + HがどのアプリケーションでもBackspaceになるように変更
+           name = "Ctrl+H should be enabled on all apps as BackSpace";
+           remap = {
+             C-h = "Backspace";
+           };
+           # 一部アプリケーション（ターミナルエミュレータ）を対象から除外
+           application = {
+             not = ["Alacritty" "Kitty" "Wezterm"];
+           };
          };
-       }
-     ];
-     keymap = [
-       {
-         # Ctrl + HがどのアプリケーションでもBackspaceになるように変更
-         name = "Ctrl+H should be enabled on all apps as BackSpace";
-         remap = {
-           C-h = "Backspace";
-         };
-         # 一部アプリケーション（ターミナルエミュレータ）を対象から除外
-         application = {
-           not = ["Alacritty" "Kitty" "Wezterm"];
-         };
-       }
-     ];
-   };
- };
-
+       ];
+      };
+    };
+    fprintd = {
+      enable = true;
+      tod = {
+        enable = true;
+        driver = pkgs.libfprint-2-tod1-goodix-550a;
+      };
+    };
+  };
 }
