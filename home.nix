@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
 
+{
   home = rec {
     username = "raizawa";
     homeDirectory = "/home/${username}";
@@ -27,4 +28,5 @@
           source = ./fish/config.fish;
       };
     };
-  }
+  };
+}
