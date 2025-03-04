@@ -1,22 +1,19 @@
 {
   inputs = {
-  nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  nixos-hardware.url = "github:NixOS/nixos-hardware/master"; 
-  xremap.url = "github:xremap/nix-flake"; 
-  home-manager.url = "github:nix-community/home-manager";
-  home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master"; 
+    xremap.url = "github:xremap/nix-flake"; 
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
-
-  pleckjp.url = "github:ryota2357/PleckJP"; # PleckJP
+    alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
   };
 
   outputs = inputs@{
-  nixpkgs, 
-  home-manager,
-  alacritty-theme,
-  pleckjp,
-  ...
+    nixpkgs, 
+    home-manager,
+    alacritty-theme,
+    ...
   }: {
     nixosConfigurations = {
       nixos = inputs.nixpkgs.lib.nixosSystem {
@@ -37,7 +34,6 @@
          };
          extraSpecialArgs = {
            inherit inputs;
-           inherit pleckjp;
          };
          modules = [
            ./home.nix

@@ -35,11 +35,8 @@
       bat
       eza
       alacritty-theme
-    ]
-    ++ [
-      inputs.pleckjp.packages.${pkgs.system}.default
-    ]
-    ;
+      fprintd
+    ];
   };
   programs = {
     git = {
