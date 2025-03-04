@@ -236,7 +236,7 @@ fonts.packages = with pkgs; [
            application = {
              not = ["Alacritty" "Kitty" "Wezterm"];
            };
-         };
+         }
        ];
       };
     };
@@ -248,4 +248,5 @@ fonts.packages = with pkgs; [
       };
     };
   };
+
 }
