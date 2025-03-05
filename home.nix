@@ -61,7 +61,7 @@
       ];
     };
     hyprland = {
-      enable = true
+      enable = true;
     };
   };
 }
