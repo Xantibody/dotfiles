@@ -60,5 +60,8 @@
         lua-language-server
       ];
     };
+    hyprland = {
+      enable = true
+    };
   };
 }
