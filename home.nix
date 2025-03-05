@@ -60,8 +60,12 @@
         lua-language-server
       ];
     };
-    hyprland = {
-      enable = true;
+  };
+  wayland = {
+    windowManager = {
+      hyprland = {
+        enable = true;
+      };
     };
   };
 }
