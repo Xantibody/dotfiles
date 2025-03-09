@@ -1,25 +1,13 @@
-.PHONY: neovim alacritty tmux fish
+.PHONY:  home-manager nix-os
 
-neovim: ## Init neovim
-	@echo "Setting neovim..."
-	ln -vsf $(CURDIR)/nvim/ ${HOME}/.config/
+home-manager: ## home manager
+	@echo "Start home-manager..."
+	nix run nixpkgs#home-manager -- switch --flake .#raizawa
 	@echo "Done."
 
-tmux: ## Init tmux
-	@echo "Setting tmux..."
-	test -L ${HOME}/.config/$@/tmux.conf || rm -rf ${HOME}/.config/$@/tmux.conf
-	ln -vsf $(CURDIR)/tmux/tmux.conf ${HOME}/.config/tmux/tmux.conf
-	@echo "Done."
 
-alacritty: ## Init alacritty
-	@echo "Setting alacritty..."
-	test -L ${HOME}/.config/$@/alacritty.toml || rm -rf ${HOME}/.config/$@/$@.toml
-	ln -vsf $(CURDIR)/$@/alacritty.toml ${HOME}/.config/$@/alacritty.toml
-	@echo "Done."
-
-fish: ## Init fish
-	@echo "Setting fish..."
-	test -L ${HOME}/.config/$@/config.fish || rm -rf ${HOME}/.config/$@/config.fish
-	ln -vsf $(CURDIR)/$@/config.fish ${HOME}/.config/$@/config.fish
+nix-os: ## home manager
+	@echo "Start Nix OS build..."
+	sudo nixos-rebuild switch --flake .
 	@echo "Done."
 

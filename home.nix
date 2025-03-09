@@ -35,7 +35,9 @@
       bat
       eza
       alacritty-theme
-      fprintd
+      ripgrep
+      discord
+      gnumake
     ];
   };
   programs = {
