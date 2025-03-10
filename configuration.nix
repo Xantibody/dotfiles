@@ -160,8 +160,6 @@
     clang
     zig
     starship
-
-     kitty # required for the default Hyprland config
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
