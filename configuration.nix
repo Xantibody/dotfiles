@@ -1,10 +1,10 @@
-# Edit this configuration file to define what should be installed on
+ Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { 
   inputs,
-  config, 
+  config,
   pkgs, 
   ... 
 }:
@@ -161,6 +161,7 @@
     zig
     starship
 
+     kitty # required for the default Hyprland config
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -240,16 +241,16 @@ fonts.packages = with pkgs; [
        ];
       };
     };
-    fprintd = {
-      enable = true;
-      tod = {
-        enable = true;
-        # https://ryantm.github.io/nixpkgs/using/overrides/
-        # passthru.driverPath = "/lib/libfprint-2/tod-1"; をoverriding
-        # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/li/libfprint-2-tod1-goodix-550a/package.nix#L44
-        driver = pkgs.libfprint-tod;
-      };
-    };
+    # fprintd = {
+    #   enable = true;
+    #   tod = {
+    #     enable = true;
+    #     # https://ryantm.github.io/nixpkgs/using/overrides/
+    #     # passthru.driverPath = "/lib/libfprint-2/tod-1"; をoverriding
+    #     # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/li/libfprint-2-tod1-goodix-550a/package.nix#L44
+    #     driver = pkgs.libfprint-tod;
+    #   };
+    # };
   };
 
 }
