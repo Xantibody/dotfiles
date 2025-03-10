@@ -63,11 +63,9 @@
       ];
     };
   };
-  programs{
-    kitty{
-      enable = true; # required for the default Hyprland config
-    }
-  }
+  kitty{
+    enable = true; # required for the default Hyprland config
+  };
   wayland = {
     windowManager = {
       hyprland = {
