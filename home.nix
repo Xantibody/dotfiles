@@ -62,7 +62,7 @@
         lua-language-server
       ];
     };
-    kitty{
+    kitty = {
       enable = true; # required for the default Hyprland config
     };
   };
