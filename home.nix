@@ -1,7 +1,9 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, ... }:{
+  imports = [
+    inputs.hyprpanel.homeManagerModules.hyprpanel
+    inputs.ags.homeManagerModules.default
+  ];
 
-
-{
   home = rec {
     username = "raizawa";
     homeDirectory = "/home/${username}";
