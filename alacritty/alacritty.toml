@@ -5,7 +5,7 @@ import = [
 
 [window]
 option_as_alt =  "Both"
-startup_mode = "fullscreen"
+#startup_mode = "fullscreen"
 
 [font]
 size = 14.0

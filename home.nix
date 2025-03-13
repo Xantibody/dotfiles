@@ -31,6 +31,9 @@
         ".config/fish/config.fish" = {
           source = ./fish/config.fish;
       };
+        ".config/hypr/hyprland.conf" = {
+          source = ./hypr/hyprland.conf;
+      };
     };
     packages = with pkgs; [
       bat
