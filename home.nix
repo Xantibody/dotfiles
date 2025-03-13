@@ -39,7 +39,6 @@
       ripgrep
       discord
       gnumake
-      dolphin
     ];
   };
   programs = {

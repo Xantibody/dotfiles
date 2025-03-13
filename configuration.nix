@@ -167,7 +167,7 @@
     zig
     starship
 
-    kitty # required for the default Hyprland config
+    kdePackages.dolphin
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
