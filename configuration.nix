@@ -150,11 +150,9 @@
     neovim
     unzip
 
-    git
     tmux
     tmuxPlugins.sensible
 
-    fish
     fishPlugins.z
 
     slack

@@ -1,7 +1,6 @@
 { config, pkgs, inputs, ... }:{
   imports = [
     inputs.hyprpanel.homeManagerModules.hyprpanel
-    inputs.ags.homeManagerModules.default
   ];
 
   home = rec {
@@ -40,6 +39,7 @@
       ripgrep
       discord
       gnumake
+      dolphin
     ];
   };
   programs = {
