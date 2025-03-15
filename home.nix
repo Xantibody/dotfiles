@@ -31,9 +31,9 @@
         ".config/fish/config.fish" = {
           source = ./fish/config.fish;
       };
-        ".config/hypr/hyprland.conf" = {
-          source = ./hypr/hyprland.conf;
-      };
+      #   ".config/hypr/hyprland.conf" = {
+      #     source = ./hypr/hyprland.conf;
+      # };
     };
     packages = with pkgs; [
       bat
@@ -42,6 +42,7 @@
       ripgrep
       discord
       gnumake
+      kitty
     ];
   };
   programs = {
@@ -135,6 +136,13 @@
         bar.volume.rightClick = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
         bar.volume.middleClick = "pavucontrol";
         bar.media.format = "{title}";
+      };
+    };
+  };
+  wayland = {
+    windowManager = {
+      hyprland{
+        enable = true;
       };
     };
   };
