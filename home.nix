@@ -141,7 +141,7 @@
   };
   wayland = {
     windowManager = {
-      hyprland{
+      hyprland = {
         enable = true;
       };
     };
