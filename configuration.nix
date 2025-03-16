@@ -182,7 +182,8 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
+  programs.ssh.startAgent = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -258,6 +259,15 @@ fonts.packages = with pkgs; [
     #     driver = pkgs.libfprint-tod;
     #   };
     # };
+    upower = {
+      enable = true;
+    };
   };
-
+  
+  # power management
+ services = {
+  auto-cpufreq = {
+    enable = true;
+  };
+ };
 }
