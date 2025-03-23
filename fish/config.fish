@@ -5,6 +5,7 @@ function dp
     nvim
     set -e NVIM_APPNAME  # 終了後に環境変数を削除
 end
+alias ls="eza -lF"
 
 # Nightfox Color Palette
 # Style: dayfox
