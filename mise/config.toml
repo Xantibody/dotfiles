@@ -1,5 +1,0 @@
-[tools]
-python = "latest"
-java = "openjdk1.8"
-node = "latest"
-go = "1.21"
