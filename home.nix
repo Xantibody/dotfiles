@@ -19,9 +19,6 @@
           source = ./nvim/fplugin;
           recursive = true;
       };
-        ".config/tumx/tmux.conf" = {
-          source = ./tmux/tmux.conf;
-      };
         ".config/alacritty/alacritty.toml" = {
           source = ./alacritty/alacritty.toml;
       };
@@ -31,10 +28,8 @@
         ".config/fish/config.fish" = {
           source = ./fish/config.fish;
       };
-      #   ".config/hypr/hyprland.conf" = {
-      #     source = ./hypr/hyprland.conf;
-      # };
     };
+
     packages = with pkgs; [
       bat
       eza
@@ -72,7 +67,6 @@
         "./pkg/utils"
       ];
     })
-      jetbrains.idea-community
     ];
   };
   programs = {
@@ -88,7 +82,6 @@
       viAlias = true;
       vimAlias = true;
       extraPackages = with pkgs; [
-        ripgrep
         biome
 
         #LSP
