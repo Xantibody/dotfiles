@@ -83,6 +83,7 @@
       vimAlias = true;
       extraPackages = with pkgs; [
         biome
+        nodejs_23
 
         #LSP
         rust-analyzer
