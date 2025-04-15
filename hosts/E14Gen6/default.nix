@@ -9,22 +9,22 @@ in
 nixpkgs.lib.nixosSystem {
   inherit system;
   specialArgs = {
-    inherit username xremap;
+    inherit username xremap nixpkgs;
   };
 
   modules = [
     ../../nixos
     ./hardware-configuration.nix 
-    sops-nix.nixosModules.sops 
-    home-manager.nixosModules.home-manager 
-    {
-      home-manager.useUserPackages = true;
-      sharedModules = [ sops-nix.homeManagerModules.sops ];
-      # home-manager.users."${username}" = import ../../home-manager/advanced.nix;
-    #   extraSpecialArgs = {
-    #     inherit system;
-    #     inherit (inputs) nixpkgs;
-    #   };
-     }
+    # sops-nix.nixosModules.sops 
+    # home-manager.nixosModules.home-manager 
+    # {
+    #   home-manager.useUserPackages = true;
+    #   sharedModules = [ sops-nix.homeManagerModules.sops ];
+    #   home-manager.users."${username}" = import ../../home-manager/home.nix;
+    #    extraSpecialArgs = {
+    #      inherit system;
+    #      inherit (inputs) nixpkgs;
+    #    };
+    #  }
   ];
 }

@@ -4,12 +4,16 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master"; 
-    xremap.url = "github:xremap/nix-flake"; 
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    xremap = {
+      url = "github:xremap/nix-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
@@ -33,36 +37,36 @@
     # ...
   }@inputs: 
 
-flake-parts.lib.mkFlake {inherit inputs;} {
+  flake-parts.lib.mkFlake {inherit inputs;} {
     systems = [
     "x86_64-linux"
     ];
 
-  imports = [treefmt-nix.flakeModule];
+    imports = [treefmt-nix.flakeModule];
   
-  flake = {
-    nixosConfigurations = {
-      E14Gen6 = import ./hosts/E14Gen6 {inherit inputs;};
-    };
-  };
-
-  perSystem =
-    { ... }:
-    {
-      treefmt = {
-        projectRootFile = "flake.nix";
-        programs = {
-          actionlint.enable = true;
-          nixfmt.enable = true;
-          taplo.enable = true;
-          jsonfmt.enable = true;
-          yamlfmt.enable = true;
-          fish_indent.enable = true;
-          stylua.enable = true;
-          shfmt.enable = true;
-          prettier.enable = true;
-        };
+    flake = {
+      nixosConfigurations = {
+        E14Gen6 = import ./hosts/E14Gen6 {inherit inputs;};
       };
     };
+
+    perSystem =
+      { ... }:
+      {
+        treefmt = {
+          projectRootFile = "flake.nix";
+          programs = {
+            actionlint.enable = true;
+            nixfmt.enable = true;
+            taplo.enable = true;
+            jsonfmt.enable = true;
+            yamlfmt.enable = true;
+            fish_indent.enable = true;
+            stylua.enable = true;
+            shfmt.enable = true;
+            prettier.enable = true;
+          };
+        };
+      };
   };
 }

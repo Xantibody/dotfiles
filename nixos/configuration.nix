@@ -3,15 +3,14 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { 
-  inputs,
-  config,
+#  inputs,
+#  config,
   pkgs, 
-  xremap,
   ... 
 }:
 
 {
-  imports = [
+#  imports = [
   #   [ # Include the results of the hardware scan.
   #     ./hardware-configuration.nix
   #     # <home-manager/nixos>
@@ -27,8 +26,7 @@
   #  ])
   #  # xremapのNixOS modulesを使えるようにする
   #  ++ [
-     xremap.nixosModules.default
-   ];
+#   ];
 
   programs = {
     git = {

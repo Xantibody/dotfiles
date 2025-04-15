@@ -1,11 +1,16 @@
 { 
   inputs,
-  config,
+#  config,
   pkgs, 
+  xremap,
   ... 
 }:
+let
+  configuration = import ./configuration.nix { inherit pkgs; };
+in 
 {
   import = [
-    ./configuration.nix
+    configuration
+     xremap.nixosModules.default
   ];
 }

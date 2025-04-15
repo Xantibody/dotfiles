@@ -40,9 +40,6 @@ return {
     -- import lspconfig plugin
     local lspconfig = require("lspconfig")
 
-    -- import mason_lspconfig plugin
-    local mason_lspconfig = require("mason-lspconfig")
-
     -- import cmp-nvim-lsp plugin
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
@@ -65,18 +62,22 @@ return {
       vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
     end
 
-    -- java settings
-    -- Must be java17 or higher. lol
-    lspconfig["jdtls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
+    -- -- java settings
+    -- -- Must be java17 or higher. lol
+    -- lspconfig["jdtls"].setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    -- })
 
-    -- rust settings
-    lspconfig["rust_analyzer"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
+    lspconfig.rust_analyzer.setup{
+      settings = {
+        ['rust-analyzer'] = {
+          diagnostics = {
+            enable = false;
+          }
+        }
+      }
+    }
 
     -- lua settings
     lspconfig["lua_ls"].setup({
@@ -84,54 +85,54 @@ return {
       on_attach = on_attach,
     })
 
-    -- markdown settings
-    lspconfig["marksman"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- yaml settings
-    lspconfig["yamlls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    --python settings
-    lspconfig["pylsp"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    --ts, js settings
-    lspconfig["ts_ls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    --bash settings
-    lspconfig["bashls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    --terraform settings
-    lspconfig["terraformls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    --astro settings
-    lspconfig["astro"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    --typst setting
-    lspconfig["tinymist"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
+    -- -- markdown settings
+    -- lspconfig["marksman"].setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    -- })
+    --
+    -- -- yaml settings
+    -- lspconfig["yamlls"].setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    -- })
+    --
+    -- --python settings
+    -- lspconfig["pylsp"].setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    -- })
+    --
+    -- --ts, js settings
+    -- lspconfig["ts_ls"].setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    -- })
+    --
+    -- --bash settings
+    -- lspconfig["bashls"].setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    -- })
+    --
+    -- --terraform settings
+    -- lspconfig["terraformls"].setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    -- })
+    --
+    -- --astro settings
+    -- lspconfig["astro"].setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    -- })
+    --
+    -- --typst setting
+    -- lspconfig["tinymist"].setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    -- })
+    --
     --efm settings
     lspconfig["efm"].setup({
       init_options = {
@@ -172,16 +173,13 @@ return {
       }
     }
 
-    -- local iccheck = require("lua.plugins.lsp.custom.iccheck")
-
     -- --motoki settings
-    local home_path = os.getenv("HOME")
     vim.api.nvim_create_autocmd('BufReadPost', {
       desc = 'LSP: iccheck',
       callback = function()
         vim.lsp.start({
           capabilities = capabilities,
-          cmd = { home_path .. "/.iccheck/iccheck", "lsp" },
+          cmd = { "iccheck", "lsp" },
           name = 'iccheck',
           root_dir = vim.fn.getcwd(),
         })
