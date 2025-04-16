@@ -1,32 +1,45 @@
-{ config, pkgs, inputs, lib, ... }:{
+{
+  nixpkgs,
+  system,
+  ... 
+}:
+  let
+    lib = nixpkgs.lib;
+    pkgs = import inputs.nixpkgs {
+          config.allowUnfree = true; # プロプライエタリなパッケージを許可
+     overlays = [
+      hyprpanel.overlay
+     ];
+    };
+  in 
+{
   imports = [
-    inputs.hyprpanel.homeManagerModules.hyprpanel
+    hyprpanel.homeManagerModules.hyprpanel
   ];
-
   home = rec {
     username = "raizawa";
     homeDirectory = "/home/${username}";
     stateVersion = "24.11";
     file  = {
         ".config/nvim/init.lua" = {
-          source = ./nvim/init.lua;
+          source = ../nvim/init.lua;
       };
         ".config/nvim/lua" = {
-          source = ./nvim/lua;
+          source = ../nvim/lua;
           recursive = true;
       };
         ".config/nvim/fplugin" = {
-          source = ./nvim/fplugin;
+          source = ../nvim/fplugin;
           recursive = true;
       };
         ".config/alacritty/alacritty.toml" = {
-          source = ./alacritty/alacritty.toml;
+          source = ../alacritty/alacritty.toml;
       };
         ".config/alacritty/themes/themes/dawnfox.toml" = {
           source = "${pkgs.alacritty-theme}/dawnfox.toml";
       };
         ".config/fish/config.fish" = {
-          source = ./fish/config.fish;
+          source = ../fish/config.fish;
       };
     };
 

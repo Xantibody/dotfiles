@@ -17,3 +17,8 @@
 - ひたすらエラーログを解決
 - dry-run は `sudo nixos-rebuild dry-build --flake .#E14Gen6 --show-trace`でできるらしい
 - xremapが引数としてないとかnixos/default.nixで言われるのを解決する
+
+### 2025-04-15
+- dry-build通った!!
+- import記述がimportsだった(optionがリストだからだろう)
+- 次はhome-managerを移行して実際buildしてやるぜ
