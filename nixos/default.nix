@@ -3,10 +3,11 @@
 #  config,
   pkgs, 
   xremap,
+  hyprpanel,
   ... 
 }:
 let
-  configuration = import ./configuration.nix { inherit pkgs; };
+  configuration = import ./configuration.nix { inherit pkgs hyprpanel; };
 in 
 {
   imports = [

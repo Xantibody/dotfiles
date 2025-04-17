@@ -1,11 +1,13 @@
 {
   nixpkgs,
   system,
+  hyprpanel,
   ... 
 }:
   let
     lib = nixpkgs.lib;
-    pkgs = import inputs.nixpkgs {
+    pkgs = import nixpkgs {
+          system = system;
           config.allowUnfree = true; # プロプライエタリなパッケージを許可
      overlays = [
       hyprpanel.overlay

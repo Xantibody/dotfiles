@@ -22,3 +22,8 @@
 - dry-build通った!!
 - import記述がimportsだった(optionがリストだからだろう)
 - 次はhome-managerを移行して実際buildしてやるぜ
+
+### 2025-04-16
+-  error: The option `extraSpecialArgs' does not exist. Definition values: In `/nix/store/jk6xpbfh10gz6q5cqw8b2f7xk0pl7hkv-source/flake.nix'って言われちゃう
+-  extraSpecialArgsを見なおしたけど多分大丈夫なんだよな...
+-  日をおいて明日やってみる

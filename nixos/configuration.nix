@@ -2,9 +2,10 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ 
+{
 #  inputs,
 #  config,
+  hyprpanel,
   pkgs, 
   ... 
 }:
@@ -140,7 +141,10 @@
   programs.firefox.enable = true;
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs = {
+    config.allowUnfree = true;
+    overlays = [ hyprpanel.overlay ];
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
