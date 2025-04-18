@@ -28,4 +28,4 @@ for k, v in pairs(options) do
   vim.opt[k] = v
 end
 
-vim.opt.listchars:append({ space = "_", eol = "↵" })
+--vim.opt.listchars:append({ space = "_", eol = "↵" })

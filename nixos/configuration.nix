@@ -141,10 +141,6 @@
   programs.firefox.enable = true;
 
   # Allow unfree packages
-  nixpkgs = {
-    config.allowUnfree = true;
-    overlays = [ hyprpanel.overlay ];
-  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

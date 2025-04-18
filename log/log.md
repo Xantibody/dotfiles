@@ -27,3 +27,9 @@
 -  error: The option `extraSpecialArgs' does not exist. Definition values: In `/nix/store/jk6xpbfh10gz6q5cqw8b2f7xk0pl7hkv-source/flake.nix'って言われちゃう
 -  extraSpecialArgsを見なおしたけど多分大丈夫なんだよな...
 -  日をおいて明日やってみる
+
+### 2025-04-17
+- home-managerだめだった
+- moduleが悪い？
+- 今頭わるいから明日見直す
+
