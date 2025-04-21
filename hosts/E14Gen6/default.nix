@@ -23,9 +23,9 @@ nixpkgs.lib.nixosSystem {
       home-manager.sharedModules = [ sops-nix.homeManagerModules.sops ];
       home-manager.users."${username}" = import ../../home-manager/home.nix;
       home-manager.extraSpecialArgs = {
-         inherit system config;
-         inherit (inputs) nixpkgs hyprpanel;
-       };
+        inherit system config;
+        inherit (inputs) nixpkgs hyprpanel;
+      };
      }
   ];
 }
