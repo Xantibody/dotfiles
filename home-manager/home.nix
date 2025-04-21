@@ -10,8 +10,11 @@
           system = system;
           config.allowUnfree = true; # プロプライエタリなパッケージを許可
     };
-  in 
+  in
 {
+  nixpkgs.overlays = [
+    hyprpanel.overlay
+  ];
   imports = [
     hyprpanel.homeManagerModules.hyprpanel
   ];
