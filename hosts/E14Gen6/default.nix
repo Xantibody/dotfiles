@@ -9,7 +9,7 @@ in
 nixpkgs.lib.nixosSystem {
   inherit system;
   specialArgs = {
-    inherit username xremap nixpkgs;
+    inherit username xremap nixpkgs config;
   };
 
   modules = [
