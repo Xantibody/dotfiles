@@ -39,12 +39,10 @@
     fish = {
       enable = true;
      };
-    hyprland={
+    hyprland = {
       enable = true; # enable Hyprland
     };
-  }; 
-
-
+  };
   # Bootloader.
   boot = {
     loader = {
