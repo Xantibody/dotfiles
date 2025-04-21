@@ -3,11 +3,10 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 {
-#  inputs,
-#  config,
+  inputs,
+  config,
   hyprpanel,
   pkgs,
-  config,
   ...
 }:
 
