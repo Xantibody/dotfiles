@@ -9,9 +9,6 @@
     pkgs = import nixpkgs {
           system = system;
           config.allowUnfree = true; # プロプライエタリなパッケージを許可
-     overlays = [
-      hyprpanel.overlay
-     ];
     };
   in 
 {
@@ -106,7 +103,7 @@
         lua-language-server
       ];
     };
-
+  
     hyprpanel = {
       enable = true;
       overwrite.enable = true;
@@ -243,5 +240,5 @@
         };
       };
     };
-  };
+  }; 
 }
