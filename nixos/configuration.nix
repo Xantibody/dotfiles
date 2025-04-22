@@ -2,31 +2,39 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ 
-  inputs,
-  config,
-  pkgs, 
-  ... 
-}:
+{ pkgs, ... }:
 
+let
+  nixpkgs.config.allowUnfree = true; # プロプライエタリなパッケージを許可
+in
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      # <home-manager/nixos>
-    ]
+
+#  imports = [
+  #   [ # Include the results of the hardware scan.
+  #     ./hardware-configuration.nix
+  #     # <home-manager/nixos>
+  #   ]
 
    # 環境に応じてインポートするモジュールを変更してください
-  ++ (with inputs.nixos-hardware.nixosModules; [
-     common-cpu-amd
-     common-gpu-amd
-     common-pc-ssd
-     # <nixos-hardware/lenovo/thinkpad/e14/amd> 多分これ
-   ])
-   # xremapのNixOS modulesを使えるようにする
-   ++ [
-     inputs.xremap.nixosModules.default
-   ];
+ # ++ 
+  # (with inputs.nixos-hardware.nixosModules; [
+  #    common-cpu-amd
+  #    common-gpu-amd
+  #    common-pc-ssd
+  #    # <nixos-hardware/lenovo/thinkpad/e14/amd> 多分これ
+  #  ])
+  #  # xremapのNixOS modulesを使えるようにする
+  #  ++ [
+#   ];
+
+  # Bootloader.
+  boot = {
+    loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+    };
+    kernelPackages = pkgs.linuxPackages_latest;
+  };
 
   programs = {
     git = {
@@ -38,19 +46,9 @@
     fish = {
       enable = true;
      };
-    hyprland={
+    hyprland = {
       enable = true; # enable Hyprland
     };
-  }; 
-
-
-  # Bootloader.
-  boot = {
-    loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
-    };
-    kernelPackages = pkgs.linuxPackages_latest;
   };
 
   networking.hostName = "nixos"; # Define your hostname.
@@ -140,7 +138,7 @@
   programs.firefox.enable = true;
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  #config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

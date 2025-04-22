@@ -1,32 +1,47 @@
-{ config, pkgs, inputs, lib, ... }:{
-  imports = [
-    inputs.hyprpanel.homeManagerModules.hyprpanel
+{
+  nixpkgs,
+  system,
+  hyprpanel,
+  ... 
+}:
+  let
+    lib = nixpkgs.lib;
+    pkgs = import nixpkgs {
+          system = system;
+          config.allowUnfree = true; # プロプライエタリなパッケージを許可
+    };
+  in
+{
+  nixpkgs.overlays = [
+    hyprpanel.overlay
   ];
-
+  imports = [
+    hyprpanel.homeManagerModules.hyprpanel
+  ];
   home = rec {
     username = "raizawa";
     homeDirectory = "/home/${username}";
     stateVersion = "24.11";
     file  = {
         ".config/nvim/init.lua" = {
-          source = ./nvim/init.lua;
+          source = ../nvim/init.lua;
       };
         ".config/nvim/lua" = {
-          source = ./nvim/lua;
+          source = ../nvim/lua;
           recursive = true;
       };
         ".config/nvim/fplugin" = {
-          source = ./nvim/fplugin;
+          source = ../nvim/fplugin;
           recursive = true;
       };
         ".config/alacritty/alacritty.toml" = {
-          source = ./alacritty/alacritty.toml;
+          source = ../alacritty/alacritty.toml;
       };
         ".config/alacritty/themes/themes/dawnfox.toml" = {
           source = "${pkgs.alacritty-theme}/dawnfox.toml";
       };
         ".config/fish/config.fish" = {
-          source = ./fish/config.fish;
+          source = ../fish/config.fish;
       };
     };
 
@@ -83,6 +98,7 @@
       vimAlias = true;
       extraPackages = with pkgs; [
         biome
+        nodejs_23
 
         #LSP
         rust-analyzer
@@ -90,7 +106,7 @@
         lua-language-server
       ];
     };
-
+  
     hyprpanel = {
       enable = true;
       overwrite.enable = true;
@@ -227,5 +243,5 @@
         };
       };
     };
-  };
+  }; 
 }
