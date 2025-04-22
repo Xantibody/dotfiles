@@ -1,6 +1,5 @@
 { 
   inputs,
-#  config,
   pkgs, 
   xremap,
   hyprpanel,
@@ -8,10 +7,10 @@
 }:
 let
   configuration = import ./configuration.nix { inherit pkgs hyprpanel; };
-in 
+in
 {
   imports = [
     configuration
-     xremap.nixosModules.default
+    xremap.nixosModules.default
   ];
 }

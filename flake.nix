@@ -5,6 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master"; 
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
+    hyprpanel.inputs.nixpkgs.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -42,17 +43,25 @@
     "x86_64-linux"
     ];
 
-    imports = [treefmt-nix.flakeModule];
+    imports = [
+      treefmt-nix.flakeModule
+      inputs.flake-parts.flakeModules.easyOverlay
+    ];
   
     flake = {
       nixosConfigurations = {
-        E14Gen6 = import ./hosts/E14Gen6 {inherit inputs;};
+        E14Gen6 = import ./hosts/E14Gen6 {
+        inherit inputs;
+        };  
       };
     };
 
     perSystem =
-      { ... }:
+      { pkgs, ... }:
       {
+       overlayAttrs = {
+          inherit (pkgs) hyprpanel;
+        };
         treefmt = {
           projectRootFile = "flake.nix";
           programs = {

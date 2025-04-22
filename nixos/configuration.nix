@@ -2,15 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{
-  inputs,
-  config,
-  hyprpanel,
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
+let
+  nixpkgs.config.allowUnfree = true; # プロプライエタリなパッケージを許可
+in
 {
+
 #  imports = [
   #   [ # Include the results of the hardware scan.
   #     ./hardware-configuration.nix
@@ -29,6 +27,15 @@
   #  ++ [
 #   ];
 
+  # Bootloader.
+  boot = {
+    loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+    };
+    kernelPackages = pkgs.linuxPackages_latest;
+  };
+
   programs = {
     git = {
       enable = true;
@@ -42,14 +49,6 @@
     hyprland = {
       enable = true; # enable Hyprland
     };
-  };
-  # Bootloader.
-  boot = {
-    loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
-    };
-    kernelPackages = pkgs.linuxPackages_latest;
   };
 
   networking.hostName = "nixos"; # Define your hostname.
@@ -139,7 +138,7 @@
   programs.firefox.enable = true;
 
   # Allow unfree packages
-  config.allowUnfree = true;
+  #config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

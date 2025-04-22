@@ -9,11 +9,10 @@ in
 nixpkgs.lib.nixosSystem {
   inherit system;
   specialArgs = {
-    inherit username xremap nixpkgs config;
+    inherit username xremap nixpkgs;
   };
 
   modules = [
-#    {nixpkgs.overlays = [inputs.hyprpanel.overlay];}
     ../../nixos
     ./hardware-configuration.nix 
     sops-nix.nixosModules.sops 
@@ -23,7 +22,7 @@ nixpkgs.lib.nixosSystem {
       home-manager.sharedModules = [ sops-nix.homeManagerModules.sops ];
       home-manager.users."${username}" = import ../../home-manager/home.nix;
       home-manager.extraSpecialArgs = {
-        inherit system config;
+        inherit system;
         inherit (inputs) nixpkgs hyprpanel;
       };
      }
