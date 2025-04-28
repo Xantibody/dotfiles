@@ -9,7 +9,7 @@ let
   configuration = import ./configuration.nix { inherit pkgs; };
 in 
 {
-  import = [
+  imports = [
     configuration
      xremap.nixosModules.default
   ];

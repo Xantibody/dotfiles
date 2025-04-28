@@ -23,24 +23,19 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    systems.url = "github:nix-systems/default";
   };
 
   outputs = 
   {
     flake-parts,
     treefmt-nix,
+    systems,
     ...
-  # }@inputs:
-    # nixpkgs, 
-    # home-manager,
-    # hyprpanel,
-    # ...
   }@inputs: 
 
   flake-parts.lib.mkFlake {inherit inputs;} {
-    systems = [
-    "x86_64-linux"
-    ];
+    systems = import systems;
 
     imports = [treefmt-nix.flakeModule];
   
