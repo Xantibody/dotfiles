@@ -17,3 +17,8 @@
 - ひたすらエラーログを解決
 - dry-run は `sudo nixos-rebuild dry-build --flake .#E14Gen6 --show-trace`でできるらしい
 - xremapが引数としてないとかnixos/default.nixで言われるのを解決する
+
+### 2025-04-28
+- 時を戻した
+- 取り敢えずhome-managerが悪いのは判ったのでちゃんとドキュメントを読む
+- エラーを斜め読みせずにやるぞ!
