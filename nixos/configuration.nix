@@ -3,30 +3,30 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { 
-  inputs,
-  config,
+#  inputs,
+#  config,
   pkgs, 
   ... 
 }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      # <home-manager/nixos>
-    ]
+#  imports = [
+  #   [ # Include the results of the hardware scan.
+  #     ./hardware-configuration.nix
+  #     # <home-manager/nixos>
+  #   ]
 
    # 環境に応じてインポートするモジュールを変更してください
-  ++ (with inputs.nixos-hardware.nixosModules; [
-     common-cpu-amd
-     common-gpu-amd
-     common-pc-ssd
-     # <nixos-hardware/lenovo/thinkpad/e14/amd> 多分これ
-   ])
-   # xremapのNixOS modulesを使えるようにする
-   ++ [
-     inputs.xremap.nixosModules.default
-   ];
+ # ++ 
+  # (with inputs.nixos-hardware.nixosModules; [
+  #    common-cpu-amd
+  #    common-gpu-amd
+  #    common-pc-ssd
+  #    # <nixos-hardware/lenovo/thinkpad/e14/amd> 多分これ
+  #  ])
+  #  # xremapのNixOS modulesを使えるようにする
+  #  ++ [
+#   ];
 
   programs = {
     git = {

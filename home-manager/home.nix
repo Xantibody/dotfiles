@@ -1,32 +1,32 @@
-{ config, pkgs, inputs, lib, ... }:{
-  imports = [
-    inputs.hyprpanel.homeManagerModules.hyprpanel
-  ];
-
+{ 
+pkgs, 
+hyprpanel,
+... }:{
+  imports = [ hyprpanel.homeManagerModules.hyprpanel ];
   home = rec {
     username = "raizawa";
     homeDirectory = "/home/${username}";
     stateVersion = "24.11";
     file  = {
         ".config/nvim/init.lua" = {
-          source = ./nvim/init.lua;
+          source = ../nvim/init.lua;
       };
         ".config/nvim/lua" = {
-          source = ./nvim/lua;
+          source = ../nvim/lua;
           recursive = true;
       };
         ".config/nvim/fplugin" = {
-          source = ./nvim/fplugin;
+          source = ../nvim/fplugin;
           recursive = true;
       };
         ".config/alacritty/alacritty.toml" = {
-          source = ./alacritty/alacritty.toml;
+          source = ../alacritty/alacritty.toml;
       };
         ".config/alacritty/themes/themes/dawnfox.toml" = {
           source = "${pkgs.alacritty-theme}/dawnfox.toml";
       };
         ".config/fish/config.fish" = {
-          source = ./fish/config.fish;
+          source = ../fish/config.fish;
       };
     };
 
@@ -41,33 +41,33 @@
       cliphist
       fzf
 
-(buildGoModule {
-      pname = "iccheck";
-      version = "0.9.0";
-      src = fetchFromGitHub {
-        owner = "salab";
-        repo = "iccheck";
-        rev = "v0.9.0";
-        sha256 = "sha256-2bD5gN/7C79njrCVoR5H2ses6pWAQHZcYj7/f2+Ui/o=";
-      };
-      vendorHash = "sha256-pqjtoshoQlz+SFpaaxN3GMaDdZ+ztiIV6w+CTrRHuaA=";
-      meta = with lib; {
-        homepage = "https://github.com/salab/iccheck";
-      };
-      doCheck = false;
-      subPackages = [
-        "."
-        "./cmd"
-        "./pkg/domain"
-        "./pkg/fleccs"
-        "./pkg/lsp"
-        "./pkg/ncdsearch"
-        "./pkg/printer"
-        "./pkg/search"
-        "./pkg/utils"
-      ];
-    })
-    ];
+# (buildGoModule {
+#       pname = "iccheck";
+#       version = "0.9.0";
+#       src = fetchFromGitHub {
+#         owner = "salab";
+#         repo = "iccheck";
+#         rev = "v0.9.0";
+#         sha256 = "sha256-2bD5gN/7C79njrCVoR5H2ses6pWAQHZcYj7/f2+Ui/o=";
+#       };
+#       vendorHash = "sha256-pqjtoshoQlz+SFpaaxN3GMaDdZ+ztiIV6w+CTrRHuaA=";
+#       meta = with lib; {
+#         homepage = "https://github.com/salab/iccheck";
+#       };
+#       doCheck = false;
+#       subPackages = [
+#         "."
+#         "./cmd"
+#         "./pkg/domain"
+#         "./pkg/fleccs"
+#         "./pkg/lsp"
+#         "./pkg/ncdsearch"
+#         "./pkg/printer"
+#         "./pkg/search"
+#         "./pkg/utils"
+#       ];
+#     })
+     ];
   };
   programs = {
     git = {
@@ -83,6 +83,7 @@
       vimAlias = true;
       extraPackages = with pkgs; [
         biome
+        nodejs_23
 
         #LSP
         rust-analyzer

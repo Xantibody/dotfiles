@@ -1,51 +1,67 @@
 {
+  description = "r-aizawa nix conf now!";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master"; 
-    xremap.url = "github:xremap/nix-flake"; 
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
-
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    xremap = {
+      url = "github:xremap/nix-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    systems.url = "github:nix-systems/default";
   };
 
-  outputs = inputs@{
-    nixpkgs, 
-    home-manager,
-    hyprpanel,
+  outputs = 
+  {
+    flake-parts,
+    treefmt-nix,
+    systems,
     ...
-  }: let
-    system = "x86_64-linux";
-  in {
-    nixosConfigurations = {
-      nixos = inputs.nixpkgs.lib.nixosSystem {
-        modules = [
-          ./configuration.nix
-        ];
-        specialArgs = {
-         inherit inputs;
-         inherit system;
-        };
+  }@inputs: 
+
+  flake-parts.lib.mkFlake {inherit inputs;} {
+    systems = import systems;
+
+    imports = [treefmt-nix.flakeModule];
+  
+    flake = {
+      nixosConfigurations = {
+        E14Gen6 = import ./hosts/E14Gen6 {inherit inputs;};
       };
     };
-    homeConfigurations = {
-      raizawa = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = import inputs.nixpkgs {
-          system = "x86_64-linux";
-          config.allowUnfree = true; # プロプライエタリなパッケージを許可
-            overlays = [
-              inputs.hyprpanel.overlay
-            ];
-         };
-         extraSpecialArgs = {
-           inherit system;
-           inherit inputs;
-         };
-         modules = [
-           ./home.nix
-         ];
-       };
-    };
-  };
 
+    perSystem =
+      { ... }:
+      {
+        treefmt = {
+          projectRootFile = "flake.nix";
+          programs = {
+            actionlint.enable = true;
+            nixfmt.enable = true;
+            taplo.enable = true;
+            jsonfmt.enable = true;
+            yamlfmt.enable = true;
+            fish_indent.enable = true;
+            stylua.enable = true;
+            shfmt.enable = true;
+            prettier.enable = true;
+          };
+        };
+      };
+  };
 }
