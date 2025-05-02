@@ -1,6 +1,5 @@
-{pkg,...}:{
-    with pkgs; 
-    [
+{pkgs,...}:
+    with pkgs; [
       bat
       eza
       alacritty-theme
@@ -38,5 +37,4 @@
 #         "./pkg/utils"
 #       ];
 #     })
-     ];
-  }
+     ] 
