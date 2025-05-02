@@ -7,28 +7,7 @@ hyprpanel,
     username = "raizawa";
     homeDirectory = "/home/${username}";
     stateVersion = "24.11";
-    file  = {
-        ".config/nvim/init.lua" = {
-          source = ../nvim/init.lua;
-      };
-        ".config/nvim/lua" = {
-          source = ../nvim/lua;
-          recursive = true;
-      };
-        ".config/nvim/fplugin" = {
-          source = ../nvim/fplugin;
-          recursive = true;
-      };
-        ".config/alacritty/alacritty.toml" = {
-          source = ../alacritty/alacritty.toml;
-      };
-        ".config/alacritty/themes/themes/dawnfox.toml" = {
-          source = "${pkgs.alacritty-theme}/dawnfox.toml";
-      };
-        ".config/fish/config.fish" = {
-          source = ../fish/config.fish;
-      };
-    };
+    file  = import ./file;
 
     packages = with pkgs; [
       bat
@@ -40,6 +19,7 @@ hyprpanel,
       wl-clipboard
       cliphist
       fzf
+      gh
 
 # (buildGoModule {
 #       pname = "iccheck";
