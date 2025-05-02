@@ -28,7 +28,7 @@ nixpkgs.lib.nixosSystem {
       home-manager = {
         useUserPackages = true;
         backupFileExtension = "backup";
-      # sharedModules = [ sops-nix.homeManagerModules.sops ];
+        sharedModules = [ sops-nix.homeManagerModules.sops ];
         users."${username}" = import ../../home-manager/home.nix;
         extraSpecialArgs = {
         inherit system;
