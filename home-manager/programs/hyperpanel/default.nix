@@ -68,5 +68,4 @@
         bar.volume.middleClick = "pavucontrol";
         bar.media.format = "{title}";
       };
-    };
 }

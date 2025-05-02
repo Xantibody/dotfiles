@@ -12,9 +12,9 @@ hyprpanel,
     };
   programs = {
     git = import ./programs/git;
-    neovim = import ./programs/neovim;
+    neovim = import ./programs/neovim {inherit pkgs;};
     hyprpanel = import ./programs/hyperpanel;
-    wayland = import ./programs/wayland;
     };
+    wayland = import ./wayland;
 }
 

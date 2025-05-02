@@ -1,4 +1,6 @@
 {
+pkgs,...
+}:{
       enable = true;
       defaultEditor = true; # $EDITOR=nvimに設定
       viAlias = true;
@@ -12,5 +14,4 @@
         efm-langserver
         lua-language-server
       ];
-      
 }
