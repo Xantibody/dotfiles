@@ -11,6 +11,7 @@ with pkgs;
   cliphist
   fzf
   gh
+  devbox
 
   # (buildGoModule {
   #       pname = "iccheck";
