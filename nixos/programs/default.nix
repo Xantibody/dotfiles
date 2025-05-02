@@ -1,21 +1,21 @@
 {
-    git = {
-      enable = true;
-    };
-    starship = {
-      enable = true;
-    };
-    fish = {
-      enable = true;
-     };
-    hyprland={
-      enable = true;
-      };
+  git = {
+    enable = true;
+  };
+  starship = {
+    enable = true;
+  };
+  fish = {
+    enable = true;
+  };
+  hyprland = {
+    enable = true;
+  };
   # Install firefox.
-    firefox = {
-      enable = true;
-    };
-    ssh = {
-      startAgent = true;
-    };
+  firefox = {
+    enable = true;
+  };
+  ssh = {
+    startAgent = true;
+  };
 }

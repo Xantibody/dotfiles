@@ -1,7 +1,7 @@
 return {
-  'stevearc/conform.nvim',
-  keys = {
-    --[[ {
+	"stevearc/conform.nvim",
+	keys = {
+		--[[ {
       -- Customize or remove this keymap to your liking
       "<leader>F",
       function()
@@ -10,7 +10,7 @@ return {
       -- mode = "",
       desc = "Format buffer",
   }, ]]
-  },
+	},
 
-  opts = {},
+	opts = {},
 }

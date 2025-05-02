@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   defaultLocale = "ja_JP.UTF-8";
   extraLocaleSettings = {
@@ -17,6 +18,6 @@
       fcitx5-skk
       fcitx5-gtk
       libsForQt5.fcitx5-qt
-      ];
+    ];
   };
 }

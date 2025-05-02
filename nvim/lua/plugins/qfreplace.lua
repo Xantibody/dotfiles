@@ -1,3 +1,3 @@
 return {
-  'thinca/vim-qfreplace',
+	"thinca/vim-qfreplace",
 }

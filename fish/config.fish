@@ -1,9 +1,9 @@
 fish_vi_key_bindings
 alias n="nvim"
 function dp
-    set -gx NVIM_APPNAME "darkpowered"
+    set -gx NVIM_APPNAME darkpowered
     nvim
-    set -e NVIM_APPNAME  # 終了後に環境変数を削除
+    set -e NVIM_APPNAME # 終了後に環境変数を削除
 end
 # alias ls="eza -lF"
 abbr ll 'eza --icons -lahF'

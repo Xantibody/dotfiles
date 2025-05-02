@@ -1,10 +1,8 @@
 [general]
-import = [
-    "~/.config/alacritty/themes/themes/dawnfox.toml", 
-]
+import = ["~/.config/alacritty/themes/themes/dawnfox.toml"]
 
 [window]
-option_as_alt =  "Both"
+option_as_alt = "Both"
 #startup_mode = "fullscreen"
 
 [font]
@@ -12,7 +10,7 @@ size = 14.0
 normal = { family = "Explex Console NF", style = "Regular" }
 
 [env]
- TERM = "alacritty"
+TERM = "alacritty"
 
 [terminal]
 shell = "fish"

@@ -1,5 +1,5 @@
 {
-      enable = true;
-      userName = "Xantibody";
-      userEmail = "zeku.bushinryu38@gmail.com";
+  enable = true;
+  userName = "Xantibody";
+  userEmail = "zeku.bushinryu38@gmail.com";
 }

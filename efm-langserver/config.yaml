@@ -2,15 +2,15 @@ version: 2
 log-level: 1
 tools:
   textlint: &textlint
-    lint-command: 'pnpm --no-install textlint -f unix --stdin --stdin-filename ${INPUT}'
+    lint-command: "pnpm --no-install textlint -f unix --stdin --stdin-filename ${INPUT}"
     lint-ignore-exit-code: true
     lint-stdin: true
     lint-formats:
-      - '%f:%l:%c: %m [%trror/%r]'
+      - "%f:%l:%c: %m [%trror/%r]"
     root-markers:
       - .textlintrc
 languages:
   markdown:
-    - <<: *textlint
+    - !!merge <<: *textlint
   markdown.mdx:
-    - <<: *textlint
+    - !!merge <<: *textlint

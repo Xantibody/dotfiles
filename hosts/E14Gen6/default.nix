@@ -21,9 +21,9 @@ nixpkgs.lib.nixosSystem {
 
   modules = [
     ../../nixos
-    ./hardware-configuration.nix 
-    sops-nix.nixosModules.sops 
-    home-manager.nixosModules.home-manager 
+    ./hardware-configuration.nix
+    sops-nix.nixosModules.sops
+    home-manager.nixosModules.home-manager
     {
       home-manager = {
         useUserPackages = true;
@@ -31,10 +31,10 @@ nixpkgs.lib.nixosSystem {
         sharedModules = [ sops-nix.homeManagerModules.sops ];
         users."${username}" = import ../../home-manager/home.nix;
         extraSpecialArgs = {
-        inherit system;
-        inherit pkgs hyprpanel;
+          inherit system;
+          inherit pkgs hyprpanel;
         };
-       };
-     }
-   ];
+      };
+    }
+  ];
 }

@@ -1,3 +1,3 @@
 return {
-  "matsui54/denops-signature_help",
+	"matsui54/denops-signature_help",
 }
