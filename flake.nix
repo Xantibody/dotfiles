@@ -62,6 +62,10 @@
             prettier.enable = true;
           };
         };
+          nixfmt = {
+            enable = true;
+            package = nixpkgs.nixfmt-rfc-style;
+          };
       };
   };
 }

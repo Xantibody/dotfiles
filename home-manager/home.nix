@@ -7,8 +7,8 @@ hyprpanel,
     username = "raizawa";
     homeDirectory = "/home/${username}";
     stateVersion = "24.11";
-    file  = import ./file {inherit pkgs;};
-    packages = import ./packages {inherit pkgs;};
+    file  = import ./home/file {inherit pkgs;};
+    packages = import ./home/packages {inherit pkgs;};
     };
   programs = {
     git = import ./programs/git;
@@ -17,4 +17,3 @@ hyprpanel,
     };
     wayland = import ./wayland;
 }
-
