@@ -16,6 +16,7 @@
     git = import ./programs/git;
     neovim = import ./programs/neovim { inherit pkgs; };
     hyprpanel = import ./programs/hyperpanel;
+    alacritty = import ./programs/alacritty;
   };
   wayland = import ./wayland;
 }

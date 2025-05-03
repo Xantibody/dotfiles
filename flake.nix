@@ -62,10 +62,6 @@
               prettier.enable = true;
             };
           };
-          # nixfmt = {
-          #   enable = true;
-          #   package = pkgs.nixfmt-rfc-style;
-          # };
         };
     };
 }

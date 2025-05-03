@@ -11,7 +11,6 @@
   hyprland = {
     enable = true;
   };
-  # Install firefox.
   firefox = {
     enable = true;
   };

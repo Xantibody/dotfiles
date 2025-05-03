@@ -3,9 +3,8 @@ with pkgs;
 [
   bat
   eza
-  alacritty-theme
+#  alacritty-theme
   ripgrep
-  discord
   gnumake
   wl-clipboard
   cliphist
