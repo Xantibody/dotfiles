@@ -84,107 +84,69 @@ return {
 	},
 
 	config = function()
-		-- import lspconfig plugin
-		local lspconfig = require("lspconfig")
-
-		-- import cmp-nvim-lsp plugin
-		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 			callback = function(ev)
-				-- Buffer local mappings.
-				-- See `:help vim.lsp.*` for documentation on any of the below functions
 				local opts = { buffer = ev.buf, silent = true }
 			end,
 		})
-		-- used to enable autocompletion (assign to every lsp server config)
+
+		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
-		-- Change the Diagnostic symbols in the sign column (gutter)
-		-- (not in youtube nvim video)
 		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 		for type, icon in pairs(signs) do
 			local hl = "DiagnosticSign" .. type
 			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 		end
 
-		-- -- java settings
-		-- -- Must be java17 or higher. lol
-		-- lspconfig["jdtls"].setup({
-		--   capabilities = capabilities,
-		--   on_attach = on_attach,
-		-- })
-
-		lspconfig.rust_analyzer.setup({
-			settings = {
-				["rust-analyzer"] = {
-					diagnostics = {
-						enable = false,
-					},
-				},
-			},
-		})
-
-		-- lua settings
-		lspconfig["lua_ls"].setup({
-			capabilities = capabilities,
-			on_attach = on_attach,
-		})
+		vim.lsp.enable("rust_analyzer")
+		vim.lsp.enable("gopls")
+		vim.lsp.enable("lua_ls")
+		vim.lsp.enable("ts_ls")
 
 		-- -- markdown settings
 		-- lspconfig["marksman"].setup({
 		--   capabilities = capabilities,
-		--   on_attach = on_attach,
 		-- })
 		--
 		-- -- yaml settings
 		-- lspconfig["yamlls"].setup({
 		--   capabilities = capabilities,
-		--   on_attach = on_attach,
 		-- })
 		--
 		-- --python settings
 		-- lspconfig["pylsp"].setup({
 		--   capabilities = capabilities,
-		--   on_attach = on_attach,
 		-- })
 		--
 		-- --ts, js settings
 		-- lspconfig["ts_ls"].setup({
 		--   capabilities = capabilities,
-		--   on_attach = on_attach,
 		-- })
 		--
 		-- --bash settings
 		-- lspconfig["bashls"].setup({
 		--   capabilities = capabilities,
-		--   on_attach = on_attach,
 		-- })
 		--
 		-- --terraform settings
 		-- lspconfig["terraformls"].setup({
 		--   capabilities = capabilities,
-		--   on_attach = on_attach,
 		-- })
 		--
 		-- --astro settings
 		-- lspconfig["astro"].setup({
 		--   capabilities = capabilities,
-		--   on_attach = on_attach,
 		-- })
 		--
 		-- --typst setting
 		-- lspconfig["tinymist"].setup({
 		--   capabilities = capabilities,
-		--   on_attach = on_attach,
 		-- })
 		--
 		--efm settings
-		lspconfig["efm"].setup({
-			init_options = {
-				documentFormatting = true,
-			},
+		vim.lsp.config("efm", {
 			filetypes = {
 				"lua",
 				"markdown",
@@ -208,29 +170,6 @@ return {
 					},
 				},
 			},
-		})
-
-		lspconfig.helm_ls.setup({
-			settings = {
-				["helm-ls"] = {
-					yamlls = {
-						path = "yaml-language-server",
-					},
-				},
-			},
-		})
-
-		-- --motoki settings
-		vim.api.nvim_create_autocmd("BufReadPost", {
-			desc = "LSP: iccheck",
-			callback = function()
-				vim.lsp.start({
-					capabilities = capabilities,
-					cmd = { "iccheck", "lsp" },
-					name = "iccheck",
-					root_dir = vim.fn.getcwd(),
-				})
-			end,
 		})
 	end,
 }

@@ -60,8 +60,7 @@ return {
 				expand = function(args)
 					luasnip.lsp_expand(args.body)
 				end,
-			}
-,
+			},
 			mapping = cmp.mapping.preset.insert({
 				["<Tab>"] = cmp.mapping.select_next_item(),
 				["<S-Tab>"] = cmp.mapping.select_prev_item(),
@@ -89,27 +88,18 @@ return {
 					mode = "symbol",
 					maxwidth = 50,
 					menu = {
-						buffer = "[Buffer]",
-						nvim_lsp = "[LSP]",
-						luasnip = "[LuaSnip]",
+						buffer = "󰓩",
+						nvim_lsp = "󰙱",
+						luasnip = "󰯂",
 						nvim_lua = "[Lua]",
-						path = "[Path]",
-						spell = "[Spell]",
-						copilot = "[Copilot]",
-						emoji = "[Emoji]",
-						nerdfont = "[NF]",
+						path = "",
+						spell = "󰓆",
+						emoji = "󰞅",
+						nerdfont = "󰹼",
 					},
 				}),
 			},
 		})
-
-		-- copilot setup
-		lspkind.init({
-			symbol_map = {
-				Copilot = "",
-			},
-		})
-		vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
 
 		-- `/` cmdline setup.
 		cmp.setup.cmdline("/", {

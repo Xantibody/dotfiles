@@ -10,10 +10,14 @@
   extraPackages = with pkgs; [
     biome
     nodejs_23
+    wl-clipboard
+    go
 
     #LSP
     rust-analyzer
     efm-langserver
     lua-language-server
+    gopls
+    typescript-language-server
   ];
 }
