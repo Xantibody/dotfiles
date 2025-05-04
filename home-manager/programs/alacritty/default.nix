@@ -1,4 +1,5 @@
-{pkgs,...}:{
+{ pkgs, ... }:
+{
   enable = true;
   settings = {
     window = {
@@ -7,10 +8,10 @@
     };
     font = {
       size = 14.0;
-    normal = {
-      family = "Explex Console NF";
-      style = "Regular";
-    };
+      normal = {
+        family = "Explex Console NF";
+        style = "Regular";
+      };
     };
     env = {
       TERM = "alacritty";
