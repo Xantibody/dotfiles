@@ -18,6 +18,6 @@
     terminal = {
       shell = "fish";
     };
-    general.import = [ pkgs.alacritty-theme.cyber_punk_neon] ;
+    general.import = [ pkgs.alacritty-theme.dawnfox ];
   };
 }

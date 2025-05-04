@@ -1,4 +1,4 @@
-{ inputs }:
+{ inputs, ... }:
 let
   inherit (inputs) nixpkgs xremap hyprpanel alacritty-theme;
   inherit (inputs) sops-nix home-manager;
@@ -9,9 +9,7 @@ let
   pkgs = import nixpkgs {
     inherit system;
     overlays = [ 
-    hyprpanel.overlay 
-    alacritty-theme.overlays.default
-    
+    hyprpanel.overlay alacritty-theme.overlays.default
     ];
     config.allowUnfree = true;
   };
