@@ -3,7 +3,7 @@ with pkgs;
 [
   bat
   eza
-#  alacritty-theme
+  alacritty-theme
   ripgrep
   gnumake
   wl-clipboard
