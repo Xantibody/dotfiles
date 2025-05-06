@@ -7,10 +7,6 @@
     source = ../../../nvim/lua;
     recursive = true;
   };
-  ".config/nvim/fplugin" = {
-    source = ../../../nvim/fplugin;
-    recursive = true;
-  };
   ".config/fish/config.fish" = {
     source = ../../../fish/config.fish;
   };
