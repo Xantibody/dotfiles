@@ -12,6 +12,7 @@
     nodejs_23
     wl-clipboard
     go
+    pnpm_9
 
     #LSP
     rust-analyzer
