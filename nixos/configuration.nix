@@ -16,13 +16,11 @@
   nixpkgs.config.allowUnfree = true;
   fonts.packages = with pkgs; [ hackgen-nf-font ];
   environment.systemPackages = with pkgs; [
-    #alacritty
     neovim
     unzip
     fishPlugins.z
     slack
     docker
-    mise
     deno
     xsel
     fzf

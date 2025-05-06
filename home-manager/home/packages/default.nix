@@ -5,7 +5,6 @@ with pkgs;
   eza
   ripgrep
   gnumake
-  wl-clipboard
   cliphist
   fzf
   gh
