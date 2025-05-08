@@ -12,10 +12,6 @@
     nodejs_23
     wl-clipboard
     go
-    pnpm_9
-    textlint
-    textlint-rule-preset-ja-technical-writing
-
 
     #LSP
     rust-analyzer

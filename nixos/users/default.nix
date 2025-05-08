@@ -2,7 +2,7 @@
 {
   users.raizawa = {
     isNormalUser = true;
-    description = "raizawa";
+    description = "r-aizawa";
     extraGroups = [
       "networkmanager"
       "wheel"

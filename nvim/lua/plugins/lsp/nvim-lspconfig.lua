@@ -92,6 +92,7 @@ return {
 		})
 
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
+		local capabilities = cmp_nvim_lsp.default_capabilities()
 
 		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 		for type, icon in pairs(signs) do
@@ -103,33 +104,6 @@ return {
 		vim.lsp.enable("gopls")
 		vim.lsp.enable("lua_ls")
 		vim.lsp.enable("ts_ls")
-		vim.lsp.enable("efm")
-		vim.lsp.config("efm", {
-			filetypes = {
-				"lua",
-				"markdown",
-			},
-			settings = {
-				rootMarkers = {
-					".git/",
-					".textlintrc",
-				},
-				languages = {
-					lua = {
-						{
-							formatCommand = "lua-format -i",
-						},
-					},
-					markdown = {
-            {
-						lintCommand = "textlint -f unix --stdin --stdin-filename ${INPUT}",
-						lintFormats = { "%f:%l:%c: %m [%trror/%r]" },
-						rootMarkers = { ".textlintrc" },
-            },
-					},
-				},
-			},
-		})
 
 		-- -- markdown settings
 		-- lspconfig["marksman"].setup({
@@ -172,5 +146,30 @@ return {
 		-- })
 		--
 		--efm settings
+		vim.lsp.config("efm", {
+			filetypes = {
+				"lua",
+				"markdown",
+				"markdown.mdx",
+			},
+			settings = {
+				rootMarkers = {
+					".git/",
+					".textlintrc",
+				},
+				languages = {
+					lua = {
+						{
+							formatCommand = "lua-format -i",
+						},
+					},
+					markdown = {
+						lintCommand = "pnpm --no-install textlint -f unix --stdin --stdin-filename ${INPUT}",
+						lintFormats = { "%f:%l:%c: %m [%trror/%r]" },
+						rootMarkers = { ".textlintrc" },
+					},
+				},
+			},
+		})
 	end,
 }
