@@ -2,7 +2,7 @@ version: 2
 log-level: 1
 tools:
   textlint: &textlint
-    lint-command: "pnpm --no-install textlint -f unix --stdin --stdin-filename ${INPUT}"
+    lint-command: "textlint -f unix --stdin --stdin-filename ${INPUT}"
     lint-ignore-exit-code: true
     lint-stdin: true
     lint-formats:
