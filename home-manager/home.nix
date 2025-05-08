@@ -18,6 +18,7 @@
     hyprpanel = import ./programs/hyperpanel;
     alacritty = import ./programs/alacritty { inherit pkgs; };
     direnv = import ./programs/direnv;
-    starship =  import ./programs/starship;
+    starship = import ./programs/starship;
+  };
   wayland = import ./wayland;
 }
