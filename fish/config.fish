@@ -5,7 +5,10 @@ function dp
     nvim
     set -e NVIM_APPNAME # 終了後に環境変数を削除
 end
+
 abbr ll 'eza --icons -lahF'
+starship init fish | source
+direnv hook fish | source
 
 # Nightfox Color Palette
 # Style: dayfox
@@ -42,5 +45,3 @@ set -g fish_pager_color_progress $comment
 set -g fish_pager_color_prefix $cyan
 set -g fish_pager_color_completion $foreground
 set -g fish_pager_color_description $comment
-
-starship init fish | source

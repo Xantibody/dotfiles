@@ -17,6 +17,7 @@
     neovim = import ./programs/neovim { inherit pkgs; };
     hyprpanel = import ./programs/hyperpanel;
     alacritty = import ./programs/alacritty { inherit pkgs; };
+    direnv = import ./programs/direnv;
   };
   wayland = import ./wayland;
 }
