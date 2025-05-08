@@ -1,6 +1,5 @@
 {
   description = "r-aizawa nix conf now!";
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -46,23 +45,21 @@
         };
       };
 
-      perSystem =
-        { pkgs, ... }:
-        {
-          treefmt = {
-            projectRootFile = "flake.nix";
-            programs = {
-              actionlint.enable = true;
-              nixfmt.enable = true;
-              taplo.enable = true;
-              jsonfmt.enable = true;
-              yamlfmt.enable = true;
-              fish_indent.enable = true;
-              stylua.enable = true;
-              shfmt.enable = true;
-              prettier.enable = true;
-            };
+      perSystem = {
+        treefmt = {
+          projectRootFile = "flake.nix";
+          programs = {
+            actionlint.enable = true;
+            nixfmt.enable = true;
+            taplo.enable = true;
+            jsonfmt.enable = true;
+            yamlfmt.enable = true;
+            fish_indent.enable = true;
+            stylua.enable = true;
+            shfmt.enable = true;
+            prettier.enable = true;
           };
         };
+      };
     };
 }

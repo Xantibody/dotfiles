@@ -2,7 +2,7 @@
   enable = true;
   overwrite.enable = true;
   hyprland.enable = true;
-  theme = "catppuccin_mocha";
+  theme = "everforest";
   layout = {
     "bar.layouts" =
       let

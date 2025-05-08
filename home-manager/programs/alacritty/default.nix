@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 {
   enable = true;
   settings = {
@@ -7,7 +10,7 @@
       #startup_mode = "fullscreen"
     };
     font = {
-      size = 14.0;
+      size = 13;
       normal = {
         family = "Explex Console NF";
         style = "Regular";

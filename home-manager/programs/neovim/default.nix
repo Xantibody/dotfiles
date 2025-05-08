@@ -19,5 +19,6 @@
     lua-language-server
     gopls
     typescript-language-server
+    nixd
   ];
 }
