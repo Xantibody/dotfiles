@@ -104,6 +104,11 @@ return {
 		vim.lsp.enable("gopls")
 		vim.lsp.enable("lua_ls")
 		vim.lsp.enable("ts_ls")
+    vim.lsp.enable("nixd")
+		vim.lsp.config("nixd", {
+			cmd = { "nix", "run", "nixpkgs#nixd" },
+			filetypes = { "nix" },
+		})
 
 		-- -- markdown settings
 		-- lspconfig["marksman"].setup({
