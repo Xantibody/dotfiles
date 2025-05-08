@@ -16,7 +16,6 @@
   nixpkgs.config.allowUnfree = true;
   fonts.packages = with pkgs; [ hackgen-nf-font ];
   environment.systemPackages = with pkgs; [
-    neovim
     unzip
     fishPlugins.z
     slack
@@ -28,7 +27,6 @@
     gcc
     clang
     zig
-    starship
     kdePackages.dolphin
     wofi
   ];
