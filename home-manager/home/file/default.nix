@@ -10,4 +10,7 @@
   ".config/fish/config.fish" = {
     source = ../../../fish/config.fish;
   };
+  ".config/efm-langserver/config.yaml" = {
+    source = ../../../efm-langserver/config.yaml;
+  };
 }
