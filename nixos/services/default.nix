@@ -1,4 +1,8 @@
 {
+  pkgs,
+  ...
+}:
+{
   xserver = {
     enable = true;
     xkb = {
@@ -53,17 +57,14 @@
       ];
     };
   };
-  # xremapでキー設定をいい感じに変更
   # fprintd = {
-  #   enable = true;
-  #   tod = {
-  #     enable = true;
-  #     # https://ryantm.github.io/nixpkgs/using/overrides/
-  #     # passthru.driverPath = "/lib/libfprint-2/tod-1"; をoverriding
-  #     # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/li/libfprint-2-tod1-goodix-550a/package.nix#L44
-  #     driver = pkgs.libfprint-tod;
-  #   };
-  # };
+  fprintd = {
+    enable = true;
+    tod = {
+      enable = true;
+      driver = pkgs.libfprint-2-tod1-goodix;
+    };
+  };
   upower = {
     enable = true;
   };

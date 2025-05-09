@@ -6,7 +6,7 @@
   programs = import ./programs;
   boot = import ./boot { inherit pkgs; };
   i18n = import ./i18n { inherit pkgs; };
-  services = import ./services;
+  services = import ./services { inherit pkgs; };
   nix = import ./nix;
   users = import ./users { inherit pkgs; };
   networking = import ./networking;
@@ -15,20 +15,5 @@
   security.rtkit.enable = true;
   nixpkgs.config.allowUnfree = true;
   fonts.packages = with pkgs; [ hackgen-nf-font ];
-  environment.systemPackages = with pkgs; [
-    unzip
-    fishPlugins.z
-    slack
-    docker
-    deno
-    xsel
-    fzf
-    tree-sitter
-    gcc
-    clang
-    zig
-    kdePackages.dolphin
-    wofi
-  ];
-
+  environment = import ./environment{inherit pkgs;};
 }
