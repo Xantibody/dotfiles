@@ -24,5 +24,6 @@ pkgs,
     zig
     kdePackages.dolphin
     wofi
+    wl-clipboard
   ];
 }
