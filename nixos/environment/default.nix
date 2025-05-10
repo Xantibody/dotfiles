@@ -1,7 +1,8 @@
 {
-pkgs,
-...
-}:{
+  pkgs,
+  ...
+}:
+{
   etc."polkit-1/rules.d/50-fprintd.rules".text = ''
     polkit.addRule(function(action, subject) {
       if (action.id == "net.reactivated.fprint.device.enroll" &&
@@ -25,5 +26,6 @@ pkgs,
     kdePackages.dolphin
     wofi
     wl-clipboard
+    usbutils
   ];
 }

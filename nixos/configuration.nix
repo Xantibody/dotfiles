@@ -15,5 +15,5 @@
   security.rtkit.enable = true;
   nixpkgs.config.allowUnfree = true;
   fonts.packages = with pkgs; [ hackgen-nf-font ];
-  environment = import ./environment{inherit pkgs;};
+  environment = import ./environment { inherit pkgs; };
 }

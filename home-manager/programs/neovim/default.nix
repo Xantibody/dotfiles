@@ -19,5 +19,6 @@
     gopls
     typescript-language-server
     nixd
+    basedpyright
   ];
 }

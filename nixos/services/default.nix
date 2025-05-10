@@ -10,10 +10,8 @@
       variant = "";
     };
   };
-
   # Enable CUPS to print documents.
   printing.enable = true;
-
   pipewire = {
     enable = true;
     alsa = {
@@ -22,7 +20,6 @@
     };
     pulse.enable = true;
   };
-
   auto-cpufreq = {
     enable = true;
   };
@@ -57,13 +54,18 @@
       ];
     };
   };
-  # fprintd = {
   fprintd = {
     enable = true;
     tod = {
       enable = true;
       driver = pkgs.libfprint-2-tod1-goodix;
     };
+  };
+  udev = {
+    enable = true;
+     extraRules = ''
+      SUBSYSTEM=="usb", ATTR{idVendor}=="10a5", ATTR{idProduct}=="d805", MODE="0666"
+  '';
   };
   upower = {
     enable = true;
