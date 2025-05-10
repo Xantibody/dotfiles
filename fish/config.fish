@@ -7,6 +7,7 @@ function dp
 end
 
 abbr ll 'eza --icons -lahF'
+abbr dbde 'devbox init && devbox generate direnv'
 starship init fish | source
 direnv hook fish | source
 
