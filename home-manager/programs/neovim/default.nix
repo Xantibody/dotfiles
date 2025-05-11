@@ -20,5 +20,6 @@
     typescript-language-server
     nixd
     basedpyright
+    vscode-langservers-extracted
   ];
 }

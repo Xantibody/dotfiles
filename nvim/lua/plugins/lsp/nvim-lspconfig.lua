@@ -106,7 +106,7 @@ return {
 		vim.lsp.enable("ts_ls")
 		vim.lsp.enable("nixd")
 		vim.lsp.enable("basedpyright")
-
+		vim.lsp.enable("html")
 		-- -- markdown settings
 		-- lspconfig["marksman"].setup({
 		--   capabilities = capabilities,
