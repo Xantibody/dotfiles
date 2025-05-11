@@ -27,5 +27,7 @@
     wofi
     wl-clipboard
     usbutils
+    jq
+    vulnix
   ];
 }
