@@ -9,6 +9,7 @@ with pkgs;
   fzf
   gh
   devbox
+  nix-prefetch-github
 
   # (buildGoModule {
   #       pname = "iccheck";
