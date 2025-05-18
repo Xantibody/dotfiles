@@ -63,9 +63,9 @@
   };
   udev = {
     enable = true;
-     extraRules = ''
+    extraRules = ''
       SUBSYSTEM=="usb", ATTR{idVendor}=="10a5", ATTR{idProduct}=="d805", MODE="0666"
-  '';
+    '';
   };
   upower = {
     enable = true;

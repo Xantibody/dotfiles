@@ -21,5 +21,6 @@
     nixd
     basedpyright
     vscode-langservers-extracted
+    bash-language-server
   ];
 }
