@@ -22,5 +22,6 @@
     basedpyright
     vscode-langservers-extracted
     bash-language-server
+    tinymist 
   ];
 }

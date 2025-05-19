@@ -108,6 +108,7 @@ return {
 		vim.lsp.enable("basedpyright")
 		vim.lsp.enable("html")
     vim.lsp.enable("bashls")
+    vim.lsp.enable("tinymist")
 		-- -- markdown settings
 		-- lspconfig["marksman"].setup({
 		--   capabilities = capabilities,
