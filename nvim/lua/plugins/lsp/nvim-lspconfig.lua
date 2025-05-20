@@ -109,7 +109,7 @@ return {
 		vim.lsp.enable("html")
 		vim.lsp.enable("bashls")
 		vim.lsp.enable("tinymist")
-		--
+
 		--efm settings
 		vim.lsp.config("efm", {
 			filetypes = {
