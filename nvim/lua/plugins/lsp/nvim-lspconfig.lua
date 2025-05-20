@@ -107,47 +107,8 @@ return {
 		vim.lsp.enable("nixd")
 		vim.lsp.enable("basedpyright")
 		vim.lsp.enable("html")
-    vim.lsp.enable("bashls")
-    vim.lsp.enable("tinymist")
-		-- -- markdown settings
-		-- lspconfig["marksman"].setup({
-		--   capabilities = capabilities,
-		-- })
-		--
-		-- -- yaml settings
-		-- lspconfig["yamlls"].setup({
-		--   capabilities = capabilities,
-		-- })
-		--
-		-- --python settings
-		-- lspconfig["pylsp"].setup({
-		--   capabilities = capabilities,
-		-- })
-		--
-		-- --ts, js settings
-		-- lspconfig["ts_ls"].setup({
-		--   capabilities = capabilities,
-		-- })
-		--
-		-- --bash settings
-		-- lspconfig["bashls"].setup({
-		--   capabilities = capabilities,
-		-- })
-		--
-		-- --terraform settings
-		-- lspconfig["terraformls"].setup({
-		--   capabilities = capabilities,
-		-- })
-		--
-		-- --astro settings
-		-- lspconfig["astro"].setup({
-		--   capabilities = capabilities,
-		-- })
-		--
-		-- --typst setting
-		-- lspconfig["tinymist"].setup({
-		--   capabilities = capabilities,
-		-- })
+		vim.lsp.enable("bashls")
+		vim.lsp.enable("tinymist")
 		--
 		--efm settings
 		vim.lsp.config("efm", {

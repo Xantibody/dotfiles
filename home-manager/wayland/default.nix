@@ -24,11 +24,16 @@
             "$mod, P, pseudo, # dwindle"
             "$mod, S, togglesplit, # dwindle"
 
-            # Move focus with mod + arrow keys
+            # Move focus with mod for vim key
             "$mod, H, movefocus, l"
             "$mod, L, movefocus, r"
             "$mod, K, movefocus, u"
             "$mod, J, movefocus, d"
+            "$mod, left, swapwindow, l"
+            "$mod, right, swapwindow, r"
+            "$mod, up, swapwindow, u"
+            "$mod, down, swapwindow, d"
+
           ]
           ++ (
             # workspaces

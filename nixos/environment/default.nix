@@ -29,5 +29,6 @@
     usbutils
     jq
     vulnix
+    zathura
   ];
 }
