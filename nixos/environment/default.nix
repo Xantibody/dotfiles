@@ -30,5 +30,6 @@
     jq
     vulnix
     zathura
+    gimp3
   ];
 }
