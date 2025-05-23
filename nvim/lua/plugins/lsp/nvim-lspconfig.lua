@@ -7,14 +7,6 @@ return {
 	},
 	keys = {
 		{
-			"<leader>F",
-			function()
-				vim.lsp.buf.format({ async = true })
-			end,
-			mode = "n",
-			desc = "Format buffer using LSP",
-		},
-		{
 			"gD",
 			vim.lsp.buf.declaration,
 			mode = "n",
