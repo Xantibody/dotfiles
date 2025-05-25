@@ -1,5 +1,6 @@
 #! /usr/bin/python3
 
+#issue https://gitlab.freedesktop.org/libfprint/libfprint/-/issues/415#note_1063158
 import gi
 gi.require_version('FPrint', '2.0')
 from gi.repository import FPrint
