@@ -101,6 +101,7 @@ return {
 		vim.lsp.enable("html")
 		vim.lsp.enable("bashls")
 		vim.lsp.enable("tinymist")
+		vim.lsp.enable("hls")
 
 		--efm settings
 		vim.lsp.config("efm", {
