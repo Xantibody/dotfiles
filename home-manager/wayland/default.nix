@@ -4,7 +4,6 @@
       enable = true;
       settings = {
         exec-once = [
-          "fcitx5"
           "wl-paste --type text --watch cliphist store # Stores only text data"
           "wl-paste --type image --watch cliphist store # Stores only image data"
         ];
@@ -29,10 +28,11 @@
             "$mod, L, movefocus, r"
             "$mod, K, movefocus, u"
             "$mod, J, movefocus, d"
-            "$mod, left, swapwindow, l"
-            "$mod, right, swapwindow, r"
-            "$mod, up, swapwindow, u"
-            "$mod, down, swapwindow, d"
+            "$mod_SHIFT, H, swapwindow, l"
+            "$mod_SHIFT, L, swapwindow, r"
+            "$mod_SHIFT, K, swapwindow, u"
+            "$mod_SHIFT, J, swapwindow, d"
+
 
           ]
           ++ (
