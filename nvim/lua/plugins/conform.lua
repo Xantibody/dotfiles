@@ -1,5 +1,6 @@
 return {
 	"stevearc/conform.nvim",
+	event = { "BufWritePre" },
 	keys = {
 		{
 			-- Customize or remove this keymap to your liking
@@ -13,14 +14,14 @@ return {
 	},
 	config = function()
 		require("conform").setup({
+			format_on_save = {
+				timeout_ms = 500,
+				lsp_format = "fallback",
+			},
 			formatters_by_ft = {
 				lua = { "stylua" },
 				go = { "gofmt" },
 				nix = { "nixfmt" },
-			},
-			format_on_save = {
-				timeout_ms = 500,
-				lsp_format = "fallback",
 			},
 		})
 	end,
