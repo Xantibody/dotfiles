@@ -1,15 +1,19 @@
-{ pkgs, ... }:
+{
+pkgs,
+... 
+}:
 with pkgs;
 [
   bat
-  eza
-  ripgrep
-  gnumake
   cliphist
+  devbox
+  eza
   fzf
   gh
-  devbox
+  gnumake
   nix-prefetch-github
+  #pympress
+  ripgrep
 
   # (buildGoModule {
   #       pname = "iccheck";
