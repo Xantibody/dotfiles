@@ -15,7 +15,7 @@
   programs = {
     git = import ./programs/git;
     neovim = import ./programs/neovim { inherit pkgs; };
-    hyprpanel = import ./programs/hyperpanel;
+    hyprpanel = import ./programs/hyprpanel;
     alacritty = import ./programs/alacritty { inherit pkgs; };
     direnv = import ./programs/direnv;
     starship = import ./programs/starship;
