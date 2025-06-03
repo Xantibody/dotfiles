@@ -10,7 +10,6 @@
   extraPackages = with pkgs; [
     biome
     nodejs_23
-    go
 
     #LSP
     rust-analyzer

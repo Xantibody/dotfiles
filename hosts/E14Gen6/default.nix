@@ -1,4 +1,7 @@
-{ inputs, ... }:
+{
+  inputs,
+  ...
+}:
 let
   inherit (inputs)
     nixpkgs
@@ -16,6 +19,8 @@ let
     overlays = [
       hyprpanel.overlay
       alacritty-theme.overlays.default
+      #(import ../../overlays/explex)
+      #   (import ../../overlays/markmap)
     ];
     config.allowUnfree = true;
   };
