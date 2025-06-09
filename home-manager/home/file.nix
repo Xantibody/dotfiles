@@ -1,10 +1,9 @@
-{ pkgs, ... }:
 {
   ".config/nvim/init.lua" = {
     source = ../../nvim/init.lua;
   };
   ".config/nvim/lua" = {
-    source =  ../../nvim/lua;
+    source = ../../nvim/lua;
     recursive = true;
   };
   ".config/fish/config.fish" = {
@@ -12,5 +11,8 @@
   };
   ".config/efm-langserver/config.yaml" = {
     source = ../../efm-langserver/config.yaml;
+  };
+  ".skk/SKK-JISYO.L" = {
+    source = ../../skk/SKK-JISYO.L;
   };
 }
