@@ -33,7 +33,6 @@
             "$mod_SHIFT, K, swapwindow, u"
             "$mod_SHIFT, J, swapwindow, d"
 
-
           ]
           ++ (
             # workspaces

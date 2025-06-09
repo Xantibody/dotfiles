@@ -5,9 +5,10 @@
 }:
 let
   username = "raizawa";
-in {
+in
+{
   imports = [ hyprpanel.homeManagerModules.hyprpanel ];
-  home = import ./home {inherit pkgs username;}; 
-  programs = import ./programs {inherit pkgs;};
+  home = import ./home { inherit pkgs username; };
+  programs = import ./programs { inherit pkgs; };
   wayland = import ./wayland.nix;
 }
