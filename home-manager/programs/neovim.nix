@@ -8,6 +8,7 @@
   viAlias = true;
   vimAlias = true;
   extraPackages = with pkgs; [
+    tree-sitter
     biome
     nodejs_23
 
