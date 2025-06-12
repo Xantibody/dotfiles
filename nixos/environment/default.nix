@@ -12,24 +12,20 @@
     });
   '';
   systemPackages = with pkgs; [
-    unzip
-    fishPlugins.z
-    slack
-    docker
-    deno
-    xsel
-    fzf
-    tree-sitter
-    gcc
     clang
-    zig
-    kdePackages.dolphin
-    wofi
-    wl-clipboard
-    usbutils
-    jq
-    vulnix
-    zathura
+    deno
+    fishPlugins.z
+    fzf
+    gcc
     gimp3
+    jq
+    kdePackages.dolphin
+    slack
+    unzip
+    usbutils
+    vulnix
+    wl-clipboard
+    wofi
+    xsel
   ];
 }
