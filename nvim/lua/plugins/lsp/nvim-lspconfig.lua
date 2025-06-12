@@ -9,12 +9,12 @@ return {
 		{ "<leader>ca", vim.lsp.buf.code_action, mode = { "n", "v" }, desc = "See available code actions" },
 		{ "<leader>rn", vim.lsp.buf.rename, mode = "n", desc = "Smart rename" },
 		{ "<leader>d", vim.diagnostic.open_float, mode = "n", desc = "Show line diagnostics" },
+		{ "<leader>D", vim.lsp.buf.type_definition, desc = "Go to type definition" },
 		{ "[d", vim.diagnostic.goto_prev, mode = "n", desc = "Go to previous diagnostic" },
 		{ "]d", vim.diagnostic.goto_next, mode = "n", desc = "Go to next diagnostic" },
 		{ "K", vim.lsp.buf.hover, mode = "n", desc = "Show documentation for what is under cursor" },
 		{ "gD", vim.lsp.buf.declaration, mode = "n", desc = "Go to declaration" },
 		{ "gd", vim.lsp.buf.definition, desc = "Go to definition" },
-		{ "gi", vim.lsp.buf.implementation, desc = "Go to implementation" },
 		{ "gi", vim.lsp.buf.implementation, desc = "Go to implementation" },
 		{ "gr", vim.lsp.buf.references, desc = "Find references" },
 		{ "<C-k>", vim.lsp.buf.signature_help, desc = "Show signature help" },
@@ -28,9 +28,7 @@ return {
 			desc = "List workspace folders",
 		},
 		{ "<leader>rs", ":LspRestart<CR>", mode = "n", desc = "Restart LSP" },
-		{ "<leader>D", vim.lsp.buf.type_definition, desc = "Go to type definition" },
 		{ "<leader>rn", vim.lsp.buf.rename, desc = "Rename symbol" },
-		{ "<leader>ca", vim.lsp.buf.code_action, mode = { "n", "v" }, desc = "Code action" },
 	},
 
 	config = function()
