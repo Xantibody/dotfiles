@@ -2,16 +2,15 @@
   lib,
   stdenvNoCC,
   fetchzip,
-  ...
 }:
-stdenvNoCC.mkDerivation rec {
-    pname = "explex-nf";
-    version = "0.0.3";
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "explex-nf";
+  version = "0.0.3";
 
- src = fetchzip {
-      url = "https://github.com/yuru7/Explex/releases/download/v${version}/Explex_NF_v${version}.zip";
-      hash = "sha256-X4CnYT5B7IyG1Z5Ex6CXCfX7Hz3vNb5bP+vq1Vjx8XI=";
-    };
+  src = fetchzip {
+    url = "https://github.com/yuru7/Explex/releases/download/v${finalAttrs.version}/Explex_NF_v${finalAttrs.version}.zip";
+    hash = "sha256-X4CnYT5B7IyG1Z5Ex6CXCfX7Hz3vNb5bP+vq1Vjx8XI=";
+  };
 
   installPhase = ''
     runHook preInstall
@@ -21,11 +20,12 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
-    meta = with lib; {
-      description = "Explex font by yuru7";
-      homepage = "https://github.com/yuru7/Explex";
-      license = licenses.ofl;
-      platforms = platforms.all;
-    maintainers = with maintainers; [ r-aizawa ];
-    };
-}
+  meta = {
+    description = "Composite font of 0xProto, IBM Plex Sans JP and nerd-fonts";
+    homepage = "https://github.com/yuru7/Explex";
+    changelog = "https://github.com/yuru7/Explex/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.r-aizawa ];
+  };
+})
