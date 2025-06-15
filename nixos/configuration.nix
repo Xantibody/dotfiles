@@ -19,4 +19,6 @@
     plemoljp-nf
   ];
   environment = import ./environment { inherit pkgs; };
+
+  virtualisation.docker.enable = true;
 }

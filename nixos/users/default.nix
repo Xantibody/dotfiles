@@ -4,6 +4,7 @@
     isNormalUser = true;
     description = "r-aizawa";
     extraGroups = [
+      "docker"
       "networkmanager"
       "wheel"
     ];

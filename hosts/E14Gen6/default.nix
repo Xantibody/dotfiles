@@ -19,7 +19,8 @@ let
     overlays = [
       hyprpanel.overlay
       alacritty-theme.overlays.default
-      #(import ../../overlays/explex)
+      (final: prev:{explex = prev.callPackage ../../overlays/explex.nix{};})
+      (final: prev:{explex-nf = prev.callPackage ../../overlays/explex-nf.nix{};})
       #   (import ../../overlays/markmap)
     ];
     config.allowUnfree = true;
