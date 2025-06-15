@@ -440,8 +440,7 @@ themes {
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-theme "dawnfox"
-// theme "default"
+ theme "dawnfox"
 
 // The name of the default layout to load on startup
 // Default: "default"
@@ -533,9 +532,9 @@ theme "dawnfox"
 // Default: false
 //
 // disable_session_metadata true
-
 // Enable or disable support for the enhanced Kitty Keyboard Protocol (the host terminal must also support it)
 // (Requires restart)
 // Default: true (if the host terminal supports it)
 //
 // support_kitty_keyboard_protocol false
+show_startup_tips false
