@@ -1,12 +1,12 @@
 {
-  pkgs,
-  ...
+  pkgs
 }:
 {
   enable = true;
-  defaultEditor = true; # $EDITOR=nvimに設定
+
   viAlias = true;
   vimAlias = true;
+  defaultEditor = true;
   extraPackages = with pkgs; [
     tree-sitter
     biome
