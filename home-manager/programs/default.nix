@@ -1,6 +1,5 @@
 {
   pkgs,
-  ...
 }:
 {
   git = import ./git.nix;
