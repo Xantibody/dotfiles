@@ -16,6 +16,6 @@
     source = ../../skk/SKK-JISYO.L;
   };
   ".config/zellij/config.kdl" = {
-      source = ../../zellij/config.kdl;
+    source = ../../zellij/config.kdl;
   };
 }
