@@ -4,17 +4,21 @@
 }:
 with pkgs;
 [
+  #pympress
+  google-chrome
   bat
   cliphist
   devbox
+  explex
+  explex-nf
   eza
   fzf
   gh
+#  gnupg
   gnumake
   nix-prefetch-github
-  #pympress
   ripgrep
-
+  zellij
   # (buildGoModule {
   #       pname = "iccheck";
   #       version = "0.9.0";
