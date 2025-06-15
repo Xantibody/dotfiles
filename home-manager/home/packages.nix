@@ -14,7 +14,7 @@ with pkgs;
   eza
   fzf
   gh
-#  gnupg
+  #  gnupg
   gnumake
   nix-prefetch-github
   ripgrep
