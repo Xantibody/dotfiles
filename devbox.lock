@@ -480,6 +480,54 @@
           "store_path": "/nix/store/c9m6yd8fg1flz2j5r4bif1ib5j20a0cy-python3-3.12.8"
         }
       }
+    },
+    "vim-startuptime@latest": {
+      "last_modified": "2025-05-31T03:30:20Z",
+      "resolved": "github:NixOS/nixpkgs/59138c7667b7970d205d6a05a8bfa2d78caa3643#vim-startuptime",
+      "source": "devbox-search",
+      "version": "1.3.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/wqax27c8jkng5vjmyy2s3q4a9f39swwp-vim-startuptime-1.3.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/wqax27c8jkng5vjmyy2s3q4a9f39swwp-vim-startuptime-1.3.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/pga87dnyfx0r6ls0lpzk39fq6fxkzic3-vim-startuptime-1.3.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/pga87dnyfx0r6ls0lpzk39fq6fxkzic3-vim-startuptime-1.3.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/30k6k47cnw434qckh75x00md8f3f9lkh-vim-startuptime-1.3.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/30k6k47cnw434qckh75x00md8f3f9lkh-vim-startuptime-1.3.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/x8bpjrx2kjbzhb7v652361pmff61ivz1-vim-startuptime-1.3.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/x8bpjrx2kjbzhb7v652361pmff61ivz1-vim-startuptime-1.3.2"
+        }
+      }
     }
   }
 }
