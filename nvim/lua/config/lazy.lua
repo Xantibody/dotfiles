@@ -25,9 +25,10 @@ vim.g.maplocalleader = "\\"
 require("lazy").setup({
 	spec = {
 		-- import your plugins
-		{ import = "plugins" },
-		{ import = "plugins.lsp" },
 		{ import = "plugins.default" },
+		{ import = "plugins.display" },
+		{ import = "plugins.edit" },
+		{ import = "plugins.preview" },
 	},
 	-- automatically check for plugin updates
 	checker = { enabled = true },
@@ -46,7 +47,7 @@ require("lazy").setup({
 				-- "gzip",
 				-- "matchit",
 				-- "matchparen",
-				"netrwPlugin",
+				-- "netrwPlugin",
 				-- "tarPlugin",
 				-- "tohtml",
 				-- "tutor",
