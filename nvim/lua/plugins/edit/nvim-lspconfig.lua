@@ -53,6 +53,8 @@ return {
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
+		vim.lsp.enable("yamlls")
+		vim.lsp.enable("pyright")
 		vim.lsp.enable("rust_analyzer")
 		vim.lsp.enable("gopls")
 		vim.lsp.enable("lua_ls")
