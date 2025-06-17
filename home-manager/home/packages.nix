@@ -4,7 +4,7 @@
 }:
 with pkgs;
 [
-  #pympress
+  #  pympress
   google-chrome
   bat
   cliphist
