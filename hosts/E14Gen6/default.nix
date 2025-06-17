@@ -8,8 +8,9 @@ let
     xremap
     hyprpanel
     alacritty-theme
+    sops-nix
+    home-manager
     ;
-  inherit (inputs) sops-nix home-manager;
 
   username = "raizawa";
   system = "x86_64-linux";
@@ -21,6 +22,7 @@ let
       alacritty-theme.overlays.default
       (final: prev: { explex = prev.callPackage ../../overlays/explex.nix { }; })
       (final: prev: { explex-nf = prev.callPackage ../../overlays/explex-nf.nix { }; })
+      #(final: prev: { markmap-cli = prev.callPackage ../../overlays/markmap.nix { }; })
       #   (import ../../overlays/markmap)
     ];
     config.allowUnfree = true;
@@ -45,8 +47,7 @@ nixpkgs.lib.nixosSystem {
         sharedModules = [ sops-nix.homeManagerModules.sops ];
         users."${username}" = import ../../home-manager/home.nix;
         extraSpecialArgs = {
-          inherit system;
-          inherit pkgs hyprpanel;
+          inherit system pkgs hyprpanel;
         };
       };
     }

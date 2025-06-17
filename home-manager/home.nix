@@ -1,6 +1,6 @@
 {
-  pkgs,
   hyprpanel,
+  pkgs,
   ...
 }:
 let

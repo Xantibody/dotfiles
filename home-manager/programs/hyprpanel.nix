@@ -2,6 +2,7 @@
   enable = true;
   overwrite.enable = true;
   hyprland.enable = true;
+  overlay.enable = true;
   theme = "everforest";
   layout = {
     "bar.layouts" =
