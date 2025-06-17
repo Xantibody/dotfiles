@@ -10,7 +10,6 @@
   extraPackages = with pkgs; [
     tree-sitter
     biome
-    nodejs_23
 
     #LSP
     rust-analyzer
