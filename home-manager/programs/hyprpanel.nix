@@ -2,10 +2,9 @@
   enable = true;
   overwrite.enable = true;
   hyprland.enable = true;
-  #theme = "everforest";
   settings = {
     layout = {
-      bar.layouts =
+      "bar.layouts" =
         let
           layout =
             {
@@ -46,30 +45,49 @@
           "3" = none;
         };
     };
-    bar.customModules.updates.pollingInterval = 1440000;
-    theme.bar.floating = false;
-    theme.bar.buttons.enableBorders = true;
-    theme.bar.transparent = true;
-    theme.font.size = "14px";
-    menus.clock.time.military = true;
-    menus.clock.time.hideSeconds = false;
-    bar.clock.format = "%y/%m/%d  %H:%M";
-    bar.media.show_active_only = true;
-    bar.notifications.show_total = false;
-    theme.bar.buttons.modules.ram.enableBorder = false;
-    bar.launcher.autoDetectIcon = true;
-    bar.battery.hideLabelWhenFull = true;
-    menus.dashboard.controls.enabled = false;
-    menus.dashboard.shortcuts.enabled = true;
-    menus.clock.weather.enabled = false;
-    menus.dashboard.shortcuts.right.shortcut1.command = "gcolor3";
-    menus.media.displayTime = true;
-    menus.power.lowBatteryNotification = true;
-    bar.customModules.updates.updateCommand = "jq '[.[].cvssv3_basescore | to_entries | add | select(.value > 5)] | length' <<< $(vulnix -S --json)";
-    bar.customModules.updates.icon.updated = "󰋼";
-    bar.customModules.updates.icon.pending = "󰋼";
-    bar.volume.rightClick = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
-    bar.volume.middleClick = "pavucontrol";
-    bar.media.format = "{title}";
+    theme = {
+      bar = {
+        floating = false;
+        buttons.modules.ram.enableBorder = false;
+        buttons.enableBorders = true;
+        transparent = true;
+      };
+      font.size = "14px";
+    };
+    bar = {
+      clock.format = "%y/%m/%d  %H:%M";
+      media.show_active_only = true;
+      media.format = "{title}";
+      notifications.show_total = false;
+      #launcher.autoDetectIcon = true;
+      launcher.icon = "";
+      battery.hideLabelWhenFull = true;
+      customModules = {
+        updates = {
+          pollingInterval = 1440000;
+          updateCommand = "jq '[.[].cvssv3_basescore | to_entries | add | select(.value > 5)] | length' <<< $(vulnix -S --json)";
+          icon.updated = "󰋼";
+          icon.pending = "󰋼";
+        };
+      };
+      volume = {
+        rightClick = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
+        middleClick = "pavucontrol";
+      };
+    };
+    menus = {
+      clock = {
+        time.military = true;
+        time.hideSeconds = false;
+        weather.enabled = false;
+      };
+      dashboard = {
+        controls.enabled = false;
+        shortcuts.enabled = true;
+        shortcuts.right.shortcut1.command = "gcolor3";
+      };
+      media.displayTime = true;
+      power.lowBatteryNotification = true;
+    };
   };
 }
