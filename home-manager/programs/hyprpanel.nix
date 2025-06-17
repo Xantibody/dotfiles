@@ -2,51 +2,50 @@
   enable = true;
   overwrite.enable = true;
   hyprland.enable = true;
-  overlay.enable = true;
-  theme = "everforest";
-  layout = {
-    "bar.layouts" =
-      let
-        layout =
-          {
-            showBattery ? true,
-          }:
-          {
-            "left" = [
-              "dashboard"
-              "workspaces"
-              "windowtitle"
-              "updates"
-              "storage"
-            ] ++ (if showBattery then [ "battery" ] else [ ]);
-            "middle" = [
-              "media"
-            ];
-            "right" = [
-              "cpu"
-              "ram"
-              "volume"
-              "network"
-              "bluetooth"
-              "systray"
-              "clock"
-              "notifications"
-            ];
-          };
-        none = {
-          "left" = [ ];
-          "middle" = [ ];
-          "right" = [ ];
-        };
-      in
-      {
-        "0" = layout { };
-        "1" = none;
-        "2" = layout { showBattery = false; };
-        "3" = none;
-      };
-  };
+  #theme = "everforest";
   settings = {
+    layout = {
+      bar.layouts =
+        let
+          layout =
+            {
+              showBattery ? true,
+            }:
+            {
+              "left" = [
+                "dashboard"
+                "workspaces"
+                "windowtitle"
+                "updates"
+                "storage"
+              ] ++ (if showBattery then [ "battery" ] else [ ]);
+              "middle" = [
+                "media"
+              ];
+              "right" = [
+                "cpu"
+                "ram"
+                "volume"
+                "network"
+                "bluetooth"
+                "systray"
+                "clock"
+                "notifications"
+              ];
+            };
+          none = {
+            "left" = [ ];
+            "middle" = [ ];
+            "right" = [ ];
+          };
+        in
+        {
+          "0" = layout { };
+          "1" = none;
+          "2" = layout { showBattery = false; };
+          "3" = none;
+        };
+    };
     bar.customModules.updates.pollingInterval = 1440000;
     theme.bar.floating = false;
     theme.bar.buttons.enableBorders = true;
