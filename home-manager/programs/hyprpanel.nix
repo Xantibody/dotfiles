@@ -55,11 +55,13 @@
       font.size = "14px";
     };
     bar = {
-      clock.format = "%y/%m/%d  %H:%M";
-      media.show_active_only = true;
-      media.format = "{title}";
+      clock.format = "%Y/%m/%d(%a) %p %I:%M";
+      media = {
+        show_active_only = true;
+        format = "{title}";
+      };
       notifications.show_total = false;
-      #launcher.autoDetectIcon = true;
+      launcher.autoDetectIcon = true;
       launcher.icon = "";
       battery.hideLabelWhenFull = true;
       customModules = {
@@ -76,6 +78,8 @@
       };
     };
     menus = {
+      media.displayTime = true;
+      power.lowBatteryNotification = true;
       clock = {
         time.military = true;
         time.hideSeconds = false;
@@ -86,8 +90,6 @@
         shortcuts.enabled = true;
         shortcuts.right.shortcut1.command = "gcolor3";
       };
-      media.displayTime = true;
-      power.lowBatteryNotification = true;
     };
   };
 }
