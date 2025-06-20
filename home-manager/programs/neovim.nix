@@ -12,15 +12,20 @@
     biome
 
     #LSP
-    rust-analyzer
-    efm-langserver
-    lua-language-server
-    gopls
-    typescript-language-server
-    nixd
     basedpyright
-    vscode-langservers-extracted
     bash-language-server
+    efm-langserver
+    gopls
+    lua-language-server
+    nixd
+    rust-analyzer
     tinymist
+    typescript-language-server
+    vscode-langservers-extracted
+
+    #formatter
+    nixfmt
+    stylua
+    yamlfmt
   ];
 }
