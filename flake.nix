@@ -3,7 +3,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
+    #    waybar.url = "github:Alexays/Waybar/master";
     flake-parts.url = "github:hercules-ci/flake-parts";
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
     home-manager = {
@@ -26,13 +26,7 @@
     systems.url = "github:nix-systems/default";
   };
 
-  outputs =
-    {
-      flake-parts,
-      treefmt-nix,
-      systems,
-      ...
-    }@inputs:
+  outputs = { flake-parts, treefmt-nix, systems, ... }@inputs:
 
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import systems;

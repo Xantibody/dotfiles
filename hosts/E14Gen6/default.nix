@@ -1,16 +1,6 @@
-{
-  inputs,
-  ...
-}:
+{ inputs, ... }:
 let
-  inherit (inputs)
-    nixpkgs
-    xremap
-    hyprpanel
-    alacritty-theme
-    sops-nix
-    home-manager
-    ;
+  inherit (inputs) nixpkgs xremap alacritty-theme sops-nix home-manager;
 
   username = "raizawa";
   system = "x86_64-linux";
@@ -18,23 +8,26 @@ let
   pkgs = import nixpkgs {
     inherit system;
     overlays = [
-      hyprpanel.overlay
+      # (_: _: {waybar_git =inputs.waybar.packages.${pkgs.stdenv.hostPlatform.system}.waybar;})
       alacritty-theme.overlays.default
-      (final: prev: { explex = prev.callPackage ../../overlays/explex.nix { }; })
-      (final: prev: { explex-nf = prev.callPackage ../../overlays/explex-nf.nix { }; })
-      (final: prev: { iccheck = prev.callPackage ../../overlays/iccheck.nix { }; })
+      (final: prev: {
+        explex = prev.callPackage ../../overlays/explex.nix { };
+      })
+      (final: prev: {
+        explex-nf = prev.callPackage ../../overlays/explex-nf.nix { };
+      })
+      (final: prev: {
+        iccheck = prev.callPackage ../../overlays/iccheck.nix { };
+      })
       #(final: prev: { markmap-cli = prev.callPackage ../../overlays/markmap.nix { }; })
       #   (import ../../overlays/markmap)
     ];
     config.allowUnfree = true;
   };
 
-in
-nixpkgs.lib.nixosSystem {
+in nixpkgs.lib.nixosSystem {
   inherit system;
-  specialArgs = {
-    inherit username xremap nixpkgs;
-  };
+  specialArgs = { inherit username xremap nixpkgs; };
 
   modules = [
     ../../nixos
@@ -47,9 +40,7 @@ nixpkgs.lib.nixosSystem {
         backupFileExtension = "backup";
         sharedModules = [ sops-nix.homeManagerModules.sops ];
         users."${username}" = import ../../home-manager/home.nix;
-        extraSpecialArgs = {
-          inherit system pkgs hyprpanel;
-        };
+        extraSpecialArgs = { inherit system pkgs; };
       };
     }
   ];
