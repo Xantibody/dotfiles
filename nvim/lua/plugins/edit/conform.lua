@@ -24,10 +24,11 @@ return {
 				},
 			},
 			formatters_by_ft = {
-				lua = { "stylua" },
 				go = { "gofmt" },
+				lua = { "stylua" },
 				nix = { "nixfmt" },
 				typst = { "typstyle" },
+				yaml = { "yamlfmt" },
 			},
 		})
 	end,
