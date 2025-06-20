@@ -50,7 +50,7 @@
           projectRootFile = "flake.nix";
           programs = {
             actionlint.enable = true;
-            nixfmt.enable = true;
+            nixfmt-rfc-style.enable = true;
             taplo.enable = true;
             jsonfmt.enable = true;
             yamlfmt.enable = true;
