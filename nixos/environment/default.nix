@@ -12,6 +12,7 @@
     });
   '';
   systemPackages = with pkgs; [
+    blueman
     clang
     deno
     fishPlugins.z
