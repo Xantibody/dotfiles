@@ -1,6 +1,12 @@
 { inputs, ... }:
 let
-  inherit (inputs) nixpkgs xremap alacritty-theme sops-nix home-manager;
+  inherit (inputs)
+    nixpkgs
+    xremap
+    alacritty-theme
+    sops-nix
+    home-manager
+    ;
 
   username = "raizawa";
   system = "x86_64-linux";
@@ -25,7 +31,8 @@ let
     config.allowUnfree = true;
   };
 
-in nixpkgs.lib.nixosSystem {
+in
+nixpkgs.lib.nixosSystem {
   inherit system;
   specialArgs = { inherit username xremap nixpkgs; };
 
