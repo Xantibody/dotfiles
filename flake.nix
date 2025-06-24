@@ -26,13 +26,7 @@
     systems.url = "github:nix-systems/default";
   };
 
-  outputs =
-    {
-      flake-parts,
-      treefmt-nix,
-      systems,
-      ...
-    }@inputs:
+  outputs = { flake-parts, treefmt-nix, systems, ... }@inputs:
 
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import systems;
@@ -50,7 +44,7 @@
           projectRootFile = "flake.nix";
           programs = {
             actionlint.enable = true;
-            nixfmt-rfc-style.enable = true;
+            nixfmt.enable = true;
             taplo.enable = true;
             jsonfmt.enable = true;
             yamlfmt.enable = true;
