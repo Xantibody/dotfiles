@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 with pkgs;
 [
   pympress
@@ -14,6 +11,7 @@ with pkgs;
   eza
   fzf
   gh
+
   #  gnupg
   gnumake
   nix-prefetch-github
