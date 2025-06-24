@@ -6,11 +6,12 @@
         exec-once = [
           "wl-paste --type text --watch cliphist store # Stores only text data"
           "wl-paste --type image --watch cliphist store # Stores only image data"
+          "waybar"
         ];
         "$mod" = "SUPER";
         "$terminal" = "alacritty";
         "$fileManager" = "dolphin";
-        "$menu" = "wofi --show drun";
+        "$menu" = "rofi --show drun";
         bind =
           [
             "$mod, Q, exec, $terminal"
@@ -19,7 +20,7 @@
             "$mod, E, exec, $fileManager"
             # "$mod, F, exec, firefox"
             "$mod, F, exec, google-chrome-stable"
-            "$mod, V, exec, cliphist list | wofi -S dmenu | cliphist decode | wl-copy"
+            "$mod, V, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
             "$mod, R, exec, $menu"
             "$mod, P, pseudo, # dwindle"
             "$mod, S, togglesplit, # dwindle"

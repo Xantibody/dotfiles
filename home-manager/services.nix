@@ -1,0 +1,5 @@
+{
+  mako = {
+    enable = true;
+  };
+}

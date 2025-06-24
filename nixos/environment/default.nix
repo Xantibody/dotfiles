@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 {
   etc."polkit-1/rules.d/50-fprintd.rules".text = ''
     polkit.addRule(function(action, subject) {
@@ -12,21 +9,29 @@
     });
   '';
   systemPackages = with pkgs; [
-    blueman
-    clang
-    deno
     fishPlugins.z
-    fzf
     gcc
     gimp3
-    jq
     kdePackages.dolphin
     slack
     unzip
     usbutils
-    vulnix
     wl-clipboard
     wofi
     xsel
+
+    # waybar
+    bluetui
+    brightnessctl
+    nerd-fonts.jetbrains-mono
+    wireplumber
+    networkmanager
+    libnotify
+    coreutils
+    gawk
+    lm_sensors
+    kitty
+    playerctl
+    pulseaudio
   ];
 }

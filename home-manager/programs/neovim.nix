@@ -8,6 +8,8 @@
   extraPackages = with pkgs; [
     tree-sitter
     biome
+    fzf
+    deno
 
     #LSP
     basedpyright

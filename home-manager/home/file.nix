@@ -18,4 +18,12 @@
   ".config/zellij/config.kdl" = {
     source = ../../zellij/config.kdl;
   };
+  ".config/waybar/scripts" = {
+    source = ../../waybar/scripts;
+    recursive = true;
+  };
+  ".config/rofi" = {
+    source = ../../rofi;
+    recursive = true;
+  };
 }

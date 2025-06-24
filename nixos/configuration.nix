@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 {
   programs = import ./programs;
   boot = import ./boot { inherit pkgs; };
@@ -11,7 +8,7 @@
   users = import ./users { inherit pkgs; };
   networking = import ./networking;
   time.timeZone = "Asia/Tokyo";
-  hardware.pulseaudio.enable = false;
+  hardware = import ./hardware.nix;
   security.rtkit.enable = true;
   nixpkgs.config.allowUnfree = true;
   fonts.packages = with pkgs; [
