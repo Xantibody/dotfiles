@@ -11,7 +11,7 @@
         "$mod" = "SUPER";
         "$terminal" = "alacritty";
         "$fileManager" = "dolphin";
-        "$menu" = "rofi --show drun";
+        "$menu" = "rofi -modi drun,run -show drun";
         bind =
           [
             "$mod, Q, exec, $terminal"

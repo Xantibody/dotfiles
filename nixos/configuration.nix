@@ -14,6 +14,7 @@
   fonts.packages = with pkgs; [
     hackgen-nf-font
     plemoljp-nf
+    nerd-fonts.jetbrains-mono
   ];
   environment = import ./environment { inherit pkgs; };
 
