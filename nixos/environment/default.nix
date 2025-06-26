@@ -23,7 +23,6 @@
     # waybar
     bluetui
     brightnessctl
-    nerd-fonts.jetbrains-mono
     wireplumber
     networkmanager
     libnotify

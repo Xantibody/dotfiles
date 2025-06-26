@@ -227,7 +227,7 @@
         };
 
         "tooltip-format-activated" = "Presentation Mode";
-        "tooltip-for/mat-deactivated" = "Idle Mode";
+        "tooltip-format-deactivated" = "Idle Mode";
         "start-activated" = false;
       };
 
