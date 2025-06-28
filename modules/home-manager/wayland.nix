@@ -1,7 +1,8 @@
+{ isLinux, ... }:
 {
   windowManager = {
     hyprland = {
-      enable = true;
+      enable = isLinux;
       settings = {
         exec-once = [
           "wl-paste --type text --watch cliphist store # Stores only text data"
