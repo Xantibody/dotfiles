@@ -14,8 +14,8 @@ configuration {
 window {
   location:                 northeast;
   anchor:                   north;
-  x-offset:                 -3px;
-  y-offset:                 3px;
+  x-offset:                 -80px;
+  y-offset:                 30px;
   width:                    150px;
   border:                   3px;
   border-radius:            10px;
@@ -39,7 +39,7 @@ textbox-custom {
   background-color:         @select-bg;
   text-color:               @select-fg;
   expand:                   false;
-  // content:                  "  Power";
+  content:                  "  Power";
 }
 
 /* List */
