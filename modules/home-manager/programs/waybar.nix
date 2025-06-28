@@ -1,5 +1,6 @@
+{ isLinux }:
 {
-  enable = true;
+  enable = isLinux;
   settings = {
     # theme https://github.com/sejjy/mechabar
     #  ─────────────────────────────────────────────────────────────┤ header ├───

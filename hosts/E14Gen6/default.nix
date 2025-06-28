@@ -16,16 +16,8 @@ let
     overlays = [
       alacritty-theme.overlays.default
       (final: prev: {
-        explex = prev.callPackage ../../overlays/explex.nix { };
-      })
-      (final: prev: {
-        explex-nf = prev.callPackage ../../overlays/explex-nf.nix { };
-      })
-      (final: prev: {
         iccheck = prev.callPackage ../../overlays/iccheck.nix { };
       })
-      #(final: prev: { markmap-cli = prev.callPackage ../../overlays/markmap.nix { }; })
-      #   (import ../../overlays/markmap)
     ];
     config.allowUnfree = true;
   };
@@ -36,8 +28,8 @@ nixpkgs.lib.nixosSystem {
   specialArgs = { inherit username xremap nixpkgs; };
 
   modules = [
-    ../../nixos
-    ./hardware-configuration.nix
+    ../../modules/nixos
+    ../../modules/nixos/hardware-configuration.nix
     sops-nix.nixosModules.sops
     home-manager.nixosModules.home-manager
     {
@@ -45,8 +37,7 @@ nixpkgs.lib.nixosSystem {
         useUserPackages = true;
         backupFileExtension = "backup";
         sharedModules = [ sops-nix.homeManagerModules.sops ];
-        users."${username}" = import ../../home-manager/home.nix;
-        extraSpecialArgs = { inherit system pkgs; };
+        users."${username}" = import ../../modules/home-manager { inherit pkgs username; };
       };
     }
   ];
