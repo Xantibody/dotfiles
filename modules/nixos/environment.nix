@@ -9,7 +9,7 @@
     });
   '';
   systemPackages = with pkgs; [
-    fishPlugins.z
+    cliphist
     gcc
     gimp3
     kdePackages.dolphin
