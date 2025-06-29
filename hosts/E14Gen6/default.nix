@@ -6,10 +6,12 @@ let
     alacritty-theme
     sops-nix
     home-manager
+    self
     ;
 
   username = "raizawa";
   system = "x86_64-linux";
+  homeDirectory = "/home/${username}";
 
   pkgs = import nixpkgs {
     inherit system;
@@ -37,7 +39,14 @@ nixpkgs.lib.nixosSystem {
         useUserPackages = true;
         backupFileExtension = "backup";
         sharedModules = [ sops-nix.homeManagerModules.sops ];
-        users."${username}" = import ../../modules/home-manager { inherit pkgs username; };
+        users."${username}" = import ../../modules/home-manager {
+          inherit
+            pkgs
+            homeDirectory
+            username
+            self
+            ;
+        };
       };
     }
   ];

@@ -1,10 +1,18 @@
 {
   description = "r-aizawa nix conf now!";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
+    nixpkgs = {
+      url = "github:NixOS/nixpkgs/nixos-unstable";
+    };
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+    };
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+    };
+    alacritty-theme = {
+      url = "github:alexghr/alacritty-theme.nix";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -35,12 +43,14 @@
 
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import systems;
-
       imports = [ treefmt-nix.flakeModule ];
 
       flake = {
         nixosConfigurations = {
           E14Gen6 = import ./hosts/E14Gen6 { inherit inputs; };
+        };
+        homeConfigurations = {
+          work-macBook-m2 = import ./hosts/work-macBook-m2 { inherit inputs; };
         };
       };
 

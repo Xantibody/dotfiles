@@ -4,12 +4,12 @@ with pkgs;
   pympress
   google-chrome
   bat
-  cliphist
   devbox
   explex
   explex-nf
   eza
   fzf
+  fishPlugins.z
   gh
 
   #  gnupg
