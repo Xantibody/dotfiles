@@ -2,12 +2,10 @@ return {
 	"neovim/nvim-lspconfig",
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
-		"hrsh7th/cmp-nvim-lsp",
 		{ "antosha417/nvim-lsp-file-operations", config = true },
 	},
 	keys = {
 		{ "<leader>ca", vim.lsp.buf.code_action, mode = { "n", "v" }, desc = "See available code actions" },
-		{ "<leader>rn", vim.lsp.buf.rename, mode = "n", desc = "Smart rename" },
 		{ "<leader>d", vim.diagnostic.open_float, mode = "n", desc = "Show line diagnostics" },
 		{ "<leader>D", vim.lsp.buf.type_definition, desc = "Go to type definition" },
 		{ "[d", vim.diagnostic.goto_prev, mode = "n", desc = "Go to previous diagnostic" },
@@ -35,7 +33,6 @@ return {
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 			callback = function(ev)
-				local opts = { buffer = ev.buf, silent = true }
 				local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 				vim.diagnostic.config({
 					signs = {
@@ -49,9 +46,6 @@ return {
 				})
 			end,
 		})
-
-		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-		local capabilities = cmp_nvim_lsp.default_capabilities()
 
 		vim.lsp.enable("yamlls")
 		vim.lsp.enable("pyright")
