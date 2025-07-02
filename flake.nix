@@ -40,7 +40,6 @@
       systems,
       ...
     }@inputs:
-
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import systems;
       imports = [ treefmt-nix.flakeModule ];
@@ -53,7 +52,6 @@
           work-macBook-m2 = import ./hosts/work-macBook-m2 { inherit inputs; };
         };
       };
-
       perSystem = {
         treefmt = {
           projectRootFile = "flake.nix";

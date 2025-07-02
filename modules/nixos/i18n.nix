@@ -12,12 +12,4 @@
     LC_TELEPHONE = "ja_JP.UTF-8";
     LC_TIME = "ja_JP.UTF-8";
   };
-  # inputMethod = {
-  # enabled = "fcitx5";
-  # # fcitx5.addons = with pkgs; [
-  #   fcitx5-skk
-  #   fcitx5-gtk
-  #   libsForQt5.fcitx5-qt
-  # ];
-  #};
 }
