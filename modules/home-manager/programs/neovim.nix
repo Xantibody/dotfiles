@@ -22,6 +22,7 @@
     tinymist
     typescript-language-server
     vscode-langservers-extracted
+    yaml-language-server
 
     #formatter
     nixfmt
