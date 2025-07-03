@@ -2,8 +2,8 @@ return {
 	"saghen/blink.cmp",
 	event = { "InsertEnter", "CmdLineEnter" },
 	dependencies = {
-		"rafamadriz/friendly-snippets",
 		"L3MON4D3/LuaSnip",
+		"rafamadriz/friendly-snippets",
 		"saghen/blink.compat",
 		"uga-rosa/cmp-skkeleton",
 		"onsails/lspkind.nvim",
