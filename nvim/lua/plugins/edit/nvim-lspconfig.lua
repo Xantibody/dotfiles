@@ -65,6 +65,19 @@ return {
 			filetypes = { "opentofu", "opentofu-vars", "terraform" },
 		})
 
+		vim.lsp.config("yamlls", {
+			settings = {
+				yaml = {
+					-- other settings. note this overrides the lspconfig defaults.
+					["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.1-standalone-strict/all.json"] = {
+						"**/*k8s*/**/*.yaml",
+						"**/manifest/*.yaml",
+					},
+					-- other schemas
+				},
+			},
+		})
+
 		--efm settings
 		vim.lsp.config("efm", {
 			filetypes = {
