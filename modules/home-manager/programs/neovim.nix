@@ -1,5 +1,4 @@
-{ pkgs }:
-{
+{ pkgs }: {
   enable = true;
 
   viAlias = true;
@@ -23,6 +22,7 @@
     typescript-language-server
     vscode-langservers-extracted
     yaml-language-server
+    fish-lsp
 
     #formatter
     nixfmt
