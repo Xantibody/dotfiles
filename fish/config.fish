@@ -1,10 +1,6 @@
 fish_vi_key_bindings
-alias n="nvim"
-function dp
-    set -gx NVIM_APPNAME darkpowered
-    nvim
-    set -e NVIM_APPNAME # 終了後に環境変数を削除
-end
+abbr n nvim
+abbr dp 'NVIM_APPNAME=darkpowered nvim'
 
 abbr ll 'eza --icons -lahF'
 abbr dbde 'devbox init && devbox generate direnv'
