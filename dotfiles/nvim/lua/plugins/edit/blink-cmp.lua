@@ -7,8 +7,8 @@ return {
 		"uga-rosa/cmp-skkeleton",
 		"onsails/lspkind.nvim",
 		"nvim-tree/nvim-web-devicons",
+		{ "Kaiser-Yang/blink-cmp-dictionary", dependencies = { "nvim-lua/plenary.nvim" } },
 	},
-
 	version = "1.*",
 	build = "nix run .#build-plugin",
 
@@ -65,7 +65,7 @@ return {
 			},
 		},
 		sources = {
-			default = { "lazydev", "lsp", "path", "snippets", "buffer", "skkeleton" },
+			default = { "dictionary", "lazydev", "lsp", "path", "snippets", "buffer", "skkeleton" },
 			providers = {
 				lazydev = {
 					name = "LazyDev",
@@ -76,6 +76,14 @@ return {
 					name = "skkeleton",
 					module = "blink.compat.source",
 					score_offset = 3,
+				},
+				dictionary = {
+					module = "blink-cmp-dictionary",
+					name = "Dict",
+					-- Make sure this is at least 2.
+					-- 3 is recommended
+					min_keyword_length = 3,
+					opts = { dictionary_files = { "@aspellDicts.es@" } },
 				},
 			},
 		},
