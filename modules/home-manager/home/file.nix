@@ -19,8 +19,8 @@
   ".config/zellij/config.kdl" = {
     source = self + /dotfiles/zellij/config.kdl;
   };
-  ".config/waybar/scripts" = {
-    source = self + /dotfiles/waybar/scripts;
+  ".config/waybar" = {
+    source = self + /dotfiles/waybar;
     recursive = true;
   };
   ".config/rofi" = {
