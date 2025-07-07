@@ -23,14 +23,16 @@
     # waybar
     bluetui
     brightnessctl
-    wireplumber
-    networkmanager
-    libnotify
     coreutils
     gawk
-    lm_sensors
+    iw
     kitty
+    libnotify
+    lm_sensors
+    networkmanager
     playerctl
     pulseaudio
+    waybar
+    wireplumber
   ];
 }
