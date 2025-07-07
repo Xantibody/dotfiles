@@ -27,4 +27,8 @@
     source = self + /rofi;
     recursive = true;
   };
+  ".config/k9s" = {
+    source = self + /k9s;
+    recursive = true;
+  };
 }
