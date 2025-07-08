@@ -30,6 +30,7 @@ return {
 			menu = {
 				border = "rounded",
 				draw = {
+					columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 1 } },
 					treesitter = { "lsp" },
 					components = {
 						kind_icon = {
@@ -64,26 +65,29 @@ return {
 				},
 			},
 		},
+
+		-- TODO: 設定が長すぎるので,メソッド化かファイル分割を検討したい
 		sources = {
 			default = { "dictionary", "lazydev", "lsp", "path", "snippets", "buffer", "skkeleton" },
 			providers = {
 				lazydev = {
 					name = "LazyDev",
 					module = "lazydev.integrations.blink",
-					score_offset = 100,
+					score_offset = 1,
 				},
 				skkeleton = {
 					name = "skkeleton",
 					module = "blink.compat.source",
-					score_offset = 3,
+					-- 日本語入力はほかとconflictしないはず
+					score_offset = 1,
 				},
 				dictionary = {
 					module = "blink-cmp-dictionary",
 					name = "Dict",
-					-- Make sure this is at least 2.
-					-- 3 is recommended
 					min_keyword_length = 3,
 					opts = { dictionary_directories = { vim.fn.expand("~/.config/nvim/dictionary") } },
+					-- snippets以下にしたいが方法不明
+					score_offset = -1,
 				},
 			},
 		},
