@@ -2,8 +2,10 @@
 
 my configuration
 
-## E14Gen6
+## using
 
 ```bash
- make E14Gen6
+ make
+ # or
+ make help
 ```
