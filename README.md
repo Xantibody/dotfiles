@@ -2,7 +2,7 @@
 
 my configuration
 
-## using
+## usage
 
 ```bash
  make
