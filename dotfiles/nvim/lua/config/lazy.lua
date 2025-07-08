@@ -29,6 +29,7 @@ require("lazy").setup({
 		{ import = "plugins.display" },
 		{ import = "plugins.edit" },
 		{ import = "plugins.preview" },
+		{ import = "plugins.test" },
 	},
 	-- automatically check for plugin updates
 	checker = { enabled = true },
