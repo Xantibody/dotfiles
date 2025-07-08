@@ -7,9 +7,9 @@
   defaultEditor = true;
   extraPackages = with pkgs; [
     tree-sitter
-    biome
     fzf
     deno
+    wordnet
 
     #LSP
     basedpyright
@@ -29,5 +29,7 @@
     nixfmt
     stylua
     yamlfmt
+    biome
+
   ];
 }

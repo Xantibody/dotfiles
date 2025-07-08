@@ -83,7 +83,7 @@ return {
 					-- Make sure this is at least 2.
 					-- 3 is recommended
 					min_keyword_length = 3,
-					opts = { dictionary_files = { "@aspellDicts.es@" } },
+					opts = { dictionary_directories = { vim.fn.expand("~/.config/nvim/dictionary") } },
 				},
 			},
 		},
