@@ -3,6 +3,9 @@
   ".config/nvim/init.lua" = {
     source = self + /dotfiles/nvim/init.lua;
   };
+  ".config/nvim/dictionary" = {
+    source = self + /dotfiles/nvim/dictionary;
+  };
   ".config/nvim/lua" = {
     source = self + /dotfiles/nvim/lua;
     recursive = true;
