@@ -12,10 +12,6 @@ work-macBook-m2: ## Switch home-manager configuration for work MacBook Pro M2
 	nix run nixpkgs#home-manager -- switch --flake .#work-macBook-m2 --show-trace
 	@echo "Done."
 
-.PHONY: fmt
-fmt: ## Apply nix fmt
-	nix fmt
-
 .PHONY: help
 help: ## Display Help
 	@grep -E '^[[:alnum:]_-]+:[[:space:]]*## .*$$' $(MAKEFILE_LIST) | \
