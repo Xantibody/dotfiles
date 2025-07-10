@@ -5,6 +5,8 @@
       enable = isLinux;
       settings = {
         exec-once = [
+          # 履歴が無限に消えないので起動時に消す
+          "cliphist wipe"
           "wl-paste --type text --watch cliphist store # Stores only text data"
           "wl-paste --type image --watch cliphist store # Stores only image data"
           "waybar"
