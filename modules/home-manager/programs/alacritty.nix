@@ -1,13 +1,10 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 {
   enable = true;
   settings = {
     window = {
       option_as_alt = "Both";
-      #startup_mode = "fullscreen"
+      startup_mode = "fullscreen";
     };
     font = {
       size = 13;
