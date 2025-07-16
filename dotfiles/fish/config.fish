@@ -6,6 +6,7 @@ abbr ll 'eza --icons -lahF'
 abbr dbde 'devbox init && devbox generate direnv'
 starship init fish | source
 direnv hook fish | source
+fnm env --use-on-cd --shell fish | source
 
 # Nightfox Color Palette
 # Style: dayfox
