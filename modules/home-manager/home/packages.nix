@@ -9,8 +9,6 @@ with pkgs;
   explex-nf
   eza
   fzf
-  fish
-  fishPlugins.z
   gh
   fnm
 
