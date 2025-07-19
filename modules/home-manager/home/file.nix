@@ -10,9 +10,9 @@
     source = self + /dotfiles/nvim/lua;
     recursive = true;
   };
-  ".config/fish/config.fish" = {
-    source = self + /dotfiles/fish/config.fish;
-  };
+  # ".config/fish/config.fish" = {
+  #   source = self + /dotfiles/fish/config.fish;
+  # };
   ".config/efm-langserver/config.yaml" = {
     source = self + /dotfiles/efm-langserver/config.yaml;
   };
