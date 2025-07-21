@@ -19,6 +19,7 @@
     wl-clipboard
     wofi
     xsel
+    via
 
     # waybar
     bluetui
