@@ -1,21 +1,15 @@
 { pkgs, ... }:
 with pkgs;
 [
-  pympress
-  google-chrome
   bat
   devbox
-  explex
-  explex-nf
   eza
-  fzf
-  gh
   fnm
-
-  #  gnupg
-  gnumake
+  gh
+  google-chrome
+  iccheck
   nix-prefetch-github
+  pympress
   ripgrep
   zellij
-  iccheck
 ]

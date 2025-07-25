@@ -27,6 +27,7 @@ return {
 				go = { "gofmt" },
 				lua = { "stylua" },
 				nix = { "nixfmt" },
+				rust = { "rustfmt" },
 				typst = { "typstyle" },
 				yaml = { "yamlfmt" },
 			},

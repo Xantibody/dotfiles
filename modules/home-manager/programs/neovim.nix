@@ -1,7 +1,6 @@
 { pkgs }:
 {
   enable = true;
-
   viAlias = true;
   vimAlias = true;
   defaultEditor = true;
@@ -15,6 +14,7 @@
     basedpyright
     bash-language-server
     efm-langserver
+    fish-lsp
     gopls
     lua-language-server
     nixd
@@ -23,13 +23,12 @@
     typescript-language-server
     vscode-langservers-extracted
     yaml-language-server
-    fish-lsp
 
     #formatter
+    biome
     nixfmt
+    rustfmt
     stylua
     yamlfmt
-    biome
-
   ];
 }
