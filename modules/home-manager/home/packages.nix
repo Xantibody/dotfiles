@@ -6,6 +6,7 @@ with pkgs;
   eza
   fnm
   gh
+  gnumake
   google-chrome
   iccheck
   nix-prefetch-github
