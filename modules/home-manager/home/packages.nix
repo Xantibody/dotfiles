@@ -1,5 +1,6 @@
 { pkgs, ... }:
-with pkgs; [
+with pkgs;
+[
   bat
   devbox
   eza
