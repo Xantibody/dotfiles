@@ -9,5 +9,6 @@
   rofi = import ./rofi.nix { inherit isLinux; };
   starship = import ./starship.nix;
   waybar = import ./waybar.nix { inherit isLinux; };
+  zellij = import ./zellij.nix;
   zoxide = import ./zoxide.nix;
 }

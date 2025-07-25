@@ -1,6 +1,5 @@
 { pkgs, ... }:
-with pkgs;
-[
+with pkgs; [
   bat
   devbox
   eza
@@ -12,5 +11,4 @@ with pkgs;
   nix-prefetch-github
   pympress
   ripgrep
-  zellij
 ]
