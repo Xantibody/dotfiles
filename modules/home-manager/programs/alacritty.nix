@@ -4,7 +4,6 @@
   settings = {
     window = {
       option_as_alt = "Both";
-      startup_mode = "fullscreen";
     };
     font = {
       size = 13;
