@@ -22,4 +22,10 @@ let
     environment = import ./environment.nix { inherit pkgs; };
     virtualisation.docker.enable = true;
   };
-in { imports = [ configuration xremap.nixosModules.default ]; }
+in
+{
+  imports = [
+    configuration
+    xremap.nixosModules.default
+  ];
+}

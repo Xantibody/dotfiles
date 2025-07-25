@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   xserver = import ./xserver.nix;
   printing = import ./printing.nix;
   pipewire = import ./pipewire.nix;
