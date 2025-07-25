@@ -3,14 +3,14 @@ let
   configuration = {
     programs = import ./programs;
     boot = import ./boot { inherit pkgs; };
-    i18n = import ./i18n.nix { inherit pkgs; };
+    i18n = import ./i18n { inherit pkgs; };
     services = import ./services { inherit pkgs; };
-    nix = import ./nix.nix;
-    users = import ./users.nix { inherit pkgs; };
-    networking = import ./networking.nix;
+    nix = import ./nix;
+    users = import ./users { inherit pkgs; };
+    networking = import ./networking;
     time.timeZone = "Asia/Tokyo";
     hardware = import ./hardware.nix;
-    security = import ./security.nix;
+    security = import ./security;
     nixpkgs.config.allowUnfree = true;
     fonts.packages = with pkgs; [
       hackgen-nf-font
