@@ -1,7 +1,7 @@
 { pkgs, xremap, ... }:
 let
   configuration = {
-    programs = import ./programs.nix;
+    programs = import ./programs;
     boot = import ./boot.nix { inherit pkgs; };
     i18n = import ./i18n.nix { inherit pkgs; };
     services = import ./services.nix { inherit pkgs; };
@@ -22,10 +22,4 @@ let
     environment = import ./environment.nix { inherit pkgs; };
     virtualisation.docker.enable = true;
   };
-in
-{
-  imports = [
-    configuration
-    xremap.nixosModules.default
-  ];
-}
+in { imports = [ configuration xremap.nixosModules.default ]; }
