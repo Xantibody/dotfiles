@@ -2,9 +2,9 @@
 let
   configuration = {
     programs = import ./programs;
-    boot = import ./boot.nix { inherit pkgs; };
+    boot = import ./boot { inherit pkgs; };
     i18n = import ./i18n.nix { inherit pkgs; };
-    services = import ./services.nix { inherit pkgs; };
+    services = import ./services { inherit pkgs; };
     nix = import ./nix.nix;
     users = import ./users.nix { inherit pkgs; };
     networking = import ./networking.nix;
