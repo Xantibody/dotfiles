@@ -16,90 +16,90 @@ blue: &blue "#448488"
 red: &red "#cc231c"
 k9s:
   body:
-    fgColor: *foreground 
-    bgColor: *background 
-    logoColor: *blue 
+    fgColor: *foreground
+    bgColor: *background
+    logoColor: *blue
   prompt:
-    fgColor: *foreground 
-    bgColor: *background 
-    suggestColor: *orange 
+    fgColor: *foreground
+    bgColor: *background
+    suggestColor: *orange
   info:
-    fgColor: *magenta 
-    sectionColor: *foreground 
+    fgColor: *magenta
+    sectionColor: *foreground
   help:
-    fgColor: *foreground 
-    bgColor: *background 
-    keyColor: *magenta 
-    numKeyColor: *blue 
-    sectionColor: *green 
+    fgColor: *foreground
+    bgColor: *background
+    keyColor: *magenta
+    numKeyColor: *blue
+    sectionColor: *green
   dialog:
-    fgColor: *foreground 
-    bgColor: *background 
-    buttonFgColor: *foreground 
-    buttonBgColor: *magenta 
+    fgColor: *foreground
+    bgColor: *background
+    buttonFgColor: *foreground
+    buttonBgColor: *magenta
     buttonFocusFgColor: white
-    buttonFocusBgColor: *cyan 
-    labelFgColor: *orange 
-    fieldFgColor: *foreground 
+    buttonFocusBgColor: *cyan
+    labelFgColor: *orange
+    fieldFgColor: *foreground
   frame:
     border:
-      fgColor: *selection 
-      focusColor: *current_line 
+      fgColor: *selection
+      focusColor: *current_line
     menu:
-      fgColor: *foreground 
-      keyColor: *magenta 
-      numKeyColor: *magenta 
+      fgColor: *foreground
+      keyColor: *magenta
+      numKeyColor: *magenta
     crumbs:
-      fgColor: *foreground 
-      bgColor: *comment 
-      activeColor: *blue 
+      fgColor: *foreground
+      bgColor: *comment
+      activeColor: *blue
     status:
-      newColor: *cyan 
-      modifyColor: *blue 
-      addColor: *green 
-      errorColor: *red 
-      highlightColor: *orange 
-      killColor: *comment 
-      completedColor: *comment 
+      newColor: *cyan
+      modifyColor: *blue
+      addColor: *green
+      errorColor: *red
+      highlightColor: *orange
+      killColor: *comment
+      completedColor: *comment
     title:
-      fgColor: *foreground 
-      bgColor: *background 
-      highlightColor: *orange 
-      counterColor: *blue 
-      filterColor: *magenta 
+      fgColor: *foreground
+      bgColor: *background
+      highlightColor: *orange
+      counterColor: *blue
+      filterColor: *magenta
   views:
     charts:
       bgColor: background
       defaultDialColors:
-        - *blue 
-        - *red 
+        - *blue
+        - *red
       defaultChartColors:
-        - *blue 
-        - *red 
+        - *blue
+        - *red
     table:
-      fgColor: *foreground 
-      bgColor: *background 
-      cursorFgColor: *foreground 
-      cursorBgColor: *current_line 
+      fgColor: *foreground
+      bgColor: *background
+      cursorFgColor: *foreground
+      cursorBgColor: *current_line
       header:
-        fgColor: *foreground 
-        bgColor: *background 
-        sorterColor: *selection 
+        fgColor: *foreground
+        bgColor: *background
+        sorterColor: *selection
     xray:
-      fgColor: *foreground 
-      bgColor: *background 
-      cursorColor: *current_line 
-      graphicColor: *blue 
+      fgColor: *foreground
+      bgColor: *background
+      cursorColor: *current_line
+      graphicColor: *blue
       showIcons: false
     yaml:
-      keyColor: *magenta 
-      colonColor: *blue 
-      valueColor: *foreground 
+      keyColor: *magenta
+      colonColor: *blue
+      valueColor: *foreground
     logs:
-      fgColor: *foreground 
-      bgColor: *background 
+      fgColor: *foreground
+      bgColor: *background
       indicator:
-        fgColor: *foreground 
-        bgColor: *background 
-        toggleOnColor: *magenta 
-        toggleOffColor: *blue 
+        fgColor: *foreground
+        bgColor: *background
+        toggleOnColor: *magenta
+        toggleOffColor: *blue

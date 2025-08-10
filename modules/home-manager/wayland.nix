@@ -15,46 +15,45 @@
         "$terminal" = "alacritty";
         "$fileManager" = "dolphin";
         "$menu" = "rofi -modi drun,run -show drun";
-        bind =
-          [
-            "$mod, Q, exec, $terminal"
-            "$mod, C, killactive,"
-            "$mod, M, exit,"
-            "$mod, E, exec, $fileManager"
-            # "$mod, F, exec, firefox"
-            "$mod, F, exec, google-chrome-stable"
-            "$mod, V, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
-            "$mod, R, exec, $menu"
-            "$mod, P, pseudo, # dwindle"
-            "$mod, S, togglesplit, # dwindle"
+        bind = [
+          "$mod, Q, exec, $terminal"
+          "$mod, C, killactive,"
+          "$mod, M, exit,"
+          "$mod, E, exec, $fileManager"
+          # "$mod, F, exec, firefox"
+          "$mod, F, exec, google-chrome-stable"
+          "$mod, V, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
+          "$mod, R, exec, $menu"
+          "$mod, P, pseudo, # dwindle"
+          "$mod, S, togglesplit, # dwindle"
 
-            # Move focus with mod for vim key
-            "$mod, H, movefocus, l"
-            "$mod, L, movefocus, r"
-            "$mod, K, movefocus, u"
-            "$mod, J, movefocus, d"
-            "$mod_SHIFT, H, swapwindow, l"
-            "$mod_SHIFT, L, swapwindow, r"
-            "$mod_SHIFT, K, swapwindow, u"
-            "$mod_SHIFT, J, swapwindow, d"
+          # Move focus with mod for vim key
+          "$mod, H, movefocus, l"
+          "$mod, L, movefocus, r"
+          "$mod, K, movefocus, u"
+          "$mod, J, movefocus, d"
+          "$mod_SHIFT, H, swapwindow, l"
+          "$mod_SHIFT, L, swapwindow, r"
+          "$mod_SHIFT, K, swapwindow, u"
+          "$mod_SHIFT, J, swapwindow, d"
 
-          ]
-          ++ (
-            # workspaces
-            # binds $mod + [shift +] {1..9} to [move to] workspace {1..9}
-            builtins.concatLists (
-              builtins.genList (
-                i:
-                let
-                  ws = i + 1;
-                in
-                [
-                  "$mod, code:1${toString i}, workspace, ${toString ws}"
-                  "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
-                ]
-              ) 9
-            )
-          );
+        ]
+        ++ (
+          # workspaces
+          # binds $mod + [shift +] {1..9} to [move to] workspace {1..9}
+          builtins.concatLists (
+            builtins.genList (
+              i:
+              let
+                ws = i + 1;
+              in
+              [
+                "$mod, code:1${toString i}, workspace, ${toString ws}"
+                "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
+              ]
+            ) 9
+          )
+        );
         input = {
           repeat_delay = 250;
           repeat_rate = 50;
