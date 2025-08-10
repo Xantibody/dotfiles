@@ -6,6 +6,6 @@
   auto-cpufreq = import ./auto-cpufreq.nix;
   xremap = import ./xremap.nix;
   fprintd = import ./fprintd.nix { inherit pkgs; };
-  udev = import ./udev.nix;
+  udev = import ./udev.nix { inherit pkgs; };
   upower = import ./upower.nix;
 }
