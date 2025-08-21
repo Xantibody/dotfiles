@@ -12,4 +12,5 @@ with pkgs;
   nix-prefetch-github
   pympress
   ripgrep
+  uv
 ]
