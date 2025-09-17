@@ -6,10 +6,10 @@ E14Gen6: ## Switch NixOS configuration for E14Gen6(ThinkPad)
 	sudo nixos-rebuild switch --flake .#E14Gen6 --show-trace
 	@echo "Done."
 
-.PHONY: work-macBook-m2
-work-macBook-m2: ## Switch home-manager configuration for work MacBook Pro M2
-	@echo "Start work-macBook-m2  switch..."
-	nix run nixpkgs#home-manager -- switch --flake .#work-macBook-m2 --show-trace
+.PHONY: work-macBook-m4
+work-macBook-m4: ## Switch home-manager configuration for work MacBook Pro M4
+	@echo "Start work-macBook-m4  switch..."
+	nix run nixpkgs#home-manager -- switch --flake .#work-macBook-m4 --show-trace
 	@echo "Done."
 
 .PHONY: help

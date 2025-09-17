@@ -7,6 +7,10 @@
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
     };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
     };
@@ -49,7 +53,7 @@
           E14Gen6 = import ./hosts/E14Gen6 { inherit inputs; };
         };
         homeConfigurations = {
-          work-macBook-m2 = import ./hosts/work-macBook-m2 { inherit inputs; };
+          work-macBook-m4 = import ./hosts/work-macBook-m4 { inherit inputs; };
         };
       };
       perSystem = {
