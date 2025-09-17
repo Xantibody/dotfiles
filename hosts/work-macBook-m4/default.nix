@@ -3,8 +3,8 @@ let
   inherit (inputs)
     nixpkgs
     alacritty-theme
-    sops-nix
     home-manager
+    nix-darwin
     self
     ;
 
@@ -24,17 +24,50 @@ let
   };
 
 in
-home-manager.lib.homeManagerConfiguration {
-  pkgs = pkgs;
-  modules = [
-    ../../modules/home-manager
-  ];
-  extraSpecialArgs = {
+nix-darwin.lib.darwinSystem {
+  inherit system;
+  specialArgs = {
     inherit
+      inputs
       pkgs
       username
       homeDirectory
-      self
       ;
   };
+  modules = [
+    {
+      # Basic nix-darwin system configuration
+      nix.settings.experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+
+      # User configuration
+      users.users."${username}" = {
+        name = username;
+        home = homeDirectory;
+      };
+
+      system.stateVersion = 4;
+    }
+    home-manager.darwinModules.home-manager
+    {
+      home-manager = {
+        #        useGlobalPkgs = true;
+        useUserPackages = true;
+        users."${username}" = {
+          imports = [
+            (import ../../modules/home-manager {
+              inherit
+                pkgs
+                homeDirectory
+                username
+                self
+                ;
+            })
+          ];
+        };
+      };
+    }
+  ];
 }

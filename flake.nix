@@ -52,7 +52,7 @@
         nixosConfigurations = {
           E14Gen6 = import ./hosts/E14Gen6 { inherit inputs; };
         };
-        homeConfigurations = {
+        darwinConfigurations = {
           work-macBook-m4 = import ./hosts/work-macBook-m4 { inherit inputs; };
         };
       };
