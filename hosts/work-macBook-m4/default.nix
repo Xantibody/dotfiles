@@ -50,7 +50,21 @@ nix-darwin.lib.darwinSystem {
         };
       };
 
-      system.stateVersion = 4;
+      homebrew = {
+        enable = true;
+        onActivation = {
+          autoUpdate = true;
+        };
+        casks = [
+          "alacritty"
+          "clipy"
+          "macskk"
+        ];
+      };
+      system = {
+        stateVersion = 4;
+        primaryUser = username;
+      };
       ids.gids.nixbld = 350;
     }
     home-manager.darwinModules.home-manager
