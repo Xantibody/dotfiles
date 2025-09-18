@@ -9,7 +9,7 @@ E14Gen6: ## Switch NixOS configuration for E14Gen6(ThinkPad)
 .PHONY: work-macBook-m4
 work-macBook-m4: ## Switch home-manager configuration for work MacBook Pro M4
 	@echo "Start work-macBook-m4  switch..."
-	sudo nix run nix-darwin -- switch --flake .#work-macBook-m4 --show-trace
+	sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#work-macBook-m4 --show-trace
 	@echo "Done."
 
 .PHONY: help

@@ -36,19 +36,22 @@ nix-darwin.lib.darwinSystem {
   };
   modules = [
     {
-      # Basic nix-darwin system configuration
-      nix.settings.experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-
       # User configuration
       users.users."${username}" = {
         name = username;
         home = homeDirectory;
       };
 
+      nix = {
+        optimise.automatic = true;
+        settings = {
+          experimental-features = "nix-command flakes";
+          max-jobs = 8;
+        };
+      };
+
       system.stateVersion = 4;
+      ids.gids.nixbld = 350;
     }
     home-manager.darwinModules.home-manager
     {
