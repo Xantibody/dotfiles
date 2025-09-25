@@ -64,6 +64,10 @@ nix-darwin.lib.darwinSystem {
       system = {
         stateVersion = 4;
         primaryUser = username;
+        keyboard = {
+          enableKeyMapping = true;
+          remapCapsLockToControl = true;
+        };
       };
       ids.gids.nixbld = 350;
     }
