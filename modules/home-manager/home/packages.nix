@@ -2,6 +2,7 @@
 with pkgs;
 [
   bat
+  fd
   devbox
   eza
   fnm
