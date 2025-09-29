@@ -14,4 +14,6 @@ with pkgs;
   pympress
   ripgrep
   uv
+  cargo
+  rustc
 ]
