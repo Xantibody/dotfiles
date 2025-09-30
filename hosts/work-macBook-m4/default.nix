@@ -41,7 +41,12 @@ nix-darwin.lib.darwinSystem {
         name = username;
         home = homeDirectory;
       };
-
+      defaults = {
+        NSGlobalDomain = {
+          KeyRepeat = 7;
+          InitialKeyRepeat = 7;
+        };
+      };
       nix = {
         optimise.automatic = true;
         settings = {
