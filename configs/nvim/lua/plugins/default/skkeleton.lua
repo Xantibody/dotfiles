@@ -8,7 +8,9 @@ return {
 		vim.fn["skkeleton#config"]({
 			eggLikeNewline = true,
 			registerConvertResult = true,
-			globalDictionaries = { "~/.skk/SKK-JISYO.L" },
+			globalDictionaries = {
+				"~/Library/Containers/net.mtgto.inputmethod.macSKK/Data/Documents/Dictionaries/SKK-JISYO.L",
+			},
 		})
 
 		-- lualine setting

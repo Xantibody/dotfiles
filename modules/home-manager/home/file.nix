@@ -13,9 +13,6 @@
   ".config/efm-langserver/config.yaml" = {
     source = self + /configs/efm-langserver/config.yaml;
   };
-  ".skk/SKK-JISYO.L" = {
-    source = self + /configs/skk/SKK-JISYO.L;
-  };
   ".config/zellij/config.kdl" = {
     source = self + /configs/zellij/config.kdl;
   };

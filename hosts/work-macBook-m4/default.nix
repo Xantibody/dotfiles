@@ -60,6 +60,8 @@ nix-darwin.lib.darwinSystem {
           "macskk"
         ];
       };
+
+      fonts.packages = [ pkgs.explex-nf ];
       system = {
         stateVersion = 4;
         primaryUser = username;
