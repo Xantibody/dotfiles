@@ -8,7 +8,7 @@ let
     self
     ;
 
-  username = "usr0200777";
+  username = "ryu.aizawa";
   system = "aarch64-darwin";
   homeDirectory = "/Users/${username}";
 
@@ -41,12 +41,6 @@ nix-darwin.lib.darwinSystem {
         name = username;
         home = homeDirectory;
       };
-      defaults = {
-        NSGlobalDomain = {
-          KeyRepeat = 7;
-          InitialKeyRepeat = 7;
-        };
-      };
       nix = {
         optimise.automatic = true;
         settings = {
@@ -72,6 +66,12 @@ nix-darwin.lib.darwinSystem {
         keyboard = {
           enableKeyMapping = true;
           remapCapsLockToControl = true;
+        };
+        defaults = {
+          NSGlobalDomain = {
+            KeyRepeat = 10;
+            InitialKeyRepeat = 1;
+          };
         };
       };
       ids.gids.nixbld = 350;
