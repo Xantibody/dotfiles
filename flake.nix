@@ -35,8 +35,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     systems.url = "github:nix-systems/default";
+    edgepkgs.url = "github:natsukium/edgepkgs";
   };
-
   outputs =
     {
       flake-parts,

@@ -5,6 +5,7 @@ let
     xremap
     alacritty-theme
     sops-nix
+    edgepkgs
     home-manager
     self
     ;
@@ -17,6 +18,7 @@ let
     inherit system;
     overlays = [
       alacritty-theme.overlays.default
+      edgepkgs.overlays.default
       (final: prev: {
         iccheck = prev.callPackage ../../overlays/iccheck.nix { };
       })

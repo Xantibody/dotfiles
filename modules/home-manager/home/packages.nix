@@ -2,9 +2,10 @@
 with pkgs;
 [
   bat
-  fd
+  cargo
   devbox
   eza
+  fd
   fnm
   gh
   gnumake
@@ -13,7 +14,7 @@ with pkgs;
   nix-prefetch-github
   pympress
   ripgrep
-  uv
-  cargo
   rustc
+  uv
+  edge.claude-code
 ]

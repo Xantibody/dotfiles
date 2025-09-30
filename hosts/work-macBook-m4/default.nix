@@ -1,10 +1,11 @@
 { inputs, ... }:
 let
   inherit (inputs)
-    nixpkgs
     alacritty-theme
+    edgepkgs
     home-manager
     nix-darwin
+    nixpkgs
     self
     ;
 
@@ -16,6 +17,7 @@ let
     inherit system;
     overlays = [
       alacritty-theme.overlays.default
+      edgepkgs.overlays.default
       (final: prev: {
         iccheck = prev.callPackage ../../overlays/iccheck.nix { };
       })
