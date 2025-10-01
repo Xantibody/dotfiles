@@ -73,8 +73,8 @@ nix-darwin.lib.darwinSystem {
         };
         defaults = {
           NSGlobalDomain = {
-            KeyRepeat = 10;
-            InitialKeyRepeat = 1;
+            KeyRepeat = 2;
+            InitialKeyRepeat = 15;
           };
         };
       };
