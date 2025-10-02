@@ -62,6 +62,7 @@ nix-darwin.lib.darwinSystem {
           "macskk"
         ];
       };
+      security.pam.services.sudo_local.touchIdAuth = true;
 
       fonts.packages = [ pkgs.explex-nf ];
       system = {
@@ -75,6 +76,21 @@ nix-darwin.lib.darwinSystem {
           NSGlobalDomain = {
             KeyRepeat = 2;
             InitialKeyRepeat = 15;
+          };
+          dock = {
+            show-recents = false;
+            persistent-apps = [
+              { app = "/System/Applications/Launchpad.app"; }
+              { app = "${pkgs.slack}/Applications/slack.app/"; }
+              { app = "${pkgs.google-chrome}/Applications/Google Chrome.app"; }
+              {
+                spacer = {
+                  small = true;
+                };
+              }
+              { app = "${pkgs.kitty}/Applications/kitty.app"; }
+
+            ];
           };
         };
       };
