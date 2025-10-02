@@ -8,6 +8,7 @@ let
     edgepkgs
     home-manager
     self
+    mcp-servers-nix
     ;
 
   username = "raizawa";
@@ -18,6 +19,7 @@ let
     inherit system;
     overlays = [
       alacritty-theme.overlays.default
+      mcp-servers-nix.overlays.default
       edgepkgs.overlays.default
       (final: prev: {
         iccheck = prev.callPackage ../../overlays/iccheck.nix { };

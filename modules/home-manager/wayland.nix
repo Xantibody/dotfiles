@@ -12,7 +12,7 @@
           "waybar"
         ];
         "$mod" = "SUPER";
-        "$terminal" = "alacritty";
+        "$terminal" = "kitty";
         "$fileManager" = "dolphin";
         "$menu" = "rofi -modi drun,run -show drun";
         bind = [
@@ -20,7 +20,6 @@
           "$mod, C, killactive,"
           "$mod, M, exit,"
           "$mod, E, exec, $fileManager"
-          # "$mod, F, exec, firefox"
           "$mod, F, exec, google-chrome-stable"
           "$mod, V, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
           "$mod, R, exec, $menu"
