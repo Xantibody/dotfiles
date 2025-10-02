@@ -47,6 +47,13 @@ nix-darwin.lib.darwinSystem {
         shell = pkgs.fish;
       };
       environment.shells = [ pkgs.fish ];
+      environment.systemPackages = [
+        pkgs.colima
+        pkgs.lima-additional-guestagents
+        pkgs.docker
+        pkgs.docker-compose
+        pkgs.docker-buildx
+      ];
       nix = {
         optimise.automatic = true;
         settings = {
