@@ -89,6 +89,7 @@ nix-darwin.lib.darwinSystem {
           };
           dock = {
             show-recents = false;
+            autohide = true;
             persistent-apps = [
               { app = "/System/Applications/Launchpad.app"; }
               { app = "${pkgs.slack}/Applications/slack.app/"; }
