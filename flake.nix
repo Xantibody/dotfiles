@@ -36,6 +36,7 @@
     };
     systems.url = "github:nix-systems/default";
     edgepkgs.url = "github:natsukium/edgepkgs";
+    mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
   };
   outputs =
     {

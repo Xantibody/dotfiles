@@ -3,6 +3,7 @@ let
   inherit (inputs)
     alacritty-theme
     edgepkgs
+    mcp-servers-nix
     home-manager
     nix-darwin
     nixpkgs
@@ -18,6 +19,7 @@ let
     overlays = [
       alacritty-theme.overlays.default
       edgepkgs.overlays.default
+      mcp-servers-nix.overlays.default
       (final: prev: {
         iccheck = prev.callPackage ../../overlays/iccheck.nix { };
       })
@@ -100,12 +102,13 @@ nix-darwin.lib.darwinSystem {
     home-manager.darwinModules.home-manager
     {
       home-manager = {
-        useUserPackages = true;
+        useGlobalPkgs = true;
         users."${username}" = {
           imports = [
             (import ../../modules/home-manager {
               inherit
                 pkgs
+                mcp-servers-nix
                 homeDirectory
                 username
                 self

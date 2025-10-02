@@ -1,4 +1,7 @@
-{ pkgs, isLinux }:
+{
+  pkgs,
+  isLinux,
+}:
 {
   alacritty = import ./alacritty.nix { inherit pkgs; };
   direnv = import ./direnv.nix;
