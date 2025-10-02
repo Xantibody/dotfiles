@@ -42,7 +42,9 @@ nix-darwin.lib.darwinSystem {
       users.users."${username}" = {
         name = username;
         home = homeDirectory;
+        shell = pkgs.fish;
       };
+      environment.shells = [ pkgs.fish ];
       nix = {
         optimise.automatic = true;
         settings = {
@@ -50,7 +52,7 @@ nix-darwin.lib.darwinSystem {
           max-jobs = 8;
         };
       };
-
+      programs.fish.enable = true;
       homebrew = {
         enable = true;
         onActivation = {
@@ -63,7 +65,6 @@ nix-darwin.lib.darwinSystem {
         ];
       };
       security.pam.services.sudo_local.touchIdAuth = true;
-
       fonts.packages = [ pkgs.explex-nf ];
       system = {
         stateVersion = 4;
