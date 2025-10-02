@@ -11,4 +11,5 @@
   waybar = import ./waybar.nix { inherit isLinux; };
   zellij = import ./zellij.nix;
   zoxide = import ./zoxide.nix;
+  kitty = import ./kitty.nix;
 }
