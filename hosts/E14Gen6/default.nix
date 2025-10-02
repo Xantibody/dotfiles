@@ -44,6 +44,7 @@ nixpkgs.lib.nixosSystem {
         users."${username}" = import ../../modules/home-manager {
           inherit
             pkgs
+            edgepkgs
             homeDirectory
             username
             self
