@@ -20,5 +20,5 @@ in
   };
   programs = import ./programs { inherit pkgs isLinux; };
   wayland = import ./wayland.nix { inherit isLinux; };
-  services = import ./services.nix { inherit isLinux; };
+  services = import ./services { inherit isLinux; };
 }
