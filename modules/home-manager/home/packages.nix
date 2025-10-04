@@ -17,6 +17,8 @@ with pkgs;
   rustc
   uv
   edge.claude-code
+  codex
+  emacs
   context7-mcp
   serena
 ]
