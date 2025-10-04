@@ -23,9 +23,6 @@ let
     virtualisation.docker.enable = true;
   };
 in
-{
-  imports = [
-    configuration
-    xremap.nixosModules.default
-  ];
+configuration // {
+  imports = [ xremap.nixosModules.default ];
 }
