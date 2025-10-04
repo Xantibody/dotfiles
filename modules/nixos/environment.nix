@@ -21,7 +21,6 @@
     xsel
     via
 
-    # waybar
     bluetui
     brightnessctl
     coreutils
@@ -35,6 +34,5 @@
     pulseaudio
     waybar
     wireplumber
-    claude-code
   ];
 }
