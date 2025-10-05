@@ -34,5 +34,6 @@
     pulseaudio
     waybar
     wireplumber
+    hyprlock
   ];
 }
