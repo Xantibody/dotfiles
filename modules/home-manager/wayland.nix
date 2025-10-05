@@ -25,6 +25,7 @@
           "$mod, R, exec, $menu"
           "$mod, P, pseudo, # dwindle"
           "$mod, S, togglesplit, # dwindle"
+          "$mod_SHIFT, E, exec, emacs"
 
           # Move focus with mod for vim key
           "$mod, H, movefocus, l"
