@@ -1,4 +1,4 @@
-local function skkeleton()
+local function get_skkeleton_state()
 	local ok, mode = pcall(vim.fn["skkeleton#mode"])
 	if not ok then
 		return ""
@@ -7,7 +7,7 @@ local function skkeleton()
 	if mode == "hira" then
 		return "ひら"
 	elseif mode == "kata" then
-		return "カタ"
+		return "カナ"
 	elseif mode == "hankata" then
 		return "半カナ"
 	elseif mode == "zenkaku" then
@@ -30,7 +30,7 @@ return {
 			theme = "everforest",
 		},
 		sections = {
-			lualine_x = { skkeleton },
+			lualine_x = { get_skkeleton_state },
 		},
 	},
 	extensions = {
