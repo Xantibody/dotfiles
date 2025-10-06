@@ -18,7 +18,6 @@ with pkgs;
   uv
   edge.claude-code
   codex
-  emacs
   context7-mcp
   serena
 ]

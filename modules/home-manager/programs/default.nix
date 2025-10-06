@@ -15,4 +15,5 @@
   zellij = import ./zellij.nix;
   zoxide = import ./zoxide.nix;
   kitty = import ./kitty.nix;
+  emacs = import ./emacs.nix;
 }
