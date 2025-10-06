@@ -67,12 +67,12 @@
           sensitivity = 0;
           touchpad.natural_scroll = true;
         };
-        # xwayland = {
-        #   force_zero_scaling = true;
-        # };
+        xwayland = {
+          force_zero_scaling = true;
+        };
         monitor = [
           "eDP-1, preferred, auto, 1"
-          "eDP-2, preferred, auto-up, 1"
+          ", preferred, auto,1, mirror, eDP-1"
         ];
       };
     };
