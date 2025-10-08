@@ -29,6 +29,9 @@ let
       system = import ./system.nix { inherit pkgs username; };
     }
     // {
+      services = import ./services.nix;
+    }
+    // {
       ids.gids.nixbld = 350;
     };
 in
