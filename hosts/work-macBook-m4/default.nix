@@ -23,6 +23,8 @@ let
       (final: prev: {
         iccheck = prev.callPackage ../../overlays/iccheck.nix { };
       })
+      (import ../../overlays/basedpyright.nix)
+      # neovimのbuildでこけるので一時対応
     ];
     config.allowUnfree = true;
   };
