@@ -18,6 +18,7 @@ with pkgs;
   uv
   edge.claude-code
   codex
+  gemini-cli
   context7-mcp
   serena
 ]
