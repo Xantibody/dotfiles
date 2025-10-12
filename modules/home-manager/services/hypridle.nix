@@ -11,10 +11,12 @@
       {
         timeout = 300;
         on-timeout = "hyprlock";
+        on-resume = "hyprctl dispatch dpms on"; # 何か入力が来たら点灯
       } # 5分でロック
       {
         timeout = 600;
         on-timeout = "hyprctl dispatch dpms off";
+        on-resume = "hyprctl dispatch dpms on"; # 解除時は必ず点灯
       } # 10分で消灯
     ];
   };
