@@ -3,6 +3,7 @@ with pkgs;
 [
   bat
   cargo
+  deck
   devbox
   eza
   fd
@@ -21,4 +22,5 @@ with pkgs;
   gemini-cli
   context7-mcp
   serena
+  yaskkserv2
 ]
