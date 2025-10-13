@@ -23,4 +23,5 @@ with pkgs;
   context7-mcp
   serena
   yaskkserv2
+  firefox-beta-bin
 ]
