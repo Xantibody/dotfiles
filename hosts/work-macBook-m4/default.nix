@@ -20,12 +20,8 @@ let
       alacritty-theme.overlays.default
       edgepkgs.overlays.default
       mcp-servers-nix.overlays.default
-      (final: prev: {
-        iccheck = prev.callPackage ../../overlays/iccheck.nix { };
-      })
-      (import ../../overlays/basedpyright.nix)
-      # neovimのbuildでこけるので一時対応
-    ];
+    ]
+    ++ (import ../../overlays);
     config.allowUnfree = true;
   };
 

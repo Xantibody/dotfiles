@@ -21,10 +21,7 @@ let
       alacritty-theme.overlays.default
       mcp-servers-nix.overlays.default
       edgepkgs.overlays.default
-      (final: prev: {
-        iccheck = prev.callPackage ../../overlays/iccheck.nix { };
-      })
-    ];
+    ] ++ (import ../../overlays);
     config.allowUnfree = true;
   };
 
