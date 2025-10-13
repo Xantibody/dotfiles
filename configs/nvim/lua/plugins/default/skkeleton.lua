@@ -9,7 +9,7 @@ return {
 			eggLikeNewline = true,
 			registerConvertResult = true,
 			globalDictionaries = {
-				"~/Library/Containers/net.mtgto.inputmethod.macSKK/Data/Documents/Dictionaries/SKK-JISYO.L",
+				"/home/raizawa/Repo/dotfiles/configs/skk/SKK-JISYO.L",
 			},
 		})
 
