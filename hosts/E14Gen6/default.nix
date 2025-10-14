@@ -21,7 +21,8 @@ let
       alacritty-theme.overlays.default
       mcp-servers-nix.overlays.default
       edgepkgs.overlays.default
-    ] ++ (import ../../overlays);
+    ]
+    ++ (import ../../overlays);
     config.allowUnfree = true;
   };
 
