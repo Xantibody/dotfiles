@@ -21,7 +21,8 @@ let
       edgepkgs.overlays.default
       mcp-servers-nix.overlays.default
     ]
-    ++ (import ../../overlays);
+    ++ (import ../../overlays)
+    ++ [ (import ../../overlays/gtk3-no-doc.nix) ];
     config.allowUnfree = true;
   };
 
