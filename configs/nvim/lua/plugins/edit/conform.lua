@@ -22,10 +22,6 @@ return {
 				typstyle = {
 					command = "typstyle",
 				},
-				yamlfmt = {
-					-- 改行を切り詰めない設定
-					args = { "-formatter", "retain_line_breaks=true" },
-				},
 			},
 			formatters_by_ft = {
 				go = { "gofmt" },

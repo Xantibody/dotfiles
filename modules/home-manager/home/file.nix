@@ -31,4 +31,7 @@
   ".via/via.json" = {
     source = self + /configs/via/via.json;
   };
+  ".config/yamlfmt/yamlfmt.yaml" = {
+    source = self + /configs/yamlfmt/yamlfmt.yaml;
+  };
 }
