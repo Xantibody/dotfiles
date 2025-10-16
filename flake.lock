@@ -523,11 +523,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1760445323,
-        "narHash": "sha256-gY+rsPgSdjgdcxYHcrz2vxexy1AbfgjiHTea630fo1M=",
+        "lastModified": 1760576522,
+        "narHash": "sha256-HBH/SYEBORXyc9vjzLlowwNO9Sf7NyCQLOHvZdM1kJg=",
         "owner": "natsukium",
         "repo": "mcp-servers-nix",
-        "rev": "d54de2548d5147f5929de5f96649395bed6581f1",
+        "rev": "98c1f065fdc709f478496083c2382537f62a85b1",
         "type": "github"
       },
       "original": {
@@ -667,11 +667,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1760284886,
-        "narHash": "sha256-TK9Kr0BYBQ/1P5kAsnNQhmWWKgmZXwUQr4ZMjCzWf2c=",
+        "lastModified": 1760524057,
+        "narHash": "sha256-EVAqOteLBFmd7pKkb0+FIUyzTF61VKi7YmvP1tw4nEw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "cf3f5c4def3c7b5f1fc012b3d839575dbe552d43",
+        "rev": "544961dfcce86422ba200ed9a0b00dd4b1486ec5",
         "type": "github"
       },
       "original": {
@@ -920,11 +920,11 @@
         "xremap": "xremap_2"
       },
       "locked": {
-        "lastModified": 1758929268,
-        "narHash": "sha256-WIxpQYzXUKZRCLZ1djg5vZiakWrcjhybrq85oQJ6n/c=",
+        "lastModified": 1760596096,
+        "narHash": "sha256-WT0sRDzj2Ma/2pdFmddYuNSTUd5ZOmAfgDREjkWtwQ4=",
         "owner": "xremap",
         "repo": "nix-flake",
-        "rev": "226fcadfe1d810a89ce318f6a304df3caf7f9cd7",
+        "rev": "e8f58f1351824e9cd5cb32c75df6fbee804059de",
         "type": "github"
       },
       "original": {
