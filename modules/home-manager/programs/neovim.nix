@@ -9,6 +9,7 @@
     fzf
     deno
     wordnet
+    textlint
 
     #LSP
     basedpyright

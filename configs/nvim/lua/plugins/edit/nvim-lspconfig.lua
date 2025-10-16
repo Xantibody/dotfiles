@@ -47,7 +47,49 @@ return {
 			end,
 		})
 
+		vim.lsp.config("yamlls", {
+			settings = {
+				yaml = {
+					schemas = {
+						-- other settings. note this overrides the lspconfig defaults.
+						["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.1-standalone-strict/all.json"] = {
+							"**/*k8s*/**/*.yaml",
+							"**/manifest/*.yaml",
+						},
+					},
+					-- other schemas
+				},
+			},
+		})
+
+		--efm settings
+		vim.lsp.config("efm", {
+			filetypes = {
+				"markdown",
+			},
+			init_options = { documentLinting = true, documentFormatting = false },
+			settings = {
+				rootMarkers = {
+					".git/",
+					".textlintrc",
+					".textlintrc.json",
+				},
+				languages = {
+
+					markdown = {
+						{
+							lintIgnoreExitCode = true,
+							lintStdin = true,
+							lintCommand = "textlint --format unix --stdin --stdin-filename ${INPUT}",
+							lintFormats = { "%f:%l:%c: %m" },
+						},
+					},
+				},
+			},
+		})
+
 		vim.lsp.enable("denols")
+		vim.lsp.enable("efm")
 		vim.lsp.enable("yamlls")
 		vim.lsp.enable("pyright")
 		vim.lsp.enable("rust_analyzer")
@@ -65,46 +107,6 @@ return {
 		vim.lsp.config("tofu_ls", {
 			cmd = { "opentofu-ls", "serve" },
 			filetypes = { "opentofu", "opentofu-vars", "terraform" },
-		})
-
-		vim.lsp.config("yamlls", {
-			settings = {
-				yaml = {
-					-- other settings. note this overrides the lspconfig defaults.
-					["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.1-standalone-strict/all.json"] = {
-						"**/*k8s*/**/*.yaml",
-						"**/manifest/*.yaml",
-					},
-					-- other schemas
-				},
-			},
-		})
-
-		--efm settings
-		vim.lsp.config("efm", {
-			filetypes = {
-				"lua",
-				"markdown",
-				"markdown.mdx",
-			},
-			settings = {
-				rootMarkers = {
-					".git/",
-					".textlintrc",
-				},
-				languages = {
-					lua = {
-						{
-							formatCommand = "lua-format -i",
-						},
-					},
-					markdown = {
-						lintCommand = "pnpm --no-install textlint -f unix --stdin --stdin-filename ${INPUT}",
-						lintFormats = { "%f:%l:%c: %m [%trror/%r]" },
-						rootMarkers = { ".textlintrc" },
-					},
-				},
-			},
 		})
 	end,
 }
