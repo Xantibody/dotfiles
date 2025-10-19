@@ -1,4 +1,5 @@
 {
+  enable = true;
   userName = "raizawa";
   serviceMode = "system";
   config = {
@@ -20,9 +21,9 @@
         # 一部アプリケーション（ターミナルエミュレータ）を対象から除外
         application = {
           not = [
-            "Alacritty"
-            "Kitty"
-            "Wezterm"
+            "alacritty"
+            "kitty"
+            "wezterm"
           ];
         };
       }
