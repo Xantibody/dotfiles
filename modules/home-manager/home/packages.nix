@@ -4,6 +4,8 @@ with pkgs;
   bat
   cargo
   deck
+  devenv
+  direnv
   devbox
   eza
   fd

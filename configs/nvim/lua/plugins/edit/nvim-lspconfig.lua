@@ -82,6 +82,8 @@ return {
 							lintStdin = true,
 							lintCommand = "textlint --format unix --stdin --stdin-filename ${INPUT}",
 							lintFormats = { "%f:%l:%c: %m" },
+							formatCommand = "textlint --fix --no-color --stdin --stdin-filename ${INPUT}",
+							formatStdin = true,
 						},
 					},
 				},
