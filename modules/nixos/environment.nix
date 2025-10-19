@@ -26,7 +26,6 @@
     coreutils
     gawk
     iw
-    kitty
     libnotify
     lm_sensors
     networkmanager

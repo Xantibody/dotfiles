@@ -1,8 +1,13 @@
 {
   enable = true;
-  font.name = "Explex";
-  # themeFile = "Dayfox";
+  font = {
+    name = "Explex Console NF";
+    size = 9;
+  };
+
   settings = {
+    macos_option_as_alt = true;
+
     # Nightfox colors for Kitty
     ## name: dayfox
     ## upstream: https://github.com/edeneast/nightfox.nvim/raw/main/extra/dayfox/kitty.conf
