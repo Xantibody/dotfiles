@@ -2,7 +2,7 @@
   enable = true;
   font = {
     name = "Explex Console NF";
-    size = 9;
+    size = 11;
   };
 
   settings = {
