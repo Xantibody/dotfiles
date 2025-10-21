@@ -23,6 +23,8 @@
     typescript-language-server
     vscode-langservers-extracted
     yaml-language-server
+    typos-lsp
+    helm-ls
 
     #formatter
     biome
