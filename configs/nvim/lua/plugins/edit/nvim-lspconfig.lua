@@ -5,7 +5,8 @@ return {
 		{ "antosha417/nvim-lsp-file-operations", config = true },
 	},
 	keys = {
-		{ "<leader>ca", vim.lsp.buf.code_action, mode = { "n", "v" }, desc = "See available code actions" },
+		-- tiny-code-actionに割り当てる
+		-- { "<leader>ca", vim.lsp.buf.code_action, mode = { "n", "v" }, desc = "See available code actions" },
 		{ "<leader>d", vim.diagnostic.open_float, mode = "n", desc = "Show line diagnostics" },
 		{ "<leader>D", vim.lsp.buf.type_definition, desc = "Go to type definition" },
 		{ "[d", vim.diagnostic.goto_prev, mode = "n", desc = "Go to previous diagnostic" },
