@@ -1,9 +1,20 @@
 return {
 	"folke/which-key.nvim",
+	event = "VeryLazy",
 	opts = {
-		spec = {
-			{ "<BS>", desc = "Decrement Selection", mode = "x" },
-			{ "<c-space>", desc = "Increment Selection", mode = { "x", "n" } },
+		preset = "helix",
+		win = {
+			width = 100,
+			height = { min = 40, max = 40 },
+		},
+	},
+	keys = {
+		{
+			"<leader>?",
+			function()
+				require("which-key").show({ global = false })
+			end,
+			desc = "Buffer Local Keymaps (which-key)",
 		},
 	},
 }
