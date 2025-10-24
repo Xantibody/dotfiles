@@ -3,10 +3,9 @@ return {
 	event = { "InsertEnter", "CmdLineEnter" },
 	dependencies = {
 		{ "L3MON4D3/LuaSnip", dependencies = { "rafamadriz/friendly-snippets" } },
-		"saghen/blink.compat",
-		"uga-rosa/cmp-skkeleton",
 		"onsails/lspkind.nvim",
 		"nvim-tree/nvim-web-devicons",
+		"Xantibody/blink-cmp-skkeleton",
 		{ "Kaiser-Yang/blink-cmp-dictionary", dependencies = { "nvim-lua/plenary.nvim" } },
 	},
 	version = "1.*",
@@ -68,7 +67,14 @@ return {
 
 		-- TODO: 設定が長すぎるので,メソッド化かファイル分割を検討したい
 		sources = {
-			default = { "dictionary", "lazydev", "lsp", "path", "snippets", "buffer", "skkeleton" },
+			default = function(ctx)
+				-- skkeleton専用で組む
+				if require("blink-cmp-skkeleton").is_enabled() then
+					return { "skkeleton" }
+				else
+					return { "dictionary", "lazydev", "lsp", "path", "snippets", "buffer" }
+				end
+			end,
 			providers = {
 				lazydev = {
 					name = "LazyDev",
@@ -77,9 +83,9 @@ return {
 				},
 				skkeleton = {
 					name = "skkeleton",
-					module = "blink.compat.source",
-					-- 日本語入力はほかとconflictしないはず
-					score_offset = 1,
+					module = "blink-cmp-skkeleton",
+					score_offset = 100,
+					min_keyword_length = 0,
 				},
 				dictionary = {
 					module = "blink-cmp-dictionary",
