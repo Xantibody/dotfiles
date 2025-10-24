@@ -24,6 +24,6 @@ with pkgs;
   gemini-cli
   context7-mcp
   serena
-  github-mcp-server
+  # github-mcp-server
   yaskkserv2
 ]
