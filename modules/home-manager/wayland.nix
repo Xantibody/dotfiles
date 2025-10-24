@@ -5,6 +5,8 @@
       enable = isLinux;
       settings = {
         exec-once = [
+          # skk server起動
+          "yaskkserv2 $HOME/.skk/dictionary.yaskkserv2"
           # 履歴が無限に消えないので起動時に消す
           "cliphist wipe"
           "wl-paste --type text --watch cliphist store # Stores only text data"

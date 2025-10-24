@@ -8,9 +8,10 @@ return {
 		vim.fn["skkeleton#config"]({
 			eggLikeNewline = true,
 			registerConvertResult = true,
-			globalDictionaries = {
-				"/home/raizawa/Repo/dotfiles/configs/skk/SKK-JISYO.L",
-			},
+			sources = { "skk_server" },
+			-- Set showCandidatesCount to a very high number to prevent auto-conversion
+			-- This forces all candidates to be shown, which blink.cmp can then display
+			showCandidatesCount = 999,
 		})
 
 		-- lualine setting
