@@ -14,8 +14,8 @@ work-macBook-m4: ## Switch home-manager configuration for work MacBook Pro M4
 
 .PHONY: create-JISYO
 create-JISYO: ## Create skkserv data
-	mkdir $HOME/.skk/
-	yaskkserv2_make_dictionary --dictionary-filename=$HOME/.skk/dictionary.yaskkserv2 ./configs/skk/SKK-JISYO.emoji.utf8 ./configs/skk/SKK-JISYO.L
+	mkdir -p $$HOME/.skk/
+	yaskkserv2_make_dictionary --dictionary-filename=$$HOME/.skk/dictionary.yaskkserv2 ./configs/skk/SKK-JISYO.emoji.utf8 ./configs/skk/SKK-JISYO.L
 	@echo "Done."
 
 .PHONY: help
