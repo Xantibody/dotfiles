@@ -1,8 +1,9 @@
+{ kittyFontSize }:
 {
   enable = true;
   font = {
     name = "Explex Console NF";
-    size = 11;
+    size = kittyFontSize;
   };
 
   settings = {

@@ -1,6 +1,7 @@
 {
   pkgs,
   isLinux,
+  kittyFontSize,
 }:
 {
   alacritty = import ./alacritty.nix { inherit pkgs; };
@@ -14,7 +15,7 @@
   waybar = import ./waybar.nix { inherit isLinux; };
   zellij = import ./zellij.nix;
   zoxide = import ./zoxide.nix;
-  kitty = import ./kitty.nix;
+  kitty = import ./kitty.nix { inherit kittyFontSize; };
   emacs = import ./emacs.nix;
   firefox = import ./firefox.nix;
 }

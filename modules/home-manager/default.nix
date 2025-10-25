@@ -3,6 +3,7 @@
   username,
   homeDirectory,
   self,
+  kittyFontSize,
   ...
 }:
 let
@@ -18,7 +19,7 @@ in
       self
       ;
   };
-  programs = import ./programs { inherit pkgs isLinux; };
+  programs = import ./programs { inherit pkgs isLinux kittyFontSize; };
   wayland = import ./wayland.nix { inherit isLinux; };
   services = import ./services { inherit isLinux; };
 }
