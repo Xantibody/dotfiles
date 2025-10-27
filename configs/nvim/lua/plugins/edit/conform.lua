@@ -1,5 +1,5 @@
 return {
-	"stevearc/onform.nvim",
+	"stevearc/conform.nvim",
 	event = { "BufWritePre" },
 	keys = {
 		{
