@@ -20,6 +20,7 @@ with pkgs;
   rustc
   uv
   just
+  vhs
   edge.claude-code
   codex
   gemini-cli
