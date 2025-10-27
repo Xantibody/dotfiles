@@ -19,6 +19,7 @@ with pkgs;
   ripgrep
   rustc
   uv
+  just
   edge.claude-code
   codex
   gemini-cli

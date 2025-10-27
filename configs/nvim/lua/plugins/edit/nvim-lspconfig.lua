@@ -92,6 +92,8 @@ return {
 		})
 
 		vim.lsp.enable("denols")
+		vim.lsp.enable("just")
+		vim.lsp.enable("jsonls")
 		vim.lsp.enable("efm")
 		vim.lsp.enable("yamlls")
 		vim.lsp.enable("pyright")

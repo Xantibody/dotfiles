@@ -1,5 +1,5 @@
 return {
-	"stevearc/conform.nvim",
+	"stevearc/onform.nvim",
 	event = { "BufWritePre" },
 	keys = {
 		{
@@ -30,6 +30,8 @@ return {
 				rust = { "rustfmt", lsp_format = "fallback" },
 				typst = { "typstyle" },
 				yaml = { "yamlfmt" },
+				just = { "just" },
+				json = { "gojq" },
 			},
 		})
 	end,

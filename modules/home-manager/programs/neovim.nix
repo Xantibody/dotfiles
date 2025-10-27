@@ -25,6 +25,8 @@
     yaml-language-server
     typos-lsp
     helm-ls
+    just-lsp
+    vscode-json-languageserver
 
     #formatter
     biome
@@ -32,5 +34,7 @@
     rustfmt
     stylua
     yamlfmt
+    just-formatter
+    gojq
   ];
 }
