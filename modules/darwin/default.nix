@@ -31,6 +31,7 @@ let
     // {
       services = import ./services.nix;
     }
+    // (import ./options.nix { inherit pkgs; })
     // {
       ids.gids.nixbld = 350;
     };
