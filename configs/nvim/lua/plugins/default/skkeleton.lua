@@ -5,6 +5,7 @@ return {
 		"vim-denops/denops.vim",
 	},
 	config = function()
+		vim.g["skkeleton#mapped_keys"] = { "<C-n>", "<C-p>" }
 		vim.fn["skkeleton#config"]({
 			eggLikeNewline = true,
 			registerConvertResult = true,
