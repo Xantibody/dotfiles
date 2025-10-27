@@ -31,7 +31,9 @@ let
     // {
       services = import ./services.nix;
     }
-    // (import ./options.nix { inherit pkgs; })
+    // {
+      launchd = import ./launchd.nix { inherit pkgs username; };
+    }
     // {
       ids.gids.nixbld = 350;
     };

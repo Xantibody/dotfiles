@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
-  launchd.user.agents.colima = {
+  user.agents.colima = {
     serviceConfig = {
       Program = "${pkgs.colima}/bin/colima";
       ProgramArguments = [
@@ -20,6 +20,20 @@
       RunAtLoad = true;
       StandardOutPath = "/tmp/colima.log";
       StandardErrorPath = "/tmp/colima.err";
+    };
+  };
+
+  user.agents.yaskkserv2 = {
+    serviceConfig = {
+      Program = "${pkgs.yaskkserv2}/bin/yaskkserv2";
+      ProgramArguments = [
+        "${pkgs.yaskkserv2}/bin/yaskkserv2"
+        "/Users/${username}/.skk/dictionary.yaskkserv2"
+      ];
+      KeepAlive = true;
+      RunAtLoad = true;
+      StandardOutPath = "/tmp/yaskkserv2.log";
+      StandardErrorPath = "/tmp/yaskkserv2.err";
     };
   };
 }
