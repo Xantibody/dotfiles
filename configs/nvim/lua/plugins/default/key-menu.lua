@@ -1,5 +1,5 @@
 return {
-	"linty-org/key-menu.nvim",
+	"emmanueltouzery/key-menu.nvim",
 	event = "VeryLazy", -- 起動を軽く
 	opts = {}, -- そのままでOK（必要なら設定を書く）
 	init = function()
