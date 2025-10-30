@@ -1,4 +1,3 @@
-{ isLinux }:
 {
-  enable = isLinux;
+  enable = true;
 }

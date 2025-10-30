@@ -1,7 +1,7 @@
 {
   pkgs,
+  lib,
   isLinux,
-  kittyFontSize,
 }:
 {
   alacritty = import ./alacritty.nix { inherit pkgs; };
@@ -10,12 +10,15 @@
   fish = import ./fish.nix { inherit pkgs; };
   git = import ./git.nix;
   neovim = import ./neovim.nix { inherit pkgs; };
-  rofi = import ./rofi.nix { inherit isLinux; };
-  starship = import ./starship.nix;
-  waybar = import ./waybar.nix { inherit isLinux; };
   zellij = import ./zellij.nix;
+  starship = import ./starship.nix;
   zoxide = import ./zoxide.nix;
-  kitty = import ./kitty.nix { inherit kittyFontSize; };
+  kitty = import ./kitty.nix;
   emacs = import ./emacs.nix;
   firefox = import ./firefox.nix;
+}
+// lib.optionalAttrs isLinux {
+  rofi = import ./rofi.nix;
+  waybar = import ./waybar.nix;
+
 }

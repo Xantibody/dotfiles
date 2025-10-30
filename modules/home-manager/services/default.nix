@@ -1,7 +1,6 @@
-{ isLinux }:
 {
   mako = {
-    enable = isLinux;
+    enable = true;
     settings = {
       icons = true;
       markup = true;
@@ -9,7 +8,7 @@
     };
   };
   hyprpaper = {
-    enable = isLinux;
+    enable = true;
   };
-  hypridle = import ./hypridle.nix { inherit isLinux; };
+  hypridle = import ./hypridle.nix;
 }

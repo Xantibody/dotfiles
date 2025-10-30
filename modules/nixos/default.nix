@@ -12,15 +12,9 @@ let
     hardware = import ./hardware.nix;
     security = import ./security.nix;
     nixpkgs.config.allowUnfree = true;
-    fonts.packages = with pkgs; [
-      hackgen-nf-font
-      plemoljp-nf
-      nerd-fonts.jetbrains-mono
-      explex
-      explex-nf
-    ];
     environment = import ./environment.nix { inherit pkgs; };
     virtualisation.docker.enable = true;
+    fonts = import ./fonts.nix { inherit pkgs; };
   };
 in
 {

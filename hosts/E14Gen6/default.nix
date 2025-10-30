@@ -14,8 +14,6 @@ let
   username = "raizawa";
   system = "x86_64-linux";
   homeDirectory = "/home/${username}";
-  kittyFontSize = 8;
-
   pkgs = import nixpkgs {
     inherit system;
     overlays = [
@@ -48,7 +46,6 @@ nixpkgs.lib.nixosSystem {
             homeDirectory
             username
             self
-            kittyFontSize
             ;
         };
       };

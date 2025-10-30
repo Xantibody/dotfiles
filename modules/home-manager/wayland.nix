@@ -1,8 +1,7 @@
-{ isLinux, ... }:
 {
   windowManager = {
     hyprland = {
-      enable = isLinux;
+      enable = true;
       settings = {
         exec-once = [
           # skk server起動
@@ -72,10 +71,10 @@
         xwayland = {
           force_zero_scaling = true;
         };
-        # monitor = [
-        # "eDP-1, preferred, auto, 1"
-        # ", preferred, auto,1, mirror, eDP-1"
-        # ];
+        monitor = [
+          "eDP-1, preferred, auto, 1"
+          # ", preferred, auto,1, mirror, eDP-1"
+        ];
       };
     };
   };

@@ -13,7 +13,6 @@ let
   username = "ryu.aizawa";
   system = "aarch64-darwin";
   homeDirectory = "/Users/${username}";
-  kittyFontSize = 11;
 
   pkgs = import nixpkgs {
     inherit system;
@@ -36,7 +35,6 @@ nix-darwin.lib.darwinSystem {
       pkgs
       username
       homeDirectory
-      kittyFontSize
       ;
   };
   modules = [
@@ -54,7 +52,6 @@ nix-darwin.lib.darwinSystem {
                 homeDirectory
                 username
                 self
-                kittyFontSize
                 ;
             })
           ];
