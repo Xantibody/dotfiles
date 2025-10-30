@@ -14,7 +14,11 @@ return {
 	---@module 'blink.cmp'
 	---@type blink.cmp.Config
 	opts = {
-		keymap = { preset = "super-tab" },
+		keymap = {
+			preset = "super-tab",
+			["<C-b>"] = { "fallback" },
+			["<C-f>"] = { "fallback" },
+		},
 		snippets = { preset = "luasnip" },
 		appearance = {
 			nerd_font_variant = "mono",

@@ -2,41 +2,34 @@
 local M = {}
 
 -- 判定関数：conform.format_on_save から呼ぶ
-function M.should_format(bufnr)
-	if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+-- デフォルトで有効、明示的にfalseが設定されている場合のみ無効
+function M.is_autoformat_enabled()
+	if vim.g.enable_autoformat == false then
 		return false
 	end
 	return true
 end
 
-function M.setup_commands()
-	vim.api.nvim_create_user_command("FormatToggle", function(args)
-		if args.bang then
-			vim.b.disable_autoformat = not vim.b.disable_autoformat
-			print("Autoformat (buffer): " .. (vim.b.disable_autoformat and "OFF" or "ON"))
+function M.setup_conform_nvim_commands()
+	vim.api.nvim_create_user_command("FormatToggle", function()
+		if vim.g.enable_autoformat == false then
+			vim.g.enable_autoformat = true
 		else
-			vim.g.disable_autoformat = not vim.g.disable_autoformat
-			print("Autoformat (global): " .. (vim.g.disable_autoformat and "OFF" or "ON"))
+			vim.g.enable_autoformat = false
 		end
-	end, { desc = "Toggle autoformat-on-save (use ! for buffer)", bang = true })
+		print("Autoformat: " .. (vim.g.enable_autoformat == false and "OFF" or "ON"))
+	end, { desc = "Toggle autoformat-on-save" })
 
 	vim.api.nvim_create_user_command("FormatEnable", function()
-		vim.b.disable_autoformat = false
-		vim.g.disable_autoformat = false
+		vim.g.enable_autoformat = true
 		print("Autoformat: ON")
 	end, { desc = "Enable autoformat-on-save" })
 
-	vim.api.nvim_create_user_command("FormatDisable", function(args)
-		if args.bang then
-			vim.b.disable_autoformat = true
-			print("Autoformat (buffer): OFF")
-		else
-			vim.g.disable_autoformat = true
-			print("Autoformat (global): OFF")
-		end
-	end, { desc = "Disable autoformat-on-save (use ! for buffer)", bang = true })
+	vim.api.nvim_create_user_command("FormatDisable", function()
+		vim.g.enable_autoformat = false
+		print("Autoformat: OFF")
+	end, { desc = "Disable autoformat-on-save" })
 end
-
 
 function M.get_skkeleton_state(ok, mode)
 	if not ok then
@@ -59,5 +52,11 @@ function M.get_skkeleton_state(ok, mode)
 	return ""
 end
 
+function M.get_autoformat_state()
+	if vim.g.enable_autoformat == false then
+		return "fmt:✗"
+	end
+	return "fmt:✓"
+end
 
 return M

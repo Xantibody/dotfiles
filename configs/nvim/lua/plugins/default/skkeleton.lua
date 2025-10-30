@@ -5,7 +5,7 @@ return {
 		"vim-denops/denops.vim",
 	},
 	config = function()
-		vim.g["skkeleton#mapped_keys"] = { "<C-n>", "<C-p>" }
+		-- vim.g["skkeleton#mapped_keys"] = { "<C-n>", "<C-p>" }
 		vim.fn["skkeleton#config"]({
 			eggLikeNewline = true,
 			registerConvertResult = true,
@@ -28,7 +28,5 @@ return {
 
 		vim.keymap.set("i", "<C-j>", "<Plug>(skkeleton-enable)")
 		vim.keymap.set("c", "<C-j>", "<Plug>(skkeleton-enable)")
-		vim.fn["skkeleton#register_keymap"]("henkan", "<C-n>", "henkanForward")
-		vim.fn["skkeleton#register_keymap"]("henkan", "<C-p>", "henkanBackward")
 	end,
 }
