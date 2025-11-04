@@ -2,6 +2,10 @@
 with pkgs;
 [
   bat
+  kustomize
+  kubernetes-helm
+  yq-go
+  dyff
   cargo
   deck
   devenv
