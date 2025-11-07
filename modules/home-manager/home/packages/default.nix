@@ -1,11 +1,13 @@
 { pkgs, ... }:
+let
+  k8s = import ./k8s.nix { inherit pkgs; };
+in
 with pkgs;
 [
   bat
-  kustomize
-  kubernetes-helm
-  yq-go
-  dyff
+
+  awscli2
+  obsidian
   cargo
   deck
   devenv
@@ -30,6 +32,7 @@ with pkgs;
   gemini-cli
   context7-mcp
   serena
-  # github-mcp-server
+  github-mcp-server
   yaskkserv2
 ]
+++ k8s
