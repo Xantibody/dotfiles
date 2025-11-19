@@ -3,7 +3,7 @@
   "packages": [
     "python@3.12.8",
     "libfprint@1.94.9",
-    "gobject-introspection@1.82.0",
+    "gobject-introspection@1.86.0",
     "gtk3@3.24.49",
     "python3Packages.pygobject3",
     "gusb@0.4.9",
