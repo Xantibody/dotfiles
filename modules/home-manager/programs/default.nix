@@ -13,7 +13,7 @@
   zellij = import ./zellij.nix;
   starship = import ./starship.nix;
   zoxide = import ./zoxide.nix;
-  kitty = import ./kitty.nix;
+  kitty = import ./kitty.nix { inherit pkgs; };
   emacs = import ./emacs.nix;
   firefox = import ./firefox.nix;
 }

@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   enable = true;
   font = {
@@ -6,6 +7,7 @@
   };
 
   settings = {
+    shell = "${pkgs.fish}/bin/fish";
     macos_option_as_alt = true;
 
     # Nightfox colors for Kitty
