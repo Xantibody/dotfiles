@@ -14,6 +14,12 @@ work-macBook-m4:
     sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#work-macBook-m4 --show-trace
     @echo "Done."
 
+# Switch home-manager configuration for private MacBook Pro M4
+private-workmacbook-pro-m4:
+    @echo "Start private-workmacbook-pro-m4 switch..."
+    sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#private-macbook-pro-m4 --show-trace
+    @echo "Done."
+
 # Create skkserv data
 create-JISYO:
     mkdir -p $HOME/.skk/

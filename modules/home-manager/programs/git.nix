@@ -1,8 +1,10 @@
 {
   enable = true;
-  userName = "Xantibody";
-  userEmail = "zeku.bushinryu38@gmail.com";
-  extraConfig = {
-    core.editor = "nvim";
+  settings = {
+    user = {
+      name = "Xantibody";
+      email = "zeku.bushinryu38@gmail.com";
+      core.editor = "nvim";
+    };
   };
 }

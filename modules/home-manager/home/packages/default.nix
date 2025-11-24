@@ -6,7 +6,6 @@ with pkgs;
 [
   bat
 
-  awscli2
   obsidian
   cargo
   deck
@@ -21,7 +20,6 @@ with pkgs;
   google-chrome
   iccheck
   nix-prefetch-github
-  pympress
   ripgrep
   rustc
   uv
