@@ -35,8 +35,4 @@ with pkgs;
     yaskkserv2
   ]
   ++ k8s
-  ++ lib.optionals pkgs.stdenv.isDarwin [
-    brewCasks.clipy
-    macskk
-  ]
 )
