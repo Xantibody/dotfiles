@@ -34,6 +34,14 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    brew-nix = {
+      url = "github:BatteredBunny/brew-nix";
+      inputs.brew-api.follows = "brew-api";
+    };
+    brew-api = {
+      url = "github:BatteredBunny/brew-api";
+      flake = false;
+    };
     systems.url = "github:nix-systems/default";
     edgepkgs.url = "github:natsukium/edgepkgs";
     mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
