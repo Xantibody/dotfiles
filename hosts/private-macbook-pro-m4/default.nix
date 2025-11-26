@@ -2,6 +2,7 @@
 let
   inherit (inputs)
     alacritty-theme
+    brew-nix
     edgepkgs
     mcp-servers-nix
     home-manager
@@ -20,6 +21,7 @@ let
       alacritty-theme.overlays.default
       edgepkgs.overlays.default
       mcp-servers-nix.overlays.default
+      brew-nix.overlays.default
     ]
     ++ (import ../../overlays)
     ++ [ (import ../../overlays/gtk3-no-doc.nix) ];

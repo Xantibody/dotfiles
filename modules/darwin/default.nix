@@ -17,9 +17,6 @@ let
       programs = import ./programs.nix;
     }
     // {
-      homebrew = import ./homebrew.nix;
-    }
-    // {
       security = import ./security.nix;
     }
     // {
