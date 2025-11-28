@@ -1,14 +1,9 @@
 { self, ... }:
 {
-  ".config/nvim/init.lua" = {
-    source = self + /configs/nvim/init.lua;
-  };
+  # nvim の init.lua, lua/ は NixVim で管理
+  # dictionary は blink-cmp-dictionary で使用するため残す
   ".config/nvim/dictionary" = {
     source = self + /configs/nvim/dictionary;
-  };
-  ".config/nvim/lua" = {
-    source = self + /configs/nvim/lua;
-    recursive = true;
   };
   ".config/efm-langserver/config.yaml" = {
     source = self + /configs/efm-langserver/config.yaml;

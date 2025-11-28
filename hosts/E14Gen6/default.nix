@@ -2,6 +2,7 @@
 let
   inherit (inputs)
     nixpkgs
+    nixvim
     xremap
     alacritty-theme
     sops-nix
@@ -39,7 +40,10 @@ nixpkgs.lib.nixosSystem {
       home-manager = {
         useGlobalPkgs = true;
         backupFileExtension = "backup";
-        sharedModules = [ sops-nix.homeManagerModules.sops ];
+        sharedModules = [
+          sops-nix.homeManagerModules.sops
+          nixvim.homeModules.nixvim
+        ];
         users."${username}" = import ../../modules/home-manager {
           inherit
             pkgs

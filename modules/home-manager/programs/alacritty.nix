@@ -8,7 +8,7 @@
     font = {
       size = 13;
       normal = {
-        family = "Explex NF";
+        family = "Explex35 Console NF";
         style = "Regular";
       };
     };

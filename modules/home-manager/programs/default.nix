@@ -9,7 +9,7 @@
   fastfetch = import ./fastfetch.nix;
   fish = import ./fish.nix { inherit pkgs; };
   git = import ./git.nix;
-  neovim = import ./neovim.nix { inherit pkgs; };
+  nixvim = import ./nixvim { inherit pkgs; };
   zellij = import ./zellij.nix;
   starship = import ./starship.nix;
   zoxide = import ./zoxide.nix;

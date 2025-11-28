@@ -7,6 +7,7 @@ let
     home-manager
     nix-darwin
     nixpkgs
+    nixvim
     self
     ;
 
@@ -45,6 +46,7 @@ nix-darwin.lib.darwinSystem {
         useGlobalPkgs = true;
         users."${username}" = {
           imports = [
+            nixvim.homeModules.nixvim
             (import ../../modules/home-manager {
               inherit
                 pkgs
