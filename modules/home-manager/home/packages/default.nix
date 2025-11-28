@@ -1,6 +1,7 @@
 { pkgs, ... }:
 let
   k8s = import ./k8s.nix { inherit pkgs; };
+  mcp = import ./mcp.nix { inherit pkgs; };
 in
 with pkgs;
 (
@@ -29,10 +30,8 @@ with pkgs;
     edge.claude-code
     codex
     gemini-cli
-    context7-mcp
-    serena
-    github-mcp-server
     yaskkserv2
   ]
   ++ k8s
+  ++ mcp
 )
