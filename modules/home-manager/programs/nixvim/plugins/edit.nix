@@ -1,6 +1,32 @@
-# 編集系プラグイン: blink-cmp, comment, conform, diffview, fidget, luasnip, treesj, lazydev, lsp-signature
+# 編集系プラグイン: lsp, blink-cmp, comment, conform, diffview, fidget, luasnip, treesj, lazydev, lsp-signature
 { pkgs, ... }:
 {
+  # LSP
+  lsp = {
+    enable = true;
+    servers = {
+      nixd.enable = true;
+      lua_ls.enable = true;
+      gopls.enable = true;
+      rust_analyzer = {
+        enable = true;
+        installCargo = false;
+        installRustc = false;
+      };
+      yamlls.enable = true;
+      jsonls.enable = true;
+      html.enable = true;
+      bashls.enable = true;
+      pyright.enable = true;
+      tinymist.enable = true;
+      typos_lsp.enable = true;
+      ts_ls.enable = true;
+      helm_ls.enable = true;
+      denols.enable = true;
+      efm.enable = true;
+    };
+  };
+
   # Blink-cmp
   blink-cmp = {
     enable = true;
@@ -19,6 +45,38 @@
           draw = {
             columns.__raw = ''{ { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 1 } }'';
             treesitter = [ "lsp" ];
+            components = {
+              kind_icon = {
+                text.__raw = ''
+                  function(ctx)
+                    local icon = ctx.kind_icon
+                    if vim.tbl_contains({ "path" }, ctx.source_name) then
+                      local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
+                      if dev_icon then
+                        icon = dev_icon
+                      end
+                    else
+                      icon = require("lspkind").symbolic(ctx.kind, {
+                        mode = "symbol",
+                      })
+                    end
+                    return icon .. ctx.icon_gap
+                  end
+                '';
+                highlight.__raw = ''
+                  function(ctx)
+                    local hl = ctx.kind_hl
+                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                      local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+                      if dev_icon then
+                        hl = dev_hl
+                      end
+                    end
+                    return hl
+                  end
+                '';
+              };
+            };
           };
         };
       };
@@ -28,7 +86,7 @@
             if require("blink-cmp-skkeleton").is_enabled() then
               return { "skkeleton" }
             else
-              return { "dictionary", "lazydev", "lsp", "path", "snippets", "buffer" }
+              return { "lsp", "path", "snippets", "buffer", "lazydev", "dictionary" }
             end
           end
         '';
@@ -48,7 +106,6 @@
             module = "blink-cmp-dictionary";
             name = "Dict";
             min_keyword_length = 3;
-            # snippets以下にしたいので低いスコア
             score_offset = -1;
             opts.dictionary_directories.__raw = ''{ vim.fn.expand("~/.config/nvim/dictionary") }'';
           };
