@@ -1,8 +1,4 @@
 { pkgs, ... }:
-let
-  # extraConfigLua を用途別に分割
-  luaConfig = import ./lua { inherit pkgs; };
-in
 {
   enable = true;
   viAlias = true;
@@ -42,8 +38,29 @@ in
     timeoutlen = 300;
   };
 
-  # 用途別に分割した Lua 設定を結合
-  extraConfigLua = luaConfig.all;
+  # Lua設定ファイルを ~/.config/nvim/lua/ に配置
+  extraFiles = {
+    "lua/config/utils.lua".source = ./lua/utils.lua;
+    "lua/config/ui.lua".source = ./lua/ui.lua;
+    "lua/config/lsp.lua".source = ./lua/lsp.lua;
+    "lua/config/skkeleton.lua".source = ./lua/skkeleton.lua;
+    "lua/config/hlslens.lua".source = ./lua/hlslens.lua;
+    "lua/config/keymenu.lua".source = ./lua/keymenu.lua;
+    "lua/config/plugins.lua".source = ./lua/plugins.lua;
+    "lua/config/alpha.lua".source = ./lua/alpha.lua;
+  };
+
+  # Lua設定を読み込む
+  extraConfigLua = ''
+    require("config.utils")
+    require("config.ui")
+    require("config.lsp")
+    require("config.skkeleton")
+    require("config.hlslens")
+    require("config.keymenu")
+    require("config.plugins")
+    require("config.alpha")
+  '';
 
   colorschemes.nightfox = {
     enable = true;
