@@ -9,7 +9,7 @@ let
     users = import ./users.nix { inherit pkgs; };
     networking = import ./networking.nix;
     time.timeZone = "Asia/Tokyo";
-    hardware = import ./hardware.nix;
+    hardware = import ./hardware;
     security = import ./security.nix;
     nixpkgs.config.allowUnfree = true;
     environment = import ./environment.nix { inherit pkgs; };
