@@ -32,6 +32,7 @@ with pkgs;
     codex
     gemini-cli
     yaskkserv2
+    discord-ptb
   ]
   ++ k8s
   ++ mcp
