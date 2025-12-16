@@ -17,6 +17,7 @@ with pkgs;
     eza
     fd
     fnm
+
     gh
     gnumake
     google-chrome

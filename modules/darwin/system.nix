@@ -1,4 +1,9 @@
-{ pkgs, username, zen-browser, ... }:
+{
+  pkgs,
+  username,
+  zen-browser,
+  ...
+}:
 let
   system = pkgs.stdenv.hostPlatform.system;
 in
