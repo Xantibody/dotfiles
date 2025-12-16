@@ -7,6 +7,8 @@
 }:
 let
   isLinux = pkgs.stdenv.isLinux;
+  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
+  system = pkgs.stdenv.hostPlatform.system;
   lib = pkgs.lib;
 in
 {
@@ -20,7 +22,14 @@ in
       self
       ;
   };
-  programs = import ./programs { inherit pkgs lib isLinux; };
+  programs = import ./programs {
+    inherit
+      pkgs
+      lib
+      isLinux
+      isDarwin
+      ;
+  };
 }
 // lib.optionalAttrs isLinux {
   wayland = import ./wayland.nix;

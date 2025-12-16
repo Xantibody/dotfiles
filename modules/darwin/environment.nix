@@ -9,5 +9,6 @@
     docker-buildx
     brewCasks.maccy
     macskk
+    _1password-gui
   ];
 }

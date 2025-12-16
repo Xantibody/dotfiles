@@ -2,6 +2,7 @@
   pkgs,
   lib,
   isLinux,
+  isDarwin,
 }:
 {
   alacritty = import ./alacritty.nix { inherit pkgs; };
@@ -11,6 +12,7 @@
   git = import ./git.nix;
   nixvim = import ./nixvim { inherit pkgs; };
   zellij = import ./zellij.nix;
+  zen-browser = import ./zen-browser.nix { inherit pkgs; };
   starship = import ./starship.nix;
   zoxide = import ./zoxide.nix;
   kitty = import ./kitty.nix { inherit pkgs; };
