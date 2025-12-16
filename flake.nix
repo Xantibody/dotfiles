@@ -46,6 +46,21 @@
       url = "github:BatteredBunny/brew-api";
       flake = false;
     };
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+      };
+    };
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    mac-app-util = {
+      url = "github:hraban/mac-app-util";
+      inputs.cl-nix-lite.url = "github:r4v3n6101/cl-nix-lite/url-fix";
+    };
     systems.url = "github:nix-systems/default";
     edgepkgs.url = "github:natsukium/edgepkgs";
     mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
