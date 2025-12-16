@@ -57,7 +57,10 @@
   };
 
   # Neogit
-  neogit.enable = true;
+  neogit = {
+    enable = true;
+    settings.integrations.diffview = true;
+  };
 
   # Gitsigns
   gitsigns.enable = true;

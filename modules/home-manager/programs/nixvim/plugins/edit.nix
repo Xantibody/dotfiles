@@ -150,7 +150,7 @@
     };
   };
 
-  # Diffview
+  # Diffview (keymapsはLuaで設定)
   diffview = {
     enable = true;
     settings.enhanced_diff_hl = true;
