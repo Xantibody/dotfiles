@@ -103,5 +103,6 @@
     yamlfmt
     just-formatter
     gojq
+    rumdl
   ];
 }

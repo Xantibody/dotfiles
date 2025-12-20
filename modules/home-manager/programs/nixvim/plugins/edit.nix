@@ -136,16 +136,26 @@
       };
       formatters = {
         typstyle.command = "typstyle";
+        rumdl = {
+          command = "rumdl";
+          args = [
+            "fmt"
+            "-"
+            "--quiet"
+          ];
+          stdin = true;
+        };
       };
       formatters_by_ft = {
         go = [ "gofmt" ];
+        json = [ "gojq" ];
+        just = [ "just" ];
         lua = [ "stylua" ];
+        markdown = [ "rumdl" ];
         nix = [ "nixfmt" ];
         rust = [ "rustfmt" ];
         typst = [ "typstyle" ];
         yaml = [ "yamlfmt" ];
-        just = [ "just" ];
-        json = [ "gojq" ];
       };
     };
   };
