@@ -1,15 +1,14 @@
 { inputs, ... }:
 let
   inherit (inputs)
-    alacritty-theme
-    edgepkgs
-    mcp-servers-nix
     home-manager
     nix-darwin
     nixpkgs
-    nixvim
     self
     ;
+
+  commonOverlays = import ../overlays.nix { inherit inputs; };
+  commonHomeModules = import ../home-modules.nix { inherit inputs; };
 
   username = "ryu.aizawa";
   system = "aarch64-darwin";
@@ -17,13 +16,7 @@ let
 
   pkgs = import nixpkgs {
     inherit system;
-    overlays = [
-      alacritty-theme.overlays.default
-      edgepkgs.overlays.default
-      mcp-servers-nix.overlays.default
-    ]
-    ++ (import ../../overlays)
-    ++ [ (import ../../overlays/gtk3-no-doc.nix) ];
+    overlays = commonOverlays ++ (import ../../overlays) ++ [ (import ../../overlays/gtk3-no-doc.nix) ];
     config.allowUnfree = true;
   };
 
@@ -45,12 +38,10 @@ nix-darwin.lib.darwinSystem {
       home-manager = {
         useGlobalPkgs = true;
         users."${username}" = {
-          imports = [
-            nixvim.homeModules.nixvim
+          imports = commonHomeModules ++ [
             (import ../../modules/home-manager {
               inherit
                 pkgs
-                mcp-servers-nix
                 homeDirectory
                 username
                 self

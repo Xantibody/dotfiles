@@ -2,27 +2,28 @@
 let
   inherit (inputs)
     nixpkgs
-    nixvim
     xremap
-    alacritty-theme
     sops-nix
-    edgepkgs
     home-manager
     self
-    mcp-servers-nix
+    firefox-addons
+    zen-browser
     ;
+
+  commonOverlays = import ../overlays.nix { inherit inputs; };
+  commonHomeModules = import ../home-modules.nix { inherit inputs; };
 
   username = "raizawa";
   system = "x86_64-linux";
   homeDirectory = "/home/${username}";
   pkgs = import nixpkgs {
     inherit system;
-    overlays = [
-      alacritty-theme.overlays.default
-      mcp-servers-nix.overlays.default
-      edgepkgs.overlays.default
-    ]
-    ++ (import ../../overlays);
+    overlays =
+      commonOverlays
+      ++ [
+        firefox-addons.overlays.default
+      ]
+      ++ (import ../../overlays);
     config.allowUnfree = true;
   };
 
@@ -40,9 +41,9 @@ nixpkgs.lib.nixosSystem {
       home-manager = {
         useGlobalPkgs = true;
         backupFileExtension = "backup";
-        sharedModules = [
+        sharedModules = commonHomeModules ++ [
           sops-nix.homeManagerModules.sops
-          nixvim.homeModules.nixvim
+          zen-browser.homeModules.beta
         ];
         users."${username}" = import ../../modules/home-manager {
           inherit
