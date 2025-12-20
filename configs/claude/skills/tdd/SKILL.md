@@ -8,17 +8,20 @@ description: TDD methodology guidance for writing tests and implementing code. U
 ## Red-Green-Refactor Cycle
 
 ### Red Phase (Write Failing Test)
+
 - Start by writing a failing test that defines a small increment of functionality
 - Use meaningful test names that describe behavior (e.g., "shouldSumTwoPositiveNumbers")
 - Make test failures clear and informative
 - Write the simplest failing test first
 
 ### Green Phase (Make It Pass)
+
 - Write just enough code to make the test pass - no more
 - Use the simplest solution that could possibly work
 - Do not add extra features or edge case handling yet
 
 ### Refactor Phase (Improve Structure)
+
 - Refactor only when tests are passing
 - Use established refactoring patterns with their proper names
 - Make one refactoring change at a time
@@ -29,12 +32,13 @@ description: TDD methodology guidance for writing tests and implementing code. U
 
 Separate all changes into two distinct types:
 
-| Type | Description | Examples |
-|------|-------------|----------|
+| Type       | Description                                | Examples                                  |
+| ---------- | ------------------------------------------ | ----------------------------------------- |
 | STRUCTURAL | Rearranging code without changing behavior | Renaming, extracting methods, moving code |
-| BEHAVIORAL | Adding or modifying actual functionality | New features, bug fixes |
+| BEHAVIORAL | Adding or modifying actual functionality   | New features, bug fixes                   |
 
 Rules:
+
 - Never mix structural and behavioral changes in the same commit
 - Always make structural changes first when both are needed
 - Validate structural changes do not alter behavior by running tests before and after
@@ -50,6 +54,7 @@ Rules:
 ## Defect Fixing Workflow
 
 When fixing a defect:
+
 1. First write an API-level failing test
 2. Then write the smallest possible test that replicates the problem
 3. Get both tests to pass

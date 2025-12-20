@@ -8,6 +8,7 @@ description: Commit discipline for TDD workflow. Use when ready to commit code c
 ## Pre-Commit Checklist
 
 Only commit when:
+
 1. ALL tests are passing
 2. ALL compiler/linter warnings have been resolved
 3. The change represents a single logical unit of work
@@ -16,10 +17,10 @@ Only commit when:
 
 Commits must clearly indicate their type:
 
-| Type | Prefix | Description |
-|------|--------|-------------|
-| Structural | `refactor:` | Code rearrangement without behavior change |
-| Behavioral | `feat:`, `fix:` | New functionality or bug fixes |
+| Type       | Prefix          | Description                                |
+| ---------- | --------------- | ------------------------------------------ |
+| Structural | `refactor:`     | Code rearrangement without behavior change |
+| Behavioral | `feat:`, `fix:` | New functionality or bug fixes             |
 
 **Never mix structural and behavioral changes in the same commit.**
 
@@ -32,6 +33,7 @@ Commits must clearly indicate their type:
 ```
 
 Examples:
+
 - `refactor: extract validation logic to separate function`
 - `feat: add user authentication endpoint`
 - `fix: correct off-by-one error in pagination`
