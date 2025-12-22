@@ -84,7 +84,7 @@
           work-macBook-m4 = import ./hosts/work-macBook-m4 { inherit inputs; };
         };
         darwinConfigurations = {
-          private-macbook-pro-m4 = import ./hosts/private-macbook-pro-m4 { inherit inputs; };
+          private-macbook-pro-m3 = import ./hosts/private-macbook-pro-m3 { inherit inputs; };
         };
       };
       perSystem = {
