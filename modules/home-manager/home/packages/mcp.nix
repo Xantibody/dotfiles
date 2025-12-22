@@ -6,4 +6,5 @@ with pkgs;
   serena
   clickup-mcp-server
   notion-mcp-server
+  slite-mcp-server
 ]
