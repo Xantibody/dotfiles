@@ -7,8 +7,14 @@
     abbr dp 'NVIM_APPNAME=darkpowered nvim'
 
     abbr ll 'eza --icons -lahF'
-    abbr dbde 'devbox init && devbox generate direnv'
     fnm env --use-on-cd --shell fish | source
+
+    abbr g git
+    abbr gp git pull
+    abbr gP git push
+    abbr gs git status
+    abbr ga git add
+    abbr gc git commit
 
     # Nightfox Color Palette
     # Style: dayfox
