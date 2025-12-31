@@ -45,7 +45,6 @@
     "lua/config/lsp.lua".source = ./lua/lsp.lua;
     "lua/config/skkeleton.lua".source = ./lua/skkeleton.lua;
     "lua/config/hlslens.lua".source = ./lua/hlslens.lua;
-    "lua/config/keymenu.lua".source = ./lua/keymenu.lua;
     "lua/config/plugins.lua".source = ./lua/plugins.lua;
     "lua/config/alpha.lua".source = ./lua/alpha.lua;
   };
@@ -57,7 +56,6 @@
     require("config.lsp")
     require("config.skkeleton")
     require("config.hlslens")
-    require("config.keymenu")
     require("config.plugins")
     require("config.alpha")
   '';
@@ -74,26 +72,26 @@
   extraPackages = with pkgs; [
     tree-sitter
     fzf
-    deno
     wordnet
 
     # LSP
     basedpyright
     bash-language-server
+    deno
     efm-langserver
     fish-lsp
     gopls
+    helm-ls
+    just-lsp
     lua-language-server
     nixd
     rust-analyzer
     tinymist
     typescript-language-server
+    typos-lsp
+    vscode-json-languageserver
     vscode-langservers-extracted
     yaml-language-server
-    typos-lsp
-    helm-ls
-    just-lsp
-    vscode-json-languageserver
 
     # formatter
     biome

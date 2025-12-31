@@ -12,10 +12,10 @@ with pkgs.vimPlugins;
   nvim-web-devicons
   plenary-nvim
   quick-scope
+  which-key-nvim
 
   # custom
   (import ./skkeleton.nix { inherit pkgs; })
-  (import ./key-menu.nix { inherit pkgs; })
   (import ./smooth-cursor.nix { inherit pkgs; })
   (import ./tiny-glimmer.nix { inherit pkgs; })
   (import ./blink-cmp-dictionary.nix { inherit pkgs; })
