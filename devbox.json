@@ -4,7 +4,7 @@
     "python@3.12.8",
     "libfprint@1.94.9",
     "gobject-introspection@1.82.0",
-    "gtk3@3.24.49",
+    "gtk3@3.24.51",
     "python3Packages.pygobject3",
     "gusb@0.4.9",
     "json-glib@1.10.6",
