@@ -288,99 +288,99 @@
         }
       }
     },
-    "json-glib@1.10.6": {
-      "last_modified": "2025-05-07T00:09:58Z",
-      "resolved": "github:NixOS/nixpkgs/b3582c75c7f21ce0b429898980eddbbf05c68e55#json-glib",
+    "json-glib@1.10.8": {
+      "last_modified": "2025-12-26T11:10:58Z",
+      "resolved": "github:NixOS/nixpkgs/c633f572eded8c4f3c75b8010129854ed404a6ce#json-glib",
       "source": "devbox-search",
-      "version": "1.10.6",
+      "version": "1.10.8",
       "systems": {
         "aarch64-darwin": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/hrgv50k24nvhvfxmhd9gpvybd1853mi9-json-glib-1.10.6",
+              "path": "/nix/store/y3h6wks891jk4s2xwqr2gsg21ppxiilg-json-glib-1.10.8",
               "default": true
             },
             {
               "name": "dev",
-              "path": "/nix/store/r4xzsygzzviva50g38dhwi3mrsizfyd4-json-glib-1.10.6-dev"
+              "path": "/nix/store/yy1p5ppri7fic3j2qppfhsh3zbnngyyd-json-glib-1.10.8-dev"
             },
             {
               "name": "devdoc",
-              "path": "/nix/store/bakwjfzkw1nn6swrggh0wg2d50rvsfxa-json-glib-1.10.6-devdoc"
+              "path": "/nix/store/xkwyqjs0fvxg27qw3aq62hr85a4wifwz-json-glib-1.10.8-devdoc"
             },
             {
               "name": "installedTests",
-              "path": "/nix/store/1hbwn2dd27n39gy8jl0rw1na5mk61z5v-json-glib-1.10.6-installedTests"
+              "path": "/nix/store/a9hp7w9sx5ia3ia6h6b69s355xii9r2i-json-glib-1.10.8-installedTests"
             }
           ],
-          "store_path": "/nix/store/hrgv50k24nvhvfxmhd9gpvybd1853mi9-json-glib-1.10.6"
+          "store_path": "/nix/store/y3h6wks891jk4s2xwqr2gsg21ppxiilg-json-glib-1.10.8"
         },
         "aarch64-linux": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/vxzki6l54g87xb0xrg0zp0isdj3dxi0f-json-glib-1.10.6",
+              "path": "/nix/store/f79y2vzfzff7hwbw3ihdldicwxqji9fw-json-glib-1.10.8",
               "default": true
             },
             {
               "name": "dev",
-              "path": "/nix/store/zydxb936izqbbjx43hpqwfcjkahy5mv4-json-glib-1.10.6-dev"
+              "path": "/nix/store/fk6sqqsf7r0bndixfifp0vym22qhar1p-json-glib-1.10.8-dev"
             },
             {
               "name": "devdoc",
-              "path": "/nix/store/xfxhnqg88bafi6bmdjddnd8fwzyig5s2-json-glib-1.10.6-devdoc"
+              "path": "/nix/store/436dmg7n920h0570ipkdvf27wvn3rj65-json-glib-1.10.8-devdoc"
             },
             {
               "name": "installedTests",
-              "path": "/nix/store/yxk4zwf3kl1pl1adc8ka8g33arng7zkd-json-glib-1.10.6-installedTests"
+              "path": "/nix/store/k1hila09kmqvl23j5ccvd9z1qhcgl6mk-json-glib-1.10.8-installedTests"
             }
           ],
-          "store_path": "/nix/store/vxzki6l54g87xb0xrg0zp0isdj3dxi0f-json-glib-1.10.6"
+          "store_path": "/nix/store/f79y2vzfzff7hwbw3ihdldicwxqji9fw-json-glib-1.10.8"
         },
         "x86_64-darwin": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/pb1jg9dc63k8cwbr8k247p3jh6bc58qc-json-glib-1.10.6",
+              "path": "/nix/store/0wiq1csg71fisq7c5x7ahnhw3n6b2pzc-json-glib-1.10.8",
               "default": true
             },
             {
               "name": "dev",
-              "path": "/nix/store/vi0if4mmr0fcys32fphal4ys8iblfcm7-json-glib-1.10.6-dev"
+              "path": "/nix/store/zh2xjkrvbjiyc93ixl17sqrdgvhfkhrm-json-glib-1.10.8-dev"
             },
             {
               "name": "devdoc",
-              "path": "/nix/store/yshf5r3dn7qbg31vq533895k29mhqn4p-json-glib-1.10.6-devdoc"
+              "path": "/nix/store/k9qsxsl3iimsk87zhciw6qfkcjw3irwz-json-glib-1.10.8-devdoc"
             },
             {
               "name": "installedTests",
-              "path": "/nix/store/226r3l8gvj0gkzp4jplf8rzgzrkmqm6n-json-glib-1.10.6-installedTests"
+              "path": "/nix/store/2kry6klr9g6pdp4kpc1ifmwkzlzvpdif-json-glib-1.10.8-installedTests"
             }
           ],
-          "store_path": "/nix/store/pb1jg9dc63k8cwbr8k247p3jh6bc58qc-json-glib-1.10.6"
+          "store_path": "/nix/store/0wiq1csg71fisq7c5x7ahnhw3n6b2pzc-json-glib-1.10.8"
         },
         "x86_64-linux": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/xlp5f2wdxgh166zc9cwzdwgdn4n7xbcv-json-glib-1.10.6",
+              "path": "/nix/store/sbsq40x5fn6q441cbkb9zz37lad62jbk-json-glib-1.10.8",
               "default": true
             },
             {
-              "name": "installedTests",
-              "path": "/nix/store/rz7ks0ggc0p9fyfpmllw18ijhnba91dx-json-glib-1.10.6-installedTests"
-            },
-            {
               "name": "dev",
-              "path": "/nix/store/ki80qivq8zazz2bxkwf6d5hm6vwk6p7g-json-glib-1.10.6-dev"
+              "path": "/nix/store/ncjayk5h8sax3h71ppb6whj2h1q74i2g-json-glib-1.10.8-dev"
             },
             {
               "name": "devdoc",
-              "path": "/nix/store/sf4fyv6q4pf7sqgwk8iiijsar4y13vvz-json-glib-1.10.6-devdoc"
+              "path": "/nix/store/1hzala7ms1d4cbx3nnpf0ss6g1aalmvg-json-glib-1.10.8-devdoc"
+            },
+            {
+              "name": "installedTests",
+              "path": "/nix/store/lq3fvnhhhbaafcvi27ayiav6rgyigjrm-json-glib-1.10.8-installedTests"
             }
           ],
-          "store_path": "/nix/store/xlp5f2wdxgh166zc9cwzdwgdn4n7xbcv-json-glib-1.10.6"
+          "store_path": "/nix/store/sbsq40x5fn6q441cbkb9zz37lad62jbk-json-glib-1.10.8"
         }
       }
     },
@@ -422,7 +422,17 @@
     },
     "python3Packages.pygobject3": {
       "resolved": "github:NixOS/nixpkgs/b3582c75c7f21ce0b429898980eddbbf05c68e55?narHash=sha256-FshoQvr6Aor5SnORVvh%2FZdJ1Sa2U4ZrIMwKBX5k2wu0%3D#python3Packages.pygobject3",
-      "source": "nixpkg"
+      "source": "nixpkg",
+      "systems": {
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "path": "/tmp/containerbase/cache/nix/store/5fp3c26w9l68im5l2g7qxabkpafvlrnx-python3.12-pygobject-3.50.0",
+              "default": true
+            }
+          ]
+        }
+      }
     },
     "python@3.12.8": {
       "last_modified": "2025-01-06T03:40:18Z",
