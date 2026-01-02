@@ -2,7 +2,7 @@
 { pkgs, ... }:
 {
   # Treesitter
-  treesitter = {
+  plugins.treesitter = {
     enable = true;
     settings = {
       highlight.enable = true;
@@ -42,13 +42,13 @@
   };
 
   # ts-autotag
-  ts-autotag.enable = true;
+  plugins.ts-autotag.enable = true;
 
   # Telescope
-  telescope.enable = true;
+  plugins.telescope.enable = true;
 
   # Oil
-  oil = {
+  plugins.oil = {
     enable = true;
     settings = {
       default_file_explorer = true;
@@ -57,29 +57,29 @@
   };
 
   # Neogit
-  neogit = {
+  plugins.neogit = {
     enable = true;
     settings.integrations.diffview = true;
   };
 
   # Gitsigns
-  gitsigns.enable = true;
+  plugins.gitsigns.enable = true;
 
   # Barbar
-  barbar.enable = true;
+  plugins.barbar.enable = true;
 
   # Which-key
-  which-key.enable = true;
+  plugins.which-key.enable = true;
 
   # fzf-lua
-  fzf-lua.enable = true;
+  plugins.fzf-lua.enable = true;
 
   # Mini icons
-  mini = {
+  plugins.mini = {
     enable = true;
     modules.icons = { };
   };
 
   # Web devicons
-  web-devicons.enable = true;
+  plugins.web-devicons.enable = true;
 }

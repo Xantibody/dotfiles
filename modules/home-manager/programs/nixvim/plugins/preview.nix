@@ -2,13 +2,13 @@
 { pkgs, ... }:
 {
   # Markdown-preview
-  markdown-preview = {
+  plugins.markdown-preview = {
     enable = true;
     settings.filetypes = [ "markdown" ];
   };
 
   # Render-markdown
-  render-markdown = {
+  plugins.render-markdown = {
     enable = true;
     settings = {
       completions = {

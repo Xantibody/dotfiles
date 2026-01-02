@@ -5,12 +5,12 @@
   # extraPlugins + extraConfigLuaで設定（NixVimのalphaはconfigを上書きするため無効）
 
   # Flash
-  flash.enable = true;
+  plugins.flash.enable = true;
 
   # Hlslens は extraPlugins で管理 (NixVim未サポート)
 
   # Lualine
-  lualine = {
+  plugins.lualine = {
     enable = true;
     settings = {
       options.theme = "everforest";
@@ -46,7 +46,7 @@
   };
 
   # Neoscroll
-  neoscroll = {
+  plugins.neoscroll = {
     enable = true;
     settings.mappings = [
       "<C-u>"

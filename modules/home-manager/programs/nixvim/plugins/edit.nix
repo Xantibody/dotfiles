@@ -1,8 +1,8 @@
-# 編集系プラグイン: lsp, blink-cmp, comment, conform, diffview, fidget, luasnip, treesj, lazydev, lsp-signature
+# 編集系プラグイン
 { pkgs, ... }:
 {
   # LSP
-  lsp = {
+  plugins.lsp = {
     enable = true;
     servers = {
       nixd.enable = true;
@@ -28,7 +28,7 @@
   };
 
   # Blink-cmp
-  blink-cmp = {
+  plugins.blink-cmp = {
     enable = true;
     settings = {
       keymap.preset = "super-tab";
@@ -116,10 +116,10 @@
   };
 
   # Comment
-  comment.enable = true;
+  plugins.comment.enable = true;
 
   # Conform
-  conform-nvim = {
+  plugins.conform-nvim = {
     enable = true;
     settings = {
       format_on_save = {
@@ -161,29 +161,66 @@
   };
 
   # Diffview (keymapsはLuaで設定)
-  diffview = {
+  plugins.diffview = {
     enable = true;
     settings.enhanced_diff_hl = true;
   };
 
   # Fidget
-  fidget.enable = true;
+  plugins.fidget.enable = true;
 
   # Luasnip
-  luasnip = {
+  plugins.luasnip = {
     enable = true;
     fromVscode = [ { } ];
   };
 
   # Friendly-snippets
-  friendly-snippets.enable = true;
+  plugins.friendly-snippets.enable = true;
 
   # Treesj
-  treesj.enable = true;
+  plugins.treesj.enable = true;
 
   # Lazydev
-  lazydev.enable = true;
+  plugins.lazydev.enable = true;
 
   # Lsp-signature
-  lsp-signature.enable = true;
+  plugins.lsp-signature.enable = true;
+
+  ## mini-surround
+  plugins.mini-surround = {
+    enable = true;
+    autoLoad = true;
+  };
+
+  # hop
+  plugins.hop = {
+    enable = true;
+    package = pkgs.vimPlugins.hop-nvim;
+  };
+
+  keymaps =
+    let
+      mode = [
+        "n"
+        "x"
+        "o"
+      ];
+      options = {
+        silent = true;
+        noremap = true;
+      };
+    in
+    [
+      {
+        key = "s";
+        action = "<cmd>HopWord<CR>";
+        inherit mode options;
+      }
+      {
+        key = "S";
+        action = "<cmd>HopChar2<CR>";
+        inherit mode options;
+      }
+    ];
 }

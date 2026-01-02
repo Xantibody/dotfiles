@@ -65,8 +65,10 @@
     flavor = "dayfox";
   };
 
-  keymaps = import ./keymaps.nix;
-  plugins = import ./plugins { inherit pkgs; };
+  imports = [
+    ./plugins
+  ];
+
   extraPlugins = import ./extra-plugins { inherit pkgs; };
 
   extraPackages = with pkgs; [
