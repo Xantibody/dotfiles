@@ -50,16 +50,16 @@ nix-darwin.lib.darwinSystem {
     {
       home-manager = {
         useGlobalPkgs = true;
+        extraSpecialArgs = { inherit inputs; };
         users."${username}" = {
           imports = commonHomeModules ++ [
-            zen-browser.homeModules.beta
             mac-app-util.homeManagerModules.default
             (import ../../modules/home-manager {
               inherit
                 pkgs
+                inputs
                 homeDirectory
                 username
-                zen-browser
                 self
                 ;
             })

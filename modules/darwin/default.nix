@@ -24,7 +24,6 @@ let
       fonts = import ./fonts.nix { inherit pkgs; };
     }
     // {
-      system = import ./system.nix { inherit pkgs username zen-browser; };
     }
     // {
       services = import ./services.nix;
@@ -39,5 +38,6 @@ in
 {
   imports = [
     configuration
+    ./system.nix
   ];
 }

@@ -7,11 +7,11 @@
 }:
 let
   isLinux = pkgs.stdenv.isLinux;
-  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
   system = pkgs.stdenv.hostPlatform.system;
   lib = pkgs.lib;
 in
 {
+  imports = [ ./programs/zen-browser.nix ];
   home = import ./home {
     inherit
       pkgs
@@ -27,7 +27,6 @@ in
       pkgs
       lib
       isLinux
-      isDarwin
       ;
   };
 }

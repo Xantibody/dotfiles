@@ -37,11 +37,13 @@ nix-darwin.lib.darwinSystem {
     {
       home-manager = {
         useGlobalPkgs = true;
+        extraSpecialArgs = { inherit inputs; };
         users."${username}" = {
           imports = commonHomeModules ++ [
             (import ../../modules/home-manager {
               inherit
                 pkgs
+                inputs
                 homeDirectory
                 username
                 self

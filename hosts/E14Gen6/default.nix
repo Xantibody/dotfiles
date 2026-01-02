@@ -41,13 +41,14 @@ nixpkgs.lib.nixosSystem {
       home-manager = {
         useGlobalPkgs = true;
         backupFileExtension = "backup";
+        extraSpecialArgs = { inherit inputs; };
         sharedModules = commonHomeModules ++ [
           sops-nix.homeManagerModules.sops
-          zen-browser.homeModules.beta
         ];
         users."${username}" = import ../../modules/home-manager {
           inherit
             pkgs
+            inputs
             homeDirectory
             username
             self
