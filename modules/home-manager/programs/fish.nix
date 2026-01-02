@@ -3,11 +3,11 @@
   enable = true;
   interactiveShellInit = ''
     fish_vi_key_bindings
+
+    # abbr
     abbr n nvim
     abbr dp 'NVIM_APPNAME=darkpowered nvim'
-
     abbr ll 'eza --icons -lahF'
-    fnm env --use-on-cd --shell fish | source
 
     abbr g git
     abbr gp git pull
