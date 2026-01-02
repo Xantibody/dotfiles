@@ -16,8 +16,11 @@
         packages = (
           with pkgs.firefox-addons;
           [
-            vimium
+            keepa
             onepassword-password-manager
+            to-deepl
+            vimium
+            wayback-machine
           ]
         );
       };
@@ -47,7 +50,6 @@
           };
         };
       };
-
     };
   };
 }
