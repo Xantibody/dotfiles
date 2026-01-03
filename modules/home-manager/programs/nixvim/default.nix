@@ -12,30 +12,31 @@
   };
 
   opts = {
-    modifiable = true;
-    encoding = "utf-8";
-    fileencoding = "utf-8";
-    expandtab = true;
-    shiftwidth = 2;
-    tabstop = 2;
-    relativenumber = true;
-    number = true;
     clipboard = "unnamedplus";
-    termguicolors = true;
+    colorcolumn = "80,100,120";
+    encoding = "utf-8";
+    expandtab = true;
+    fileencoding = "utf-8";
+    foldexpr = "v:lua.vim.treesitter.foldexpr()";
+    foldmethod = "expr";
+    foldtext = "v:lua.vim.treesitter.foldtext()";
+    foldlevel = 99;
+    foldlevelstart = 99;
+    guifont = "Explex Console NF";
+    list = true;
+    modifiable = true;
+    number = true;
+    relativenumber = true;
+    scrolloff = 5;
+    shiftwidth = 2;
+    sidescrolloff = 8;
     spell = true;
     spelllang = [ "en_us" ];
-    foldmethod = "expr";
-    foldexpr = "v:lua.vim.treesitter.foldexpr()";
-    foldtext = "v:lua.vim.treesitter.foldtext()";
-    foldlevel = 1;
-    guifont = "Explex Console NF";
-    colorcolumn = "80,100,120";
-    scrolloff = 5;
-    sidescrolloff = 8;
-    wrap = false;
-    list = true;
+    tabstop = 2;
+    termguicolors = true;
     timeout = true;
     timeoutlen = 300;
+    wrap = false;
   };
 
   # Lua設定ファイルを ~/.config/nvim/lua/ に配置
