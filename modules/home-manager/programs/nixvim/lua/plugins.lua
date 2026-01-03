@@ -8,9 +8,6 @@ require("hlchunk").setup({
 	},
 })
 
--- tiny-glimmer
-require("tiny-glimmer").setup({})
-
 -- in-and-out
 require("in-and-out").setup({
 	additional_targets = { '"', '"' },

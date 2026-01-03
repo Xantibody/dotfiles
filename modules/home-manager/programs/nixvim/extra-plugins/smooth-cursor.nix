@@ -1,6 +1,6 @@
-{ pkgs }:
-{
-  plugin = pkgs.vimUtils.buildVimPlugin {
+{ pkgs, ... }:
+let
+  smooth-cursor-nvim = pkgs.vimUtils.buildVimPlugin {
     name = "SmoothCursor-nvim";
     src = pkgs.fetchFromGitHub {
       owner = "gen740";
@@ -9,5 +9,16 @@
       sha256 = "sha256-P0jGm5ODEVbtmqPGgDFBPDeuOF49CFq5x1PzubEJgaM=";
     };
   };
-  config = ''lua require("smoothcursor").setup({ texthl = "SmoothCursorGreen" })'';
+in
+{
+  # プラグインの登録
+  extraPlugins = [
+    smooth-cursor-nvim
+  ];
+
+  # 設定コードの登録
+  # 元のコードが 'lua require(...)' 形式だったので、そのまま Lua として渡します
+  extraConfigLua = ''
+    require("smoothcursor").setup({ texthl = "SmoothCursorGreen" })
+  '';
 }

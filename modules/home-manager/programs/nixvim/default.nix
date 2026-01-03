@@ -67,9 +67,8 @@
 
   imports = [
     ./plugins
+    ./extra-plugins
   ];
-
-  extraPlugins = import ./extra-plugins { inherit pkgs; };
 
   extraPackages = with pkgs; [
     tree-sitter

@@ -48,4 +48,10 @@
       "<C-d>"
     ];
   };
+
+  # tiny-glimmer
+  plugins.tiny-glimmer = {
+    enable = true;
+    autoLoad = true;
+  };
 }
