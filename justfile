@@ -9,9 +9,9 @@ E14Gen6:
     @echo "Done."
 
 # Switch home-manager configuration for work MacBook Pro M4
-work-macBook-m4:
-    @echo "Start work-macBook-m4 switch..."
-    sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#work-macBook-m4 --show-trace
+work-macbook-pro-m4-attm:
+    @echo "Start work-macbook-pro-m4-attm switch..."
+    sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#work-macbook-pro-m4-attm --show-trace
     @echo "Done."
 
 # Switch home-manager configuration for private MacBook Pro M3
