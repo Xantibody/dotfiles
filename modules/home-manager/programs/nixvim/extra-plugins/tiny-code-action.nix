@@ -8,7 +8,7 @@
       owner = "rachartier";
       repo = "tiny-code-action.nvim";
       rev = "main";
-      sha256 = "sha256-lEKl7W99akV71vfdHxVLwk1Py272SrT0/cH2y3COXpw=";
+      sha256 = "sha256-tiV+drfWAryw8cexSCgmZCXfHxi4oi6qX6oNmhHrhAk=";
     };
   };
   config = ''lua require("tiny-code-action").setup({})'';
