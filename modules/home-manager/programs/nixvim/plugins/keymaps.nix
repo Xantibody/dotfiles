@@ -268,49 +268,6 @@
       mode = "n";
       options.desc = "Neogit";
     }
-
-    # Flash keymaps
-    {
-      key = "s";
-      action = "<cmd>lua require('flash').jump()<CR>";
-      mode = [
-        "x"
-        "o"
-      ];
-      options.desc = "Flash";
-    }
-    {
-      key = "S";
-      action = "<cmd>lua require('flash').treesitter()<CR>";
-      mode = [
-        "n"
-        "x"
-        "o"
-      ];
-      options.desc = "Flash Treesitter";
-    }
-    {
-      key = "r";
-      action = "<cmd>lua require('flash').remote()<CR>";
-      mode = "o";
-      options.desc = "Remote Flash";
-    }
-    {
-      key = "R";
-      action = "<cmd>lua require('flash').treesitter_search()<CR>";
-      mode = [
-        "o"
-        "x"
-      ];
-      options.desc = "Treesitter Search";
-    }
-    {
-      key = "<c-s>";
-      action = "<cmd>lua require('flash').toggle()<CR>";
-      mode = "c";
-      options.desc = "Toggle Flash Search";
-    }
-
     # Hlslens clear highlight
     {
       key = "<Leader>l";
@@ -346,14 +303,6 @@
         silent = true;
         desc = "toggle save format";
       };
-    }
-
-    # Treesj toggle
-    {
-      key = "<leader>m";
-      action = "<cmd>TSJToggle<cr>";
-      mode = "n";
-      options.desc = "toggle node under cursor (split if one-line and join if multiline)";
     }
 
     # Skkeleton keymaps

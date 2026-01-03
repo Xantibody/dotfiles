@@ -178,49 +178,20 @@
   # Friendly-snippets
   plugins.friendly-snippets.enable = true;
 
-  # Treesj
-  plugins.treesj.enable = true;
-
   # Lazydev
   plugins.lazydev.enable = true;
 
   # Lsp-signature
   plugins.lsp-signature.enable = true;
 
-  ## mini-surround
-  plugins.mini-surround = {
+  ## nvim-surround
+  plugins.nvim-surround = {
     enable = true;
     autoLoad = true;
   };
 
-  # hop
-  plugins.hop = {
-    enable = true;
-    package = pkgs.vimPlugins.hop-nvim;
-  };
+  # Flash
+  imports = [ ./flash.nix ];
 
-  keymaps =
-    let
-      mode = [
-        "n"
-        "x"
-        "o"
-      ];
-      options = {
-        silent = true;
-        noremap = true;
-      };
-    in
-    [
-      {
-        key = "s";
-        action = "<cmd>HopWord<CR>";
-        inherit mode options;
-      }
-      {
-        key = "S";
-        action = "<cmd>HopChar2<CR>";
-        inherit mode options;
-      }
-    ];
+  # Hlslens は extraPlugins で管理 (NixVim未サポート)
 }

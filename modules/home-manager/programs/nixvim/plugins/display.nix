@@ -4,11 +4,6 @@
   # Alpha (dashboard)
   # extraPlugins + extraConfigLuaで設定（NixVimのalphaはconfigを上書きするため無効）
 
-  # Flash
-  plugins.flash.enable = true;
-
-  # Hlslens は extraPlugins で管理 (NixVim未サポート)
-
   # Lualine
   plugins.lualine = {
     enable = true;
