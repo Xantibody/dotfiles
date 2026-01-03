@@ -11,12 +11,10 @@ with pkgs;
     obsidian
     cargo
     deck
-    devenv
     direnv
     devbox
     eza
     fd
-    fnm
 
     gh
     gnumake

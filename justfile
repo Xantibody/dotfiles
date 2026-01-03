@@ -23,5 +23,5 @@ private-macbook-pro-m3:
 # Create skkserv data
 create-JISYO:
     mkdir -p $HOME/.skk/
-    yaskkserv2_make_dictionary --dictionary-filename=$HOME/.skk/dictionary.yaskkserv2 ./configs/skk/SKK-JISYO.emoji.utf8 ./configs/skk/SKK-JISYO.L
+    yaskkserv2_make_dictionary --dictionary-filename=$HOME/.skk/dictionary.yaskkserv2 ./configs/skk/SKK-JISYO.L
     @echo "Done."
