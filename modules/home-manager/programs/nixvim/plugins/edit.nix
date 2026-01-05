@@ -7,9 +7,6 @@
     settings.enhanced_diff_hl = true;
   };
 
-  # Fidget
-  plugins.fidget.enable = true;
-
   # Lsp-signature
   plugins.lsp-signature.enable = true;
 

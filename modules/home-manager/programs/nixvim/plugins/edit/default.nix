@@ -9,5 +9,6 @@
     ./conform
     ./comment
     ./surround
+    ./fidget
   ];
 }
