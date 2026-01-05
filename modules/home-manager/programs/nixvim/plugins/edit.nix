@@ -1,12 +1,7 @@
-# 編集系プラグイン (LSP, 補完, フォーマット, コメントは edit/ 配下に移動済み)
+# 編集系プラグイン (LSP, 補完, フォーマット, コメント等は edit/ 配下に移動済み)
+# (Diffviewは git/ に移動済み)
 { pkgs, ... }:
 {
-  # Diffview (keymapsはLuaで設定)
-  plugins.diffview = {
-    enable = true;
-    settings.enhanced_diff_hl = true;
-  };
-
   # Lsp-signature
   plugins.lsp-signature.enable = true;
 
