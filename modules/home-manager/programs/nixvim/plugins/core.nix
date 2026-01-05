@@ -56,12 +56,6 @@
     };
   };
 
-  # Neogit
-  plugins.neogit = {
-    enable = true;
-    settings.integrations.diffview = true;
-  };
-
   # Gitsigns
   plugins.gitsigns.enable = true;
 

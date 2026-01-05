@@ -169,13 +169,6 @@
       options.desc = "Open oil";
     }
 
-    # Neogit keymap
-    {
-      key = "<leader>ng";
-      action = "<cmd>Neogit<CR>";
-      mode = "n";
-      options.desc = "Neogit";
-    }
     # Hlslens clear highlight
     {
       key = "<Leader>l";
