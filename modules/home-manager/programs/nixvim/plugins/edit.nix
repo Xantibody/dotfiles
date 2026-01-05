@@ -5,8 +5,7 @@
   # Lsp-signature
   plugins.lsp-signature.enable = true;
 
-  # Flash
-  imports = [ ./flash.nix ];
+  # Flash は display/ に移動済み
 
   # Hlslens は extraPlugins で管理 (NixVim未サポート)
 }
