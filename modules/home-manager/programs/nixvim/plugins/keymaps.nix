@@ -198,21 +198,6 @@
       options.desc = "comment out line";
     }
 
-    # Conform format toggle
-    {
-      key = "<C-F>";
-      action = "<CMD>FormatToggle<CR>";
-      mode = [
-        "n"
-        "i"
-      ];
-      options = {
-        noremap = true;
-        silent = true;
-        desc = "toggle save format";
-      };
-    }
-
     # Skkeleton keymaps
     {
       key = "<C-j>";

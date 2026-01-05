@@ -6,5 +6,6 @@
     ./luasnip
     ./friendly-snippets
     ./lazydev
+    ./conform
   ];
 }
