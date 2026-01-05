@@ -1,32 +1,6 @@
-# 編集系プラグイン
+# 編集系プラグイン (LSPは edit/lsp/ に移動済み)
 { pkgs, ... }:
 {
-  # LSP
-  plugins.lsp = {
-    enable = true;
-    servers = {
-      nixd.enable = true;
-      lua_ls.enable = true;
-      gopls.enable = true;
-      rust_analyzer = {
-        enable = true;
-        installCargo = false;
-        installRustc = false;
-      };
-      yamlls.enable = true;
-      jsonls.enable = true;
-      html.enable = true;
-      bashls.enable = true;
-      pyright.enable = true;
-      tinymist.enable = true;
-      typos_lsp.enable = true;
-      ts_ls.enable = true;
-      helm_ls.enable = true;
-      denols.enable = true;
-      efm.enable = true;
-    };
-  };
-
   # Blink-cmp
   plugins.blink-cmp = {
     enable = true;

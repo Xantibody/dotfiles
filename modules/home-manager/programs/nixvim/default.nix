@@ -43,7 +43,7 @@
   extraFiles = {
     "lua/config/utils.lua".source = ./lua/utils.lua;
     "lua/config/ui.lua".source = ./lua/ui.lua;
-    "lua/config/lsp.lua".source = ./lua/lsp.lua;
+    # "lua/config/lsp.lua" は edit/lsp/config.lua に移動済み
     "lua/config/skkeleton.lua".source = ./lua/skkeleton.lua;
     "lua/config/hlslens.lua".source = ./lua/hlslens.lua;
     "lua/config/plugins.lua".source = ./lua/plugins.lua;
@@ -54,7 +54,6 @@
   extraConfigLua = ''
     require("config.utils")
     require("config.ui")
-    require("config.lsp")
     require("config.skkeleton")
     require("config.hlslens")
     require("config.plugins")
