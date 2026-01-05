@@ -1,9 +1,6 @@
-# 編集系プラグイン (LSP, 補完, フォーマットは edit/ 配下に移動済み)
+# 編集系プラグイン (LSP, 補完, フォーマット, コメントは edit/ 配下に移動済み)
 { pkgs, ... }:
 {
-  # Comment
-  plugins.comment.enable = true;
-
   # Diffview (keymapsはLuaで設定)
   plugins.diffview = {
     enable = true;

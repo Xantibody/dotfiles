@@ -187,17 +187,6 @@
       };
     }
 
-    # Comment
-    {
-      key = "<C-/>";
-      action = "<cmd>lua require('Comment.api').toggle.linewise.current()<CR><Esc>A";
-      mode = [
-        "n"
-        "i"
-      ];
-      options.desc = "comment out line";
-    }
-
     # Skkeleton keymaps
     {
       key = "<C-j>";

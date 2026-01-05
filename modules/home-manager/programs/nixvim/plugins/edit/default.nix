@@ -7,5 +7,6 @@
     ./friendly-snippets
     ./lazydev
     ./conform
+    ./comment
   ];
 }
