@@ -7,6 +7,7 @@
     ./edit.nix
     ./edit  # 新しいモジュール構造
     ./git  # Git関連プラグイン
+    ./navigation  # Navigation関連プラグイン
     ./preview.nix
     ./keymaps.nix
   ];

@@ -44,18 +44,6 @@
   # ts-autotag
   plugins.ts-autotag.enable = true;
 
-  # Telescope
-  plugins.telescope.enable = true;
-
-  # Oil
-  plugins.oil = {
-    enable = true;
-    settings = {
-      default_file_explorer = true;
-      view_options.show_hidden = true;
-    };
-  };
-
   # Barbar
   plugins.barbar.enable = true;
 
