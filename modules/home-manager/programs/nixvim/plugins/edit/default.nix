@@ -2,5 +2,9 @@
 {
   imports = [
     ./lsp
+    ./blink-cmp
+    ./luasnip
+    ./friendly-snippets
+    ./lazydev
   ];
 }
