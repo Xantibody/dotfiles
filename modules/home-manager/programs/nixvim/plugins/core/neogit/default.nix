@@ -1,10 +1,7 @@
 # Neogit Gitクライアント
 { pkgs, ... }:
 {
-  plugins.neogit = {
-    enable = true;
-    settings.integrations.diffview = true;
-  };
+  plugins.neogit.enable = true;
 
   # Neogit keymap
   keymaps = [
