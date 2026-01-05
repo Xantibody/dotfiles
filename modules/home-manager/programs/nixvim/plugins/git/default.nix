@@ -3,5 +3,6 @@
   imports = [
     ./diffview
     ./neogit
+    ./gitsigns
   ];
 }

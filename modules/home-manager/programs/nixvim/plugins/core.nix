@@ -56,9 +56,6 @@
     };
   };
 
-  # Gitsigns
-  plugins.gitsigns.enable = true;
-
   # Barbar
   plugins.barbar.enable = true;
 
