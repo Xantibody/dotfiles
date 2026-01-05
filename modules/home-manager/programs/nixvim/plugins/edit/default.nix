@@ -8,5 +8,6 @@
     ./lazydev
     ./conform
     ./comment
+    ./surround
   ];
 }

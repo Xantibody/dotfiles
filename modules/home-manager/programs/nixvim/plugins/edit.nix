@@ -13,12 +13,6 @@
   # Lsp-signature
   plugins.lsp-signature.enable = true;
 
-  ## nvim-surround
-  plugins.nvim-surround = {
-    enable = true;
-    autoLoad = true;
-  };
-
   # Flash
   imports = [ ./flash.nix ];
 
