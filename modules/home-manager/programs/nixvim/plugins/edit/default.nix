@@ -2,6 +2,7 @@
 {
   imports = [
     ./lsp
+    ./lsp-signature
     ./blink-cmp
     ./luasnip
     ./friendly-snippets
