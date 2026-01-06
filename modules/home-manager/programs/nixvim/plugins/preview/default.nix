@@ -2,5 +2,6 @@
 {
   imports = [
     ./markdown-preview
+    ./render-markdown
   ];
 }

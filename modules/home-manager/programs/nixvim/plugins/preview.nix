@@ -1,14 +1,6 @@
 # プレビュー系プラグイン: markdown-preview, render-markdown
+# すべてのプレビュー系プラグインは ./preview/ ディレクトリに移動済み
 { pkgs, ... }:
 {
-  # Render-markdown
-  plugins.render-markdown = {
-    enable = true;
-    settings = {
-      completions = {
-        blink.enabled = true;
-        lsp.enabled = true;
-      };
-    };
-  };
+  # このファイルは空です。すべてのプレビュー系プラグインは ./preview/ ディレクトリで管理されています。
 }
