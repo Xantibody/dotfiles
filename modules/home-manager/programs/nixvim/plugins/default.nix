@@ -9,6 +9,7 @@
     ./edit.nix
     ./edit  # Edit関連プラグイン (新しいモジュール構造)
     ./preview.nix
+    ./preview  # Preview関連プラグイン (新しいモジュール構造)
     ./keymaps.nix
   ];
 }
