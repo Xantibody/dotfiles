@@ -9,5 +9,6 @@
     ./treesitter
     ./barbar
     ./which-key
+    ./fzf-lua
   ];
 }
