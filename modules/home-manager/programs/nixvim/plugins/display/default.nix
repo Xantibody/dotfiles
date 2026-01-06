@@ -3,5 +3,6 @@
   imports = [
     ./flash
     ./lualine
+    ./neoscroll
   ];
 }

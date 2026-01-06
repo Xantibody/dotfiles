@@ -4,15 +4,6 @@
   # Alpha (dashboard)
   # extraPlugins + extraConfigLuaで設定（NixVimのalphaはconfigを上書きするため無効）
 
-  # Neoscroll
-  plugins.neoscroll = {
-    enable = true;
-    settings.mappings = [
-      "<C-u>"
-      "<C-d>"
-    ];
-  };
-
   # tiny-glimmer
   plugins.tiny-glimmer = {
     enable = true;
