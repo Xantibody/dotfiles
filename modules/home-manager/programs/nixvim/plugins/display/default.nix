@@ -4,5 +4,6 @@
     ./flash
     ./lualine
     ./neoscroll
+    ./tiny-glimmer
   ];
 }
