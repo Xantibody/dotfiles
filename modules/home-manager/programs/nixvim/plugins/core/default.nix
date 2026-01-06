@@ -6,5 +6,6 @@
     ./diffview
     ./neogit
     ./gitsigns
+    ./treesitter
   ];
 }
