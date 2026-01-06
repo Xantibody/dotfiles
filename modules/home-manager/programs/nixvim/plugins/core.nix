@@ -1,6 +1,6 @@
 # コアプラグイン: treesitter, telescope, oil, neogit, gitsigns, barbar, hlchunk
+# すべてのコアプラグインは ./core/ ディレクトリに移動済み
 { pkgs, ... }:
 {
-  # Web devicons
-  plugins.web-devicons.enable = true;
+  # このファイルは空です。すべてのコアプラグインは ./core/ ディレクトリで管理されています。
 }

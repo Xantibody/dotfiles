@@ -11,5 +11,6 @@
     ./which-key
     ./fzf-lua
     ./mini
+    ./web-devicons
   ];
 }
