@@ -8,5 +8,6 @@
     ./gitsigns
     ./treesitter
     ./barbar
+    ./which-key
   ];
 }
