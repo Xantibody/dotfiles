@@ -10,5 +10,6 @@
     ./barbar
     ./which-key
     ./fzf-lua
+    ./mini
   ];
 }
