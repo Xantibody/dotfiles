@@ -7,5 +7,6 @@
     ./neogit
     ./gitsigns
     ./treesitter
+    ./barbar
   ];
 }

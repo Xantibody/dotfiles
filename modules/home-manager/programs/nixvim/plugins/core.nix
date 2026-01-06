@@ -1,9 +1,6 @@
 # コアプラグイン: treesitter, telescope, oil, neogit, gitsigns, barbar, hlchunk
 { pkgs, ... }:
 {
-  # Barbar
-  plugins.barbar.enable = true;
-
   # Which-key
   plugins.which-key.enable = true;
 
