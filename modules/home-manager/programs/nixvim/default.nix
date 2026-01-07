@@ -67,7 +67,6 @@
 
   imports = [
     ./plugins
-    ./extra-plugins
   ];
 
   extraPackages = with pkgs; [

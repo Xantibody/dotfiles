@@ -5,5 +5,9 @@
     ./lualine
     ./neoscroll
     ./tiny-glimmer
+    ./smooth-cursor
+    ./alpha
+    ./hlchunk
+    ./hlslens
   ];
 }

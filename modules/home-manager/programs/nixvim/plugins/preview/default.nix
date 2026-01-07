@@ -3,5 +3,6 @@
   imports = [
     ./markdown-preview
     ./render-markdown
+    ./nvim-markdown
   ];
 }
