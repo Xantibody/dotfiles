@@ -22,10 +22,9 @@
     hlchunk-nvim
     lspkind-nvim
     nvim-hlslens
-    nvim-web-devicons
     plenary-nvim
     quick-scope
-    which-key-nvim
-
+    # nvim-web-devicons - plugins/core/web-devicons/ で管理
+    # which-key-nvim - plugins/core/which-key/ で管理
   ];
 }
