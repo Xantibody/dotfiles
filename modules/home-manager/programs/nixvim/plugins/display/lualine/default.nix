@@ -1,10 +1,5 @@
-# 表示系プラグイン: alpha, flash, hlslens, lualine, neoscroll, nightfox, render-markdown
-{ pkgs, ... }:
+# Lualine ステータスライン
 {
-  # Alpha (dashboard)
-  # extraPlugins + extraConfigLuaで設定（NixVimのalphaはconfigを上書きするため無効）
-
-  # Lualine
   plugins.lualine = {
     enable = true;
     settings = {
@@ -38,20 +33,5 @@
         "quickfix"
       ];
     };
-  };
-
-  # Neoscroll
-  plugins.neoscroll = {
-    enable = true;
-    settings.mappings = [
-      "<C-u>"
-      "<C-d>"
-    ];
-  };
-
-  # tiny-glimmer
-  plugins.tiny-glimmer = {
-    enable = true;
-    autoLoad = true;
   };
 }

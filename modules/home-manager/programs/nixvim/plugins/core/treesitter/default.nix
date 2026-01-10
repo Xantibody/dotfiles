@@ -1,4 +1,4 @@
-# コアプラグイン: treesitter, telescope, oil, neogit, gitsigns, barbar, hlchunk
+# Treesitter シンタックスハイライト・パーサー
 { pkgs, ... }:
 {
   # Treesitter
@@ -43,43 +43,4 @@
 
   # ts-autotag
   plugins.ts-autotag.enable = true;
-
-  # Telescope
-  plugins.telescope.enable = true;
-
-  # Oil
-  plugins.oil = {
-    enable = true;
-    settings = {
-      default_file_explorer = true;
-      view_options.show_hidden = true;
-    };
-  };
-
-  # Neogit
-  plugins.neogit = {
-    enable = true;
-    settings.integrations.diffview = true;
-  };
-
-  # Gitsigns
-  plugins.gitsigns.enable = true;
-
-  # Barbar
-  plugins.barbar.enable = true;
-
-  # Which-key
-  plugins.which-key.enable = true;
-
-  # fzf-lua
-  plugins.fzf-lua.enable = true;
-
-  # Mini icons
-  plugins.mini = {
-    enable = true;
-    modules.icons = { };
-  };
-
-  # Web devicons
-  plugins.web-devicons.enable = true;
 }

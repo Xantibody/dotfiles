@@ -1,3 +1,4 @@
+# Flash 高速移動プラグイン
 { pkgs, ... }:
 {
   plugins.flash.enable = true;
