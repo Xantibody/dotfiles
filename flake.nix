@@ -90,13 +90,10 @@
           programs = {
             actionlint.enable = true;
             nixfmt.enable = true;
-            taplo.enable = true;
-            jsonfmt.enable = true;
-            yamlfmt.enable = true;
             fish_indent.enable = true;
             stylua.enable = true;
             shfmt.enable = true;
-            prettier.enable = true;
+            oxfmt.enable = true;
           };
         };
       };
