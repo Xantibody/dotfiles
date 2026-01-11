@@ -94,13 +94,10 @@
     yaml-language-server
 
     # formatter
-    biome
     nixfmt-rfc-style
     rustfmt
     stylua
-    yamlfmt
     just-formatter
-    gojq
-    rumdl
+    oxfmt
   ];
 }

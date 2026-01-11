@@ -18,26 +18,27 @@
       };
       formatters = {
         typstyle.command = "typstyle";
-        rumdl = {
-          command = "rumdl";
-          args = [
-            "fmt"
-            "-"
-            "--quiet"
-          ];
-          stdin = true;
-        };
       };
       formatters_by_ft = {
+        css = [ "oxfmt" ];
         go = [ "gofmt" ];
-        json = [ "gojq" ];
+        html = [ "oxfmt" ];
+        javascript = [ "oxfmt" ];
+        javascriptreact = [ "oxfmt" ];
+        json = [ "oxfmt" ];
+        json5 = [ "oxfmt" ];
+        jsonc = [ "oxfmt" ];
         just = [ "just" ];
+        jvascriptreact = [ "oxfmt" ];
         lua = [ "stylua" ];
-        markdown = [ "rumdl" ];
+        markdown = [ "oxfmt" ];
+        mdx = [ "oxfmt" ];
         nix = [ "nixfmt" ];
         rust = [ "rustfmt" ];
+        toml = [ "oxfmt" ];
+        typescript = [ "oxfmt" ];
         typst = [ "typstyle" ];
-        yaml = [ "yamlfmt" ];
+        yaml = [ "oxfmt" ];
       };
     };
   };
