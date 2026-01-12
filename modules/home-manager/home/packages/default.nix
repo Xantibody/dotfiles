@@ -28,7 +28,7 @@ with pkgs;
     vhs
     edge.claude-code
     codex
-    # gemini-cli
+    gemini-cli
     yaskkserv2
     discord-ptb
   ]
