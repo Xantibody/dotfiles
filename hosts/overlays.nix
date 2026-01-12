@@ -1,6 +1,7 @@
 { inputs }:
+with inputs;
 [
-  inputs.alacritty-theme.overlays.default
-  inputs.edgepkgs.overlays.default
-  inputs.mcp-servers-nix.overlays.default
+  alacritty-theme.overlays.default
+  edgepkgs.overlays.default
+  mcp-servers-nix.overlays.default
 ]

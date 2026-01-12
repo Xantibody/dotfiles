@@ -3,6 +3,10 @@
   inputs,
   ...
 }:
+let
+  rycee-addons = pkgs.firefox-addons;
+  my-nur-addons = inputs.my-nur.legacyPackages.${pkgs.stdenv.hostPlatform.system}.firefox-addons;
+in
 {
   imports = [ inputs.zen-browser.homeModules.beta ];
   programs.zen-browser = {
@@ -13,16 +17,13 @@
         "zen.theme.content-element-separation" = 0;
       };
       extensions = {
-        packages = (
-          with pkgs.firefox-addons;
-          [
-            keepa
-            onepassword-password-manager
-            to-deepl
-            vimium
-            wayback-machine
-          ]
-        );
+        packages = [
+          rycee-addons.keepa
+          rycee-addons.onepassword-password-manager
+          rycee-addons.vimium
+          rycee-addons.wayback-machine
+          my-nur-addons.plamo-translate
+        ];
       };
 
       search = {

@@ -318,6 +318,24 @@
         "type": "github"
       }
     },
+    "my-nur": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_7"
+      },
+      "locked": {
+        "lastModified": 1768185289,
+        "narHash": "sha256-rijprZPsllRPi0eSSgPIeFMkfDKn3jNFpQJH6V4JYc8=",
+        "owner": "Xantibody",
+        "repo": "nur-packages",
+        "rev": "b250d2088762ef5d7981277d742d8c82a20d3d01",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Xantibody",
+        "repo": "nur-packages",
+        "type": "github"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -535,6 +553,22 @@
     },
     "nixpkgs_7": {
       "locked": {
+        "lastModified": 1712449641,
+        "narHash": "sha256-U9DDWMexN6o5Td2DznEgguh8TRIUnIl9levmit43GcI=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "600b15aea1b36eeb43833a50b0e96579147099ff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_8": {
+      "locked": {
         "lastModified": 1768129890,
         "narHash": "sha256-izB67Et12Th6/dwE7FaOuRbk1Rw/aOTYbACw1CANkkY=",
         "ref": "nixos-unstable-small",
@@ -583,9 +617,10 @@
         "home-manager": "home-manager",
         "mac-app-util": "mac-app-util",
         "mcp-servers-nix": "mcp-servers-nix",
+        "my-nur": "my-nur",
         "nix-darwin": "nix-darwin_2",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs_7",
+        "nixpkgs": "nixpkgs_8",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixvim": "nixvim",
         "sops-nix": "sops-nix",
