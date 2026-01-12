@@ -9,9 +9,9 @@
     docker-compose
     lima-additional-guestagents
     brewCasks.maccy
-    brewCasks.slite
     brewCasks.aqua-voice
-    meetingbar
+    brewCasks.claude
+    brewCasks.chatgpt
     macskk
   ];
 }

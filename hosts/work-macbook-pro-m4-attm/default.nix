@@ -49,6 +49,9 @@ nix-darwin.lib.darwinSystem {
     mac-app-util.darwinModules.default
     {
       environment.systemPackages = with pkgs; [
+
+        brewCasks.slite
+        meetingbar
       ];
     }
     {
