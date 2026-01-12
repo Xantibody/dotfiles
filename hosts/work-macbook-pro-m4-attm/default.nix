@@ -48,6 +48,10 @@ nix-darwin.lib.darwinSystem {
     home-manager.darwinModules.home-manager
     mac-app-util.darwinModules.default
     {
+      environment.systemPackages = with pkgs; [
+      ];
+    }
+    {
       home-manager = {
         useGlobalPkgs = true;
         extraSpecialArgs = { inherit inputs; };
