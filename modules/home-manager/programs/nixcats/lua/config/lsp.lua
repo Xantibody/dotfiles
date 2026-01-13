@@ -1,10 +1,25 @@
--- LSP Configuration
-local lspconfig = require("lspconfig")
+-- LSP Configuration for Neovim 0.11+
+-- Using vim.lsp.config instead of deprecated lspconfig
 
--- Default capabilities with blink.cmp
-local capabilities = require("blink.cmp").get_lsp_capabilities()
+-- Diagnostic icons
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+  callback = function(ev)
+    local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+    vim.diagnostic.config({
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = signs.Error,
+          [vim.diagnostic.severity.WARN] = signs.Warn,
+          [vim.diagnostic.severity.INFO] = signs.Info,
+          [vim.diagnostic.severity.HINT] = signs.Hint,
+        },
+      },
+    })
+  end,
+})
 
--- LSP servers to configure
+-- LSP servers to enable
 local servers = {
   "nixd",
   "lua_ls",
@@ -20,23 +35,16 @@ local servers = {
   "ts_ls",
   "helm_ls",
   "denols",
+  "efm",
 }
 
--- Setup each server
-for _, server in ipairs(servers) do
-  local ok, _ = pcall(function()
-    lspconfig[server].setup({
-      capabilities = capabilities,
-    })
-  end)
-  if not ok then
-    vim.notify("LSP server " .. server .. " not found", vim.log.levels.WARN)
-  end
-end
+-- Enable all servers
+vim.lsp.enable(servers)
 
--- Special configuration for lua_ls
-lspconfig.lua_ls.setup({
-  capabilities = capabilities,
+-- Custom configurations
+
+-- lua_ls
+vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
       runtime = { version = "LuaJIT" },
@@ -47,12 +55,52 @@ lspconfig.lua_ls.setup({
   },
 })
 
--- Special configuration for nixd
-lspconfig.nixd.setup({
-  capabilities = capabilities,
+-- nixd
+vim.lsp.config("nixd", {
   settings = {
     nixd = {
       formatting = { command = { "nixfmt" } },
+    },
+  },
+})
+
+-- yamlls with kubernetes schemas
+vim.lsp.config("yamlls", {
+  settings = {
+    yaml = {
+      schemas = {
+        ["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.1-standalone-strict/all.json"] = {
+          "**/*k8s*/**/*.yaml",
+          "**/manifest/*.yaml",
+        },
+      },
+    },
+  },
+})
+
+-- efm for textlint
+vim.lsp.config("efm", {
+  filetypes = {
+    "markdown",
+  },
+  init_options = { documentLinting = true, documentFormatting = false },
+  settings = {
+    rootMarkers = {
+      ".git/",
+      ".textlintrc",
+      ".textlintrc.json",
+    },
+    languages = {
+      markdown = {
+        {
+          lintIgnoreExitCode = true,
+          lintStdin = true,
+          lintCommand = "textlint --format unix --stdin --stdin-filename ${INPUT}",
+          lintFormats = { "%f:%l:%c: %m" },
+          formatCommand = "textlint --fix --no-color --stdin --stdin-filename ${INPUT}",
+          formatStdin = true,
+        },
+      },
     },
   },
 })
