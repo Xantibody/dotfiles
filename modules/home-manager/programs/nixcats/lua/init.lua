@@ -1,6 +1,10 @@
 -- nixCats main configuration
 -- Migration from nixvim
 
+-- Add config directory to Lua path
+local script_path = debug.getinfo(1, "S").source:sub(2):match("(.*/)")
+package.path = script_path .. "?.lua;" .. script_path .. "?/init.lua;" .. package.path
+
 -- Global settings
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
