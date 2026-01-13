@@ -12,4 +12,7 @@ Use `tdd` skill for detailed TDD methodology and refactoring guidance.
 Use `git-commit` skill for commit discipline and change separation.
 Use `linux-philosophy` skill for Unix design principles.
 Use `twelve-factor` skill for web application architecture.
-Use `/tdd:go` command to advance plan.md workflow.
+
+# Communication
+
+- When asking questions with multiple options, always recommend one option as the first choice.

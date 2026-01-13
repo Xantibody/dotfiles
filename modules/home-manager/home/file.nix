@@ -31,10 +31,6 @@
   ".claude/CLAUDE.md" = {
     source = self + /configs/claude/CLAUDE.md;
   };
-  ".claude/commands" = {
-    source = self + /configs/claude/commands;
-    recursive = true;
-  };
   ".claude/skills" = {
     source = self + /configs/claude/skills;
     recursive = true;
