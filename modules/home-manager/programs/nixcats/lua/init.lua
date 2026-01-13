@@ -43,27 +43,35 @@ opt.listchars:append({ space = "･", eol = "↵" })
 
 -- Load colorscheme
 if nixCats("colorscheme") then
-  vim.cmd.colorscheme("dayfox")
+	vim.cmd.colorscheme("dayfox")
 end
 
--- Load modules
+-- Load modules (order matches nixvim)
 require("config.utils")
 require("config.ui")
-require("config.plugins")
-require("config.keymaps")
-
--- Load LSP if edit category is enabled
-if nixCats("edit") then
-  require("config.lsp")
-end
 
 -- Load Japanese input if enabled
 if nixCats("japanese") then
-  require("config.skkeleton")
+	require("config.skkeleton")
 end
 
 -- Load display modules
 if nixCats("display") then
-  require("config.hlslens")
-  require("config.alpha")
+	require("config.hlslens")
+end
+
+-- Load plugins (after skkeleton and hlslens)
+require("config.plugins")
+
+-- Load alpha
+if nixCats("display") then
+	require("config.alpha")
+end
+
+-- Load keymaps
+require("config.keymaps")
+
+-- Load LSP if edit category is enabled
+if nixCats("edit") then
+	require("config.lsp")
 end
