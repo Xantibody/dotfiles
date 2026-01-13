@@ -1,5 +1,4 @@
 # nixCats-nvim configuration
-# Migration from nixvim
 # See: https://github.com/BirdeeHub/nixCats-nvim
 {
   config,
