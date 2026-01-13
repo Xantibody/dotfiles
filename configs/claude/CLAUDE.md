@@ -8,10 +8,8 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 - Tidy First: Separate structural changes from behavioral changes
 - Small, frequent commits with all tests passing
 
-Use `tdd` skill for detailed TDD methodology and refactoring guidance.
-Use `git-commit` skill for commit discipline and change separation.
-Use `linux-philosophy` skill for Unix design principles.
-Use `twelve-factor` skill for web application architecture.
+Use `design` skill for architecture and design consultation.
+Use `implement` skill for feature implementation.
 
 # Communication
 
