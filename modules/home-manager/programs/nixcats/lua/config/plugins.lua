@@ -26,12 +26,9 @@ if nixCats("core") then
   -- Which-key
   require("which-key").setup({})
 
-  -- Treesitter
-  require("nvim-treesitter.configs").setup({
-    highlight = { enable = true },
-    indent = { enable = true },
-    incremental_selection = { enable = true },
-  })
+  -- Treesitter (grammars are provided by Nix, just enable features)
+  vim.treesitter.language.register("bash", "zsh")
+  -- Highlighting is enabled by default in Neovim 0.10+
 
   -- Barbar
   require("barbar").setup({})
