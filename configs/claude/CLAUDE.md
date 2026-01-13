@@ -10,12 +10,12 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 
 # Skills
 
-| Skill | When to use |
-|-------|-------------|
-| `design` | Architecture and design consultation |
+| Skill       | When to use                                              |
+| ----------- | -------------------------------------------------------- |
+| `design`    | Architecture and design consultation                     |
 | `implement` | Feature implementation (includes TDD, commit discipline) |
-| `verify` | Run static analysis, lint, and tests |
-| `explain` | Summarize and validate what was implemented |
+| `verify`    | Run static analysis, lint, and tests                     |
+| `explain`   | Summarize and validate what was implemented              |
 
 # Communication
 
