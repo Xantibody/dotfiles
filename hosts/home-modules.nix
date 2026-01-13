@@ -1,4 +1,5 @@
 { inputs }:
 [
-  inputs.nixvim.homeModules.nixvim
+  # nixCats neovim configuration
+  ../modules/home-manager/programs/nixcats
 ]
