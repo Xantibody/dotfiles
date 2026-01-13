@@ -52,6 +52,11 @@ require("config.ui")
 require("config.plugins")
 require("config.keymaps")
 
+-- Load LSP if edit category is enabled
+if nixCats("edit") then
+  require("config.lsp")
+end
+
 -- Load Japanese input if enabled
 if nixCats("japanese") then
   require("config.skkeleton")
