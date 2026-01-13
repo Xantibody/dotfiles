@@ -8,8 +8,14 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 - Tidy First: Separate structural changes from behavioral changes
 - Small, frequent commits with all tests passing
 
-Use `design` skill for architecture and design consultation.
-Use `implement` skill for feature implementation.
+# Skills
+
+| Skill | When to use |
+|-------|-------------|
+| `design` | Architecture and design consultation |
+| `implement` | Feature implementation (includes TDD, commit discipline) |
+| `verify` | Run static analysis, lint, and tests |
+| `explain` | Summarize and validate what was implemented |
 
 # Communication
 
