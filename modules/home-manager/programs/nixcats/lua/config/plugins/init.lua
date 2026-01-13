@@ -20,6 +20,7 @@ if nixCats("display") then
 	require("config.plugins.display.hlchunk")
 	require("config.plugins.display.flash")
 	require("config.plugins.display.smoothcursor")
+	require("config.plugins.display.render-markdown")
 end
 
 -- Edit plugins
@@ -34,9 +35,5 @@ if nixCats("edit") then
 	require("config.plugins.edit.luasnip")
 	require("config.plugins.edit.conform")
 	require("config.plugins.edit.blink-cmp")
-end
-
--- Preview plugins
-if nixCats("preview") then
-	require("config.plugins.preview.markdown")
+	require("config.plugins.edit.nvim-markdown")
 end
