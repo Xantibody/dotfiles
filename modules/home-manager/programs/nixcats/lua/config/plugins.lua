@@ -4,6 +4,8 @@
 
 -- Core plugins
 if nixCats("core") then
+	local map = vim.keymap.set
+
 	-- nvim-web-devicons
 	require("nvim-web-devicons").setup({})
 
@@ -12,6 +14,10 @@ if nixCats("core") then
 
 	-- Telescope
 	require("telescope").setup({})
+	map("n", "<leader>ff", "<cmd>lua require('telescope.builtin').find_files()<CR>", { desc = "Telescope find files" })
+	map("n", "<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<CR>", { desc = "Telescope live grep" })
+	map("n", "<leader>fb", "<cmd>lua require('telescope.builtin').buffers()<CR>", { desc = "Telescope buffers" })
+	map("n", "<leader>fh", "<cmd>lua require('telescope.builtin').help_tags()<CR>", { desc = "Telescope help tags" })
 
 	-- Oil file manager
 	require("oil").setup({
@@ -20,12 +26,14 @@ if nixCats("core") then
 			show_hidden = true,
 		},
 	})
+	map("n", "<leader>o", "<cmd>Oil<CR>", { desc = "Open oil" })
 
 	-- Gitsigns
 	require("gitsigns").setup({})
 
 	-- Neogit
 	require("neogit").setup({})
+	map("n", "<leader>ng", "<cmd>Neogit<CR>", { desc = "Neogit" })
 
 	-- Which-key
 	require("which-key").setup({})
@@ -35,10 +43,34 @@ if nixCats("core") then
 
 	-- Barbar
 	require("barbar").setup({})
+	map("n", "<A-,>", "<Cmd>BufferPrevious<CR>", { desc = "Previous buffer" })
+	map("n", "<A-.>", "<Cmd>BufferNext<CR>", { desc = "Next buffer" })
+	map("n", "<A-<>", "<Cmd>BufferMovePrevious<CR>", { desc = "Move buffer previous" })
+	map("n", "<A->>", "<Cmd>BufferMoveNext<CR>", { desc = "Move buffer next" })
+	map("n", "<A-1>", "<Cmd>BufferGoto 1<CR>", { desc = "Go to buffer 1" })
+	map("n", "<A-2>", "<Cmd>BufferGoto 2<CR>", { desc = "Go to buffer 2" })
+	map("n", "<A-3>", "<Cmd>BufferGoto 3<CR>", { desc = "Go to buffer 3" })
+	map("n", "<A-4>", "<Cmd>BufferGoto 4<CR>", { desc = "Go to buffer 4" })
+	map("n", "<A-5>", "<Cmd>BufferGoto 5<CR>", { desc = "Go to buffer 5" })
+	map("n", "<A-6>", "<Cmd>BufferGoto 6<CR>", { desc = "Go to buffer 6" })
+	map("n", "<A-7>", "<Cmd>BufferGoto 7<CR>", { desc = "Go to buffer 7" })
+	map("n", "<A-8>", "<Cmd>BufferGoto 8<CR>", { desc = "Go to buffer 8" })
+	map("n", "<A-9>", "<Cmd>BufferGoto 9<CR>", { desc = "Go to buffer 9" })
+	map("n", "<A-0>", "<Cmd>BufferLast<CR>", { desc = "Go to last buffer" })
+	map("n", "<A-p>", "<Cmd>BufferPin<CR>", { desc = "Pin/unpin buffer" })
+	map("n", "<A-c>", "<Cmd>BufferClose<CR>", { desc = "Close buffer" })
+	map("n", "<C-p>", "<Cmd>BufferPick<CR>", { desc = "Pick buffer" })
+	map("n", "<Space>bb", "<Cmd>BufferOrderByBufferNumber<CR>", { desc = "Order by buffer number" })
+	map("n", "<Space>bn", "<Cmd>BufferOrderByName<CR>", { desc = "Order by name" })
+	map("n", "<Space>bd", "<Cmd>BufferOrderByDirectory<CR>", { desc = "Order by directory" })
+	map("n", "<Space>bl", "<Cmd>BufferOrderByLanguage<CR>", { desc = "Order by language" })
+	map("n", "<Space>bw", "<Cmd>BufferOrderByWindowNumber<CR>", { desc = "Order by window number" })
 end
 
 -- Display plugins
 if nixCats("display") then
+	local map = vim.keymap.set
+
 	-- Lualine (same as nixvim)
 	require("lualine").setup({
 		options = {
@@ -78,6 +110,12 @@ if nixCats("display") then
 
 	-- Flash
 	require("flash").setup({})
+	local flash_opts = { noremap = true, silent = true }
+	map({ "n", "x", "o" }, "s", "<cmd>lua require('flash').jump()<CR>", flash_opts)
+	map({ "n", "x", "o" }, "S", "<cmd>lua require('flash').treesitter()<CR>", flash_opts)
+	map("o", "r", "<cmd>lua require('flash').remote()<CR>", flash_opts)
+	map({ "o", "x" }, "R", "<cmd>lua require('flash').treesitter_search()<CR>", flash_opts)
+	map("c", "<C-s>", "<cmd>lua require('flash').toggle()<CR>", flash_opts)
 
 	-- Smooth cursor
 	require("smoothcursor").setup({
@@ -87,6 +125,8 @@ end
 
 -- Edit plugins
 if nixCats("edit") then
+	local map = vim.keymap.set
+
 	-- Comment
 	require("Comment").setup({})
 
@@ -106,9 +146,15 @@ if nixCats("edit") then
 	require("in-and-out").setup({
 		additional_targets = { '"', '"' },
 	})
+	map("i", "<C-CR>", "<cmd>lua require('in-and-out').in_and_out()<CR>")
 
 	-- Tiny code action
 	require("tiny-code-action").setup({})
+	map({ "n", "v" }, "<leader>ca", "<cmd>lua require('tiny-code-action').code_action()<CR>", {
+		noremap = true,
+		silent = true,
+		desc = "See available code actions",
+	})
 
 	-- LuaSnip setup
 	local ls = require("luasnip")
@@ -171,6 +217,11 @@ if nixCats("edit") then
 			typst = { "typstyle" },
 			yaml = { "oxfmt" },
 		},
+	})
+	map({ "n", "i" }, "<C-F>", "<CMD>FormatToggle<CR>", {
+		noremap = true,
+		silent = true,
+		desc = "toggle save format",
 	})
 
 	-- Blink-cmp (completion) - same as nixvim

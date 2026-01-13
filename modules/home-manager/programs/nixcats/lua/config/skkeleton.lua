@@ -6,6 +6,11 @@ vim.fn["skkeleton#config"]({
 	showCandidatesCount = 999,
 })
 
+-- Skkeleton keymaps
+local map = vim.keymap.set
+map("i", "<C-j>", "<Plug>(skkeleton-enable)")
+map("c", "<C-j>", "<Plug>(skkeleton-enable)")
+
 -- lualine refresh autocmd for skkeleton mode change
 vim.api.nvim_create_autocmd({ "User" }, {
 	desc = "Refresh statusline to show the mode for Skkeleton",
