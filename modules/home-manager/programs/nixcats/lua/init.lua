@@ -68,9 +68,6 @@ if nixCats("display") then
 	require("config.alpha")
 end
 
--- Load keymaps
-require("config.keymaps")
-
 -- Load LSP if edit category is enabled
 if nixCats("edit") then
 	require("config.lsp")

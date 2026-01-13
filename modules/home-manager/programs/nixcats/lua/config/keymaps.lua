@@ -1,6 +1,0 @@
--- Global keymaps configuration
--- Plugin-specific keymaps are defined in their respective config files:
--- - plugins.lua: telescope, oil, barbar, neogit, flash, in-and-out, tiny-code-action, conform
--- - lsp.lua: LSP keymaps
--- - skkeleton.lua: Japanese input keymaps
--- - hlslens.lua: Search highlight keymaps
