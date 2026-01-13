@@ -39,4 +39,7 @@
     source = self + /configs/claude/skills;
     recursive = true;
   };
+  ".claude/settings.json" = {
+    source = self + /configs/claude/settings.json;
+  };
 }
