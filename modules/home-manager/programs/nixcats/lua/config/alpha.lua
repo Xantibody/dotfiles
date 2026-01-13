@@ -1,4 +1,3 @@
--- Alpha dashboard configuration
 local dashboard = require("alpha.themes.dashboard")
 dashboard.section.header.opts.hl = "Include"
 
@@ -29,12 +28,12 @@ dashboard.section.header.val = {
 	"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
 }
 
--- setting menu (dashboard.button creates buttons with keymaps)
+-- setting menu (dashboard.buttonでキーマップ付きボタンを作成)
 dashboard.section.buttons.val = {
 	dashboard.button("o", "󰏇  Run Oil", ":Oil <CR>"),
-	dashboard.button("n", "  Run Neogit", ":Neogit<CR>"),
-	dashboard.button("e", "  New file", ":ene <BAR> startinsert <CR>"),
-	dashboard.button("r", "  Recent file", ":Telescope oldfiles <CR>"),
+	dashboard.button("n", "  Run Neogit", ":Neogit<CR>"),
+	dashboard.button("e", "  New file", ":ene <BAR> startinsert <CR>"),
+	dashboard.button("r", "  Recent file", ":Telescope oldfiles <CR>"),
 	dashboard.button("f", "󰥨  Find file", ":Telescope find_files <CR>"),
 	dashboard.button("g", "󰱼  Find text", ":Telescope live_grep <CR>"),
 }

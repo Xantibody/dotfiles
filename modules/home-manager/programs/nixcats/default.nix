@@ -242,7 +242,6 @@ in
 
             colorscheme = with pkgs.vimPlugins; [
               nightfox-nvim
-              everforest
             ];
 
             japanese = [
