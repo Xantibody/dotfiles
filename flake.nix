@@ -84,18 +84,32 @@
           private-macbook-pro-m3 = import ./hosts/private-macbook-pro-m3 { inherit inputs; };
         };
       };
-      perSystem = {
-        treefmt = {
-          projectRootFile = "flake.nix";
-          programs = {
-            actionlint.enable = true;
-            nixfmt.enable = true;
-            fish_indent.enable = true;
-            stylua.enable = true;
-            shfmt.enable = true;
-            oxfmt.enable = true;
+      perSystem =
+        { pkgs, ... }:
+        {
+          devShells.default = pkgs.mkShell {
+            packages = with pkgs; [
+              python312
+              libfprint
+              gobject-introspection
+              gtk3
+              python3Packages.pygobject3
+              gusb
+              json-glib
+              vim-startuptime
+            ];
+          };
+          treefmt = {
+            projectRootFile = "flake.nix";
+            programs = {
+              actionlint.enable = true;
+              nixfmt.enable = true;
+              fish_indent.enable = true;
+              stylua.enable = true;
+              shfmt.enable = true;
+              oxfmt.enable = true;
+            };
           };
         };
-      };
     };
 }
