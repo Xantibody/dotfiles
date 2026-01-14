@@ -16,11 +16,46 @@
       matchPackagePatterns: ["^nixpkgs"],
       automerge: true,
     },
-    // home-manager, nix-darwin関連をグループ化
+    // NixOS専用パッケージ
     {
-      groupName: "nix-ecosystem",
+      groupName: "nixos",
       matchManagers: ["nix"],
-      matchPackageNames: ["home-manager", "nix-darwin", "flake-parts"],
+      matchPackageNames: ["nixos-hardware", "xremap"],
+      automerge: true,
+    },
+    // Darwin専用パッケージ
+    {
+      groupName: "darwin",
+      matchManagers: ["nix"],
+      matchPackageNames: ["nix-darwin", "brew-nix", "brew-api", "mac-app-util"],
+      automerge: true,
+    },
+    // home-manager関連パッケージ
+    {
+      groupName: "home-manager",
+      matchManagers: ["nix"],
+      matchPackageNames: [
+        "home-manager",
+        "alacritty-theme",
+        "zen-browser",
+        "firefox-addons",
+        "nixCats",
+      ],
+      automerge: true,
+    },
+    // 共通/基盤パッケージ
+    {
+      groupName: "nix-common",
+      matchManagers: ["nix"],
+      matchPackageNames: [
+        "flake-parts",
+        "treefmt-nix",
+        "sops-nix",
+        "my-nur",
+        "systems",
+        "edgepkgs",
+        "mcp-servers-nix",
+      ],
       automerge: true,
     },
     // その他のflake inputsは個別にautomerge
