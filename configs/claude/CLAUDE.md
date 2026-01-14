@@ -10,13 +10,15 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 
 # Skills
 
-| Skill       | When to use                                              |
-| ----------- | -------------------------------------------------------- |
-| `design`    | Architecture and design consultation                     |
-| `preview`   | Validate implementation plan before starting             |
-| `implement` | Feature implementation (includes TDD, commit discipline) |
-| `verify`    | Run static analysis, lint, and tests                     |
-| `explain`   | Summarize and validate what was implemented              |
+| Skill          | When to use                                              |
+| -------------- | -------------------------------------------------------- |
+| `design`       | Architecture and design consultation                     |
+| `preview`      | Validate implementation plan before starting             |
+| `implement`    | Feature implementation (includes TDD, commit discipline) |
+| `verify`       | Run static analysis, lint, and tests                     |
+| `explain`      | Summarize and validate what was implemented              |
+| `wrap-up`      | Finalize work: (verify →) commit → skill review          |
+| `edit-claude`  | Edit Claude config in dotfiles (in dotfiles repo only)   |
 
 # Communication
 
