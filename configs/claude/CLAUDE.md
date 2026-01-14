@@ -15,6 +15,7 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 | `design`      | Architecture and design consultation                     |
 | `preview`     | Validate implementation plan before starting             |
 | `implement`   | Feature implementation (includes TDD, commit discipline) |
+| `test-design` | Design test cases with 0-1-N boundary analysis           |
 | `verify`      | Run static analysis, lint, and tests                     |
 | `explain`     | Summarize and validate what was implemented              |
 | `wrap-up`     | Finalize work: (verify →) commit → skill review          |
