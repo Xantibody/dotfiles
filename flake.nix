@@ -85,19 +85,24 @@
         };
       };
       perSystem =
-        { pkgs, ... }:
+        { pkgs, system, ... }:
         {
           devShells.default = pkgs.mkShell {
-            packages = with pkgs; [
-              python312
-              libfprint
-              gobject-introspection
-              gtk3
-              python3Packages.pygobject3
-              gusb
-              json-glib
-              vim-startuptime
-            ];
+            packages =
+              with pkgs;
+              [
+                vim-startuptime
+              ]
+              # NixOSの指紋キャッシュを消すための依存関係
+              ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+                python312
+                libfprint
+                gobject-introspection
+                gtk3
+                python3Packages.pygobject3
+                gusb
+                json-glib
+              ];
           };
           treefmt = {
             projectRootFile = "flake.nix";
