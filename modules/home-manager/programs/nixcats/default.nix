@@ -189,6 +189,7 @@ in
               gitsigns-nvim
 
               # Syntax & parsing
+              nvim-treesitter
               nvim-treesitter.withAllGrammars
 
               # UI
