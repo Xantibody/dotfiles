@@ -32,7 +32,6 @@ local servers = {
 	"basedpyright",
 	"tinymist",
 	"typos_lsp",
-	"ts_ls",
 	"helm_ls",
 	"denols",
 	"efm",
@@ -41,6 +40,14 @@ local servers = {
 
 -- Enable all servers
 vim.lsp.enable(servers)
+
+-- tsgo (TypeScript Go) - custom config
+vim.lsp.config("tsgo", {
+	cmd = { "tsgo", "--lsp", "-stdio" },
+	filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+	root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
+})
+vim.lsp.enable("tsgo")
 
 -- Custom configurations
 

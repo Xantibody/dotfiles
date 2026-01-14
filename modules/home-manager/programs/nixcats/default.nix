@@ -154,7 +154,7 @@ in
               nixd
               rust-analyzer
               tinymist
-              typescript-language-server
+              typescript-go
               typos-lsp
               nodePackages.vscode-json-languageserver
               vscode-langservers-extracted
