@@ -9,11 +9,11 @@ Edit Claude settings in `configs/claude/`.
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `configs/claude/CLAUDE.md` | Global instructions |
-| `configs/claude/settings.json` | Claude settings |
-| `configs/claude/skills/*/SKILL.md` | Individual skills |
+| File                               | Purpose             |
+| ---------------------------------- | ------------------- |
+| `configs/claude/CLAUDE.md`         | Global instructions |
+| `configs/claude/settings.json`     | Claude settings     |
+| `configs/claude/skills/*/SKILL.md` | Individual skills   |
 
 ## After Editing
 
