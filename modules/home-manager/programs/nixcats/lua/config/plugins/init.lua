@@ -21,6 +21,7 @@ if nixCats("display") then
 	require("config.plugins.display.flash")
 	require("config.plugins.display.smoothcursor")
 	require("config.plugins.display.render-markdown")
+	require("config.plugins.display.tiny-glimmer")
 end
 
 -- Edit plugins

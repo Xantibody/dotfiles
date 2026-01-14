@@ -93,6 +93,16 @@ let
         sha256 = "sha256-wjYTO9WqdDEbH4L3dsHqOoeQf0y/Uo6WX94w/D4EuGU=";
       };
     };
+
+    tiny-glimmer = pkgs.vimUtils.buildVimPlugin {
+      name = "tiny-glimmer-nvim";
+      src = pkgs.fetchFromGitHub {
+        owner = "rachartier";
+        repo = "tiny-glimmer.nvim";
+        rev = "main";
+        sha256 = "sha256-1ApcJj0E+sLDCrgFVgy26s+EFqRqyWaIcEPo017FVsQ=";
+      };
+    };
   };
 in
 {
@@ -151,7 +161,7 @@ in
               yaml-language-server
             ];
             formatters = with pkgs; [
-              nixfmt-rfc-style
+              nixfmt
               rustfmt
               stylua
               just-formatter
@@ -201,6 +211,7 @@ in
 
               # Custom plugins
               customPlugins.smooth-cursor
+              customPlugins.tiny-glimmer
             ];
 
             edit = with pkgs.vimPlugins; [

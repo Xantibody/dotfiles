@@ -1,22 +1,22 @@
 -- LSP Configuration for Neovim 0.11+
--- Using vim.lsp.config instead of deprecated lspconfig
+-- Using native vim.lsp.config / vim.lsp.enable API
 
 -- Diagnostic icons
-vim.api.nvim_create_autocmd("LspAttach", {
-	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-	callback = function(ev)
-		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-		vim.diagnostic.config({
-			signs = {
-				text = {
-					[vim.diagnostic.severity.ERROR] = signs.Error,
-					[vim.diagnostic.severity.WARN] = signs.Warn,
-					[vim.diagnostic.severity.INFO] = signs.Info,
-					[vim.diagnostic.severity.HINT] = signs.Hint,
-				},
-			},
-		})
-	end,
+local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+vim.diagnostic.config({
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = signs.Error,
+			[vim.diagnostic.severity.WARN] = signs.Warn,
+			[vim.diagnostic.severity.INFO] = signs.Info,
+			[vim.diagnostic.severity.HINT] = signs.Hint,
+		},
+	},
+})
+
+-- Global capabilities for all LSP servers (blink.cmp integration)
+vim.lsp.config("*", {
+	capabilities = require("blink.cmp").get_lsp_capabilities(),
 })
 
 -- LSP servers to enable
@@ -29,14 +29,14 @@ local servers = {
 	"jsonls",
 	"html",
 	"bashls",
-	"pyright",
+	"basedpyright",
 	"tinymist",
 	"typos_lsp",
 	"ts_ls",
 	"helm_ls",
 	"denols",
 	"efm",
-	"tofu_ls",
+	"fish_lsp",
 }
 
 -- Enable all servers
@@ -81,9 +81,7 @@ vim.lsp.config("yamlls", {
 
 -- efm for textlint
 vim.lsp.config("efm", {
-	filetypes = {
-		"markdown",
-	},
+	filetypes = { "markdown" },
 	init_options = { documentLinting = true, documentFormatting = false },
 	settings = {
 		rootMarkers = {
@@ -104,12 +102,6 @@ vim.lsp.config("efm", {
 			},
 		},
 	},
-})
-
--- tofu_ls
-vim.lsp.config("tofu_ls", {
-	cmd = { "opentofu-ls", "serve" },
-	filetypes = { "opentofu", "opentofu-vars", "terraform" },
 })
 
 -- LSP keymaps
