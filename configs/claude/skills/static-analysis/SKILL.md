@@ -1,21 +1,16 @@
 ---
 name: static-analysis
-description: Run static analysis (type checking, etc.) on the codebase.
+description: Run static analysis (linting, type checking) on the codebase.
 ---
 
 # Static Analysis
 
-Run static analysis tools to verify code correctness.
+Run linting and type checking to verify code correctness and quality.
 
 ## Steps
 
-1. Detect the project type and find the static analysis command:
-   - TypeScript/JavaScript: `tsc --noEmit`, `npx tsc --noEmit`
-   - Go: `go vet ./...`
-   - Rust: `cargo check`
-   - Python: `mypy`, `pyright`
-   - Nix: `nix flake check`
+1. Read README, Makefile, or package.json to find the lint/check commands.
 
-2. If no static analysis tool is configured, propose adding one appropriate for the project.
+2. Run the linting command. If a separate type checking command exists, run both.
 
-3. Run the command and fix any errors found.
+3. Fix any errors found before proceeding.

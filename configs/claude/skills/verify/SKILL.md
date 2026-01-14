@@ -1,15 +1,19 @@
 ---
 name: verify
-description: Run all verification checks (format, static analysis, lint, test).
+description: Run all verification checks (static analysis, test, format).
 ---
 
 # Verify
 
 Run all verification checks to ensure code quality.
 
-Use `format` skill to run code formatters.
-Use `static-analysis` skill to run type checking and static analysis.
-Use `lint` skill to run linting checks.
-Use `test` skill to run the test suite.
+## Steps
 
-Run these in order. Fix any issues before proceeding to the next step.
+1. Read README or Makefile to find available commands.
+
+2. Run in this order:
+   - `static-analysis` skill (linting and type checking)
+   - `test` skill (run the test suite)
+   - `format` skill (run code formatters)
+
+3. Fix any issues before proceeding to the next step. Do not go back to completed steps.
