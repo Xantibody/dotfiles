@@ -8,4 +8,27 @@
   nix: {
     enabled: true,
   },
+  packageRules: [
+    // nixpkgs関連をグループ化
+    {
+      groupName: "nixpkgs",
+      matchManagers: ["nix"],
+      matchPackagePatterns: ["^nixpkgs"],
+      automerge: true,
+    },
+    // home-manager, nix-darwin関連をグループ化
+    {
+      groupName: "nix-ecosystem",
+      matchManagers: ["nix"],
+      matchPackageNames: ["home-manager", "nix-darwin", "flake-parts"],
+      automerge: true,
+    },
+    // その他のflake inputsは個別にautomerge
+    {
+      matchManagers: ["nix"],
+      automerge: true,
+      automergeType: "pr",
+      automergeStrategy: "squash",
+    },
+  ],
 }
