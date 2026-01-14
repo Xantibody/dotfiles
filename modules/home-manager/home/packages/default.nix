@@ -12,7 +12,6 @@ with pkgs;
     cargo
     deck
     direnv
-    devbox
     eza
     fd
 
