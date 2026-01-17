@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "nix": {
+    "enabled": true
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["every 3 days"]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["nix"],
+      "automerge": true
+    }
+  ]
+}
