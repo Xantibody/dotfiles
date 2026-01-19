@@ -11,7 +11,8 @@
     macos_option_as_alt = true;
 
     hide_window_decorations = "titlebar-only";
-    window_border_width = 0;
+    window_border_width = 0.5;
+    window_margin_width = 0;
     draw_minimal_borders = "yes";
 
     # Nightfox colors for Kitty
