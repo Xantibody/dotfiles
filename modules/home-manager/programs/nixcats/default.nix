@@ -238,8 +238,6 @@ in
 
               # Editing
               comment-nvim
-              nvim-surround
-              nvim-autopairs
               customPlugins.in-and-out
               customPlugins.tiny-code-action
               customPlugins.vim-qfreplace
