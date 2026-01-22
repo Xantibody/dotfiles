@@ -27,8 +27,8 @@ end
 -- Edit plugins
 if nixCats("edit") then
 	require("config.plugins.edit.comment")
-	require("config.plugins.edit.surround")
-	require("config.plugins.edit.autopairs")
+	require("config.plugins.edit.mini-surround")
+	require("config.plugins.edit.mini-pairs")
 	require("config.plugins.edit.fidget")
 	require("config.plugins.edit.lazydev")
 	require("config.plugins.edit.in-and-out")

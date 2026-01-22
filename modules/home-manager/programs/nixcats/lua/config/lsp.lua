@@ -111,25 +111,8 @@ vim.lsp.config("efm", {
 	},
 })
 
--- LSP keymaps
+-- LSP keymaps (Neovim 0.11+ defaults: K=hover, grn=rename, gra=code_action, grr=references, gri=implementation, grt=type_definition)
 local map = vim.keymap.set
-map("n", "<leader>d", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Show line diagnostics" })
-map("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", { desc = "Go to type definition" })
-map("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", { desc = "Go to previous diagnostic" })
-map("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", { desc = "Go to next diagnostic" })
-map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { desc = "Show documentation for what is under cursor" })
-map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "Go to declaration" })
+map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Show line diagnostics" })
 map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Go to definition" })
-map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", { desc = "Go to implementation" })
-map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", { desc = "Find references" })
-map("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", { desc = "Show signature help" })
-map("n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", { desc = "Add workspace folder" })
-map("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", { desc = "Remove workspace folder" })
-map(
-	"n",
-	"<leader>wl",
-	"<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
-	{ desc = "List workspace folders" }
-)
-map("n", "<leader>rs", ":LspRestart<CR>", { desc = "Restart LSP" })
-map("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", { desc = "Rename symbol" })
+map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "Go to declaration" })
