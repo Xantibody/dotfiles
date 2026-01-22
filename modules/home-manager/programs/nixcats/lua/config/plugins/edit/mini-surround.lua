@@ -1,5 +1,12 @@
 -- Surround configuration (using mini.surround)
 require("mini.surround").setup({
+	custom_surroundings = {
+		-- Triple backtick code block (use 'c' for code)
+		["c"] = {
+			input = { "```%w*\n().-()\n```" },
+			output = { left = "```\n", right = "\n```" },
+		},
+	},
 	mappings = {
 		add = "gsa", -- Add surrounding in Normal and Visual modes
 		delete = "gsd", -- Delete surrounding

@@ -52,6 +52,12 @@ require("blink.cmp").setup({
 			end
 		end,
 		providers = {
+			lsp = {
+				score_offset = 10,
+			},
+			snippets = {
+				score_offset = 5,
+			},
 			lazydev = {
 				name = "LazyDev",
 				module = "lazydev.integrations.blink",
