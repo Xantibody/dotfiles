@@ -86,6 +86,17 @@ vim.lsp.config("yamlls", {
 	},
 })
 
+-- rust_analyzer with clippy
+vim.lsp.config("rust_analyzer", {
+	settings = {
+		["rust-analyzer"] = {
+			check = {
+				command = "clippy",
+			},
+		},
+	},
+})
+
 -- efm for textlint
 vim.lsp.config("efm", {
 	filetypes = { "markdown" },
