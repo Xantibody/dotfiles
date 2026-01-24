@@ -59,7 +59,7 @@
     };
     systems.url = "github:nix-systems/default";
     mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
-    llm-agents.url = "github:Xantibody/llm-agents.nix/feature/overlay-support";
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
   outputs =
     {
