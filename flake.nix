@@ -13,9 +13,6 @@
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
     };
-    alacritty-theme = {
-      url = "github:alexghr/alacritty-theme.nix";
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -61,8 +58,8 @@
       inputs.cl-nix-lite.url = "github:r4v3n6101/cl-nix-lite/url-fix";
     };
     systems.url = "github:nix-systems/default";
-    edgepkgs.url = "github:natsukium/edgepkgs";
     mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
+    llm-agents.url = "github:Xantibody/llm-agents.nix/feature/overlay-support";
   };
   outputs =
     {
