@@ -28,7 +28,7 @@ let
         owner = "Xantibody";
         repo = "blink-cmp-skkeleton";
         rev = "main";
-        sha256 = "sha256-uzDqykavZlQcqLi/7Bqi72Pt/5zFdAqkyN73xm/KxFw=";
+        sha256 = "sha256-zEghDbOZtUQrwSLh7B7w/IxmsLML/Dju7yJP38/VMog=";
       };
     };
 
