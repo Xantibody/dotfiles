@@ -50,7 +50,6 @@ nix-darwin.lib.darwinSystem {
     {
       environment.systemPackages = with pkgs; [
 
-        brewCasks.slite
         meetingbar
       ];
     }

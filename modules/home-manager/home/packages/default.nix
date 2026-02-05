@@ -17,7 +17,7 @@ with pkgs;
 
     gh
     gnumake
-    google-chrome
+
     iccheck
     nix-prefetch-github
     ripgrep

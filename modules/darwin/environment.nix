@@ -12,6 +12,7 @@
     brewCasks.aqua-voice
     brewCasks.claude
     brewCasks.chatgpt
+    brewCasks.google-chrome
     macskk
   ];
 }
