@@ -14,6 +14,8 @@ with pkgs;
     direnv
     eza
     fd
+    go
+    gopls
 
     gh
     gnumake
@@ -21,13 +23,11 @@ with pkgs;
     iccheck
     nix-prefetch-github
     ripgrep
-    rustc
-    uv
-    just
     vhs
     llm-agents.claude-code
     llm-agents.codex
     llm-agents.gemini-cli
+
     yaskkserv2
     discord-ptb
   ]
