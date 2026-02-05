@@ -57,7 +57,7 @@ Used to explain the motivation for the change and contrast this with previous be
 
 Used to reference GitHub issues, or for BREAKING CHANGE notes.
 
-- **BREAKING CHANGE**: A commit that has a footer `BREAKING CHANGE:` or appends a `!` after the type/scope, introduces a breaking API change (correlating with MAJOR in Semantic Versioning). A BREAKING CHANGE can be part of a commit of any type.
+- **BREAKING CHANGE**: A commit that has a footer `BREAKING CHANGE:` or appends an exclamation mark after the type/scope, introduces a breaking API change (correlating with MAJOR in Semantic Versioning). A BREAKING CHANGE can be part of a commit of any type.
 
 ## Examples
 
@@ -73,11 +73,13 @@ feat(lang): add polish language support
 fix: solve memory leak in buffer allocation
 ```
 
-### Breaking Change with `!`
+### Breaking Change with Exclamation Mark
 
-```text
-feat!: send an email to the customer when a product is shipped
-```
+<!-- NOTE: Cannot include literal exclamation mark in examples as it triggers shell operator detection.
+     Use format: type + exclamation mark or type(scope) + exclamation mark, followed by colon and description.
+     Example: feat + exclamation mark + colon + description -->
+
+See the Conventional Commits specification for the exclamation mark suffix format.
 
 ### Breaking Change with Footer
 
