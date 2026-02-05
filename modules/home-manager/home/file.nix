@@ -7,9 +7,6 @@
   ".config/efm-langserver/config.yaml" = {
     source = self + /configs/efm-langserver/config.yaml;
   };
-  ".config/zellij/config.kdl" = {
-    source = self + /configs/zellij/config.kdl;
-  };
   ".config/waybar" = {
     source = self + /configs/waybar;
     recursive = true;
