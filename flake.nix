@@ -90,6 +90,7 @@
               with pkgs;
               [
                 vim-startuptime
+                just
               ]
               # NixOSの指紋キャッシュを消すための依存関係
               ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux [
