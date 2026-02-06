@@ -60,6 +60,7 @@
     systems.url = "github:nix-systems/default";
     mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
     llm-agents.url = "github:numtide/llm-agents.nix";
+    arto.url = "github:arto-app/Arto";
   };
   outputs =
     {

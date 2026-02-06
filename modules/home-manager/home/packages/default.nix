@@ -6,6 +6,7 @@ in
 with pkgs;
 (
   [
+    arto
     bat
 
     obsidian

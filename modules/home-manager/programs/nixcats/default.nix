@@ -103,6 +103,16 @@ let
         sha256 = "sha256-1ApcJj0E+sLDCrgFVgy26s+EFqRqyWaIcEPo017FVsQ=";
       };
     };
+
+    arto-vim = pkgs.vimUtils.buildVimPlugin {
+      name = "arto-vim";
+      src = pkgs.fetchFromGitHub {
+        owner = "arto-app";
+        repo = "arto.vim";
+        rev = "main";
+        sha256 = "sha256-/Rk/t7Hm/VTa1KQptzd+1sZIiRR2l++tA98DSe9uwV4=";
+      };
+    };
   };
 in
 {
@@ -213,6 +223,9 @@ in
               # Custom plugins
               customPlugins.smooth-cursor
               customPlugins.tiny-glimmer
+
+              # AI visualization
+              customPlugins.arto-vim
             ];
 
             edit = with pkgs.vimPlugins; [
