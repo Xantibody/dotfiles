@@ -94,6 +94,17 @@ let
       };
     };
 
+    tiny-inline-diagnostic = pkgs.vimUtils.buildVimPlugin {
+      name = "tiny-inline-diagnostic-nvim";
+      doCheck = false;
+      src = pkgs.fetchFromGitHub {
+        owner = "rachartier";
+        repo = "tiny-inline-diagnostic.nvim";
+        rev = "main";
+        sha256 = "sha256-KWUyn6fJDQ+jSBdO9gwN9mmufgIALwjm5GboK6y5ksM=";
+      };
+    };
+
     tiny-glimmer = pkgs.vimUtils.buildVimPlugin {
       name = "tiny-glimmer-nvim";
       src = pkgs.fetchFromGitHub {
@@ -253,6 +264,7 @@ in
               comment-nvim
               customPlugins.in-and-out
               customPlugins.tiny-code-action
+              customPlugins.tiny-inline-diagnostic
               customPlugins.vim-qfreplace
             ];
 

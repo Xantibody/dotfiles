@@ -33,6 +33,7 @@ if nixCats("edit") then
 	require("config.plugins.edit.lazydev")
 	require("config.plugins.edit.in-and-out")
 	require("config.plugins.edit.tiny-code-action")
+	require("config.plugins.edit.tiny-inline-diagnostic")
 	require("config.plugins.edit.luasnip")
 	require("config.plugins.edit.conform")
 	require("config.plugins.edit.blink-cmp")
