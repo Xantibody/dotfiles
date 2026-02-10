@@ -134,6 +134,13 @@ let
         rev = "feat/external-diff-integration";
         sha256 = "sha256-kh0t71Fkafx3jUuBICK8T9apWTj/gLVjBWcc9VfOQzY=";
       };
+      checkInputs = [ pkgs.vimPlugins.diffview-nvim ];
+      dependencies = [ pkgs.vimPlugins.plenary-nvim ];
+      nvimSkipModules = [
+        "neogit.integrations.diffview"
+        "neogit.popups.diff.actions"
+        "neogit.popups.diff.init"
+      ];
     };
   };
 in
