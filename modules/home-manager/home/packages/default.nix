@@ -8,29 +8,28 @@ with pkgs;
   [
     arto
     bat
-
-    obsidian
     cargo
     deck
+    delta
+    difftastic
     direnv
+    discord-ptb
     eza
     fd
-    go
-    gopls
-
     gh
     gnumake
-
+    go
+    gopls
     iccheck
     nix-prefetch-github
+    obsidian
     ripgrep
     vhs
+    yaskkserv2
+
     llm-agents.claude-code
     llm-agents.codex
     llm-agents.gemini-cli
-
-    yaskkserv2
-    discord-ptb
   ]
   ++ k8s
   ++ mcp

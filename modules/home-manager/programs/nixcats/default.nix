@@ -124,6 +124,17 @@ let
         sha256 = "sha256-/Rk/t7Hm/VTa1KQptzd+1sZIiRR2l++tA98DSe9uwV4=";
       };
     };
+
+    # Dogfooding: external diff integration branch
+    neogit = pkgs.vimUtils.buildVimPlugin {
+      name = "neogit";
+      src = pkgs.fetchFromGitHub {
+        owner = "Xantibody";
+        repo = "neogit";
+        rev = "feat/external-diff-integration";
+        sha256 = "sha256-kh0t71Fkafx3jUuBICK8T9apWTj/gLVjBWcc9VfOQzY=";
+      };
+    };
   };
 in
 {
@@ -206,7 +217,7 @@ in
 
               # Git
               diffview-nvim
-              neogit
+              customPlugins.neogit
               gitsigns-nvim
 
               # Syntax & parsing
