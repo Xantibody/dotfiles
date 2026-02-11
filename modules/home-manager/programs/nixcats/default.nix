@@ -131,8 +131,8 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "Xantibody";
         repo = "neogit";
-        rev = "feat/external-diff-integration";
-        sha256 = "sha256-kh0t71Fkafx3jUuBICK8T9apWTj/gLVjBWcc9VfOQzY=";
+        rev = "ec664733e7c871714578d5a9599d863ea7cbd12f";
+        sha256 = "sha256-YwTcuoR/G+5tIJjq5bwkNBL/OUPjAC0jc7R+SdHsULk=";
       };
       checkInputs = [ pkgs.vimPlugins.diffview-nvim ];
       dependencies = [ pkgs.vimPlugins.plenary-nvim ];
