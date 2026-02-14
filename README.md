@@ -5,7 +5,7 @@ my configuration
 ## usage
 
 ```bash
- make
- # or
- make help
+just
+# or
+just --list
 ```
