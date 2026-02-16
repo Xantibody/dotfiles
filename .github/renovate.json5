@@ -9,7 +9,23 @@
   nix: {
     enabled: true,
   },
+  customManagers: [
+    {
+      customType: "regex",
+      fileMatch: ["\\.nix$"],
+      matchStrings: [
+        "# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)\\n\\s*rev\\s*=\\s*\"(?<currentDigest>[a-f0-9]{40})\"",
+      ],
+    },
+  ],
   packageRules: [
+    // vim/neovimプラグイン
+    {
+      groupName: "vim-plugins",
+      matchManagers: ["custom.regex"],
+      matchDatasources: ["git-refs"],
+      automerge: true,
+    },
     // nixpkgs関連をグループ化
     {
       groupName: "nixpkgs",

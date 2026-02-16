@@ -19,6 +19,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "vim-skk";
         repo = "skkeleton";
+        # renovate: datasource=git-refs depName=vim-skk/skkeleton
         rev = "3e019b331fbf9bd1d4539e7bd650a1c543125cee";
         sha256 = "sha256-VDu8WypgpzY+Dd8KIPJXsvtBEwt5YiuGXn6HAUKCbIQ=";
       };
@@ -29,6 +30,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "Xantibody";
         repo = "blink-cmp-skkeleton";
+        # renovate: datasource=git-refs depName=Xantibody/blink-cmp-skkeleton
         rev = "69edc70d5003e0a3e9a5fc396d9a2f3049f03873";
         sha256 = "sha256-zEghDbOZtUQrwSLh7B7w/IxmsLML/Dju7yJP38/VMog=";
       };
@@ -40,6 +42,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "Kaiser-Yang";
         repo = "blink-cmp-dictionary";
+        # renovate: datasource=git-refs depName=Kaiser-Yang/blink-cmp-dictionary
         rev = "944b3b215b01303672d4213758db7c5c5a1e3c92";
         sha256 = "sha256-e8ucufhLdNnE8fBjSLaTJngEj1valYE9upH78y+wj4I=";
       };
@@ -50,6 +53,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "gen740";
         repo = "SmoothCursor.nvim";
+        # renovate: datasource=git-refs depName=gen740/SmoothCursor.nvim
         rev = "12518b284e1e3f7c6c703b346815968e1620bee2";
         sha256 = "sha256-P0jGm5ODEVbtmqPGgDFBPDeuOF49CFq5x1PzubEJgaM=";
       };
@@ -60,6 +64,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "ysmb-wtsg";
         repo = "in-and-out.nvim";
+        # renovate: datasource=git-refs depName=ysmb-wtsg/in-and-out.nvim
         rev = "03456b9c49365a28732378a7f2a72a613154e042";
         sha256 = "sha256-QPEvWOTKzscUs+vHQ0LJ/BNBd9buMgG/jkmjg7JlhT8=";
       };
@@ -71,6 +76,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "rachartier";
         repo = "tiny-code-action.nvim";
+        # renovate: datasource=git-refs depName=rachartier/tiny-code-action.nvim
         rev = "2215a7311b6eac9535695167c3a38d10c3eab444";
         sha256 = "sha256-c3wH7Zwy0oChAuyDToHHJWOOvEALtl9FDDKNcdCCTd8=";
       };
@@ -81,6 +87,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "thinca";
         repo = "vim-qfreplace";
+        # renovate: datasource=git-refs depName=thinca/vim-qfreplace
         rev = "707a895f9f86eeed106f64da0bd9fa07b3cd9cee";
         sha256 = "sha256-6G89NznCOumLIJb2l8szKGIWMr3CtpeHUfdkzEOCo8U=";
       };
@@ -91,6 +98,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "ixru";
         repo = "nvim-markdown";
+        # renovate: datasource=git-refs depName=ixru/nvim-markdown
         rev = "37850581fdaec153ce84af677d43bf8fce60813a";
         sha256 = "sha256-wjYTO9WqdDEbH4L3dsHqOoeQf0y/Uo6WX94w/D4EuGU=";
       };
@@ -102,6 +110,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "rachartier";
         repo = "tiny-inline-diagnostic.nvim";
+        # renovate: datasource=git-refs depName=rachartier/tiny-inline-diagnostic.nvim
         rev = "ecce93ff7db4461e942c03e0fcc64bd785df4057";
         sha256 = "sha256-KWUyn6fJDQ+jSBdO9gwN9mmufgIALwjm5GboK6y5ksM=";
       };
@@ -112,6 +121,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "rachartier";
         repo = "tiny-glimmer.nvim";
+        # renovate: datasource=git-refs depName=rachartier/tiny-glimmer.nvim
         rev = "932e6c2cc4a43ce578f007db1f8f61ad6798f938";
         sha256 = "sha256-Lgdeu3xRXKf7YcuPKPnVvECzQR+RzC0bM+AiilHLLVg=";
       };
@@ -123,6 +133,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "Xantibody";
         repo = "neogit";
+        # renovate: datasource=git-refs depName=Xantibody/neogit
         rev = "ec664733e7c871714578d5a9599d863ea7cbd12f";
         sha256 = "sha256-YwTcuoR/G+5tIJjq5bwkNBL/OUPjAC0jc7R+SdHsULk=";
       };
