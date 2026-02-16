@@ -325,6 +325,10 @@ in
               ];
             };
 
+            extra = {
+              arto_path = "${pkgs.arto}/Applications/Arto.app";
+            };
+
             # Enable all categories
             categories = {
               general = true;

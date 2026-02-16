@@ -9,6 +9,7 @@ package.path = script_path .. "?.lua;" .. script_path .. "?/init.lua;" .. packag
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.g.barbar_auto_setup = false
+vim.g.arto_path = nixCats.extra("arto_path")
 
 -- Editor options
 local opt = vim.opt
