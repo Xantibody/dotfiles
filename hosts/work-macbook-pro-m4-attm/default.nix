@@ -12,6 +12,7 @@ let
     ;
 
   commonOverlays = import ../overlays.nix { inherit inputs; };
+  darwinOverlays = import ../darwin-overlays.nix { inherit inputs; };
   commonHomeModules = import ../home-modules.nix { inherit inputs; };
 
   username = "r-aizawa";
@@ -22,6 +23,7 @@ let
     inherit system;
     overlays =
       commonOverlays
+      ++ darwinOverlays
       ++ [
         brew-nix.overlays.default
         firefox-addons.overlays.default
