@@ -9,6 +9,8 @@
 }:
 let
   utils = inputs.nixCats.utils;
+  isDarwin = pkgs.stdenv.isDarwin;
+  arto = import ./arto.nix { inherit pkgs; };
 
   # Custom plugins that need to be built from source
   customPlugins = {
@@ -27,7 +29,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "Xantibody";
         repo = "blink-cmp-skkeleton";
-        rev = "main";
+        rev = "69edc70d5003e0a3e9a5fc396d9a2f3049f03873";
         sha256 = "sha256-zEghDbOZtUQrwSLh7B7w/IxmsLML/Dju7yJP38/VMog=";
       };
     };
@@ -69,8 +71,8 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "rachartier";
         repo = "tiny-code-action.nvim";
-        rev = "main";
-        sha256 = "sha256-tiV+drfWAryw8cexSCgmZCXfHxi4oi6qX6oNmhHrhAk=";
+        rev = "2215a7311b6eac9535695167c3a38d10c3eab444";
+        sha256 = "sha256-c3wH7Zwy0oChAuyDToHHJWOOvEALtl9FDDKNcdCCTd8=";
       };
     };
 
@@ -89,7 +91,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "ixru";
         repo = "nvim-markdown";
-        rev = "master";
+        rev = "37850581fdaec153ce84af677d43bf8fce60813a";
         sha256 = "sha256-wjYTO9WqdDEbH4L3dsHqOoeQf0y/Uo6WX94w/D4EuGU=";
       };
     };
@@ -100,7 +102,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "rachartier";
         repo = "tiny-inline-diagnostic.nvim";
-        rev = "main";
+        rev = "ecce93ff7db4461e942c03e0fcc64bd785df4057";
         sha256 = "sha256-KWUyn6fJDQ+jSBdO9gwN9mmufgIALwjm5GboK6y5ksM=";
       };
     };
@@ -110,18 +112,8 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "rachartier";
         repo = "tiny-glimmer.nvim";
-        rev = "main";
-        sha256 = "sha256-1ApcJj0E+sLDCrgFVgy26s+EFqRqyWaIcEPo017FVsQ=";
-      };
-    };
-
-    arto-vim = pkgs.vimUtils.buildVimPlugin {
-      name = "arto-vim";
-      src = pkgs.fetchFromGitHub {
-        owner = "arto-app";
-        repo = "arto.vim";
-        rev = "main";
-        sha256 = "sha256-/Rk/t7Hm/VTa1KQptzd+1sZIiRR2l++tA98DSe9uwV4=";
+        rev = "932e6c2cc4a43ce578f007db1f8f61ad6798f938";
+        sha256 = "sha256-Lgdeu3xRXKf7YcuPKPnVvECzQR+RzC0bM+AiilHLLVg=";
       };
     };
 
@@ -237,25 +229,25 @@ in
               mini-nvim
             ];
 
-            display = with pkgs.vimPlugins; [
-              # Status line
-              lualine-nvim
+            display =
+              (with pkgs.vimPlugins; [
+                # Status line
+                lualine-nvim
 
-              # Visual enhancements
-              flash-nvim
-              neoscroll-nvim
-              alpha-nvim
-              hlchunk-nvim
-              nvim-hlslens
-              quick-scope
+                # Visual enhancements
+                flash-nvim
+                neoscroll-nvim
+                alpha-nvim
+                hlchunk-nvim
+                nvim-hlslens
+                quick-scope
 
-              # Custom plugins
-              customPlugins.smooth-cursor
-              customPlugins.tiny-glimmer
-
-              # AI visualization
-              customPlugins.arto-vim
-            ];
+                # Custom plugins
+                customPlugins.smooth-cursor
+                customPlugins.tiny-glimmer
+              ])
+              # AI visualization (darwin-only)
+              ++ lib.optionals isDarwin [ arto.plugin ];
 
             edit = with pkgs.vimPlugins; [
               # LSP
@@ -325,9 +317,7 @@ in
               ];
             };
 
-            extra = {
-              arto_path = "${pkgs.arto}/Applications/Arto.app";
-            };
+            extra = lib.optionalAttrs isDarwin arto.extra;
 
             # Enable all categories
             categories = {
