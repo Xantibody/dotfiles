@@ -29,20 +29,20 @@ Handy
 
 OK (markdown formatting added, original text preserved):
 
-```markdown
+````markdown
 ## Error handling in Go
 
 You can compare wrapped errors using `errors.Is`
 
-​```go
+​`go
 err := doSomething()
 if errors.Is(err, ErrNotFound) {
     return nil
 }
-​```
+​`
 
 Handy
-```
+````
 
 NG (original text modified):
 

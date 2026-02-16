@@ -17,14 +17,19 @@ let
 in
 nixpkgs.lib.nixosSystem {
   inherit system;
-  specialArgs = { inherit username xremap nixpkgs inputs; };
+  specialArgs = {
+    inherit
+      username
+      xremap
+      nixpkgs
+      inputs
+      ;
+  };
 
   modules = [
     {
       nixpkgs.overlays =
-        commonOverlays
-        ++ [ inputs.firefox-addons.overlays.default ]
-        ++ (import ../../overlays);
+        commonOverlays ++ [ inputs.firefox-addons.overlays.default ] ++ (import ../../overlays);
     }
     ../../modules/nixos
     ../../modules/nixos/hardware-configuration.nix
