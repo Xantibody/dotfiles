@@ -35,7 +35,7 @@ local servers = {
 	"typos_lsp",
 	"helm_ls",
 	"denols",
-	"efm",
+	"ichigyo_ls",
 	"fish_lsp",
 }
 
@@ -98,29 +98,11 @@ vim.lsp.config("rust_analyzer", {
 	},
 })
 
--- efm for textlint
-vim.lsp.config("efm", {
+-- ichigyo-ls: textlint wrapper LSP
+vim.lsp.config("ichigyo_ls", {
+	cmd = { "ichigyo-ls" },
 	filetypes = { "markdown" },
-	init_options = { documentLinting = true, documentFormatting = false },
-	settings = {
-		rootMarkers = {
-			".git/",
-			".textlintrc",
-			".textlintrc.json",
-		},
-		languages = {
-			markdown = {
-				{
-					lintIgnoreExitCode = true,
-					lintStdin = true,
-					lintCommand = "textlint --format unix --stdin --stdin-filename ${INPUT}",
-					lintFormats = { "%f:%l:%c: %m" },
-					formatCommand = "textlint --fix --no-color --stdin --stdin-filename ${INPUT}",
-					formatStdin = true,
-				},
-			},
-		},
-	},
+	root_markers = { ".textlintrc", ".textlintrc.json", ".git" },
 })
 
 -- LSP keymaps (Neovim 0.11+ defaults: K=hover, grn=rename, gra=code_action, grr=references, gri=implementation, grt=type_definition)

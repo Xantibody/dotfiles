@@ -60,6 +60,7 @@
     mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
     llm-agents.url = "github:numtide/llm-agents.nix";
     arto.url = "github:arto-app/Arto";
+    ichigyo-ls.url = "github:Xantibody/ichigyo-ls";
   };
   outputs =
     {

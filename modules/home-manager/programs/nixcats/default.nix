@@ -187,7 +187,7 @@ in
               basedpyright
               bash-language-server
               deno
-              efm-langserver
+              ichigyo-ls
               fish-lsp
               gopls
               helm-ls
