@@ -2,11 +2,12 @@
 let
   k8s = import ./k8s.nix { inherit pkgs; };
   mcp = import ./mcp.nix { inherit pkgs; };
+  darwin = import ./darwin.nix { inherit pkgs; };
+  isDarwin = pkgs.stdenv.isDarwin;
 in
 with pkgs;
 (
   [
-    arto
     bat
     cargo
     deck
@@ -33,4 +34,5 @@ with pkgs;
   ]
   ++ k8s
   ++ mcp
+  ++ pkgs.lib.optionals isDarwin darwin
 )
