@@ -30,7 +30,7 @@
     {
       groupName: "nixpkgs",
       matchManagers: ["nix"],
-      matchPackagePatterns: ["^nixpkgs"],
+      matchPackageNames: ["/^nixpkgs/"],
       automerge: true,
     },
     // NixOS専用パッケージ
