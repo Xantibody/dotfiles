@@ -12,10 +12,11 @@
   customManagers: [
     {
       customType: "regex",
-      fileMatch: ["\\.nix$"],
+      managerFilePatterns: ["\\.nix$"],
       matchStrings: [
         '# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)\\n\\s*rev\\s*=\\s*"(?<currentDigest>[a-f0-9]{40})"',
       ],
+      currentValueTemplate: "HEAD",
     },
   ],
   packageRules: [
