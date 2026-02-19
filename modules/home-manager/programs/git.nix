@@ -11,5 +11,6 @@
       email = "zeku.bushinryu38@gmail.com";
     };
     core.editor = "nvim";
+    push.useForceIfIncludes = true;
   };
 }
