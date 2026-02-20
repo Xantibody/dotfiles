@@ -4,9 +4,9 @@ on:
   pull_request:
 
 jobs:
-  flake-check:
+  fmt-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
-      - run: nix flake check
+      - run: nix fmt -- --fail-on-change
