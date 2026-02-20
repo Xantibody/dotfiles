@@ -51,11 +51,11 @@ Pre-release and build metadata extensions are available as additional labels app
 
 When analyzing commits since the last release, map Conventional Commits types to version bumps:
 
-| Commit Type / Indicator            | Version Bump |
-| ---------------------------------- | ------------ |
-| `BREAKING CHANGE:` footer or `!`   | **MAJOR**    |
-| `feat`                             | **MINOR**    |
-| `fix`, `perf`                      | **PATCH**    |
+| Commit Type / Indicator                                     | Version Bump            |
+| ----------------------------------------------------------- | ----------------------- |
+| `BREAKING CHANGE:` footer or `!`                            | **MAJOR**               |
+| `feat`                                                      | **MINOR**               |
+| `fix`, `perf`                                               | **PATCH**               |
 | `docs`, `style`, `refactor`, `test`, `build`, `ci`, `chore` | **PATCH** (if included) |
 
 The highest applicable bump wins. For example, if there is at least one breaking change, bump MAJOR regardless of other commits.
