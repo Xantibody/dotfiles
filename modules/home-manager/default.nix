@@ -11,7 +11,10 @@ let
   lib = pkgs.lib;
 in
 {
-  imports = [ ./programs/zen-browser.nix ];
+  imports = [
+    ./programs/mdsf
+    ./programs/zen-browser.nix
+  ];
   home = import ./home {
     inherit
       pkgs

@@ -1,0 +1,43 @@
+{
+  "languages": {
+    "css": {
+      "binary": "oxfmt",
+      "arguments": ["$PATH"],
+      "stdin": false
+    },
+    "go": "gofmt",
+    "html": {
+      "binary": "oxfmt",
+      "arguments": ["$PATH"],
+      "stdin": false
+    },
+    "javascript": {
+      "binary": "oxfmt",
+      "arguments": ["$PATH"],
+      "stdin": false
+    },
+    "json": {
+      "binary": "oxfmt",
+      "arguments": ["$PATH"],
+      "stdin": false
+    },
+    "lua": "stylua",
+    "nix": "nixfmt",
+    "rust": "rustfmt",
+    "toml": {
+      "binary": "oxfmt",
+      "arguments": ["$PATH"],
+      "stdin": false
+    },
+    "typescript": {
+      "binary": "oxfmt",
+      "arguments": ["$PATH"],
+      "stdin": false
+    },
+    "yaml": {
+      "binary": "oxfmt",
+      "arguments": ["$PATH"],
+      "stdin": false
+    }
+  }
+}

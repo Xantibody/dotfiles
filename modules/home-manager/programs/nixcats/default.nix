@@ -203,11 +203,12 @@ in
               yaml-language-server
             ];
             formatters = with pkgs; [
+              mdsf
               nixfmt
+              oxfmt
               rustfmt
               stylua
               just-formatter
-              oxfmt
             ];
           };
 

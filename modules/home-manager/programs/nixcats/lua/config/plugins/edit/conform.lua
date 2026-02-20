@@ -22,7 +22,7 @@ require("conform").setup({
 		jsonc = { "oxfmt" },
 		just = { "just" },
 		lua = { "stylua" },
-		markdown = { "oxfmt" },
+		markdown = { "oxfmt", "mdsf" },
 		mdx = { "oxfmt" },
 		nix = { "nixfmt" },
 		rust = { "rustfmt" },
