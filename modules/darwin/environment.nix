@@ -10,8 +10,7 @@
     lima-additional-guestagents
     brewCasks.maccy
     brewCasks.claude
-    brewCasks.chatgpt
-    brewCasks.google-chrome
+    google-chrome
     macskk
   ];
 }
