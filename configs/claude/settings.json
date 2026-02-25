@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "includeCoAuthoredBy": false,
   "language": "japanese",
   "permissions": {
@@ -14,5 +15,6 @@
       "Bash(mkdir *)"
     ],
     "deny": ["Bash(rm -rf *)", "Bash(git push *)", "Bash(curl *)"]
-  }
+  },
+  "plansDirectory": "./plans"
 }
