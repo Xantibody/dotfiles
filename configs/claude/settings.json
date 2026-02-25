@@ -1,4 +1,18 @@
 {
   "includeCoAuthoredBy": false,
-  "language": "japanese"
+  "language": "japanese",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Grep",
+      "Glob",
+      "Bash(cargo *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(mkdir *)"
+    ],
+    "deny": ["Bash(rm -rf *)", "Bash(git push *)", "Bash(curl *)"]
+  }
 }
