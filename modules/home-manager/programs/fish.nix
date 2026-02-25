@@ -1,20 +1,24 @@
 { pkgs, ... }:
 {
   enable = true;
+  shellAbbrs = {
+    # abbr
+    n = "nvim";
+    ll = "eza --icons -lahF";
+
+    g = "git";
+    gp = "git pull";
+    gP = "git push";
+    gs = "git status";
+    ga = "git add";
+    gc = "git commit";
+
+    cc = "claude";
+    ccp = "claude --permission-mode plan";
+    ccD = "claude --dangerously-skip-permissions";
+  };
   interactiveShellInit = ''
     fish_vi_key_bindings
-
-    # abbr
-    abbr n nvim
-    abbr dp 'NVIM_APPNAME=darkpowered nvim'
-    abbr ll 'eza --icons -lahF'
-
-    abbr g git
-    abbr gp git pull
-    abbr gP git push
-    abbr gs git status
-    abbr ga git add
-    abbr gc git commit
 
     # Nightfox Color Palette
     # Style: dayfox
