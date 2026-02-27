@@ -1,1 +1,6 @@
-{ enable = true; }
+{
+  enable = true;
+  settings = {
+    theme = "dayfox";
+  };
+}
