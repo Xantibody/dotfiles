@@ -5,13 +5,14 @@
 }:
 {
   direnv = import ./direnv.nix;
+  emacs = import ./emacs.nix;
   fastfetch = import ./fastfetch.nix;
   fish = import ./fish.nix { inherit pkgs; };
   git = import ./git.nix;
-  starship = import ./starship.nix;
-  zoxide = import ./zoxide.nix;
   kitty = import ./kitty.nix { inherit pkgs; };
-  emacs = import ./emacs.nix;
+  starship = import ./starship.nix;
+  zellij = import ./zellij.nix;
+  zoxide = import ./zoxide.nix;
 }
 // lib.optionalAttrs isLinux {
   rofi = import ./rofi.nix;
