@@ -35,4 +35,8 @@
   ".claude/settings.json" = {
     source = self + /configs/claude/settings.json;
   };
+  ".claude/statusline.sh" = {
+    source = self + /configs/claude/statusline.sh;
+    executable = true;
+  };
 }

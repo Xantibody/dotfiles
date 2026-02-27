@@ -16,5 +16,9 @@
     ],
     "deny": ["Bash(rm -rf *)", "Bash(git push *)", "Bash(curl *)"]
   },
-  "plansDirectory": "./plans"
+  "plansDirectory": "./plans",
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
+  }
 }
