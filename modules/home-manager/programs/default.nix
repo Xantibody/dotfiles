@@ -11,7 +11,6 @@
   git = import ./git.nix;
   kitty = import ./kitty.nix { inherit pkgs; };
   starship = import ./starship.nix;
-  zellij = import ./zellij.nix;
   zoxide = import ./zoxide.nix;
 }
 // lib.optionalAttrs isLinux {
