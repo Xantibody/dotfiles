@@ -7,8 +7,6 @@ description: Architecture and design consultation for applications.
 
 Use this skill when discussing architecture, design patterns, or system structure.
 
-Use `preview` skill to validate the plan before implementation.
-
 ## Unix/Linux Philosophy (for CLI tools and system architecture)
 
 ### Core Principles
