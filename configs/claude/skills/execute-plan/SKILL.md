@@ -39,6 +39,7 @@ After all steps are complete:
 1. Run `/verify` skill one final time
 2. Confirm all tests pass
 3. Report a summary of what was implemented and the commits created
+4. Recommend creating a decision record: suggest the user run `/decision-record` to document the rationale and outcomes
 
 ## Quality Gates
 
