@@ -20,5 +20,6 @@
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
-  }
+  },
+  "env": { "ENABLE_TOOL_SEARCH": "true" }
 }
