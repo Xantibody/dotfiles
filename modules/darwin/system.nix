@@ -15,6 +15,9 @@ in
       enableKeyMapping = true;
       remapCapsLockToControl = true;
     };
+    activationScripts.postUserActivation.text = ''
+      ${pkgs.defaultbrowser}/bin/defaultbrowser zen
+    '';
     defaults = {
       NSGlobalDomain = {
         KeyRepeat = 2;
