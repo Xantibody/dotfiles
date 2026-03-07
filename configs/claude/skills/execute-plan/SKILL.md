@@ -24,13 +24,23 @@ This skill is designed for use after clearing context (`/clear`) to start fresh 
 
 ### 3. Execute Plan Autonomously
 
+**CRITICAL: You MUST execute ALL steps in a single uninterrupted session. Do NOT pause between steps to report progress or ask for confirmation.**
+
 Execute each step of the plan following these rules:
 
-- **Do not stop**: Work through all steps until the plan is fully implemented
+- **Continuous execution**: Work through ALL steps from start to finish without stopping. After completing one step, immediately begin the next step. The only acceptable output between steps is tool calls — never a text-only message that waits for user input.
 - **Continuous verification**: Run `/verify` skill after completing each logical unit of work (e.g., after each feature, each bug fix, or each major refactoring step)
-- **Fix before proceeding**: If `/verify` finds issues, fix them immediately before moving to the next step
+- **Fix before proceeding**: If `/verify` finds issues, fix them immediately and re-run `/verify`. Do NOT stop to report the failure — just fix it and continue.
 - **Commit discipline**: Use `/commit` skill after each passing verification to create atomic commits
-- **No questions during execution**: Make reasonable decisions autonomously. Only ask the user if a critical ambiguity would lead to fundamentally different implementations
+- **Autonomous decisions**: Make reasonable decisions on your own. Choose the simpler option when unsure. Do NOT ask the user for guidance.
+
+**The ONLY reason to stop mid-execution** is if continuing would cause irreversible damage (e.g., destructive operations on production data). Ambiguity, minor uncertainty, or multiple valid approaches are NOT reasons to stop — pick the approach most consistent with the plan and proceed.
+
+**Prohibited behaviors during execution:**
+- Stopping to summarize progress or show intermediate results
+- Asking "should I continue?" or "shall I proceed to the next step?"
+- Reporting what you just did and waiting for acknowledgment
+- Asking the user to choose between implementation options
 
 ### 4. Final Verification
 
