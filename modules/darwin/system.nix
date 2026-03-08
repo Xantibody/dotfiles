@@ -15,8 +15,8 @@ in
       enableKeyMapping = true;
       remapCapsLockToControl = true;
     };
-    activationScripts.postUserActivation.text = ''
-      ${pkgs.defaultbrowser}/bin/defaultbrowser zen
+    activationScripts.postActivation.text = ''
+      sudo -u ${username} ${pkgs.defaultbrowser}/bin/defaultbrowser zen
     '';
     defaults = {
       NSGlobalDomain = {
