@@ -37,6 +37,7 @@ Execute each step of the plan following these rules:
 **The ONLY reason to stop mid-execution** is if continuing would cause irreversible damage (e.g., destructive operations on production data). Ambiguity, minor uncertainty, or multiple valid approaches are NOT reasons to stop — pick the approach most consistent with the plan and proceed.
 
 **Prohibited behaviors during execution:**
+
 - Stopping to summarize progress or show intermediate results
 - Asking "should I continue?" or "shall I proceed to the next step?"
 - Reporting what you just did and waiting for acknowledgment

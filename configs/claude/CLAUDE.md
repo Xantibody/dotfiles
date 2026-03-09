@@ -33,10 +33,10 @@ From `test-design` skill:
 
 # Skills
 
-| Skill    | When to use                                 |
-| -------- | ------------------------------------------- |
-| `commit` | Commit with Conventional Commits format     |
-| `verify` | Run static analysis, tests, and format      |
+| Skill    | When to use                             |
+| -------- | --------------------------------------- |
+| `commit` | Commit with Conventional Commits format |
+| `verify` | Run static analysis, tests, and format  |
 
 # Branch Management
 
