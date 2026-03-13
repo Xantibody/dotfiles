@@ -2,10 +2,8 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: ["config:recommended"],
   platformAutomerge: false,
-  lockFileMaintenance: {
-    enabled: true,
-    schedule: ["before 6am on monday"],
-  },
+  schedule: ["before 6am every weekday", "before 6am on sunday"],
+  automergeSchedule: ["before 6am on saturday"],
   nix: {
     enabled: true,
   },
@@ -74,6 +72,13 @@
         "edgepkgs",
         "mcp-servers-nix",
       ],
+      automerge: true,
+    },
+    // ツール/アプリケーション
+    {
+      groupName: "nix-tools",
+      matchManagers: ["nix"],
+      matchPackageNames: ["llm-agents", "arto", "ichigyo-ls"],
       automerge: true,
     },
     // その他のflake inputsは個別にautomerge
