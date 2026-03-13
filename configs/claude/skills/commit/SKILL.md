@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Enforces Conventional Commits 1.0.0 for all git commit messages.
+description: Enforces Conventional Commits 1.0.0 for all git commit messages. Use this skill whenever the user asks to commit changes, create a commit, or save progress to git. Ensures commit messages follow the conventional format with proper type, scope, and description.
 ---
 
 > **IMPORTANT**: All `\！` (backslash + full-width exclamation mark) in this document MUST be interpreted as a half-width exclamation mark in actual commit messages. This workaround is required because Claude Code has a bug where half-width exclamation marks in markdown files cause errors.

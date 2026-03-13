@@ -10,33 +10,24 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 
 ## Plan Creation
 
-When creating implementation plans (plan mode), always incorporate the following skill principles:
+When creating implementation plans (plan mode), always consult and apply principles from these skills:
 
-From `implement` skill:
-
-- Red-Green-Refactor cycle: Each step should start with a failing test
-- Tidy First: Plan structural changes and behavioral changes as separate steps
-- Defect fixing: Include a step to write a failing test that reproduces the problem before fixing
-- Plan granularity: Each step should be a small, independently verifiable unit of work
-
-From `design` skill:
-
-- CLI tools and system architecture: Apply Unix/Linux Philosophy (single responsibility, composability, fail fast)
-- Web applications and microservices: Apply Twelve-Factor App principles (config in env vars, stateless processes, explicit dependencies)
-
-From `test-design` skill:
-
-- 0-1-N Rule: Plan tests for empty(0), single(1), multiple(N), and boundary values
-- Test Behavior: Focus on external behavior, not internal implementation details
-- Refactoring Resistance: Design tests that survive code restructuring
-- When the expected functionality is well-defined, add boundary and edge case tests as leverage strengthening after the Green phase of TDD
+- `implement`: Red-Green-Refactor cycle, Tidy First (separate structural/behavioral changes), plan granularity
+- `design`: Unix/Linux Philosophy (CLI tools), Twelve-Factor App (web apps)
+- `test-design`: 0-1-N Rule, behavior-focused testing, refactoring resistance
 
 # Skills
 
-| Skill    | When to use                             |
-| -------- | --------------------------------------- |
-| `commit` | Commit with Conventional Commits format |
-| `verify` | Run static analysis, tests, and format  |
+| Skill              | When to use                                        |
+| ------------------ | -------------------------------------------------- |
+| `commit`           | Commit with Conventional Commits format             |
+| `verify`           | Run static analysis, tests, and format              |
+| `implement`        | Feature implementation or bug fixing with TDD       |
+| `design`           | Architecture and design consultation                |
+| `test-design`      | Design test cases and test strategy                 |
+| `execute-plan`     | Execute a plan from `./plans/` autonomously         |
+| `decision-record`  | Document rationale and outcomes after plan execution |
+| `version`          | Determine next version number for release           |
 
 # Branch Management
 

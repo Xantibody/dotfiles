@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Feature implementation with TDD methodology.
+description: Feature implementation with TDD methodology. Use this skill when the user asks to implement a feature, fix a bug, add functionality, or build something new. Guides development through the Red-Green-Refactor cycle with Tidy First principles to keep structural and behavioral changes separate.
 ---
 
 # Feature Implementation

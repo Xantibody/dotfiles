@@ -1,6 +1,6 @@
 ---
 name: decision-record
-description: Create a decision record from an executed plan.
+description: Create a decision record from an executed plan. Use this skill when the user wants to document what was implemented and why, create an ADR (Architecture Decision Record), or record the rationale and outcomes after completing a plan execution. Typically used after /execute-plan.
 ---
 
 # Decision Record

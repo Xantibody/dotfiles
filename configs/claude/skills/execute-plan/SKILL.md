@@ -1,6 +1,6 @@
 ---
 name: execute-plan
-description: Execute a previously created plan autonomously with continuous verification.
+description: Execute a previously created plan autonomously with continuous verification. Use this skill when the user asks to execute a plan from the ./plans/ directory, wants to run a planned implementation end-to-end, or says something like "execute the plan" or "run the plan". Works best after /clear to start with full context capacity.
 ---
 
 # Execute Plan

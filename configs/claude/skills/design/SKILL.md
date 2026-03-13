@@ -1,6 +1,6 @@
 ---
 name: design
-description: Architecture and design consultation for applications.
+description: Architecture and design consultation for applications. Use this skill when discussing system architecture, design patterns, tech stack decisions, API design, or module structure. Covers Unix/Linux Philosophy for CLI tools and Twelve-Factor App for web applications and microservices.
 ---
 
 # Design Consultation
