@@ -26,6 +26,7 @@ When creating implementation plans (plan mode), always consult and apply princip
 | `design`           | Architecture and design consultation                |
 | `test-design`      | Design test cases and test strategy                 |
 | `execute-plan`     | Execute a plan from `./plans/` autonomously         |
+| `define`           | Requirements definition before implementation       |
 | `decision-record`  | Document rationale and outcomes after plan execution |
 | `version`          | Determine next version number for release           |
 
