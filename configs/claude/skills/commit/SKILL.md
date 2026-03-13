@@ -126,6 +126,36 @@ fix: correct typo in footer
 refactor(auth): simplify session handling
 ```
 
+## Scope Inference
+
+When creating a commit, infer the scope from `git diff --cached --name-only` (staged files) using these path-based rules:
+
+| Path Pattern | Inferred Scope |
+|---|---|
+| `flake.lock` | `deps` |
+| `flake.nix` | `flake` |
+| `.github/renovate*` | `renovate` |
+| `configs/<name>/` | `<name>` (e.g., `claude`, `k9s`) |
+| `modules/home-manager/programs/<name>.nix` | `<name>` (e.g., `fish`, `kitty`) |
+| `modules/home-manager/programs/<name>/` | `<name>` (e.g., `nixcats`) |
+| `modules/home-manager/home/` | `home` |
+| `modules/darwin/` | `darwin` |
+| `modules/nixos/` | `nixos` |
+| `overlays/` | `overlays` |
+
+### Multi-Scope Resolution
+
+- If all changed files map to a **single scope**, use that scope
+- If one scope covers the **majority** (>70%) of changed files, use that scope
+- If files map to **multiple unrelated scopes**, omit the scope and recommend splitting into atomic commits
+- If the user explicitly provides a scope, use that regardless of inference
+
 ## How to Use
 
-When asked to commit changes, the agent MUST use this format. If the USER provides a message, the agent should reformat it to follow these rules if it doesn't already.
+When asked to commit changes, the agent MUST:
+
+1. Run `git diff --cached --name-only` to see staged files
+2. Infer the scope using the rules above
+3. Determine the commit type from the nature of the changes
+4. Compose the commit message following Conventional Commits format
+5. If the user provides a message, reformat it to follow these rules

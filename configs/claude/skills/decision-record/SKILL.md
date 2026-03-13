@@ -5,22 +5,25 @@ description: Create a decision record from an executed plan. Use this skill when
 
 # Decision Record
 
-Use this skill after executing a plan (`/execute-plan`) and completing final verification.
-It captures the rationale, outcomes, and next steps as a structured decision record in `./decisions/`.
+Capture the rationale, outcomes, and next steps as a structured decision record in `./decisions/`.
+
+This skill works best after `/execute-plan`, but can also be used standalone to document any significant technical decision — even without a plan file.
 
 ## Workflow
 
-### 1. Discover and Select Plan
+### 1. Identify Source
 
-- Read all files in `./plans/` directory
-- If multiple plan files exist, present a summary of each and ask the user which one to record
-- If only one plan file exists, confirm with the user before proceeding
+Determine the context source:
+
+- **With plan file**: Read files in `./plans/` directory. If multiple exist, present summaries and ask which one to record. If only one exists, confirm before proceeding.
+- **Without plan file**: Ask the user what decision was made and why. Use the current conversation context and git history as source material.
 
 ### 2. Collect Context
 
-- Extract motivation and background from the plan file
-- Run `git log --oneline` to collect commits created during execution
-- Extract out-of-scope items and future work notes from the plan
+- If a plan file exists, extract motivation and background from it
+- Run `git log --oneline` to collect recent commits relevant to the decision
+- Run `gh pr view` to check for an associated pull request
+- Extract out-of-scope items and future work notes from the plan or conversation
 
 ### 3. Draft Decision Record
 

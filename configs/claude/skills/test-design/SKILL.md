@@ -9,6 +9,20 @@ Design tests that improve design resilience, not just find bugs.
 
 Inspired by Kent Beck (TDD creator) and t-wada (Takuto Wada).
 
+## Workflow
+
+### 1. Investigate Existing Conventions
+
+Before designing test cases, understand the context:
+
+- Read the target code or specification to understand expected behavior
+- Check the codebase for existing naming conventions, patterns, and common values (e.g., directory structures that map to identifiers, commit history patterns)
+- Use actual values from the codebase in test cases rather than generic placeholders — this catches real-world edge cases and ensures tests match actual usage
+
+### 2. Design Test Cases
+
+Apply the core principles below to generate test cases in the output format.
+
 ## Core Principles
 
 | Principle              | Description                                                        |

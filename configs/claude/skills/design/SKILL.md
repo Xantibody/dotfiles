@@ -7,6 +7,24 @@ description: Architecture and design consultation for applications. Use this ski
 
 Use this skill when discussing architecture, design patterns, or system structure.
 
+## Workflow
+
+### 1. Identify the Application Type
+
+Determine which design philosophy to apply based on the project:
+
+- **CLI tools, scripts, system utilities** → Unix/Linux Philosophy
+- **Web applications, APIs, microservices** → Twelve-Factor App
+- **Libraries, shared modules** → Both (Unix for API design, Twelve-Factor for deployment)
+
+### 2. Apply the Relevant Principles
+
+Consult the checklist for the identified type. Raise concerns where the current design violates principles.
+
+### 3. Provide Recommendations
+
+Present design recommendations with rationale. When trade-offs exist, explain the pros/cons and recommend the simpler option.
+
 ## Unix/Linux Philosophy (for CLI tools and system architecture)
 
 ### Core Principles

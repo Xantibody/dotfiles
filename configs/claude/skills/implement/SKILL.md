@@ -66,12 +66,13 @@ When fixing a defect:
 
 ## Feature Implementation Workflow
 
-1. Write a simple failing test for a small part of the feature
-2. Implement the bare minimum to make it pass
-3. Run tests to confirm they pass (Green)
-4. Make any necessary structural changes (Tidy First)
-5. Commit structural changes separately (use `commit` skill)
-6. Add another test for the next small increment
-7. Repeat until feature is complete
+Build features incrementally — one test at a time, never in batch. Follow the 0-1-N progression:
 
-Always write one test at a time, make it run, then improve structure. Run all tests (except long-running tests) each time.
+1. **0-case (empty/base)**: Write a failing test for the simplest case (empty input, zero state). Implement the minimum to pass.
+2. **1-case (single/minimal)**: Write a failing test for a single valid input. Extend the implementation.
+3. **N-case (multiple/general)**: Write a failing test for the general case. Implement the real algorithm.
+4. **Boundary tests**: After the core logic works (Green), add edge case tests to strengthen confidence. These should pass without code changes.
+5. **Refactor**: Consolidate test structure (e.g., table-driven tests) and improve code quality. Commit structural changes separately (use `commit` skill).
+6. Repeat for the next increment of the feature.
+
+Each cycle is: write ONE failing test → make it pass → run ALL tests → commit. Never write multiple tests before implementing. This incremental approach catches design issues early and keeps each step small and reversible.

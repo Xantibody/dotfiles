@@ -52,6 +52,16 @@ After all steps are complete:
 3. Report a summary of what was implemented and the commits created
 4. Recommend creating a decision record: suggest the user run `/decision-record` to document the rationale and outcomes
 
+## Error Recovery
+
+When encountering errors during execution:
+
+- **Test failures**: Read the error message, fix the code, re-run tests. Do not skip failing tests.
+- **Dependency issues**: Install missing dependencies (`nix develop`, `npm install`, `go mod download`) and retry.
+- **Plan ambiguity**: Choose the simpler interpretation consistent with the plan's intent. Document the decision in the commit message.
+- **Conflicting steps**: If a later step contradicts an earlier one, follow the later step (it likely reflects updated thinking).
+- **External service unavailable**: Skip the step, note it in the final summary, and continue with remaining steps.
+
 ## Quality Gates
 
 Each logical unit of work must pass these gates before proceeding:
