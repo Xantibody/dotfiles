@@ -130,18 +130,18 @@ refactor(auth): simplify session handling
 
 When creating a commit, infer the scope from `git diff --cached --name-only` (staged files) using these path-based rules:
 
-| Path Pattern | Inferred Scope |
-|---|---|
-| `flake.lock` | `deps` |
-| `flake.nix` | `flake` |
-| `.github/renovate*` | `renovate` |
-| `configs/<name>/` | `<name>` (e.g., `claude`, `k9s`) |
+| Path Pattern                               | Inferred Scope                   |
+| ------------------------------------------ | -------------------------------- |
+| `flake.lock`                               | `deps`                           |
+| `flake.nix`                                | `flake`                          |
+| `.github/renovate*`                        | `renovate`                       |
+| `configs/<name>/`                          | `<name>` (e.g., `claude`, `k9s`) |
 | `modules/home-manager/programs/<name>.nix` | `<name>` (e.g., `fish`, `kitty`) |
-| `modules/home-manager/programs/<name>/` | `<name>` (e.g., `nixcats`) |
-| `modules/home-manager/home/` | `home` |
-| `modules/darwin/` | `darwin` |
-| `modules/nixos/` | `nixos` |
-| `overlays/` | `overlays` |
+| `modules/home-manager/programs/<name>/`    | `<name>` (e.g., `nixcats`)       |
+| `modules/home-manager/home/`               | `home`                           |
+| `modules/darwin/`                          | `darwin`                         |
+| `modules/nixos/`                           | `nixos`                          |
+| `overlays/`                                | `overlays`                       |
 
 ### Multi-Scope Resolution
 

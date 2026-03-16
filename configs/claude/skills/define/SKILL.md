@@ -48,6 +48,7 @@ Delegate investigations to sub-agents in parallel where possible:
 All sub-agents must be read-only — no file modifications.
 
 After investigation, reflect on completeness:
+
 - Have all relevant files and patterns been identified?
 - Is the scope clearly understood?
 - Are there any technical blockers?
@@ -58,14 +59,15 @@ If gaps remain, expand the investigation scope or ask the user.
 
 Resolve ambiguities through structured interaction. Score each question on four dimensions (1-5 each):
 
-| Dimension | What it measures |
-|---|---|
-| Design branching | How many implementation paths does this decision create? |
-| Irreversibility | How costly is it to change this decision later? |
+| Dimension                   | What it measures                                           |
+| --------------------------- | ---------------------------------------------------------- |
+| Design branching            | How many implementation paths does this decision create?   |
+| Irreversibility             | How costly is it to change this decision later?            |
 | Investigation impossibility | Can this be answered by reading code, or only by the user? |
-| Effort impact | How much does this change the implementation effort? |
+| Effort impact               | How much does this change the implementation effort?       |
 
 Rules for clarification:
+
 - Present high-score questions first
 - Use AskUserQuestion tool for all interactions (2-4 structured options per question)
 - Do not proceed without clear answers to high-score questions
@@ -97,10 +99,10 @@ Create the requirements document and task breakdown.
 
 ## Functional Requirements
 
-| ID | Requirement | Priority |
-|---|---|---|
-| FR-001 | ... | Mandatory |
-| FR-002 | ... | Optional |
+| ID     | Requirement | Priority  |
+| ------ | ----------- | --------- |
+| FR-001 | ...         | Mandatory |
+| FR-002 | ...         | Optional  |
 
 ## Non-Functional Requirements
 
@@ -140,10 +142,10 @@ Break down the implementation into phases suitable for `/execute-plan` handoff:
 
 Before finalizing, verify the requirements document against these criteria:
 
-| Factor | Weight | What to check |
-|---|---|---|
-| Requirement clarity | 40% | All requirements documented with no ambiguity |
-| Technical feasibility | 30% | Feasibility confirmed with evidence from codebase |
-| Stakeholder alignment | 30% | All critical questions answered by user |
+| Factor                | Weight | What to check                                     |
+| --------------------- | ------ | ------------------------------------------------- |
+| Requirement clarity   | 40%    | All requirements documented with no ambiguity     |
+| Technical feasibility | 30%    | Feasibility confirmed with evidence from codebase |
+| Stakeholder alignment | 30%    | All critical questions answered by user           |
 
 If the weighted score falls below 80%, identify gaps and address them before finalizing.
