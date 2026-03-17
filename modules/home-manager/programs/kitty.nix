@@ -9,6 +9,7 @@
   settings = {
     shell = "${pkgs.fish}/bin/fish";
     macos_option_as_alt = true;
+    enabled_layouts = "splits:split_axis=auto";
 
     hide_window_decorations = "titlebar-only";
     window_border_width = 0.5;
@@ -77,6 +78,14 @@
     "cmd+7" = "goto_tab 7";
     "cmd+8" = "goto_tab 8";
     "cmd+9" = "goto_tab 9";
+    "cmd+enter" = "launch --cwd=current --location=split";
+    "cmd+\\" = "launch --cwd=current --location=vsplit";
+    "cmd+-" = "launch --cwd=current --location=hsplit";
+    "cmd+w" = "close_tab";
+    "ctrl+shift+enter" = "launch --cwd=current --location=split";
+    "ctrl+shift+\\" = "launch --cwd=current --location=vsplit";
+    "ctrl+shift+-" = "launch --cwd=current --location=hsplit";
+    "ctrl+shift+w" = "close_tab";
   };
 
 }
