@@ -42,7 +42,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "Kaiser-Yang";
         repo = "blink-cmp-dictionary";
-        # renovate: datasource=git-refs depName=Kaiser-Yang/blink-cmp-dictionary
+        # renovate: datasource=git-refs depName=Kaiser-Yang/blink-cmp-dictionary currentValue=master
         rev = "944b3b215b01303672d4213758db7c5c5a1e3c92";
         sha256 = "sha256-e8ucufhLdNnE8fBjSLaTJngEj1valYE9upH78y+wj4I=";
       };
@@ -64,7 +64,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "ysmb-wtsg";
         repo = "in-and-out.nvim";
-        # renovate: datasource=git-refs depName=ysmb-wtsg/in-and-out.nvim
+        # renovate: datasource=git-refs depName=ysmb-wtsg/in-and-out.nvim currentValue=master
         rev = "03456b9c49365a28732378a7f2a72a613154e042";
         sha256 = "sha256-QPEvWOTKzscUs+vHQ0LJ/BNBd9buMgG/jkmjg7JlhT8=";
       };
@@ -87,7 +87,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "thinca";
         repo = "vim-qfreplace";
-        # renovate: datasource=git-refs depName=thinca/vim-qfreplace
+        # renovate: datasource=git-refs depName=thinca/vim-qfreplace currentValue=master
         rev = "707a895f9f86eeed106f64da0bd9fa07b3cd9cee";
         sha256 = "sha256-6G89NznCOumLIJb2l8szKGIWMr3CtpeHUfdkzEOCo8U=";
       };
@@ -98,7 +98,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "ixru";
         repo = "nvim-markdown";
-        # renovate: datasource=git-refs depName=ixru/nvim-markdown
+        # renovate: datasource=git-refs depName=ixru/nvim-markdown currentValue=master
         rev = "37850581fdaec153ce84af677d43bf8fce60813a";
         sha256 = "sha256-wjYTO9WqdDEbH4L3dsHqOoeQf0y/Uo6WX94w/D4EuGU=";
       };
@@ -133,7 +133,7 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "Xantibody";
         repo = "neogit";
-        # renovate: datasource=git-refs depName=Xantibody/neogit
+        # renovate: datasource=git-refs depName=Xantibody/neogit currentValue=master
         rev = "ec664733e7c871714578d5a9599d863ea7cbd12f";
         sha256 = "sha256-YwTcuoR/G+5tIJjq5bwkNBL/OUPjAC0jc7R+SdHsULk=";
       };

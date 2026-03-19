@@ -12,10 +12,10 @@
       customType: "regex",
       managerFilePatterns: ["**/*.nix"],
       matchStrings: [
-        '# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)\\s+rev\\s*=\\s*"(?<currentDigest>[a-f0-9]{40})"',
+        '# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)( currentValue=(?<currentValue>[^\\s]+))?\\s+rev\\s*=\\s*"(?<currentDigest>[a-f0-9]{40})"',
       ],
       packageNameTemplate: "https://github.com/{{{depName}}}",
-      currentValueTemplate: "HEAD",
+      currentValueTemplate: "{{#if currentValue}}{{{currentValue}}}{{else}}main{{/if}}",
     },
   ],
   packageRules: [
