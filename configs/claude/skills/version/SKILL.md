@@ -123,3 +123,93 @@ When asked to determine or recommend a version number, the agent MUST:
 2. Analyze commits since the last release using Conventional Commits format.
 3. Apply Semantic Versioning rules to recommend the next version.
 4. Explain the reasoning behind the recommendation.
+5. Ask the user for confirmation, then create an annotated git tag with a detailed changelog.
+
+## Tag Creation with Changelog
+
+After the user confirms the recommended version, create an annotated git tag that includes a structured changelog of all changes since the last release. This changelog serves as a permanent, browsable release summary attached to the tag itself (`git tag -n999` or `git show <tag>`).
+
+### Changelog Generation Steps
+
+1. **Collect commits** between the last version tag and HEAD.
+2. **Parse each commit** using Conventional Commits format (`type(scope): description`).
+3. **Group commits by type** in the following display order (skip empty groups):
+   - `feat` → Features
+   - `fix` → Bug Fixes
+   - `perf` → Performance Improvements
+   - `refactor` → Refactoring
+   - `docs` → Documentation
+   - `style` → Code Style
+   - `test` → Tests
+   - `build` → Build System
+   - `ci` → CI/CD
+   - `chore` → Chores
+   - `revert` → Reverts
+4. **Within each group**, list commits with scope (if present) and description.
+5. **Highlight breaking changes** at the top of the changelog, before the grouped sections.
+
+### Tag Message Format
+
+```text
+v<VERSION>
+
+Release Date: <YYYY-MM-DD>
+
+[BREAKING CHANGES (if any)]
+
+## Features
+- (scope): description (commit-hash)
+- description (commit-hash)
+
+## Bug Fixes
+- (scope): description (commit-hash)
+
+## Refactoring
+- (scope): description (commit-hash)
+
+...
+```
+
+**Example:**
+
+```text
+v1.3.0
+
+Release Date: 2026-03-19
+
+## Features
+- (kitty): add split pane and close tab keybindings (f6a857c)
+- (claude): add define skill for requirements definition (423df4e)
+
+## Bug Fixes
+- (claude): prevent execute-plan skill from stalling between phases (6953113)
+- (darwin): use postActivation for default browser setting (4f53fb6)
+
+## Refactoring
+- (claude): improve skill content based on evaluation results (8cdc5b9)
+- (claude): improve skill descriptions, content, and consistency (6d23936)
+
+## Code Style
+- (claude): apply nix fmt formatting (f4191fa)
+
+## Build System
+- (flake): add python to devShell for skill-creator scripts (4b46080)
+
+## Chores
+- (renovate): update schedule and add missing flake inputs (ec32454)
+```
+
+### Creating the Tag
+
+Use `git tag -a` with a HEREDOC to pass the multi-line message:
+
+```bash
+git tag -a "v<VERSION>" -m "$(cat <<'EOF'
+<changelog content>
+EOF
+)"
+```
+
+If no previous tag exists, treat all commits as the initial release changelog. For repositories with many commits, focus on commits that follow Conventional Commits format and note the total count of non-conventional commits separately.
+
+After creating the tag, confirm success by running `git tag -l "v<VERSION>"` and display the tag message with `git tag -n999 "v<VERSION>"`.
