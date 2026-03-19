@@ -20,7 +20,7 @@ let
         owner = "vim-skk";
         repo = "skkeleton";
         # renovate: datasource=git-refs depName=vim-skk/skkeleton
-        rev = "3e019b331fbf9bd1d4539e7bd650a1c543125cee";
+        rev = "158ae753bc5099ab12537c23152926c42b1f7c3a";
         sha256 = "sha256-VDu8WypgpzY+Dd8KIPJXsvtBEwt5YiuGXn6HAUKCbIQ=";
       };
     };
@@ -43,7 +43,7 @@ let
         owner = "Kaiser-Yang";
         repo = "blink-cmp-dictionary";
         # renovate: datasource=git-refs depName=Kaiser-Yang/blink-cmp-dictionary currentValue=master
-        rev = "944b3b215b01303672d4213758db7c5c5a1e3c92";
+        rev = "35142bba869b869715e91a99d2f46bcf93fca4ae";
         sha256 = "sha256-e8ucufhLdNnE8fBjSLaTJngEj1valYE9upH78y+wj4I=";
       };
     };
@@ -77,7 +77,7 @@ let
         owner = "rachartier";
         repo = "tiny-code-action.nvim";
         # renovate: datasource=git-refs depName=rachartier/tiny-code-action.nvim
-        rev = "2215a7311b6eac9535695167c3a38d10c3eab444";
+        rev = "8e72efa075ba3154bbc4c7d1db532b03b4e68373";
         sha256 = "sha256-c3wH7Zwy0oChAuyDToHHJWOOvEALtl9FDDKNcdCCTd8=";
       };
     };
@@ -111,7 +111,7 @@ let
         owner = "rachartier";
         repo = "tiny-inline-diagnostic.nvim";
         # renovate: datasource=git-refs depName=rachartier/tiny-inline-diagnostic.nvim
-        rev = "ecce93ff7db4461e942c03e0fcc64bd785df4057";
+        rev = "ba133b3e932416e4b9507095731a6d7276878fe8";
         sha256 = "sha256-KWUyn6fJDQ+jSBdO9gwN9mmufgIALwjm5GboK6y5ksM=";
       };
     };
@@ -134,7 +134,7 @@ let
         owner = "Xantibody";
         repo = "neogit";
         # renovate: datasource=git-refs depName=Xantibody/neogit currentValue=master
-        rev = "ec664733e7c871714578d5a9599d863ea7cbd12f";
+        rev = "73870229977fdd8747025820e15e98cfde787b9c";
         sha256 = "sha256-YwTcuoR/G+5tIJjq5bwkNBL/OUPjAC0jc7R+SdHsULk=";
       };
       checkInputs = [ pkgs.vimPlugins.diffview-nvim ];
