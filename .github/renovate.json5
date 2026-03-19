@@ -4,6 +4,10 @@
   platformAutomerge: false,
   schedule: ["before 6am every weekday", "before 6am on sunday"],
   automergeSchedule: ["before 6am on saturday"],
+  lockFileMaintenance: {
+    enabled: true,
+    schedule: ["before 6am on monday"],
+  },
   nix: {
     enabled: true,
   },
