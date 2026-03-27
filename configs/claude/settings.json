@@ -28,6 +28,18 @@
     "type": "command",
     "command": "~/.claude/statusline.sh"
   },
+  "PostToolUse": [
+    {
+      "matcher": "Write|Edit",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "nix fmt",
+          "timeout": 30
+        }
+      ]
+    }
+  ],
   "env": {
     "ENABLE_TOOL_SEARCH": "true",
     "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
