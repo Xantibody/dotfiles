@@ -1,11 +1,11 @@
 ---
 name: execute-plan
-description: Execute a previously created plan autonomously with continuous verification. Use this skill when the user asks to execute a plan from the ./plans/ directory, wants to run a planned implementation end-to-end, or says something like "execute the plan" or "run the plan". Works best after /clear to start with full context capacity.
+description: Execute a multi-file plan from ./plans/ autonomously with continuous verification. Plan files are numbered (e.g., 01-setup.md, 02-implement.md) and executed in order as sequential steps of a single plan. Use this skill when the user asks to execute a plan, run a planned implementation, or says "execute the plan" or "run the plan". Works best after /clear to start with full context capacity.
 ---
 
 # Execute Plan
 
-Use this skill to execute a plan that was created in a previous session.
+Execute a plan created in a previous session. All files in `./plans/` together form one plan — each file is a sequential step, ordered by its numeric prefix.
 This skill is designed for use after clearing context (`/clear`) to start fresh with full capacity.
 
 ## Golden Rule: Never Send a Text-Only Response
@@ -16,16 +16,17 @@ Until the entire plan is complete, **every single response MUST contain at least
 
 ## Workflow
 
-### 1. Discover and Select Plan
+### 1. Discover and Order Plan Files
 
-- Read all files in `./plans/` directory
-- If multiple plan files exist, present a summary of each plan and ask the user which one to execute
-- If only one plan file exists, confirm with the user before proceeding
+- List all files in `./plans/` directory
+- Sort files by numeric prefix to determine execution order (e.g., `01-setup-database.md` → `02-add-api-endpoints.md` → `03-write-tests.md`)
+- If any files lack a numeric prefix, sort them alphabetically and append after numbered files
+- List the discovered plan files in execution order and confirm with the user before proceeding
 
 ### 2. Validate Plan
 
-- Read the selected plan file thoroughly
-- Identify all tasks and their dependencies
+- Read all plan files in sequence — they form a single continuous plan
+- Identify all tasks and their dependencies across files
 - Confirm the current branch state is appropriate for the work
 
 ### 3. Execute Plan Autonomously
@@ -59,7 +60,6 @@ After all steps are complete:
 1. Run `/verify` skill one final time
 2. Confirm all tests pass
 3. Report a summary of what was implemented and the commits created
-4. Recommend creating a decision record: suggest the user run `/decision-record` to document the rationale and outcomes
 
 ## Error Recovery
 

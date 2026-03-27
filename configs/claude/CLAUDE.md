@@ -16,6 +16,12 @@ When creating implementation plans (plan mode), always consult and apply princip
 - `design`: Unix/Linux Philosophy (CLI tools), Twelve-Factor App (web apps)
 - `test-design`: 0-1-N Rule, behavior-focused testing, refactoring resistance
 
+Plan files in `./plans/` MUST be named with a numeric prefix and descriptive title to indicate execution order:
+
+- Format: `NN-descriptive-title.md` (e.g., `01-setup-database.md`, `02-add-api-endpoints.md`)
+- The numeric prefix determines execution order in `/execute-plan`
+- The title should clearly describe the content of that plan step
+
 # Skills
 
 | Skill             | When to use                                          |
@@ -27,7 +33,6 @@ When creating implementation plans (plan mode), always consult and apply princip
 | `test-design`     | Design test cases and test strategy                  |
 | `execute-plan`    | Execute a plan from `./plans/` autonomously          |
 | `define`          | Requirements definition before implementation        |
-| `decision-record` | Document rationale and outcomes after plan execution |
 | `version`         | Determine next version number for release            |
 
 # Branch Management
