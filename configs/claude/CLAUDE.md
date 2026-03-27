@@ -33,6 +33,7 @@ Plan files in `./plans/` MUST be named with a numeric prefix and descriptive tit
 | `test-design`     | Design test cases and test strategy                  |
 | `execute-plan`    | Execute a plan from `./plans/` autonomously          |
 | `define`          | Requirements definition before implementation        |
+| `refactor`        | Analyze codebase and create refactoring plan         |
 | `version`         | Determine next version number for release            |
 
 # Branch Management
