@@ -20,7 +20,7 @@ let
         owner = "vim-skk";
         repo = "skkeleton";
         # renovate: datasource=git-refs depName=vim-skk/skkeleton
-        rev = "158ae753bc5099ab12537c23152926c42b1f7c3a";
+        rev = "d593d7952e271ba67795cb556871f459aa5da0f9";
         sha256 = "sha256-VDu8WypgpzY+Dd8KIPJXsvtBEwt5YiuGXn6HAUKCbIQ=";
       };
     };
