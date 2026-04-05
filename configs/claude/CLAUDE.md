@@ -24,17 +24,17 @@ Plan files in `./plans/` MUST be named with a numeric prefix and descriptive tit
 
 # Skills
 
-| Skill             | When to use                                          |
-| ----------------- | ---------------------------------------------------- |
-| `commit`          | Commit with Conventional Commits format              |
-| `verify`          | Run static analysis, tests, and format               |
-| `implement`       | Feature implementation or bug fixing with TDD        |
-| `design`          | Architecture and design consultation                 |
-| `test-design`     | Design test cases and test strategy                  |
-| `execute-plan`    | Execute a plan from `./plans/` autonomously          |
-| `define`          | Requirements definition before implementation        |
-| `refactor`        | Analyze codebase and create refactoring plan         |
-| `version`         | Determine next version number for release            |
+| Skill          | When to use                                   |
+| -------------- | --------------------------------------------- |
+| `commit`       | Commit with Conventional Commits format       |
+| `verify`       | Run static analysis, tests, and format        |
+| `implement`    | Feature implementation or bug fixing with TDD |
+| `design`       | Architecture and design consultation          |
+| `test-design`  | Design test cases and test strategy           |
+| `execute-plan` | Execute a plan from `./plans/` autonomously   |
+| `define`       | Requirements definition before implementation |
+| `refactor`     | Analyze codebase and create refactoring plan  |
+| `version`      | Determine next version number for release     |
 
 # Branch Management
 

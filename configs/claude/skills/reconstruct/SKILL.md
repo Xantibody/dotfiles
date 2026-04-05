@@ -38,11 +38,11 @@ Show the user the commit list and changed files. If there are uncommitted change
 
 Classify the changed files into logical commit groups. Criteria:
 
-| Perspective | Examples |
-|-------------|----------|
-| Layer | Domain / Application / Infrastructure / Presentation |
-| Change type | refactor / feat / fix / test / docs / chore |
-| Feature unit | auth module / API endpoint / UI component |
+| Perspective  | Examples                                             |
+| ------------ | ---------------------------------------------------- |
+| Layer        | Domain / Application / Infrastructure / Presentation |
+| Change type  | refactor / feat / fix / test / docs / chore          |
+| Feature unit | auth module / API endpoint / UI component            |
 
 Present the proposed grouping to the user with a recommended commit order. Principles:
 
@@ -66,11 +66,13 @@ This is a destructive operation. Before executing:
 4. **Get explicit approval from the user** before proceeding.
 
 Then execute:
+
 ```bash
 git reset --soft <base>
 ```
 
 After reset, all changes are staged. Unstage everything to allow selective re-staging:
+
 ```bash
 git restore --staged .
 ```
@@ -82,12 +84,15 @@ Verify with `git status`.
 For each proposed logical group, repeat:
 
 1. **Stage files** for this group:
+
    ```bash
    git add <file1> <file2> ...
    ```
+
    If only part of a file belongs to this group, inform the user and suggest they run `git add -p <file>` manually (interactive command, cannot be run by Claude Code).
 
 2. **Review staged changes** with the user:
+
    ```bash
    git diff --cached --stat
    ```
@@ -95,6 +100,7 @@ For each proposed logical group, repeat:
 3. **Create the commit** using the `commit` skill to follow Conventional Commits format.
 
 4. **Check remaining changes**:
+
    ```bash
    git status
    ```

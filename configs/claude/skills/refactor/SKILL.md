@@ -30,13 +30,13 @@ Read the codebase thoroughly before forming opinions:
 
 Identify the **type of mess** — not all technical debt is the same:
 
-| Pattern | Symptom | Typical Cause |
-|---|---|---|
-| God object/file | One file does everything | Features added to the nearest file |
-| Scattered logic | Same concept spread across many files | No clear ownership of responsibilities |
-| Tight coupling | Changing A breaks B, C, D | Direct dependencies without interfaces |
-| Mixed concerns | UI logic in data layer, business logic in controllers | No layer discipline |
-| Copy-paste variants | Similar code repeated with small differences | Quick fixes without abstraction |
+| Pattern             | Symptom                                               | Typical Cause                          |
+| ------------------- | ----------------------------------------------------- | -------------------------------------- |
+| God object/file     | One file does everything                              | Features added to the nearest file     |
+| Scattered logic     | Same concept spread across many files                 | No clear ownership of responsibilities |
+| Tight coupling      | Changing A breaks B, C, D                             | Direct dependencies without interfaces |
+| Mixed concerns      | UI logic in data layer, business logic in controllers | No layer discipline                    |
+| Copy-paste variants | Similar code repeated with small differences          | Quick fixes without abstraction        |
 
 ### 2. Measure and Prioritize
 
@@ -71,6 +71,7 @@ Different parts of the codebase may need different approaches. Present options a
 - **Connascence**: Identify the type and strength of coupling between components to guide decoupling decisions.
 
 For each area of the codebase, recommend an approach and explain the tradeoff:
+
 - What improves (testability, readability, changeability)
 - What it costs (complexity, learning curve, migration effort)
 
@@ -104,16 +105,21 @@ Each plan file should contain:
 # Step title
 
 ## Goal
+
 What this step achieves and why it comes at this point in the sequence.
 
 ## Prerequisites
+
 Which previous steps must be complete. What tests must be passing.
 
 ## Tasks
+
 Concrete implementation tasks with enough detail to execute.
 
 ## Verification
+
 How to confirm this step succeeded without breaking anything.
+
 - Which tests to run
 - What behavior to manually verify
 ```
