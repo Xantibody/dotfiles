@@ -20,7 +20,7 @@ let
         owner = "vim-skk";
         repo = "skkeleton";
         # renovate: datasource=git-refs depName=vim-skk/skkeleton
-        rev = "d593d7952e271ba67795cb556871f459aa5da0f9";
+        rev = "b530eac5a859ce2f8fa4d99fa5cd83b9d3199086";
         sha256 = "sha256-VDu8WypgpzY+Dd8KIPJXsvtBEwt5YiuGXn6HAUKCbIQ=";
       };
     };
@@ -111,7 +111,7 @@ let
         owner = "rachartier";
         repo = "tiny-inline-diagnostic.nvim";
         # renovate: datasource=git-refs depName=rachartier/tiny-inline-diagnostic.nvim
-        rev = "ba133b3e932416e4b9507095731a6d7276878fe8";
+        rev = "57a0eb84b2008c76e77930639890d9874195b1e1";
         sha256 = "sha256-KWUyn6fJDQ+jSBdO9gwN9mmufgIALwjm5GboK6y5ksM=";
       };
     };
