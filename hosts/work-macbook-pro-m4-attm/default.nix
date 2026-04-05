@@ -71,6 +71,11 @@ nix-darwin.lib.darwinSystem {
                 self
                 ;
             })
+            {
+              programs.zen-browser.profiles.r-aizawa.extensions.packages = [
+                inputs.kotdiff.packages.${system}.default
+              ];
+            }
           ];
         };
       };

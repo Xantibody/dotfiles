@@ -61,6 +61,7 @@
     llm-agents.url = "github:numtide/llm-agents.nix";
     arto.url = "github:arto-app/Arto";
     ichigyo-ls.url = "github:Xantibody/ichigyo-ls";
+    kotdiff.url = "github:Xantibody/kotdiff";
   };
   outputs =
     {
