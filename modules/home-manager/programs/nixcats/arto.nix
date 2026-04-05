@@ -7,7 +7,7 @@
       owner = "arto-app";
       repo = "arto.vim";
       # renovate: datasource=git-refs depName=arto-app/arto.vim
-      rev = "b05936238ff835ceca43442bf4ab8e843e73815c";
+      rev = "5a00f0e977a035f8b098e0c4142e968a64f8efd2";
       sha256 = "sha256-/Rk/t7Hm/VTa1KQptzd+1sZIiRR2l++tA98DSe9uwV4=";
     };
   };
