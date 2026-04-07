@@ -12,11 +12,9 @@ let
   commonHomeModules = import ../home-modules.nix { inherit inputs; };
 
   username = "raizawa";
-  system = "x86_64-linux";
   homeDirectory = "/home/${username}";
 in
 nixpkgs.lib.nixosSystem {
-  inherit system;
   specialArgs = {
     inherit
       username
@@ -28,8 +26,10 @@ nixpkgs.lib.nixosSystem {
 
   modules = [
     {
+      nixpkgs.hostPlatform = "x86_64-linux";
       nixpkgs.overlays =
         commonOverlays ++ [ inputs.firefox-addons.overlays.default ] ++ (import ../../overlays);
+      system.stateVersion = "24.11";
     }
     ../../modules/nixos
     ../../modules/nixos/hardware-configuration.nix
