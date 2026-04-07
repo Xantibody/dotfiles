@@ -376,11 +376,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1775426576,
-        "narHash": "sha256-+LJ8rgGFZ49hfFp0pzQAqm67rvG0boAAfXQQ8Veu3n4=",
+        "lastModified": 1775529592,
+        "narHash": "sha256-stE/l3bjbLlYOHnzeBETEhX2+mgay2ReRnjZtyJF+aM=",
         "owner": "Xantibody",
         "repo": "kotdiff",
-        "rev": "4f219a40fddb2e11af7446a683b21eaf0b5a0605",
+        "rev": "8500cac7a8e7c3bbb57781eb3c0bb907a4739ca4",
         "type": "github"
       },
       "original": {
