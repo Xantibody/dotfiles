@@ -198,7 +198,6 @@ in
               tinymist
               typescript-go
               typos-lsp
-              nodePackages.vscode-json-languageserver
               vscode-langservers-extracted
               yaml-language-server
             ];
