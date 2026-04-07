@@ -8,10 +8,10 @@ final: prev: {
       owner = "wachikun";
       repo = "yaskkserv2";
       rev = "master"; # 固定したい場合はコミットSHAに
-      hash = "sha256-d037sMzr/9fa0Osl0ciQJT6FjdGlxqE7F/K+Iu+HJlw=";
+      hash = "sha256-6XE/ujU+B/gTd+S4LWQRFk9JbZz1z9SR+Nr7cARqLtY=";
     };
 
-    cargoHash = "sha256-pj08zWyaXTeg6hffFzQo0cH8k1/A8npxwdLtgHnxUpE=";
+    cargoHash = "sha256-uetEHSv1HMU7KfAPwki1EiaR6zmgRehJL2OGQ/KC/Xc=";
 
     nativeBuildInputs = [ prev.pkg-config ];
     buildInputs = [ prev.openssl ];
