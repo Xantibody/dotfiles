@@ -77,7 +77,7 @@ let
         owner = "rachartier";
         repo = "tiny-code-action.nvim";
         # renovate: datasource=git-refs depName=rachartier/tiny-code-action.nvim
-        rev = "8e72efa075ba3154bbc4c7d1db532b03b4e68373";
+        rev = "1c75d7e121ea38bf362d939ddb9064ca9bb6884f";
         sha256 = "sha256-PAwpKpvPOJuqN6XNWSQTQ14XF3aalZ2HXqx2mugzC5I=";
       };
     };
