@@ -1,1 +1,59 @@
+[skkeleton]
+src.git = "https://github.com/vim-skk/skkeleton.git"
+src.branch = "main"
+fetch.github = "vim-skk/skkeleton"
 
+[blink-cmp-skkeleton]
+src.git = "https://github.com/Xantibody/blink-cmp-skkeleton.git"
+src.branch = "main"
+fetch.github = "Xantibody/blink-cmp-skkeleton"
+
+[blink-cmp-dictionary]
+src.git = "https://github.com/Kaiser-Yang/blink-cmp-dictionary.git"
+src.branch = "master"
+fetch.github = "Kaiser-Yang/blink-cmp-dictionary"
+
+[smooth-cursor]
+src.git = "https://github.com/gen740/SmoothCursor.nvim.git"
+src.branch = "main"
+fetch.github = "gen740/SmoothCursor.nvim"
+
+[in-and-out]
+src.git = "https://github.com/ysmb-wtsg/in-and-out.nvim.git"
+src.branch = "master"
+fetch.github = "ysmb-wtsg/in-and-out.nvim"
+
+[tiny-code-action]
+src.git = "https://github.com/rachartier/tiny-code-action.nvim.git"
+src.branch = "main"
+fetch.github = "rachartier/tiny-code-action.nvim"
+
+[vim-qfreplace]
+src.git = "https://github.com/thinca/vim-qfreplace.git"
+src.branch = "master"
+fetch.github = "thinca/vim-qfreplace"
+
+[nvim-markdown]
+src.git = "https://github.com/ixru/nvim-markdown.git"
+src.branch = "master"
+fetch.github = "ixru/nvim-markdown"
+
+[tiny-inline-diagnostic]
+src.git = "https://github.com/rachartier/tiny-inline-diagnostic.nvim.git"
+src.branch = "main"
+fetch.github = "rachartier/tiny-inline-diagnostic.nvim"
+
+[tiny-glimmer]
+src.git = "https://github.com/rachartier/tiny-glimmer.nvim.git"
+src.branch = "main"
+fetch.github = "rachartier/tiny-glimmer.nvim"
+
+[neogit]
+src.git = "https://github.com/Xantibody/neogit.git"
+src.branch = "master"
+fetch.github = "Xantibody/neogit"
+
+[arto-vim]
+src.git = "https://github.com/arto-app/arto.vim.git"
+src.branch = "main"
+fetch.github = "arto-app/arto.vim"

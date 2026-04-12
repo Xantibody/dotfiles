@@ -6,5 +6,148 @@
   dockerTools,
 }:
 {
-
+  arto-vim = {
+    pname = "arto-vim";
+    version = "5a00f0e977a035f8b098e0c4142e968a64f8efd2";
+    src = fetchFromGitHub {
+      owner = "arto-app";
+      repo = "arto.vim";
+      rev = "5a00f0e977a035f8b098e0c4142e968a64f8efd2";
+      fetchSubmodules = false;
+      sha256 = "sha256-Pet/wjh0Pv6HMPRKPsgNktpMIjqwiFW2zr/IeZ5Ht84=";
+    };
+    date = "2026-03-28";
+  };
+  blink-cmp-dictionary = {
+    pname = "blink-cmp-dictionary";
+    version = "35142bba869b869715e91a99d2f46bcf93fca4ae";
+    src = fetchFromGitHub {
+      owner = "Kaiser-Yang";
+      repo = "blink-cmp-dictionary";
+      rev = "35142bba869b869715e91a99d2f46bcf93fca4ae";
+      fetchSubmodules = false;
+      sha256 = "sha256-idDHERqdqKB8/we00oVEo1sTDqrwPRTsuWmmG0ISeoE=";
+    };
+    date = "2026-02-26";
+  };
+  blink-cmp-skkeleton = {
+    pname = "blink-cmp-skkeleton";
+    version = "69edc70d5003e0a3e9a5fc396d9a2f3049f03873";
+    src = fetchFromGitHub {
+      owner = "Xantibody";
+      repo = "blink-cmp-skkeleton";
+      rev = "69edc70d5003e0a3e9a5fc396d9a2f3049f03873";
+      fetchSubmodules = false;
+      sha256 = "sha256-zEghDbOZtUQrwSLh7B7w/IxmsLML/Dju7yJP38/VMog=";
+    };
+    date = "2026-01-30";
+  };
+  in-and-out = {
+    pname = "in-and-out";
+    version = "03456b9c49365a28732378a7f2a72a613154e042";
+    src = fetchFromGitHub {
+      owner = "ysmb-wtsg";
+      repo = "in-and-out.nvim";
+      rev = "03456b9c49365a28732378a7f2a72a613154e042";
+      fetchSubmodules = false;
+      sha256 = "sha256-QPEvWOTKzscUs+vHQ0LJ/BNBd9buMgG/jkmjg7JlhT8=";
+    };
+    date = "2025-08-16";
+  };
+  neogit = {
+    pname = "neogit";
+    version = "73870229977fdd8747025820e15e98cfde787b9c";
+    src = fetchFromGitHub {
+      owner = "Xantibody";
+      repo = "neogit";
+      rev = "73870229977fdd8747025820e15e98cfde787b9c";
+      fetchSubmodules = false;
+      sha256 = "sha256-tvIJEHv/R8I1W3FBAwZHmn92JgiibqQtR75V9wQFSsE=";
+    };
+    date = "2026-01-24";
+  };
+  nvim-markdown = {
+    pname = "nvim-markdown";
+    version = "37850581fdaec153ce84af677d43bf8fce60813a";
+    src = fetchFromGitHub {
+      owner = "ixru";
+      repo = "nvim-markdown";
+      rev = "37850581fdaec153ce84af677d43bf8fce60813a";
+      fetchSubmodules = false;
+      sha256 = "sha256-wjYTO9WqdDEbH4L3dsHqOoeQf0y/Uo6WX94w/D4EuGU=";
+    };
+    date = "2025-11-02";
+  };
+  skkeleton = {
+    pname = "skkeleton";
+    version = "b530eac5a859ce2f8fa4d99fa5cd83b9d3199086";
+    src = fetchFromGitHub {
+      owner = "vim-skk";
+      repo = "skkeleton";
+      rev = "b530eac5a859ce2f8fa4d99fa5cd83b9d3199086";
+      fetchSubmodules = false;
+      sha256 = "sha256-OhHlG3ngNbvUSNqS/MFJpYI/cfbkxSxTPo8EiSwW/MU=";
+    };
+    date = "2026-04-02";
+  };
+  smooth-cursor = {
+    pname = "smooth-cursor";
+    version = "12518b284e1e3f7c6c703b346815968e1620bee2";
+    src = fetchFromGitHub {
+      owner = "gen740";
+      repo = "SmoothCursor.nvim";
+      rev = "12518b284e1e3f7c6c703b346815968e1620bee2";
+      fetchSubmodules = false;
+      sha256 = "sha256-P0jGm5ODEVbtmqPGgDFBPDeuOF49CFq5x1PzubEJgaM=";
+    };
+    date = "2024-09-18";
+  };
+  tiny-code-action = {
+    pname = "tiny-code-action";
+    version = "1c75d7e121ea38bf362d939ddb9064ca9bb6884f";
+    src = fetchFromGitHub {
+      owner = "rachartier";
+      repo = "tiny-code-action.nvim";
+      rev = "1c75d7e121ea38bf362d939ddb9064ca9bb6884f";
+      fetchSubmodules = false;
+      sha256 = "sha256-MkC8zt+tLQ6tCt9B1rkYEUjQ4I2pwf0TNnm7rf0iRaA=";
+    };
+    date = "2026-04-11";
+  };
+  tiny-glimmer = {
+    pname = "tiny-glimmer";
+    version = "932e6c2cc4a43ce578f007db1f8f61ad6798f938";
+    src = fetchFromGitHub {
+      owner = "rachartier";
+      repo = "tiny-glimmer.nvim";
+      rev = "932e6c2cc4a43ce578f007db1f8f61ad6798f938";
+      fetchSubmodules = false;
+      sha256 = "sha256-Lgdeu3xRXKf7YcuPKPnVvECzQR+RzC0bM+AiilHLLVg=";
+    };
+    date = "2026-01-19";
+  };
+  tiny-inline-diagnostic = {
+    pname = "tiny-inline-diagnostic";
+    version = "57a0eb84b2008c76e77930639890d9874195b1e1";
+    src = fetchFromGitHub {
+      owner = "rachartier";
+      repo = "tiny-inline-diagnostic.nvim";
+      rev = "57a0eb84b2008c76e77930639890d9874195b1e1";
+      fetchSubmodules = false;
+      sha256 = "sha256-mJl6yuTH79QsfKRktBGzPOlnL1x3/KoOAWyDGGw/AwM=";
+    };
+    date = "2026-04-05";
+  };
+  vim-qfreplace = {
+    pname = "vim-qfreplace";
+    version = "707a895f9f86eeed106f64da0bd9fa07b3cd9cee";
+    src = fetchFromGitHub {
+      owner = "thinca";
+      repo = "vim-qfreplace";
+      rev = "707a895f9f86eeed106f64da0bd9fa07b3cd9cee";
+      fetchSubmodules = false;
+      sha256 = "sha256-6G89NznCOumLIJb2l8szKGIWMr3CtpeHUfdkzEOCo8U=";
+    };
+    date = "2024-06-14";
+  };
 }

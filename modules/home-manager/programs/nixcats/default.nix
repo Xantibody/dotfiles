@@ -10,133 +10,68 @@
 let
   utils = inputs.nixCats.utils;
   isDarwin = pkgs.stdenv.isDarwin;
-  arto = import ./arto.nix { inherit pkgs; };
+  sources = pkgs.callPackage ../../../../_sources/generated.nix { };
+  arto = import ./arto.nix { inherit pkgs sources; };
 
-  # Custom plugins that need to be built from source
+  # Custom plugins built from nvfetcher-managed sources
   customPlugins = {
     skkeleton = pkgs.vimUtils.buildVimPlugin {
       name = "skkeleton";
-      src = pkgs.fetchFromGitHub {
-        owner = "vim-skk";
-        repo = "skkeleton";
-        # renovate: datasource=git-refs depName=vim-skk/skkeleton
-        rev = "b530eac5a859ce2f8fa4d99fa5cd83b9d3199086";
-        sha256 = "sha256-OhHlG3ngNbvUSNqS/MFJpYI/cfbkxSxTPo8EiSwW/MU=";
-      };
+      inherit (sources.skkeleton) src;
     };
 
     blink-cmp-skkeleton = pkgs.vimUtils.buildVimPlugin {
       name = "blink-cmp-skkeleton";
-      src = pkgs.fetchFromGitHub {
-        owner = "Xantibody";
-        repo = "blink-cmp-skkeleton";
-        # renovate: datasource=git-refs depName=Xantibody/blink-cmp-skkeleton
-        rev = "69edc70d5003e0a3e9a5fc396d9a2f3049f03873";
-        sha256 = "sha256-zEghDbOZtUQrwSLh7B7w/IxmsLML/Dju7yJP38/VMog=";
-      };
+      inherit (sources.blink-cmp-skkeleton) src;
     };
 
     blink-cmp-dictionary = pkgs.vimUtils.buildVimPlugin {
       name = "blink-cmp-dictionary";
       doCheck = false;
-      src = pkgs.fetchFromGitHub {
-        owner = "Kaiser-Yang";
-        repo = "blink-cmp-dictionary";
-        # renovate: datasource=git-refs depName=Kaiser-Yang/blink-cmp-dictionary currentValue=master
-        rev = "35142bba869b869715e91a99d2f46bcf93fca4ae";
-        sha256 = "sha256-idDHERqdqKB8/we00oVEo1sTDqrwPRTsuWmmG0ISeoE=";
-      };
+      inherit (sources.blink-cmp-dictionary) src;
     };
 
     smooth-cursor = pkgs.vimUtils.buildVimPlugin {
       name = "SmoothCursor-nvim";
-      src = pkgs.fetchFromGitHub {
-        owner = "gen740";
-        repo = "SmoothCursor.nvim";
-        # renovate: datasource=git-refs depName=gen740/SmoothCursor.nvim
-        rev = "12518b284e1e3f7c6c703b346815968e1620bee2";
-        sha256 = "sha256-P0jGm5ODEVbtmqPGgDFBPDeuOF49CFq5x1PzubEJgaM=";
-      };
+      inherit (sources.smooth-cursor) src;
     };
 
     in-and-out = pkgs.vimUtils.buildVimPlugin {
       name = "in-and-out-nvim";
-      src = pkgs.fetchFromGitHub {
-        owner = "ysmb-wtsg";
-        repo = "in-and-out.nvim";
-        # renovate: datasource=git-refs depName=ysmb-wtsg/in-and-out.nvim currentValue=master
-        rev = "03456b9c49365a28732378a7f2a72a613154e042";
-        sha256 = "sha256-QPEvWOTKzscUs+vHQ0LJ/BNBd9buMgG/jkmjg7JlhT8=";
-      };
+      inherit (sources.in-and-out) src;
     };
 
     tiny-code-action = pkgs.vimUtils.buildVimPlugin {
       name = "tiny-code-action-nvim";
       doCheck = false;
-      src = pkgs.fetchFromGitHub {
-        owner = "rachartier";
-        repo = "tiny-code-action.nvim";
-        # renovate: datasource=git-refs depName=rachartier/tiny-code-action.nvim
-        rev = "8e72efa075ba3154bbc4c7d1db532b03b4e68373";
-        sha256 = "sha256-PAwpKpvPOJuqN6XNWSQTQ14XF3aalZ2HXqx2mugzC5I=";
-      };
+      inherit (sources.tiny-code-action) src;
     };
 
     vim-qfreplace = pkgs.vimUtils.buildVimPlugin {
       name = "vim-qfreplace";
-      src = pkgs.fetchFromGitHub {
-        owner = "thinca";
-        repo = "vim-qfreplace";
-        # renovate: datasource=git-refs depName=thinca/vim-qfreplace currentValue=master
-        rev = "707a895f9f86eeed106f64da0bd9fa07b3cd9cee";
-        sha256 = "sha256-6G89NznCOumLIJb2l8szKGIWMr3CtpeHUfdkzEOCo8U=";
-      };
+      inherit (sources.vim-qfreplace) src;
     };
 
     nvim-markdown = pkgs.vimUtils.buildVimPlugin {
       name = "nvim-markdown";
-      src = pkgs.fetchFromGitHub {
-        owner = "ixru";
-        repo = "nvim-markdown";
-        # renovate: datasource=git-refs depName=ixru/nvim-markdown currentValue=master
-        rev = "37850581fdaec153ce84af677d43bf8fce60813a";
-        sha256 = "sha256-wjYTO9WqdDEbH4L3dsHqOoeQf0y/Uo6WX94w/D4EuGU=";
-      };
+      inherit (sources.nvim-markdown) src;
     };
 
     tiny-inline-diagnostic = pkgs.vimUtils.buildVimPlugin {
       name = "tiny-inline-diagnostic-nvim";
       doCheck = false;
-      src = pkgs.fetchFromGitHub {
-        owner = "rachartier";
-        repo = "tiny-inline-diagnostic.nvim";
-        # renovate: datasource=git-refs depName=rachartier/tiny-inline-diagnostic.nvim
-        rev = "57a0eb84b2008c76e77930639890d9874195b1e1";
-        sha256 = "sha256-mJl6yuTH79QsfKRktBGzPOlnL1x3/KoOAWyDGGw/AwM=";
-      };
+      inherit (sources.tiny-inline-diagnostic) src;
     };
 
     tiny-glimmer = pkgs.vimUtils.buildVimPlugin {
       name = "tiny-glimmer-nvim";
-      src = pkgs.fetchFromGitHub {
-        owner = "rachartier";
-        repo = "tiny-glimmer.nvim";
-        # renovate: datasource=git-refs depName=rachartier/tiny-glimmer.nvim
-        rev = "932e6c2cc4a43ce578f007db1f8f61ad6798f938";
-        sha256 = "sha256-Lgdeu3xRXKf7YcuPKPnVvECzQR+RzC0bM+AiilHLLVg=";
-      };
+      inherit (sources.tiny-glimmer) src;
     };
 
     # Dogfooding: external diff integration branch
     neogit = pkgs.vimUtils.buildVimPlugin {
       name = "neogit";
-      src = pkgs.fetchFromGitHub {
-        owner = "Xantibody";
-        repo = "neogit";
-        # renovate: datasource=git-refs depName=Xantibody/neogit currentValue=master
-        rev = "73870229977fdd8747025820e15e98cfde787b9c";
-        sha256 = "sha256-tvIJEHv/R8I1W3FBAwZHmn92JgiibqQtR75V9wQFSsE=";
-      };
+      inherit (sources.neogit) src;
       checkInputs = [ pkgs.vimPlugins.diffview-nvim ];
       dependencies = [ pkgs.vimPlugins.plenary-nvim ];
       nvimSkipModules = [

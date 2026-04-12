@@ -1,0 +1,27 @@
+name: Update vim plugins
+
+on:
+  schedule:
+    - cron: "0 21 * * 0-4" # before 6am JST on weekdays (Mon-Fri)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: DeterminateSystems/nix-installer-action@main
+      - name: Run nvfetcher
+        run: nix run nixpkgs#nvfetcher
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore(deps): update vim-plugins"
+          title: "chore(deps): update vim-plugins"
+          body: "Automated vim plugin update via nvfetcher."
+          branch: nvfetcher/vim-plugins
+          labels: automerge
