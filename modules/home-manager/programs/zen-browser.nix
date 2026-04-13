@@ -15,6 +15,7 @@ in
       settings = {
         "extensions.autoDisableScopes" = 0;
         "zen.theme.content-element-separation" = 0;
+        "browser.translations.enable" = false;
       };
       extensions = {
         packages = [
