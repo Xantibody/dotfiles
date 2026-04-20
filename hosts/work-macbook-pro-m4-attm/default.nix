@@ -53,6 +53,7 @@ nix-darwin.lib.darwinSystem {
       environment.systemPackages = with pkgs; [
 
         meetingbar
+        zoom-us
       ];
     }
     {
