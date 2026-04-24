@@ -54,6 +54,21 @@ Never start new feature work directly on a non-default branch without confirming
 - Before moving to the next task, always ask if the user wants to commit the current changes.
 - When committing, always use `/commit` skill to follow Conventional Commits format.
 
+# Documentation Philosophy
+
+Each artifact answers a different question:
+
+| Artifact      | Answers | Rationale                                              |
+| ------------- | ------- | ------------------------------------------------------ |
+| Code          | How     | The implementation itself is the most accurate spec    |
+| Tests         | What    | Tests define expected behavior and act as living docs  |
+| Commit logs   | Why     | Captures the motivation and context behind each change |
+| Code comments | Why not | Explains non-obvious decisions and rejected approaches |
+
+- Do NOT duplicate "How" in comments — the code already shows that.
+- Do NOT duplicate "What" in commit messages — tests already cover that.
+- Write code comments only when the reason for a choice is not self-evident (e.g., workarounds, performance trade-offs, constraints from external systems).
+
 # Scripting Preferences
 
 - When writing scripts for text processing, data manipulation, or automation, use Go instead of Perl or other scripting languages.
