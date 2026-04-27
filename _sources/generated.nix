@@ -104,39 +104,39 @@
   };
   tiny-code-action = {
     pname = "tiny-code-action";
-    version = "1c75d7e121ea38bf362d939ddb9064ca9bb6884f";
+    version = "0d040ed81f7953118b81cd12681fcdfcac069803";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-code-action.nvim";
-      rev = "1c75d7e121ea38bf362d939ddb9064ca9bb6884f";
+      rev = "0d040ed81f7953118b81cd12681fcdfcac069803";
       fetchSubmodules = false;
-      sha256 = "sha256-MkC8zt+tLQ6tCt9B1rkYEUjQ4I2pwf0TNnm7rf0iRaA=";
+      sha256 = "sha256-UF9zeO5Uujdt2MEwy2d2Lhk6JRnEN4vrEvYslv0/zaA=";
     };
-    date = "2026-04-11";
+    date = "2026-04-25";
   };
   tiny-glimmer = {
     pname = "tiny-glimmer";
-    version = "932e6c2cc4a43ce578f007db1f8f61ad6798f938";
+    version = "cc285167914e947fc130523d02927fdaf24636a6";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-glimmer.nvim";
-      rev = "932e6c2cc4a43ce578f007db1f8f61ad6798f938";
+      rev = "cc285167914e947fc130523d02927fdaf24636a6";
       fetchSubmodules = false;
-      sha256 = "sha256-Lgdeu3xRXKf7YcuPKPnVvECzQR+RzC0bM+AiilHLLVg=";
+      sha256 = "sha256-oRdeegElffDVtvv87z7z4fJH/ScTFz0wXz9sevTq10s=";
     };
-    date = "2026-01-19";
+    date = "2026-04-27";
   };
   tiny-inline-diagnostic = {
     pname = "tiny-inline-diagnostic";
-    version = "57a0eb84b2008c76e77930639890d9874195b1e1";
+    version = "147af4e49f51dd48f41972de26552872b8ba7b25";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-inline-diagnostic.nvim";
-      rev = "57a0eb84b2008c76e77930639890d9874195b1e1";
+      rev = "147af4e49f51dd48f41972de26552872b8ba7b25";
       fetchSubmodules = false;
-      sha256 = "sha256-mJl6yuTH79QsfKRktBGzPOlnL1x3/KoOAWyDGGw/AwM=";
+      sha256 = "sha256-LpZuRNGSK8AHLTIPIWoQlGot89qubFRL/RZ+EMs4bnQ=";
     };
-    date = "2026-04-05";
+    date = "2026-04-22";
   };
   vim-qfreplace = {
     pname = "vim-qfreplace";
