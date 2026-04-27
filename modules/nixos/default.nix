@@ -12,6 +12,9 @@ let
     hardware = import ./hardware;
     security = import ./security.nix;
     nixpkgs.config.allowUnfree = true;
+    nixpkgs.config.permittedInsecurePackages = [
+      "openssl-1.1.1w"
+    ];
     environment = import ./environment.nix { inherit pkgs; };
     virtualisation.docker.enable = true;
     fonts = import ./fonts.nix { inherit pkgs; };
