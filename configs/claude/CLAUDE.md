@@ -69,6 +69,12 @@ Each artifact answers a different question:
 - Do NOT duplicate "What" in commit messages — tests already cover that.
 - Write code comments only when the reason for a choice is not self-evident (e.g., workarounds, performance trade-offs, constraints from external systems).
 
+# Project Command Discovery
+
+- Discover build, test, lint, and format commands from project files (`flake.nix`, `Makefile`, `justfile`, `package.json`, etc.) before running any check
+- If no command is discoverable from project files, do not guess — ask the user or recommend setting one up
+- If a command fails due to missing dependencies, do not fall back to a different tool — recommend the appropriate setup to the user
+
 # Scripting Preferences
 
 - When writing scripts for text processing, data manipulation, or automation, use Go instead of Perl or other scripting languages.
