@@ -29,7 +29,6 @@ with pkgs;
     yaskkserv2
 
     llm-agents.claude-code
-    llm-agents.codex
     llm-agents.gemini-cli
   ]
   ++ k8s
