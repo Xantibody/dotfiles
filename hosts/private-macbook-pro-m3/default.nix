@@ -49,6 +49,13 @@ nix-darwin.lib.darwinSystem {
     ../../modules/darwin
     home-manager.darwinModules.home-manager
     mac-app-util.darwinModules.default
+    inputs.magical-merchant.darwinModules.default
+    {
+      services.magical-merchant = {
+        enable = true;
+        workersUrl = "https://magical-merchant.sync.r-aizawa.com";
+      };
+    }
     {
       environment.systemPackages = with pkgs; [
       ];

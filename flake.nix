@@ -62,6 +62,7 @@
     arto.url = "github:arto-app/Arto";
     ichigyo-ls.url = "github:Xantibody/ichigyo-ls";
     kotdiff.url = "github:Xantibody/kotdiff";
+    magical-merchant.url = "github:Xantibody/magical-merchant";
   };
   outputs =
     {
