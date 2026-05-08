@@ -467,6 +467,11 @@
         "owner": "Xantibody",
         "repo": "magical-merchant",
         "rev": "57e5fe79e90cd996746a5171fb2738e1eea1b3cb",
+        "lastModified": 1777988088,
+        "narHash": "sha256-PiIPELIdrmvpvnsiKBOhHJhy6jtBIqOj48F1Eu3D5FM=",
+        "owner": "Xantibody",
+        "repo": "magical-merchant",
+        "rev": "7cbec6b18258156b7107f76c5fbcddcf28e907a7",
         "type": "github"
       },
       "original": {
