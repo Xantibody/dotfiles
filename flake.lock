@@ -462,11 +462,11 @@
         "treefmt-nix": "treefmt-nix_4"
       },
       "locked": {
-        "lastModified": 1777518064,
-        "narHash": "sha256-VryTR6QEZCT8YQH6ub6X6ALM1S4pOdKcFN4dX+A2A+c=",
+        "lastModified": 1778440061,
+        "narHash": "sha256-FLfUuooSdmn7adkY7bzOroHSiW+MfpfNMbc8/xLMGy0=",
         "owner": "Xantibody",
         "repo": "magical-merchant",
-        "rev": "44f708b5564fecbd6c9ae119801e060b4fa99019",
+        "rev": "57e5fe79e90cd996746a5171fb2738e1eea1b3cb",
         "type": "github"
       },
       "original": {
@@ -1138,11 +1138,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776317517,
-        "narHash": "sha256-JP1XVRabZquf7pnXvRUjp7DV+EBrB6Qmp3+vG3HMy/k=",
+        "lastModified": 1778799443,
+        "narHash": "sha256-lNFVDKuh5xJn+VrF8gI+EmFmUgRlmQZWxQHJGNLqcp0=",
         "owner": "0xc000022070",
         "repo": "zen-browser-flake",
-        "rev": "0a7be59e988bb2cb452080f59aaabae70bc415ae",
+        "rev": "2a400947d9b911ab6b3073de7d6bb43f04cc0479",
         "type": "github"
       },
       "original": {
