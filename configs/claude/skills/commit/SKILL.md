@@ -3,8 +3,6 @@ name: commit
 description: Enforces Conventional Commits 1.0.0 for all git commit messages. Use this skill whenever the user asks to commit changes, create a commit, or save progress to git. Ensures commit messages follow the conventional format with proper type, scope, and description.
 ---
 
-> **IMPORTANT**: All `\！` (backslash + full-width exclamation mark) in this document MUST be interpreted as a half-width exclamation mark in actual commit messages. This workaround is required because Claude Code has a bug where half-width exclamation marks in markdown files cause errors.
-
 # Conventional Commits (commit)
 
 This skill enforces the [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) specification for all git commit messages. Using this skill ensures that commit history is readable, automated tools (like semantic versioning) can function correctly, and the intent of changes is clear.
@@ -59,7 +57,7 @@ Used to explain the motivation for the change and contrast this with previous be
 
 Used to reference GitHub issues, or for BREAKING CHANGE notes.
 
-- **BREAKING CHANGE**: A commit that has a footer `BREAKING CHANGE:` or appends a `\！` after the type/scope, introduces a breaking API change (correlating with MAJOR in Semantic Versioning). A BREAKING CHANGE can be part of a commit of any type.
+- **BREAKING CHANGE**: A commit that has a footer `BREAKING CHANGE:` or appends a `!` after the type/scope, introduces a breaking API change (correlating with MAJOR in Semantic Versioning). A BREAKING CHANGE can be part of a commit of any type.
 
 ## Examples
 
@@ -75,10 +73,10 @@ feat(lang): add polish language support
 fix: solve memory leak in buffer allocation
 ```
 
-### Breaking Change with `\！`
+### Breaking Change with `!`
 
 ```text
-feat\！: send an email to the customer when a product is shipped
+feat!: send an email to the customer when a product is shipped
 ```
 
 ### Breaking Change with Footer
