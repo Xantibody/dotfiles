@@ -8,51 +8,10 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 - Tidy First: Separate structural changes from behavioral changes
 - Small, frequent commits with all tests passing
 
-## Plan Creation
-
-When creating implementation plans (plan mode), always consult and apply principles from these skills:
-
-- `implement`: Red-Green-Refactor cycle, Tidy First (separate structural/behavioral changes), plan granularity
-- `design`: Unix/Linux Philosophy (CLI tools), Twelve-Factor App (web apps)
-- `test-design`: 0-1-N Rule, behavior-focused testing, refactoring resistance
-
-Plan files in `./plans/` MUST be named with a numeric prefix and descriptive title to indicate execution order:
-
-- Format: `NN-descriptive-title.md` (e.g., `01-setup-database.md`, `02-add-api-endpoints.md`)
-- The numeric prefix determines execution order in `/execute-plan`
-- The title should clearly describe the content of that plan step
-
-# Skills
-
-| Skill          | When to use                                   |
-| -------------- | --------------------------------------------- |
-| `commit`       | Commit with Conventional Commits format       |
-| `verify`       | Run static analysis, tests, and format        |
-| `implement`    | Feature implementation or bug fixing with TDD |
-| `design`       | Architecture and design consultation          |
-| `test-design`  | Design test cases and test strategy           |
-| `execute-plan` | Execute a plan from `./plans/` autonomously   |
-| `define`       | Requirements definition before implementation |
-| `refactor`     | Analyze codebase and create refactoring plan  |
-| `version`      | Determine next version number for release     |
-
-# Branch Management
-
-When starting new feature implementation:
-
-1. Check the current branch with `git branch --show-current`
-2. Identify the GitHub default branch with `gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name'`
-3. If the current branch is NOT the default branch, ask the user to choose:
-   - **Create a new branch from default (Recommended)**: Switch to the default branch, pull latest, and create a new feature branch
-   - **Use worktree**: Create a worktree for isolated development while keeping the current branch intact
-
-Never start new feature work directly on a non-default branch without confirming with the user.
-
 # Communication
 
 - When asking questions with multiple options, always recommend one option as the first choice.
 - Before moving to the next task, always ask if the user wants to commit the current changes.
-- When committing, always use `/commit` skill to follow Conventional Commits format.
 
 # Documentation Philosophy
 
@@ -64,16 +23,6 @@ Each artifact answers a different question:
 | Tests         | What    | Tests define expected behavior and act as living docs  |
 | Commit logs   | Why     | Captures the motivation and context behind each change |
 | Code comments | Why not | Explains non-obvious decisions and rejected approaches |
-
-- Do NOT duplicate "How" in comments — the code already shows that.
-- Do NOT duplicate "What" in commit messages — tests already cover that.
-- Write code comments only when the reason for a choice is not self-evident (e.g., workarounds, performance trade-offs, constraints from external systems).
-
-# Project Command Discovery
-
-- Discover build, test, lint, and format commands from project files (`flake.nix`, `Makefile`, `justfile`, `package.json`, etc.) before running any check
-- If no command is discoverable from project files, do not guess — ask the user or recommend setting one up
-- If a command fails due to missing dependencies, do not fall back to a different tool — recommend the appropriate setup to the user
 
 # Scripting Preferences
 
