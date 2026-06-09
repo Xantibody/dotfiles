@@ -34,7 +34,9 @@ in
               small = true;
             };
           }
-          { app = "/Users/${username}/Applications/Home Manager Apps/Zen Browser (Beta).app"; }
+          # 1Password 連携のため /Applications/Nix Apps/ 版 (署名保持コピー) を pin する。
+          # Home Manager Apps / trampoline 版は /nix/store 解決 or ad-hoc 署名で 1Password に弾かれる。
+          { app = "/Applications/Nix Apps/Zen Browser (Beta).app"; }
           { app = "${pkgs.kitty}/Applications/kitty.app"; }
         ];
       };
