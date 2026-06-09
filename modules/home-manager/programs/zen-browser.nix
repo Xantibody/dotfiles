@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  lib,
   ...
 }:
 let
@@ -9,8 +10,16 @@ let
 in
 {
   imports = [ inputs.zen-browser.homeModules.beta ];
+
   programs.zen-browser = {
     enable = true;
+
+    # macOS では署名保持版 Zen を environment.systemPackages 経由で
+    # /Applications/Nix Apps/ へ配置する (modules/darwin/zen-beta-signed.nix)。
+    # 1Password の native core が /nix/store 配置を拒否するため、ここでは
+    # package を入れず (null)、プロファイル/拡張/設定のみ home-manager で管理する。
+    package = lib.mkIf pkgs.stdenv.isDarwin null;
+
     profiles.r-aizawa = {
       settings = {
         "extensions.autoDisableScopes" = 0;
