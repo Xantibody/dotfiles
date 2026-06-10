@@ -20,15 +20,15 @@
   };
   blink-cmp-dictionary = {
     pname = "blink-cmp-dictionary";
-    version = "17ea03ba5c296310b9f74587b52fde1b04d84c1a";
+    version = "898a958cece34da20524d04ebc032a92a9565643";
     src = fetchFromGitHub {
       owner = "Kaiser-Yang";
       repo = "blink-cmp-dictionary";
-      rev = "17ea03ba5c296310b9f74587b52fde1b04d84c1a";
+      rev = "898a958cece34da20524d04ebc032a92a9565643";
       fetchSubmodules = false;
-      sha256 = "sha256-DfUXUKYNnnY0at1ayU/uRRGGGf4bmuuWvQar1XEUa5Q=";
+      sha256 = "sha256-eV0/8ga2ZE0HLrFN24k6MIGFNl/3zSr6/nqF8MwDDmQ=";
     };
-    date = "2026-05-11";
+    date = "2026-06-01";
   };
   blink-cmp-skkeleton = {
     pname = "blink-cmp-skkeleton";
@@ -116,27 +116,27 @@
   };
   tiny-glimmer = {
     pname = "tiny-glimmer";
-    version = "cc285167914e947fc130523d02927fdaf24636a6";
+    version = "f26728abf811324d7ed6b035a11d7b76a27c06c3";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-glimmer.nvim";
-      rev = "cc285167914e947fc130523d02927fdaf24636a6";
+      rev = "f26728abf811324d7ed6b035a11d7b76a27c06c3";
       fetchSubmodules = false;
-      sha256 = "sha256-oRdeegElffDVtvv87z7z4fJH/ScTFz0wXz9sevTq10s=";
+      sha256 = "sha256-CUxWZOoEj2kamwlhcpz0K1IR+7TfFC22RPIVj4x6TeI=";
     };
-    date = "2026-04-27";
+    date = "2026-05-18";
   };
   tiny-inline-diagnostic = {
     pname = "tiny-inline-diagnostic";
-    version = "147af4e49f51dd48f41972de26552872b8ba7b25";
+    version = "e930d0a46031645040d5492595b46cdf6ab3514f";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-inline-diagnostic.nvim";
-      rev = "147af4e49f51dd48f41972de26552872b8ba7b25";
+      rev = "e930d0a46031645040d5492595b46cdf6ab3514f";
       fetchSubmodules = false;
-      sha256 = "sha256-LpZuRNGSK8AHLTIPIWoQlGot89qubFRL/RZ+EMs4bnQ=";
+      sha256 = "sha256-m4ax8+4P+fWtne7hLn3I9RXPeC8y/CZXqtqKCVa8e7c=";
     };
-    date = "2026-04-22";
+    date = "2026-06-09";
   };
   vim-qfreplace = {
     pname = "vim-qfreplace";
