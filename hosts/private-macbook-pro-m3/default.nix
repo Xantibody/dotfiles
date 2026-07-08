@@ -57,8 +57,10 @@ nix-darwin.lib.darwinSystem {
       };
     }
     {
-      environment.systemPackages = with pkgs; [
-      ];
+      environment.systemPackages =
+        # 署名保持版 Zen を /Applications/Nix Apps/ へ署名保持コピーさせ、
+        # 1Password 連携を成立させる (詳細は zen-beta-signed.nix のコメント)。
+        [ (import ../../modules/darwin/zen-beta-signed.nix { inherit inputs pkgs; }) ];
     }
     {
       home-manager = {
