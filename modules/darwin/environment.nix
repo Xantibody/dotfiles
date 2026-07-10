@@ -11,6 +11,5 @@
     brewCasks.maccy
     brewCasks.claude
     google-chrome
-    macskk
   ];
 }
