@@ -26,7 +26,7 @@ Either way, best used after `/clear` to start with full context capacity.
 
 - Read all plan files in sequence — they form a single continuous plan
 - Identify task dependencies across files
-- Confirm the current branch is appropriate for the work (use `branch-start` skill if unsure)
+- Confirm the current branch is appropriate for the work — if on a non-default branch that was not created for this plan, ask the user before proceeding
 
 ### 3. Execute
 

@@ -10,6 +10,8 @@ Use this skill when implementing features or fixing bugs.
 Use `design` skill for architecture and design principles.
 Use `commit` skill when ready to commit.
 
+Before starting new work, confirm the working branch: create a feature branch from the default branch for new work; never begin on an unrelated non-default branch without asking the user first.
+
 ## Red-Green-Refactor Cycle
 
 ### Red Phase (Write Failing Test)
