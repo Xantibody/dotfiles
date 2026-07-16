@@ -1,6 +1,7 @@
 ---
 name: reconstruct
 description: Reconstruct git commit history on a development branch. Resets messy commits back to a clean diff against the base branch, then guides the user to rebuild logically coherent, minimal commits one by one. Use this skill when the user wants to clean up commits, reorganize history, split commits, squash and recommit, or tidy up before a PR. Provides a more controllable alternative to interactive rebase.
+disable-model-invocation: true
 ---
 
 # Git History Reconstruction

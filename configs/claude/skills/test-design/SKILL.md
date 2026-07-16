@@ -1,6 +1,7 @@
 ---
 name: test-design
 description: Design test cases following Kent Beck and t-wada principles. Use this skill when the user asks what to test, wants to design test cases, needs a test strategy, or wants to identify edge cases and boundary conditions for a feature. Focuses on behavior-driven testing with the 0-1-N rule.
+disallowed-tools: Edit, Write, NotebookEdit
 ---
 
 # Test Design

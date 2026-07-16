@@ -1,6 +1,7 @@
 ---
 name: version
 description: Determines the next version number following Semantic Versioning 2.0.0. Use this skill when the user asks to determine the next version, bump the version, prepare a release, or create a version tag. Analyzes commit history with Conventional Commits to recommend the appropriate MAJOR, MINOR, or PATCH bump.
+disable-model-invocation: true
 ---
 
 # Semantic Versioning (version)
