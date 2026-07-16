@@ -5,51 +5,11 @@ description: Determines the next version number following Semantic Versioning 2.
 
 # Semantic Versioning (version)
 
-This skill determines the next version number for a release based on the [Semantic Versioning 2.0.0](https://semver.org/) specification. It analyzes the commit history since the last release and recommends the appropriate version bump.
+Determine the next version number per [Semantic Versioning 2.0.0](https://semver.org/) by analyzing the Conventional Commits history since the last release.
 
-## Version Format
+## Determining the Bump
 
-```text
-MAJOR.MINOR.PATCH
-```
-
-- **MAJOR**: Incremented for incompatible API changes.
-- **MINOR**: Incremented for backward-compatible functionality additions. Resets PATCH to 0.
-- **PATCH**: Incremented for backward-compatible bug fixes.
-
-Pre-release and build metadata extensions are available as additional labels appended to the MAJOR.MINOR.PATCH format.
-
-## Specification Rules
-
-1. **Public API Declaration**: Software using Semantic Versioning MUST declare a public API. This API could be declared in the code itself or exist strictly in documentation.
-
-2. **Normal Version Format**: A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0.
-
-3. **Release Immutability**: Once a versioned package has been released, the contents of that version MUST NOT be modified. Any modifications MUST be released as a new version.
-
-4. **Zero Major Version (0.y.z)**: Major version zero is for initial development. Anything MAY change at any time. The public API SHOULD NOT be considered stable.
-
-5. **Version 1.0.0**: Version 1.0.0 defines the public API. The way in which the version number is incremented after this release is dependent on this public API and how it changes.
-
-6. **Patch Version Z (x.y.Z)**: MUST be incremented if only backward-compatible bug fixes are introduced. A bug fix is defined as an internal change that corrects incorrect behavior.
-
-7. **Minor Version Y (x.Y.z)**: MUST be incremented if new, backward-compatible functionality is introduced to the public API. It MUST be incremented if any public API functionality is marked as deprecated. It MAY be incremented if substantial new functionality or improvements are introduced within the private code. It MAY include patch level changes. Patch version MUST be reset to 0 when minor version is incremented.
-
-8. **Major Version X (X.y.z)**: MUST be incremented if any backward-incompatible changes are introduced to the public API. It MAY also include minor and patch level changes. Patch and minor versions MUST be reset to 0 when major version is incremented.
-
-9. **Pre-release Version**: A pre-release version MAY be denoted by appending a hyphen and a series of dot-separated identifiers immediately following the patch version. Identifiers MUST comprise only ASCII alphanumerics and hyphens [0-9A-Za-z-]. Pre-release versions have a lower precedence than the associated normal version. Examples: 1.0.0-alpha, 1.0.0-alpha.1, 1.0.0-0.3.7, 1.0.0-x.7.z.92, 1.0.0-x-y-z.--.
-
-10. **Build Metadata**: Build metadata MAY be denoted by appending a plus sign and a series of dot-separated identifiers immediately following the patch or pre-release version. Identifiers MUST comprise only ASCII alphanumerics and hyphens [0-9A-Za-z-]. Build metadata MUST be ignored when determining version precedence. Examples: 1.0.0-alpha+001, 1.0.0+20130313144700, 1.0.0-beta+exp.sha.5114f85, 1.0.0+21AF26D3----117B344092BD.
-
-11. **Precedence**: Precedence refers to how versions are compared to each other when ordered.
-    - Precedence MUST be calculated by separating major, minor, patch, and pre-release identifiers in that order. Build metadata does not figure into precedence.
-    - Precedence is determined by the first difference when comparing each of these identifiers from left to right: Major, minor, and patch versions are always compared numerically. Example: 1.0.0 < 2.0.0 < 2.1.0 < 2.1.1.
-    - When major, minor, and patch are equal, a pre-release version has lower precedence than a normal version. Example: 1.0.0-alpha < 1.0.0.
-    - Precedence for two pre-release versions with the same major, minor, and patch version MUST be determined by comparing each dot-separated identifier from left to right until a difference is found. Example: 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta < 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
-
-## How to Determine the Next Version
-
-When analyzing commits since the last release, map Conventional Commits types to version bumps:
+Map commit types since the last release to version bumps:
 
 | Commit Type / Indicator                                     | Version Bump            |
 | ----------------------------------------------------------- | ----------------------- |
@@ -58,95 +18,26 @@ When analyzing commits since the last release, map Conventional Commits types to
 | `fix`, `perf`                                               | **PATCH**               |
 | `docs`, `style`, `refactor`, `test`, `build`, `ci`, `chore` | **PATCH** (if included) |
 
-The highest applicable bump wins. For example, if there is at least one breaking change, bump MAJOR regardless of other commits.
+The highest applicable bump wins. While the major version is 0 (initial development), the API is not considered stable — confirm with the user whether a breaking change should bump MAJOR or MINOR.
 
 ## Workflow
 
-1. **Find the latest version tag** (e.g., `git describe --tags --abbrev=0`).
-2. **List commits since that tag** (e.g., `git log <tag>..HEAD --oneline`).
-3. **Analyze each commit** for type, scope, and breaking change indicators.
-4. **Determine the highest bump level** (MAJOR > MINOR > PATCH).
-5. **Calculate the next version** by applying the bump to the current version.
-6. **Present the recommendation** with a summary of the changes that drove the decision.
+1. **Find the latest version tag**: `git describe --tags --abbrev=0`
+2. **List commits since that tag**: `git log <tag>..HEAD --oneline`
+3. **Analyze each commit** for type, scope, and breaking change indicators
+4. **Determine the highest bump level** (MAJOR > MINOR > PATCH) and calculate the next version
+5. **Present the recommendation** with a summary of the changes that drove the decision
+6. **On user confirmation**, create an annotated tag with a changelog (below)
 
-## Examples
-
-### Patch Release
-
-Current version: 1.2.3
-
-```text
-fix: resolve null pointer in config parser
-docs: update installation guide
-```
-
-Next version: **1.2.4**
-
-### Minor Release
-
-Current version: 1.2.3
-
-```text
-feat(api): add endpoint for user preferences
-fix: handle empty response body gracefully
-```
-
-Next version: **1.3.0**
-
-### Major Release
-
-Current version: 1.2.3
-
-```text
-feat!: redesign authentication flow
-feat(api): add batch processing endpoint
-fix: correct timezone handling
-```
-
-Next version: **2.0.0**
-
-### Pre-release
-
-Current version: 2.0.0
-
-```text
-feat: add experimental caching layer
-```
-
-Next version (pre-release): **2.1.0-alpha.1**
-
-## How to Use
-
-When asked to determine or recommend a version number, the agent MUST:
-
-1. Check the current version from git tags or version files.
-2. Analyze commits since the last release using Conventional Commits format.
-3. Apply Semantic Versioning rules to recommend the next version.
-4. Explain the reasoning behind the recommendation.
-5. Ask the user for confirmation, then create an annotated git tag with a detailed changelog.
+If no previous tag exists, treat all commits as the initial release changelog. For repositories with many non-conventional commits, focus on commits that follow Conventional Commits format and note the total count of the rest separately.
 
 ## Tag Creation with Changelog
 
-After the user confirms the recommended version, create an annotated git tag that includes a structured changelog of all changes since the last release. This changelog serves as a permanent, browsable release summary attached to the tag itself (`git tag -n999` or `git show <tag>`).
+The annotated tag message contains a structured changelog of all changes since the last release, browsable via `git tag -n999` or `git show <tag>`.
 
-### Changelog Generation Steps
+Group commits by type in this display order (skip empty groups), and highlight breaking changes at the top before the grouped sections:
 
-1. **Collect commits** between the last version tag and HEAD.
-2. **Parse each commit** using Conventional Commits format (`type(scope): description`).
-3. **Group commits by type** in the following display order (skip empty groups):
-   - `feat` → Features
-   - `fix` → Bug Fixes
-   - `perf` → Performance Improvements
-   - `refactor` → Refactoring
-   - `docs` → Documentation
-   - `style` → Code Style
-   - `test` → Tests
-   - `build` → Build System
-   - `ci` → CI/CD
-   - `chore` → Chores
-   - `revert` → Reverts
-4. **Within each group**, list commits with scope (if present) and description.
-5. **Highlight breaking changes** at the top of the changelog, before the grouped sections.
+`feat` → Features, `fix` → Bug Fixes, `perf` → Performance Improvements, `refactor` → Refactoring, `docs` → Documentation, `style` → Code Style, `test` → Tests, `build` → Build System, `ci` → CI/CD, `chore` → Chores, `revert` → Reverts
 
 ### Tag Message Format
 
@@ -164,39 +55,7 @@ Release Date: <YYYY-MM-DD>
 ## Bug Fixes
 - (scope): description (commit-hash)
 
-## Refactoring
-- (scope): description (commit-hash)
-
 ...
-```
-
-**Example:**
-
-```text
-v1.3.0
-
-Release Date: 2026-03-19
-
-## Features
-- (kitty): add split pane and close tab keybindings (f6a857c)
-- (claude): add define skill for requirements definition (423df4e)
-
-## Bug Fixes
-- (claude): prevent execute-plan skill from stalling between phases (6953113)
-- (darwin): use postActivation for default browser setting (4f53fb6)
-
-## Refactoring
-- (claude): improve skill content based on evaluation results (8cdc5b9)
-- (claude): improve skill descriptions, content, and consistency (6d23936)
-
-## Code Style
-- (claude): apply nix fmt formatting (f4191fa)
-
-## Build System
-- (flake): add python to devShell for skill-creator scripts (4b46080)
-
-## Chores
-- (renovate): update schedule and add missing flake inputs (ec32454)
 ```
 
 ### Creating the Tag
@@ -210,6 +69,4 @@ EOF
 )"
 ```
 
-If no previous tag exists, treat all commits as the initial release changelog. For repositories with many commits, focus on commits that follow Conventional Commits format and note the total count of non-conventional commits separately.
-
-After creating the tag, confirm success by running `git tag -l "v<VERSION>"` and display the tag message with `git tag -n999 "v<VERSION>"`.
+After creating the tag, confirm success with `git tag -l "v<VERSION>"` and display the message with `git tag -n999 "v<VERSION>"`.
