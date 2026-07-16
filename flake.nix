@@ -107,7 +107,6 @@
                 python3Packages.pygobject3
                 gusb
                 json-glib
-                python3 # skill-creator scripts (eval-viewer, benchmark aggregation)
               ];
           };
           treefmt = {
