@@ -3,7 +3,7 @@
 with inputs;
 [
   mcp-servers-nix.overlays.default
-  llm-agents.overlays.default
+  llm-agents.overlays.shared-nixpkgs
   (final: prev: {
     ichigyo-ls = ichigyo-ls.packages.${final.system}.default;
     # Workaround: direnv build hangs on darwin due to test-fish failure
