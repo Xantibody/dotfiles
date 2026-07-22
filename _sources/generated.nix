@@ -20,27 +20,27 @@
   };
   blink-cmp-dictionary = {
     pname = "blink-cmp-dictionary";
-    version = "17ea03ba5c296310b9f74587b52fde1b04d84c1a";
+    version = "898a958cece34da20524d04ebc032a92a9565643";
     src = fetchFromGitHub {
       owner = "Kaiser-Yang";
       repo = "blink-cmp-dictionary";
-      rev = "17ea03ba5c296310b9f74587b52fde1b04d84c1a";
+      rev = "898a958cece34da20524d04ebc032a92a9565643";
       fetchSubmodules = false;
-      sha256 = "sha256-DfUXUKYNnnY0at1ayU/uRRGGGf4bmuuWvQar1XEUa5Q=";
+      sha256 = "sha256-eV0/8ga2ZE0HLrFN24k6MIGFNl/3zSr6/nqF8MwDDmQ=";
     };
-    date = "2026-05-11";
+    date = "2026-06-01";
   };
   blink-cmp-skkeleton = {
     pname = "blink-cmp-skkeleton";
-    version = "69edc70d5003e0a3e9a5fc396d9a2f3049f03873";
+    version = "bc9391a8767e9cdfed2a603b6f49699c4ccc6e26";
     src = fetchFromGitHub {
       owner = "Xantibody";
       repo = "blink-cmp-skkeleton";
-      rev = "69edc70d5003e0a3e9a5fc396d9a2f3049f03873";
+      rev = "bc9391a8767e9cdfed2a603b6f49699c4ccc6e26";
       fetchSubmodules = false;
-      sha256 = "sha256-zEghDbOZtUQrwSLh7B7w/IxmsLML/Dju7yJP38/VMog=";
+      sha256 = "sha256-teQAXiKfFtsRfewtliHjyiwv+u96cbOpx4FolpQa5WE=";
     };
-    date = "2026-01-30";
+    date = "2026-07-21";
   };
   in-and-out = {
     pname = "in-and-out";
@@ -80,15 +80,15 @@
   };
   skkeleton = {
     pname = "skkeleton";
-    version = "770b265dd115dba96ea5314642e35764654ef08f";
+    version = "72e6425966232a01ed9bd70b24e2fd1dddc4d368";
     src = fetchFromGitHub {
       owner = "vim-skk";
       repo = "skkeleton";
-      rev = "770b265dd115dba96ea5314642e35764654ef08f";
+      rev = "72e6425966232a01ed9bd70b24e2fd1dddc4d368";
       fetchSubmodules = false;
-      sha256 = "sha256-Gsl/LqUY8szRqYLnDVyDOIDCw+cisoKsS5Fl1zQ+unM=";
+      sha256 = "sha256-vowvXdNy5J2uLxBt9xLF6/0HYbl3yYv6vWl51AQ9+Ic=";
     };
-    date = "2026-05-05";
+    date = "2026-07-21";
   };
   smooth-cursor = {
     pname = "smooth-cursor";
@@ -116,27 +116,27 @@
   };
   tiny-glimmer = {
     pname = "tiny-glimmer";
-    version = "cc285167914e947fc130523d02927fdaf24636a6";
+    version = "9a48d8a7436231cb16d47c88f924702e5602870a";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-glimmer.nvim";
-      rev = "cc285167914e947fc130523d02927fdaf24636a6";
+      rev = "9a48d8a7436231cb16d47c88f924702e5602870a";
       fetchSubmodules = false;
-      sha256 = "sha256-oRdeegElffDVtvv87z7z4fJH/ScTFz0wXz9sevTq10s=";
+      sha256 = "sha256-ONv/NE4D5vWNV56oJc/h5/nniOWjH5eUG0Q80dMVSxg=";
     };
-    date = "2026-04-27";
+    date = "2026-07-05";
   };
   tiny-inline-diagnostic = {
     pname = "tiny-inline-diagnostic";
-    version = "147af4e49f51dd48f41972de26552872b8ba7b25";
+    version = "6264451f14119d63a52580e5198d6baf8518b0b2";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-inline-diagnostic.nvim";
-      rev = "147af4e49f51dd48f41972de26552872b8ba7b25";
+      rev = "6264451f14119d63a52580e5198d6baf8518b0b2";
       fetchSubmodules = false;
-      sha256 = "sha256-LpZuRNGSK8AHLTIPIWoQlGot89qubFRL/RZ+EMs4bnQ=";
+      sha256 = "sha256-dG4eCcIRaHOPj75DNOBJAqo2Vy7LAQ0QfWOVD94FloA=";
     };
-    date = "2026-04-22";
+    date = "2026-07-05";
   };
   vim-qfreplace = {
     pname = "vim-qfreplace";
