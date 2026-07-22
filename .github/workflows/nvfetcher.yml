@@ -17,6 +17,8 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@main
       - name: Run nvfetcher
         run: nix run nixpkgs#nvfetcher
+      - name: Format generated sources
+        run: nix fmt _sources/generated.nix
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v8
