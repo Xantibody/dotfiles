@@ -29,3 +29,10 @@ Each artifact answers a different question:
 - When writing scripts for text processing, data manipulation, or automation, use Go instead of Perl or other scripting languages.
 - For simple one-off tasks, write a small `main.go` and run it with `go run`.
 - Do not use Perl one-liners or Perl scripts.
+
+# Command Usage (distilled from c4 logs)
+
+- Never read files with Bash cat/head/tail — use the Read tool.
+  It fails gracefully on missing files (c4 data: 33% of `cat` calls failed).
+- Prefer `rg` over `grep`: use `rg -m N PATTERN` instead of
+  `grep PATTERN | head -N`, and `rg -n` instead of `grep -rn`.
