@@ -9,11 +9,13 @@ with pkgs;
 (
   [
     bat
+    c4
     cargo
     deck
     delta
     difftastic
     direnv
+    duckdb
     discord-ptb
     eza
     fd
