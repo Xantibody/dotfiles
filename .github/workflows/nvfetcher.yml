@@ -18,7 +18,7 @@ jobs:
       - name: Run nvfetcher
         run: nix run nixpkgs#nvfetcher
       - name: Format generated sources
-        run: nix fmt _sources/generated.nix
+        run: nix fmt _sources/
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v8
