@@ -1,0 +1,10 @@
+# ホストごとの age 鍵 (~/.config/sops/age/keys.txt) で復号する。
+# 新しいホストを追加したら age-keygen で鍵を作り、recipient を追記して
+# `sops updatekeys secrets/*.yaml` で再暗号化する。
+keys:
+  - &work-macbook-pro-m4 age16sxv6prxd70jck6gkeupqysd5p2m5d0wcexnu0y52tfw6arq7fsqfaghwp
+creation_rules:
+  - path_regex: secrets/.*
+    key_groups:
+      - age:
+          - *work-macbook-pro-m4

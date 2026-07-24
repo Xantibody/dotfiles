@@ -6,6 +6,7 @@ let
     nix-darwin
     nixpkgs
     self
+    sops-nix
     zen-browser
     firefox-addons
     mac-app-util
@@ -76,6 +77,8 @@ nix-darwin.lib.darwinSystem {
         extraSpecialArgs = { inherit inputs; };
         users."${username}" = {
           imports = commonHomeModules ++ [
+            sops-nix.homeManagerModules.sops
+            ./git.nix
             mac-app-util.homeManagerModules.default
             (import ../../modules/home-manager {
               inherit
