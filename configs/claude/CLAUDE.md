@@ -36,3 +36,6 @@ Each artifact answers a different question:
   It fails gracefully on missing files (c4 data: 33% of `cat` calls failed).
 - Prefer `rg` over `grep`: use `rg -m N PATTERN` instead of
   `grep PATTERN | head -N`, and `rg -n` instead of `grep -rn`.
+- To wait for CI, use a single blocking watch — `gh pr checks <pr> --watch`
+  or `gh run watch <id>` (run in background for long runs) — instead of
+  sleep-and-repoll loops (c4 data: 10 sleep-poll invocations burned ~18 min).

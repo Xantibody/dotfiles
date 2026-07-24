@@ -93,7 +93,10 @@ ORDER BY project, n DESC;
    Do not make a rule for something that is missing
 4. Organize high-failure-rate commands into candidate project-specific
    rules of the form "in this repo, use `Y` instead of `X`"
-5. Present the proposals to the user and, once approved, append to CLAUDE.md.
+5. Present the proposals to the user, **leading with the intent**: what
+   wasteful pattern the data shows, why it happens, and how the rule would
+   change Claude's behavior — then ask for approval. Once approved, append
+   to CLAUDE.md.
    **The user's CLAUDE.md is managed by home-manager**, so edit
-   `~/Repository/dotfiles/configs/claude/CLAUDE.md` (a rebuild is required to apply it).
+   `~/Repository/github.com/Xantibody/dotfiles/configs/claude/CLAUDE.md` (a rebuild is required to apply it).
    Put project-specific rules in each repository's own `CLAUDE.md`
