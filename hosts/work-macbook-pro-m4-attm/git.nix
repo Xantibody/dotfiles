@@ -23,6 +23,12 @@ in
     }
   ];
 
+  # 会社 org は ghq get で自動的に workRoot 配下へ clone させる
+  programs.git.settings.ghq = {
+    "https://github.com/attmcojp".root = workRoot;
+    "https://github.com/attmcojp-docs".root = workRoot;
+  };
+
   home.file."src/work/.envrc".text = ''
     export GH_CONFIG_DIR=${config.xdg.configHome}/gh-work
   '';

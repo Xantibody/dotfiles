@@ -12,5 +12,6 @@
     };
     core.editor = "nvim";
     push.useForceIfIncludes = true;
+    ghq.root = "~/Repository";
   };
 }

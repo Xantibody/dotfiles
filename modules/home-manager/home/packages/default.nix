@@ -20,6 +20,7 @@ with pkgs;
     eza
     fd
     gh
+    ghq
     gnumake
     go
     gopls
