@@ -31,8 +31,8 @@ with pkgs;
     vhs
     yaskkserv2
 
-    llm-agents.claude-code
-    llm-agents.gemini-cli
+    # llm-agents.claude-code  # Nix 管理をやめて別途導入するため一旦コメントアウト
+    # llm-agents.gemini-cli   # Nix 管理をやめて別途導入するため一旦コメントアウト
   ]
   ++ k8s
   ++ mcp
