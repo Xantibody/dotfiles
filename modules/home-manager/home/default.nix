@@ -17,4 +17,5 @@
   sessionVariables = {
     EDITOR = "nvim";
   };
+  sessionPath = [ "$HOME/.local/bin" ];
 }
