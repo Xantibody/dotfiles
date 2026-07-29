@@ -33,6 +33,14 @@ in
     export GH_CONFIG_DIR=${config.xdg.configHome}/gh-work
   '';
 
+  # direnv は最も近い .envrc を 1 つだけ読むため、workRoot 配下のリポジトリが
+  # 自前の .envrc（use flake など）を持つと上の .envrc は読まれず GH_CONFIG_DIR が失われる。
+  # direnvrc はどの .envrc よりも先に必ず source されるので、ここで親を辿らせる。
+  # 各リポジトリの .envrc に source_up_if_exists を書く方式は書き忘れで破綻するため取らない。
+  programs.direnv.stdlib = ''
+    source_up_if_exists
+  '';
+
   # rebuild のたびに .envrc が再生成されても direnv allow を要求されないようにする。
   programs.direnv.config.whitelist.prefix = [ workRoot ];
 }
