@@ -12,6 +12,11 @@
     };
     core.editor = "nvim";
     push.useForceIfIncludes = true;
-    ghq.root = "~/Repository";
+    # 最後の root が primary となり、新規 clone 先になる。
+    # 会社 org は host 側の ghq.<url>.root で work へ振り分ける。
+    ghq.root = [
+      "~/Repository/work"
+      "~/Repository/private"
+    ];
   };
 }
