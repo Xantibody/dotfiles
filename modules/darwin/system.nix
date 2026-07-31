@@ -28,12 +28,6 @@ in
         show-recents = false;
         autohide = true;
         persistent-apps = [
-          { app = "${pkgs.slack}/Applications/slack.app/"; }
-          {
-            spacer = {
-              small = true;
-            };
-          }
           # 1Password 連携のため /Applications/Nix Apps/ 版 (署名保持コピー) を pin する。
           # Home Manager Apps / trampoline 版は /nix/store 解決 or ad-hoc 署名で 1Password に弾かれる。
           { app = "/Applications/Nix Apps/Zen Browser (Beta).app"; }

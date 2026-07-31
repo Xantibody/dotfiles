@@ -2,4 +2,5 @@
 with pkgs;
 [
   arto
+  slack
 ]
