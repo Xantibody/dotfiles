@@ -1,13 +1,14 @@
 ---
 name: c4-analyze
-description: Analyze c4 (Claude Code Command Collector) logs with DuckDB and distill improvement rules into CLAUDE.md. Use this skill when the user asks to analyze command logs, find slow or failing commands, review command usage patterns, detect replaceable pipelines, or update CLAUDE.md rules based on collected data. Triggers include "c4", "command log", "analyze", "retrospective", "slow command", "コマンドログ", "分析", "振り返り", "遅いコマンド".
+description: Analyze c4 (Claude Code Command Collector) logs with DuckDB, audit whether existing CLAUDE.md rules still earn their place, and distill a net-neutral rule diff. Use this skill when the user asks to analyze command logs, find slow or failing commands, review command usage patterns, detect replaceable pipelines, or update CLAUDE.md rules based on collected data. Triggers include "c4", "command log", "analyze", "retrospective", "slow command", "コマンドログ", "分析", "振り返り", "遅いコマンド".
 ---
 
 # c4 Log Analysis (c4-analyze)
 
-Analyze the Bash command logs collected by c4 with DuckDB, and distill
-rules for improving Claude's own behavior (alternative CLIs,
-project-specific conventions) into CLAUDE.md.
+Analyze the Bash command logs collected by c4 with DuckDB, then produce a
+**diff** to CLAUDE.md — not an append. Every round both adds rules the data
+justifies and retires rules the data no longer supports. A ruleset that only
+grows loses adherence per rule; keep it roughly line-neutral.
 
 ## Data location
 
@@ -42,11 +43,26 @@ nix run nixpkgs#duckdb -- -c "<SQL>"    # fallback
 
 1. Deduplicate duration aggregates by `tool_use_id` (a compound command repeats the same value across rows)
 2. Use the **median and p90**, not the average (cache cold/warm makes it vary)
-3. When looking at a single command's duration, restrict to single-segment invocations
+3. When looking at a single command's duration, restrict to single-segment
+   invocations — **but never stop there.** Only ~11% of invocations are single
+   segment, so that view is blind to anything that only ever appears mid-chain
+   (`sleep`, `nc`, loop bodies). Always also run query 5.
+4. The first segment's `connector` is **NULL**, not `''`
+5. **Raw arguments are not stored.** Frequency alone cannot tell a violation
+   from a legitimate use — split by position/connector first. `| head` (truncating
+   command output) and `head file` (reading a file) are the same `base_command`
+   but only the latter breaks a rule. Same for `cat`: heredoc writes and
+   `cat f | rg` are fine
 
 ## Standard queries
 
 ```sql
+-- 0. Scope: how much data, over what window
+SELECT count(*) AS rows, count(DISTINCT tool_use_id) AS invocations,
+       count(DISTINCT session_id) AS sessions,
+       min(timestamp) AS from_ts, max(timestamp) AS to_ts
+FROM read_csv('~/.claude/c4.csv');
+
 -- 1. Command frequency and failure rate
 SELECT normalized_command, count(*) AS n,
        round(avg(CASE WHEN status = 'failure' THEN 1 ELSE 0 END) * 100) AS fail_pct
@@ -66,7 +82,7 @@ FROM single GROUP BY 1 ORDER BY total_ms DESC LIMIT 20;
 -- 3. Frequent pipelines (the main hunting ground for replacements)
 WITH chains AS (
   SELECT tool_use_id,
-         string_agg(CASE WHEN connector = '' THEN normalized_command
+         string_agg(CASE WHEN connector IS NULL OR connector = '' THEN normalized_command
                          ELSE connector || ' ' || normalized_command END,
                     ' ' ORDER BY segment_index) AS pipeline,
          count(*) AS segments
@@ -80,23 +96,105 @@ SELECT project, normalized_command, count(*) AS n
 FROM read_csv('~/.claude/c4.csv') GROUP BY 1, 2
 QUALIFY row_number() OVER (PARTITION BY project ORDER BY n DESC) <= 5
 ORDER BY project, n DESC;
+
+-- 5. Wall-time attribution — THE money query.
+--    Attributes each invocation's full duration to every command inside it,
+--    so mid-chain time sinks surface. Overlapping by design: read it as
+--    "invocations containing X cost N seconds", then confirm by eyeballing
+--    the individual chains (query 5b).
+WITH inv AS (
+  SELECT tool_use_id, any_value(duration_ms) AS ms
+  FROM read_csv('~/.claude/c4.csv') GROUP BY 1
+),
+j AS (
+  SELECT DISTINCT c.tool_use_id, c.normalized_command, i.ms
+  FROM read_csv('~/.claude/c4.csv') c JOIN inv i USING (tool_use_id)
+)
+SELECT normalized_command, count(*) AS n, sum(ms) / 1000 AS total_s,
+       median(ms)::int AS med_ms
+FROM j WHERE ms IS NOT NULL GROUP BY 1 ORDER BY total_s DESC LIMIT 20;
+
+-- 5b. Denominator + the actual chains behind a suspect command.
+--     Always report a time finding as a % of this total.
+WITH inv AS (
+  SELECT tool_use_id, any_value(duration_ms) AS ms, any_value(project) AS proj,
+         string_agg(normalized_command, ' ' ORDER BY segment_index) AS p
+  FROM read_csv('~/.claude/c4.csv') GROUP BY 1
+)
+SELECT proj, ms, p FROM inv
+WHERE ms IS NOT NULL AND p LIKE '%<suspect>%' ORDER BY ms DESC;
+
+-- 6. Rule effectiveness — did the last round's rules change behavior?
+--    Get the cutoff from: git log --format='%h %ad %s' --date=short -- configs/claude/CLAUDE.md
+WITH d AS (
+  SELECT *, CASE WHEN timestamp < '<rule_added_date>' THEN 'before' ELSE 'after' END AS era
+  FROM read_csv('~/.claude/c4.csv')
+)
+SELECT era, count(DISTINCT tool_use_id) AS inv,
+       count(*) FILTER (base_command = '<targeted>') AS targeted,
+       count(*) FILTER (base_command = '<replacement>') AS replacement,
+       round(avg(CASE WHEN status = 'failure' THEN 1 ELSE 0 END) * 100)
+         FILTER (base_command = '<targeted>') AS targeted_fail_pct
+FROM d GROUP BY 1;
 ```
 
-## Distillation procedure
+## Procedure
 
-1. Run the four queries above and pick out the standout patterns
-2. Cross-check against the replacement lookup table:
+### Step 1 — Audit the existing rules first
+
+Read `configs/claude/CLAUDE.md`, then run query 6 once per existing
+Command-Usage rule, using the date that rule landed as the cutoff. Classify
+each rule:
+
+| Signal                                               | Action                                                                                           |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Targeted command **never appears** (n = 0)           | **Delete** — a warning against a temptation that isn't real                                      |
+| Replacement now dominates ~10:1 and failures are low | **Delete or compress** — behavior is internalized; keep only the sub-clause still being violated |
+| The cited statistic no longer holds                  | **Rewrite** with the current number, or drop it — stale evidence undermines every other rule     |
+| Still violated, and query 5 shows real cost          | **Strengthen** — name the exact anti-pattern form that leaked through                            |
+| Two rules share one underlying norm                  | **Merge** into one bullet                                                                        |
+
+### Step 2 — Find new candidates
+
+Run queries 0–5. For each candidate, before proposing anything:
+
+1. **Split by position/connector** (caveat 5) to separate violations from
+   legitimate uses. Do not quote a raw frequency as evidence of waste
+2. **Verify the claim outside the log.** If the finding is "used Python in a
+   non-Python repo", check with `fd -e py <repo>`. If it is "should use `rg`",
+   confirm the binary exists (`which rg fd`). Never write a rule for a tool
+   that is not installed
+3. Cross-check the replacement table:
    - `grep` (frequent / with -r) → `rg` / `find` → `fd` / `cat X | grep Y` → `rg Y X`
-   - `sort | uniq -c | sort` → `sort | uniq -c` is fine as-is, but if frequent consider a dedicated aggregation script
-   - `npm` → `pnpm`, `pip` → `uv` only when consistent with the project's lock file
-3. **Confirm the alternative CLI is actually installed** (`which rg fd`, etc.).
-   Do not make a rule for something that is missing
-4. Organize high-failure-rate commands into candidate project-specific
-   rules of the form "in this repo, use `Y` instead of `X`"
-5. Present the proposals to the user, **leading with the intent**: what
-   wasteful pattern the data shows, why it happens, and how the rule would
-   change Claude's behavior — then ask for approval. Once approved, append
-   to CLAUDE.md.
-   **The user's CLAUDE.md is managed by home-manager**, so edit
-   `~/Repository/github.com/Xantibody/dotfiles/configs/claude/CLAUDE.md` (a rebuild is required to apply it).
-   Put project-specific rules in each repository's own `CLAUDE.md`
+   - `npm` → `pnpm`, `pip` → `uv` — only when consistent with the project's lock file
+
+### Step 3 — Apply the evidence bar
+
+A finding becomes a rule only if it clears **both**:
+
+- **Measured loss** — a share of total wall time (query 5b denominator), or a
+  failure rate well above the ~3% baseline, or a repeated wasted round trip
+- **A concrete replacement** the next session can act on
+
+Explicitly reject the rest and say so. Cheap-but-noisy patterns (decorative
+`echo`, `sed` at a 3% failure rate) are _not_ rules. Note that the biggest
+lever is usually a handful of very slow invocations, not the most frequent
+command — check share of total time before assuming frequency means cost.
+
+### Step 4 — Present a diff, then apply
+
+Lead with **intent**: the wasteful pattern the data shows, why it happens, and
+how behavior would change. Present additions and retirements together as a
+`diff` block with a bullet-count delta, and state which candidates were
+rejected and why. Ask for approval before editing.
+
+Once approved:
+
+- **The user's CLAUDE.md is managed by home-manager** — edit
+  `~/Repository/github.com/Xantibody/dotfiles/configs/claude/CLAUDE.md`
+  (a rebuild is required to apply it). This skill lives beside it under
+  `configs/claude/skills/`
+- Put project-specific rules in each repository's own `CLAUDE.md`
+- Keep every rule one bullet with its evidence inline (`c4 data: …`) so the
+  next round can audit it. A rule with no cited evidence cannot be retired
+  on evidence
