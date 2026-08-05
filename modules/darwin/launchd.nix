@@ -1,4 +1,9 @@
-{ pkgs, username, ... }:
+{
+  pkgs,
+  username,
+  colima,
+  ...
+}:
 {
   user.agents = {
     colima = {
@@ -8,16 +13,21 @@
           "${pkgs.colima}/bin/colima"
           "start"
           "--cpu"
-          "11"
+          (toString colima.cpu)
           "--memory"
-          "24"
+          (toString colima.memory)
           "--vm-type"
           "vz"
           "--vz-rosetta"
           "--mount-type"
           "virtiofs"
         ];
-        KeepAlive = true;
+        # `colima start` は VM を起こして終了する一回きりのコマンドで、常駐しない。
+        # KeepAlive を付けると launchd が終了のたびに再実行し、起動に失敗する設定
+        # だったときは 11 秒周期の無限ループになる。失敗した試行は usernet デーモンを
+        # 孤児として残すので、半日ほどでプロセス上限を食い潰してマシン全体が
+        # fork できなくなる (実測 2414 個)。
+        KeepAlive = false;
         RunAtLoad = true;
         StandardOutPath = "/tmp/colima.log";
         StandardErrorPath = "/tmp/colima.err";

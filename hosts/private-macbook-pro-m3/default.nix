@@ -19,6 +19,14 @@ let
   system = "aarch64-darwin";
   homeDirectory = "/Users/${username}";
 
+  # Mac15,3 は 8 コア / 16GB。共有の既定値 (11 コア / 24GB) は物理を超えていて、
+  # Virtualization.framework が "memorySize is greater than
+  # maximumAllowedMemorySize" で構成ごと拒否する。ホストにも余裕を残す。
+  colima = {
+    cpu = 6;
+    memory = 8;
+  };
+
   pkgs = import nixpkgs {
     inherit system;
     overlays =
@@ -43,6 +51,7 @@ nix-darwin.lib.darwinSystem {
       username
       homeDirectory
       zen-browser
+      colima
       ;
   };
   modules = [

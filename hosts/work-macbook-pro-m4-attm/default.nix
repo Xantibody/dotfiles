@@ -20,6 +20,13 @@ let
   system = "aarch64-darwin";
   homeDirectory = "/Users/${username}";
 
+  # 従来値のまま。物理を超えていると Virtualization.framework が構成ごと拒否して
+  # colima が起動しなくなるので、この機種の実機で確かめてから触る。
+  colima = {
+    cpu = 11;
+    memory = 24;
+  };
+
   pkgs = import nixpkgs {
     inherit system;
     overlays =
@@ -44,6 +51,7 @@ nix-darwin.lib.darwinSystem {
       username
       homeDirectory
       zen-browser
+      colima
       ;
   };
   modules = [
