@@ -1,0 +1,8 @@
+{
+  "name": "mcp-defaults",
+  "description": "Always-on MCP servers (context7, deepwiki) so every project gets them without a per-repository .mcp.json",
+  "version": "1.0.0",
+  "author": {
+    "name": "Xantibody"
+  }
+}
