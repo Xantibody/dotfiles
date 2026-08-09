@@ -45,15 +45,26 @@ than filling the slot.
    review of the wrong thing. Use the `commit` skill for the message. Leave unrelated
    untracked files alone and say later that you did.
 
-4. **Confirm the range is not empty** before writing a word:
+4. **Confirm the range is exactly what you mean to propose** before writing a word:
 
    ```bash
-   git diff --stat "origin/$BASE...HEAD"
+   git log --oneline "origin/$BASE..HEAD"
    ```
 
-   Empty output means the branch does not actually differ from the base — usually step
-   2 gone wrong, sometimes a fetch that moved the base past you. Stop and fix it. An
-   empty PR with a beautifully written body is worse than no PR.
+   Both ways this can be wrong ship a PR that misrepresents itself, and neither
+   announces itself later:
+
+   - **Empty.** The branch does not differ from the base — usually step 2 gone wrong,
+     sometimes a fetch that moved the base past you. An empty PR with a beautifully
+     written body is worse than no PR.
+   - **More commits than you expect.** A branch cut from a local default branch that was
+     itself ahead of the remote carries those unpushed commits along, and they will land
+     in your PR as if they were part of the work. Read the list and confirm every commit
+     belongs. If one doesn't, that is the user's unpushed work and their call — ask
+     whether to push it to the base first and rebase, or to rebase it out of the branch.
+     Do not quietly include it and do not quietly drop it.
+
+   Stop and resolve either case before composing anything.
 
 Verify and push come _after_ the body is written — see "Verify, push, create". Checks
 like `nix flake check` take minutes and tell you nothing you need in order to write
@@ -359,8 +370,20 @@ Read two things from the output:
   exits 0 with `No mermaid charts found` — so the exit code alone will happily bless a
   body that forgot the mandatory diagram. Confirm N is what you expect.
 
-Then look at the PNG. Parsing and being readable are different bars, and a diagram
-GitHub has scaled into illegibility passes the first while failing the reviewer.
+Then look at the PNG. Parsing and being readable are different bars, and the failures
+that clear the first one are the dangerous kind because nothing reports them:
+
+- **A long edge routed behind a node** reads as an edge between that node and the
+  target — the diagram then asserts a relationship you never wrote. Watch for this when
+  one node fans out to several others in `LR`; switching to `TD`, or grouping the
+  targets into `subgraph`s, usually straightens the routing out.
+- **Edge labels landing next to the wrong edge** when several arrows leave the same
+  node, so the reader attaches your text to a different relationship than you meant.
+- **A diagram GitHub scales into illegibility**, which passes the parse and fails the
+  reviewer.
+
+All three are layout, not syntax, so the fix is to restructure and re-render rather
+than to reword.
 
 `mmdc` rasterizes through a headless browser, which is why Chrome is involved; handing
 it over via `PUPPETEER_EXECUTABLE_PATH` keeps this inside `nix run` instead of letting
@@ -402,6 +425,21 @@ Pass the body with `--body-file`; `--body` mangles newlines and the mermaid fenc
 `gh pr checks --watch` blocks until CI settles and exits non-zero on failure — never
 `sleep` and poll. If the repo reports no checks the command errors out; that is not a
 failure, so note it and move on.
+
+Some setups deny `git push` outright, and pushing is not something to route around — a
+denial is a decision, not an obstacle. The body is already the valuable part and it is
+already on disk, so hand it over instead of discarding the work: give the user the
+exact commands to run themselves, with the real `$BODY` path substituted in.
+
+```text
+! git push -u origin <branch>
+! gh pr create --base <base> --title "<title>" --body-file <the actual path>
+```
+
+The `!` prefix runs it in their Claude Code session, so the output lands back in the
+conversation and you can pick up at `gh pr checks --watch`. The same applies if
+`gh pr create` is denied but the push went through — hand over only the step you were
+blocked on, not the whole sequence.
 
 When checks fail, read the failing job (`gh run view <id> --log-failed`) and report
 what broke. Fix it if the cause is in this branch; ask first if the fix would widen
