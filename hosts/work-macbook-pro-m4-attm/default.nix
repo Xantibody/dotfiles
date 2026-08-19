@@ -36,8 +36,7 @@ let
         brew-nix.overlays.default
         firefox-addons.overlays.default
       ]
-      ++ (import ../../overlays)
-      ++ [ (import ../../overlays/gtk3-no-doc.nix) ];
+      ++ (import ../../overlays);
     config.allowUnfree = true;
   };
 
