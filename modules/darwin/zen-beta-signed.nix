@@ -1,18 +1,21 @@
-# 署名保持版 Zen Beta (macOS) — 1Password 連携を成立させるための2つの問題を解決する。
+# 署名保持版 Zen Beta (macOS) — 1Password 連携を成立させるための配置調整。
 #
-# 問題1 (署名): zen-browser-flake の installDarwin は公式署名済み .app を改変後に
-#   `/usr/bin/codesign --sign -` で ad-hoc 再署名し、Zen 元来の Apple Developer
-#   署名 (Team ID 9V5K9TP787) を剥がす。1Password はこれを署名検証で拒否し、
-#   macOS 26 では Gatekeeper も「壊れている」と弾く。
-#   対策: .app を一切改変しない installPhase に差し替え、Developer ID 署名・公証を温存。
-#   → upstream PR #212 が同じ修正を入れる。マージ後はこの installPhase override を
-#     外し、flake の beta-unwrapped をそのまま使えるようになる。
+# 問題1 (署名) は解決済み: かつて zen-browser-flake の installDarwin は公式署名済み
+#   .app を改変後に `/usr/bin/codesign --sign -` で ad-hoc 再署名し、Zen 元来の
+#   Apple Developer 署名 (Team ID 9V5K9TP787) を剥がしていた。upstream は PR #212 を
+#   取り込まず、同等の修正を 17a400c として main に入れており、現在の installDarwin は
+#   .app を一切改変しない。よって署名目的の override はもう不要。
 #
-# 問題2 (配置): 1Password の native core は署名が正しくても /nix/store 配置の
-#   ブラウザを検証で拒否する (BrowserVerificationFailed)。
-#   対策: このパッケージを environment.systemPackages に入れ、nix-darwin に
-#     標準ロケーション /Applications/Nix Apps/ へ署名保持コピーさせる。
-#   → こちらは PR #212 後も必要 (1Password が /nix/store を受け付けないため)。
+# 問題2 (配置) は未解決なので、以下の installPhase override が残っている:
+#   1Password の native core は署名が正しくても /nix/store 配置のブラウザを検証で
+#   拒否する (BrowserVerificationFailed)。このパッケージを environment.systemPackages
+#   に入れ、nix-darwin に標準ロケーション /Applications/Nix Apps/ へ署名保持コピー
+#   させることで回避する。
+#   upstream の launcher は home-manager 前提で
+#   `$HOME/Applications/Home Manager Apps/` を見にいくが、ここは systemPackages 経由の
+#   配置なのでそのパスは存在せず、/nix/store へフォールバックして 1Password に弾かれる。
+#   そのため launcher の STABLE_PATH だけを /Applications/Nix Apps/ に差し替える。
+#   (upstream をそのまま使えるようになるのは 1Password が /nix/store を受け付けた場合のみ)
 #
 # プロファイル/拡張/設定は home-manager の programs.zen-browser が package = null で
 # 別途管理し、Dock は /Applications/Nix Apps/ 版を pin する (modules/darwin/system.nix)。
