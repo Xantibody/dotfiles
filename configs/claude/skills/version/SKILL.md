@@ -71,3 +71,8 @@ EOF
 ```
 
 After creating the tag, confirm success with `git tag -l "v<VERSION>"` and display the message with `git tag -n999 "v<VERSION>"`.
+
+A first tag is the point a repository stops being disposable, so it is also the
+natural moment to check branch protection — see the `branch-protection` skill.
+Keep it to one line if protection already exists; a release is a bad time for a
+detour.
