@@ -114,7 +114,7 @@ parse), never use lowercase `end` as a node id, and past ~15 nodes you are
 drawing the system instead of the change. Emphasize with `stroke`, not `fill`
 (fills swallow labels on GitHub's dark theme).
 
-## Verify, push, create
+## Verify, hand off the push, create
 
 Write the body outside the worktree so a later `git add -A` can't swallow it:
 
@@ -122,22 +122,22 @@ Write the body outside the worktree so a later `git add -A` can't swallow it:
 BODY=$(mktemp -d)/pr-body.md
 ```
 
-Before pushing, run the project's checks via the `verify` skill. A PR that
+Before the push, run the project's checks via the `verify` skill. A PR that
 fails its own repo's fmt/check burns a review round on nothing.
 
+`git push` is deny-listed on purpose — the user pushes. If the branch is not
+on the remote yet, hand over the exact command with the real branch
+substituted, in the form `! git push -u origin <branch>`, and continue once
+they have run it:
+
 ```bash
-git push -u origin HEAD
 gh pr create --base "$BASE" --title "<title>" --body-file "$BODY"
 gh pr checks --watch
 ```
 
 Use `--body-file`, not `--body` (which mangles newlines and mermaid fences).
-`gh pr checks --watch` blocks until CI settles — never sleep-and-poll.
-
-If push or create is denied by permissions, that is the user's decision, not
-an obstacle to route around. Hand over the exact commands with real paths
-substituted, in the form `! git push -u origin <branch>`, so the user can run
-them in their own session.
+If `gh pr create` is denied too, that is the user's decision, not an obstacle
+to route around — hand that command over the same way.
 
 ## Report
 

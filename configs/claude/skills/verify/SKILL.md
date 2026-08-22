@@ -7,7 +7,7 @@ description: Run all verification checks (static analysis, tests, formatting) on
 
 Run static analysis, tests, and formatters to ensure the codebase is in a clean state.
 
-This skill is the single entry point for all routine quality checks. It supersedes separate `test`, `format`, and `static-analysis` skills by handling discovery and orchestration in one place.
+This skill is the single entry point for all routine quality checks, handling discovery and orchestration in one place.
 
 ## Workflow
 
