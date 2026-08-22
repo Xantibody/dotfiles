@@ -13,6 +13,14 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 - When asking questions with multiple options, always recommend one option as the first choice.
 - Before moving to the next task, always ask if the user wants to commit the current changes.
 
+# Git Workflow
+
+- `git push` is deliberately denied in settings. Never attempt it and never
+  chain it after `git commit`. After committing, report what is ready and
+  hand off — the user pushes themselves.
+- After the user has pushed, they will ask for a PR; create it then (via the
+  pull-request skill), not before the push.
+
 # Repository Conventions
 
 - Nearly every repository has a `/sample` directory used as a working
