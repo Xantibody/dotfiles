@@ -15,18 +15,16 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 
 # Git Workflow
 
-- `git push` is deliberately denied in settings. Never attempt it and never
-  chain it after `git commit`. After committing, report what is ready and
-  hand off — the user pushes themselves.
-- After the user has pushed, they will ask for a PR; create it then (via the
-  pull-request skill), not before the push.
+- `git push` is deny-listed on purpose — don't chain it after `git commit`,
+  and treat a push denial as the handoff, not an error: commit, report, and
+  let the user push. They ask for a PR after pushing.
 
 # Repository Conventions
 
-- Nearly every repository has a `/sample` directory used as a working
-  reference space: implementation plans and saved HTML of reference sites
-  live there. Read it for context before starting work, and write new plans
-  and downloaded reference material there.
+- Nearly every repository has a `/sample` directory: implementation plans
+  and saved HTML of reference sites live there. Read it before starting
+  work; save new reference material there. It is always
+  gitignored — add it to `.gitignore` if missing.
 
 # Documentation Philosophy
 

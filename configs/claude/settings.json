@@ -28,7 +28,7 @@
       "Bash(curl)"
     ]
   },
-  "plansDirectory": "./plans",
+  "plansDirectory": "./sample",
   "hooks": {
     "PostToolUse": [
       {
