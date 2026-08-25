@@ -35,7 +35,8 @@ with pkgs;
     yaskkserv2
 
     # llm-agents.claude-code  # Nix 管理をやめて別途導入するため一旦コメントアウト
-    # llm-agents.gemini-cli   # Nix 管理をやめて別途導入するため一旦コメントアウト
+    # nixpkgs より追従が速いので llm-agents 版を使う
+    llm-agents.gemini-cli
   ]
   ++ k8s
   ++ mcp
