@@ -97,12 +97,15 @@ The body is written in Japanese, in this format:
 - **なぜやるか** is the core of the body. If the motivation lives in a commit
   body, lift it from there.
 - **やったこと** is a map of the change, not a table of contents for the
-  diff. GitHub already shows file lists and line counts. See "Altitude" below.
+  diff. GitHub already shows file lists and line counts.
 - **やらなかったこと** is the most valuable section when you can write it —
   stating "this is out of scope" saves the reviewer from wondering whether to
-  flag it. If there is truly nothing, drop the section. Never leave an empty
-  section.
-- **資料** — likewise, drop it if there are no links.
+  flag it. It and 資料 are dropped when empty; never leave a blank section.
+
+The three subsections below decide how the body reads: at what level it
+speaks (Altitude), how items are arranged (Structure), and how much of it
+there is (Length). Then Diagrams decides whether a picture replaces some
+of the text.
 
 ### Altitude
 
@@ -123,19 +126,36 @@ only makes sense with the diff open is at the wrong altitude.
 - **Counts and measurements stay when they are the reason.** 「21 箇所の
   写経を 1 つのヘルパーに」 justifies a refactor; a list of the 21 call
   sites does not.
-- **Sub-bullets are a smell.** A bullet with three or more sub-bullets is
-  the diff's table of contents creeping back. Either the parent bullet
-  already says enough, or the structure wants a diagram.
-- **Preparatory commits get one bullet, together.** A feature branch
-  usually carries a refactor or two that made the feature possible. Fold
-  them into a single 「先に構造を直した」 bullet that says why they were
-  needed; they don't go in the diagram, and listing each one is the diff
-  again.
+  The test: a teammate on a different project should be able to read every
+  bullet and understand what changed. If they would need the diff, raise the
+  altitude; if they would still need the diff after that, that is what the
+  diff is for.
 
-The test: a teammate on a different project should be able to read every
-bullet and understand what changed. If they would need the diff, raise the
-altitude; if they would still need the diff after that, that is what the
-diff is for.
+### Structure
+
+Markdown has three ways to hold more than a few items — nested bullets,
+numbered lists, `###` headings — and a flat list of six is what you get
+when you use none of them. A reader scans a flat list once and keeps three
+items; from the fourth on they blur together, and the body reads as long
+even when it is short.
+
+- **Three siblings is the limit at any level.** A fourth item at the same
+  indentation means the list is hiding a grouping. Find the axis and show
+  it:
+  - nest — a parent bullet names the group, the members sit beneath it
+  - number — `1.` when order carries meaning (steps, before → after)
+  - head — `###` inside やったこと when the groups are areas of the change
+    (画面 / core / CI)
+- **Exceed three only when the items are true peers with no shared axis.**
+  Say so to yourself before doing it; it is rare, and "I couldn't find the
+  axis" is not the same as there being none.
+- **Depth costs too.** Two levels is the most a PR body needs. A third
+  level means the axis was wrong, or the section wants a diagram.
+
+Preparatory commits — the refactor or two that made the feature possible —
+are one such group: one parent bullet 「先に構造を直した」 with the why,
+members beneath only if the reviewer needs them. They don't go in the
+diagram.
 
 ### Length
 
@@ -167,11 +187,11 @@ diagram, and that rewrite does not reopen the decision.
    between them. An unchanged neighbour counts only when it is an endpoint
    of a new, removed, or rerouted exchange. **Three or more** means the
    reviewer is assembling a picture from text. Draw the exchange.
-2. **Check the length.** If やったこと runs past ~6 bullets (sub-bullets
-   included), the body past ~600 characters, or it carries more than ~10
-   backtick identifiers, the text is doing a diagram's job. Either draw,
-   or raise the altitude until the count drops. Both are correct answers;
-   leaving it as is, is not.
+2. **Check the size.** If やったこと needs more than three groups after
+   applying Structure, the body runs past ~600 characters, or it carries
+   more than ~10 backtick identifiers, the text is doing a diagram's job.
+   Either draw, or raise the altitude until the count drops. Both are
+   correct answers; leaving it as is, is not.
 
 Two actors or fewer — a version bump, a config tweak, a typo fix, a single
 function change — gets no diagram. A forced diagram is decoration that looks

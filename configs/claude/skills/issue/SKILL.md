@@ -122,6 +122,9 @@ issue. File the ones that are follow-up work this repo will actually do.
 
 - **Drop sections you can't fill.** Deleting a section beats leaving it blank
   or writing "特になし". The template is not a completeness checklist.
+- **Three siblings per list level.** A fourth item at the same indentation
+  is a hidden grouping — nest it, number it when order matters, or split
+  with `###`. A flat list of six reads as long even when it is short.
 - A diagram is warranted only when proposing or explaining architecture. Don't
   force one otherwise.
 - If reproduction logs or error output already exist in the conversation,
