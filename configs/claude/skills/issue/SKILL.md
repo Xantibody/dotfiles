@@ -9,10 +9,23 @@ The reader of an issue is either you months from now or someone with no
 context. The job is to leave just enough for them to reproduce and decide,
 briefly — long issues don't get read.
 
-## Check the repo's own templates first
+## Check whose repo it is first
 
-If the target repo has `.github/ISSUE_TEMPLATE/`, that takes precedence —
-follow it instead of this skill's templates. Otherwise use the ones below.
+The templates below are the user's own. In someone else's repo, that repo's
+conventions win:
+
+```bash
+gh repo view --json owner --jq .owner.login
+gh api user --jq .login
+```
+
+If the logins differ, read `.github/ISSUE_TEMPLATE/` and the last several
+closed issues (`gh issue list --state closed --limit 10`), then ask the user
+which to follow, recommending the repo's own style as the first option. Don't
+silently pick either.
+
+Even in the user's own repo, an existing `.github/ISSUE_TEMPLATE/` takes
+precedence over the templates below.
 
 ## Pick a type
 
@@ -22,7 +35,8 @@ deliberately left out, being filed so the reason isn't lost. Tasks that are
 none of these (refactoring, investigation, TODO) borrow the feature-request
 shape and drop the sections that don't fit.
 
-The issue body is written in Japanese.
+Load the `explain` skill before drafting — it holds the bullet-structure rule
+shared with the `pull-request` skill and with reports to the user.
 
 ### Bug report
 

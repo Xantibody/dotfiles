@@ -12,6 +12,20 @@ longer and wastes the reviewer's time. Brevity is courtesy, not laziness.
 
 ## Pre-flight
 
+0. **Whose repo:** the title and body format below are the user's own. In
+   someone else's repo, that repo's conventions win.
+
+   ```bash
+   gh repo view --json owner --jq .owner.login
+   gh api user --jq .login
+   ```
+
+   On a fork, judge by `gh repo view --json parent` — the PR lands upstream.
+   If the logins differ, read `.github/PULL_REQUEST_TEMPLATE.md` and the last
+   several merged PRs (`gh pr list --state merged --limit 10`), then ask the
+   user which to follow, recommending the repo's own style as the first
+   option. Don't silently pick either.
+
 1. **Base and branch:**
 
    ```bash
@@ -72,7 +86,8 @@ split; say so to the user.
 
 ## Body
 
-The body is written in Japanese, in this format:
+Load the `explain` skill before drafting — it holds the bullet-structure rule
+shared with the `issue` skill and with reports to the user. The body format:
 
 ```markdown
 ## なぜやるか
@@ -192,19 +207,6 @@ because the rider is low-risk: nothing deleted that someone depends on,
 no default changed, no behaviour the reviewer has to think hard about. A
 rider that needs thinking is a second PR, not a longer body. The length
 scales with what the reviewer must doubt, not with what was done.
-
-### One bullet, one claim
-
-A bullet that needs a colon to carry its content is a subsection wearing a
-bullet's clothes. `- 問い方が増えた: <続けて数行ぶんの中身>` reads as a single
-list item but holds a section's worth of text, and the colon papers over the
-fact that the structure is wrong. Match the structure to the content instead:
-
-- one claim → one bullet, no colon
-- a claim plus supporting detail → nest the detail as indented sub-bullets
-- more than a couple of lines → promote it to a `###` heading
-
-The same applies to the report you give the user after creating the PR.
 
 ### Diagrams
 
