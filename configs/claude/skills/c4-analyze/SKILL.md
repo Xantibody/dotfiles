@@ -173,11 +173,13 @@ Run queries 0–5. For each candidate, before proposing anything:
 A finding becomes a rule only if it clears **both**:
 
 - **Measured loss** — a share of total wall time (query 5b denominator), or a
-  failure rate well above the ~3% baseline, or a repeated wasted round trip
+  failure rate well above the baseline (query 3 — cite the number you
+  measured, not the one in the previous round's rule), or a repeated wasted
+  round trip
 - **A concrete replacement** the next session can act on
 
 Explicitly reject the rest and say so. Cheap-but-noisy patterns (decorative
-`echo`, `sed` at a 3% failure rate) are _not_ rules. Note that the biggest
+`echo`, `sed` failing at roughly the baseline rate) are _not_ rules. Note that the biggest
 lever is usually a handful of very slow invocations, not the most frequent
 command — check share of total time before assuming frequency means cost.
 
@@ -190,10 +192,11 @@ rejected and why. Ask for approval before editing.
 
 Once approved:
 
-- **The user's CLAUDE.md is managed by home-manager** — edit
-  `~/Repository/github.com/Xantibody/dotfiles/configs/claude/CLAUDE.md`
-  (a rebuild is required to apply it). This skill lives beside it under
-  `configs/claude/skills/`
+- **The user's CLAUDE.md is managed by home-manager** — `~/.claude/CLAUDE.md`
+  is a symlink into the Nix store, so edit the source in the dotfiles repo
+  (`configs/claude/CLAUDE.md`, next to this skill under
+  `configs/claude/skills/`; find the checkout with `ghq list -p dotfiles`).
+  A rebuild is required to apply it
 - Put project-specific rules in each repository's own `CLAUDE.md`
 - Keep every rule one bullet with its evidence inline (`c4 data: …`) so the
   next round can audit it. A rule with no cited evidence cannot be retired
