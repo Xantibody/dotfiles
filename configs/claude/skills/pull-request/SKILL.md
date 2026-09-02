@@ -167,12 +167,17 @@ diagram.
 
 Japanese does not wrap, so line counts hide length — count characters.
 The whole body fits in one screen: なぜやるか in two or three sentences,
-one idea per やったこと bullet, one line per やらなかったこと. Outside the
-diagram, stay under ~600 characters; past ~900 you are narrating something
-the diff or the diagram already shows. A `。` in the middle of a bullet is
-the tell: 「issue にするか聞く。テンプレを追加」 is two things that
-happened and wants two bullets. A second sentence belongs only when it
-gives the reason for the first.
+one idea per bullet everywhere else. Outside the diagram, stay under ~600
+characters; past ~900 you are narrating something the diff or the diagram
+already shows.
+
+A `。` in the middle of a bullet is the tell. 「issue にするか聞く。テンプレ
+を追加」 is two things that happened and wants two bullets; 「c4 の改善。
+引数の形、ツール名、ハッシュ」 is an item followed by its members and
+wants a nested list. The only second sentence that stays is the reason for
+the first — and in やらなかったこと that sentence is mandatory, because
+the reason is the part the next person cannot reconstruct. Budget is not
+a license to drop it; nest the members instead.
 
 Drawing is a way to delete text. The bullets under a diagram get shorter
 because the structure moved into the picture; if the body is as long with
