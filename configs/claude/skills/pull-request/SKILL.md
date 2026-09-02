@@ -137,6 +137,20 @@ bullet and understand what changed. If they would need the diff, raise the
 altitude; if they would still need the diff after that, that is what the
 diff is for.
 
+### Length
+
+Japanese does not wrap, so line counts hide length — count characters.
+The whole body fits in one screen: なぜやるか in two or three sentences,
+one sentence per やったこと bullet (a second only when the reason is not
+obvious from the first), one line per やらなかったこと. Outside the
+diagram, stay under ~600 characters; past ~900 you are narrating something
+the diff or the diagram already shows. A bullet that needs a second
+sentence to explain its first is usually two bullets, or a diagram edge.
+
+Drawing is a way to delete text. The bullets under a diagram get shorter
+because the structure moved into the picture; if the body is as long with
+the diagram as it would be without, the diagram is decoration.
+
 ### Diagrams
 
 A diagram earns its place by showing **relationships** — which parts now talk
@@ -154,9 +168,10 @@ diagram, and that rewrite does not reopen the decision.
    of a new, removed, or rerouted exchange. **Three or more** means the
    reviewer is assembling a picture from text. Draw the exchange.
 2. **Check the length.** If やったこと runs past ~6 bullets (sub-bullets
-   included), or the body carries more than ~10 backtick identifiers, the
-   text is doing a diagram's job. Either draw, or raise the altitude until
-   the count drops. Both are correct answers; leaving it as is, is not.
+   included), the body past ~600 characters, or it carries more than ~10
+   backtick identifiers, the text is doing a diagram's job. Either draw,
+   or raise the altitude until the count drops. Both are correct answers;
+   leaving it as is, is not.
 
 Two actors or fewer — a version bump, a config tweak, a typo fix, a single
 function change — gets no diagram. A forced diagram is decoration that looks
