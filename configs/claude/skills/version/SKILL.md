@@ -23,7 +23,7 @@ The highest applicable bump wins. While the major version is 0 (initial developm
 
 ## Workflow
 
-1. **Find the latest version tag**: `git describe --tags --abbrev=0`
+1. **Find the latest version tag**: `git describe --tags --abbrev=0 --match 'v*'` — without `--match`, any non-version tag (a deploy marker, a bookmark) is picked up and the changelog starts from the wrong point
 2. **List commits since that tag**: `git log <tag>..HEAD --oneline`
 3. **Analyze each commit** for type, scope, and breaking change indicators
 4. **Determine the highest bump level** (MAJOR > MINOR > PATCH) and calculate the next version
@@ -70,7 +70,11 @@ EOF
 )"
 ```
 
+Before tagging, make sure the tree is clean and the checks pass (`verify` skill). A tag on a broken or half-committed state is the one kind of commit that is awkward to redo, because the name is already taken.
+
 After creating the tag, confirm success with `git tag -l "v<VERSION>"` and display the message with `git tag -n999 "v<VERSION>"`.
+
+A tag that only exists locally is the failure mode here — it is easy to forget, and nothing reminds you. `git push` is deny-listed on purpose, so hand the user the exact command in the form `! git push origin v<VERSION>` and say plainly that the tag is not on the remote until they run it.
 
 A first tag is the point a repository stops being disposable, so it is also the
 natural moment to check branch protection — see the `branch-protection` skill.
