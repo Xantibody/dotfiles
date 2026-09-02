@@ -64,6 +64,7 @@ nix-darwin.lib.darwinSystem {
     {
       services.magical-merchant = {
         enable = true;
+        cli.enable = true;
         workersUrl = "https://magical-merchant.sync.r-aizawa.com";
       };
     }
