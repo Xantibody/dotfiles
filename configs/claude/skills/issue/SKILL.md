@@ -122,9 +122,11 @@ issue. File the ones that are follow-up work this repo will actually do.
 
 - **Drop sections you can't fill.** Deleting a section beats leaving it blank
   or writing "特になし". The template is not a completeness checklist.
-- **Three siblings per list level.** A fourth item at the same indentation
-  is a hidden grouping — nest it, number it when order matters, or split
-  with `###`. A flat list of six reads as long even when it is short.
+- **The shape of the information picks the construct.** Three siblings
+  per list level, tables for items that share attributes, `<details>` for
+  logs, alerts for the one thing not to miss. The catalogue with the
+  misuse of each is `../pull-request/references/markdown.md`; read it
+  before writing a body longer than a few lines.
 - A diagram is warranted only when proposing or explaining architecture. Don't
   force one otherwise.
 - If reproduction logs or error output already exist in the conversation,

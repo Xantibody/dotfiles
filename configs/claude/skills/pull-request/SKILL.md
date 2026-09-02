@@ -133,24 +133,30 @@ only makes sense with the diff open is at the wrong altitude.
 
 ### Structure
 
-Markdown has three ways to hold more than a few items — nested bullets,
-numbered lists, `###` headings — and a flat list of six is what you get
-when you use none of them. A reader scans a flat list once and keeps three
-items; from the fourth on they blur together, and the body reads as long
-even when it is short.
+The shape of the information decides the construct. GitHub renders a
+dozen of them — nested and numbered lists, `###` groups, tables, task
+lists, `<details>`, alerts, blockquotes, code blocks, permalinks — and
+each exists because some shape reads badly as anything else. A flat
+bullet list is what you get when you haven't asked what shape the
+information has: a reader scans it once and keeps three items, and the
+body reads as long even when it is short.
+
+Read `references/markdown.md` before writing the body — it maps each
+shape to its construct and names the misuse that makes each one lie.
+The rules that bite most often:
 
 - **Three siblings is the limit at any level.** A fourth item at the same
-  indentation means the list is hiding a grouping. Find the axis and show
-  it:
-  - nest — a parent bullet names the group, the members sit beneath it
-  - number — `1.` when order carries meaning (steps, before → after)
-  - head — `###` inside やったこと when the groups are areas of the change
-    (画面 / core / CI)
-- **Exceed three only when the items are true peers with no shared axis.**
-  Say so to yourself before doing it; it is rare, and "I couldn't find the
-  axis" is not the same as there being none.
-- **Depth costs too.** Two levels is the most a PR body needs. A third
-  level means the axis was wrong, or the section wants a diagram.
+  indentation means a grouping is hiding. Find the axis and show it — a
+  parent bullet with members beneath, `1.` when order means something,
+  `###` when the groups are areas of the change. Exceed three only for
+  true peers with no shared axis, and "I couldn't find the axis" is not
+  the same as there being none.
+- **Items that share attributes are a table, not bullets.** Before/after
+  values, option × trade-off, file × why: if every bullet would repeat the
+  same two or three fields, the reader wants columns.
+- **Supporting material collapses; the core never does.** Long output,
+  the full list of touched files, a log — inside `<details>` with a
+  summary that states the conclusion. The template sections stay open.
 
 Preparatory commits — the refactor or two that made the feature possible —
 are one such group: one parent bullet 「先に構造を直した」 with the why,
@@ -161,11 +167,12 @@ diagram.
 
 Japanese does not wrap, so line counts hide length — count characters.
 The whole body fits in one screen: なぜやるか in two or three sentences,
-one sentence per やったこと bullet (a second only when the reason is not
-obvious from the first), one line per やらなかったこと. Outside the
+one idea per やったこと bullet, one line per やらなかったこと. Outside the
 diagram, stay under ~600 characters; past ~900 you are narrating something
-the diff or the diagram already shows. A bullet that needs a second
-sentence to explain its first is usually two bullets, or a diagram edge.
+the diff or the diagram already shows. A `。` in the middle of a bullet is
+the tell: 「issue にするか聞く。テンプレを追加」 is two things that
+happened and wants two bullets. A second sentence belongs only when it
+gives the reason for the first.
 
 Drawing is a way to delete text. The bullets under a diagram get shorter
 because the structure moved into the picture; if the body is as long with
