@@ -442,11 +442,11 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1788370336,
-        "narHash": "sha256-2JpXtNP0gLe0ksa22kxv/sdqzKjt5FmkxI/ui6e4umg=",
+        "lastModified": 1788383953,
+        "narHash": "sha256-gNFFBAM7RlA7APH/dnmKGV8EJt4BETkwmr1bO/RnsOI=",
         "owner": "Xantibody",
         "repo": "magical-merchant",
-        "rev": "8f7ca3a48e453ce922b312822bb76d38cca702c6",
+        "rev": "4350aa4256ba6d4bddd8684fbc15d49dbf1cdc8f",
         "type": "github"
       },
       "original": {
