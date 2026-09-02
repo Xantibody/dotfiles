@@ -1,6 +1,6 @@
 ---
 name: issue
-description: Creates GitHub issues with a concise Japanese body, modeled on traP NeoShowcase's issue templates (bug report / feature request). Use this skill whenever the user wants to file, open, or create an issue — including phrasings like "issueを立てて", "issue作って", "バグ報告して", "機能要望を出して", "この問題をissueにして", or "gh issue create". Also use it when the user describes a bug or wants to track future work as an issue.
+description: Creates GitHub issues with a concise Japanese body, modeled on traP NeoShowcase's issue templates (bug report / feature request), plus a deferred-work template for things a PR or task left out. Use this skill whenever the user wants to file, open, or create an issue — including phrasings like "issueを立てて", "issue作って", "バグ報告して", "機能要望を出して", "この問題をissueにして", "やらなかったことをissueに", "見送ったやつをissueにして", or "gh issue create". Also use it when the user describes a bug, wants to track future work as an issue, or agrees to file the やらなかったこと reported at the end of a task.
 ---
 
 # Issues
@@ -17,8 +17,10 @@ follow it instead of this skill's templates. Otherwise use the ones below.
 ## Pick a type
 
 **Bug report** — something doesn't behave as expected. **Feature request** — a
-new behavior is wanted. Tasks that are neither (refactoring, investigation,
-TODO) borrow the feature-request shape and drop the sections that don't fit.
+new behavior is wanted. **Deferred work** — something a PR or task
+deliberately left out, being filed so the reason isn't lost. Tasks that are
+none of these (refactoring, investigation, TODO) borrow the feature-request
+shape and drop the sections that don't fit.
 
 The issue body is written in Japanese.
 
@@ -82,10 +84,49 @@ Title: `[Feature]: <one-line summary>`
 is shared, a different solution may do; if it isn't, no implementation
 proposal can be judged.
 
+### Deferred work
+
+The やらなかったこと of a PR, or the "left out" list at the end of a task,
+already contains the hard part: the reason it was left out. An issue that
+only says "do X later" loses that, and whoever picks it up re-derives the
+decision or, worse, reverses it without knowing. So the reason is the core
+section here, and the origin link is what lets them read the surrounding
+context.
+
+Title: `[Deferred]: <one-line summary>`
+
+```markdown
+## 見送ったこと
+
+<何を、どこまでやらなかったか一行で>
+
+## 見送った理由
+
+<なぜ今やらなかったか。動作未確認 / 別の判断が要る / 挙動変更を含む / 手元で検証できない、など具体的に>
+
+## 再開の条件
+
+<何が揃えば着手できるか。あれば>
+
+## 出どころ
+
+- <元の PR / commit / 会話。PR なら #123>
+```
+
+One issue per item, not one issue for the whole list — they get picked up at
+different times. Not every item deserves one: "out of scope forever"
+(a different feature, someone else's repo) is a sentence in the PR, not an
+issue. File the ones that are follow-up work this repo will actually do.
+
 ## Common rules
 
 - **Drop sections you can't fill.** Deleting a section beats leaving it blank
   or writing "特になし". The template is not a completeness checklist.
+- **The shape of the information picks the construct.** Three siblings
+  per list level, tables for items that share attributes, `<details>` for
+  logs, alerts for the one thing not to miss. The catalogue with the
+  misuse of each is `../pull-request/references/markdown.md`; read it
+  before writing a body longer than a few lines.
 - A diagram is warranted only when proposing or explaining architecture. Don't
   force one otherwise.
 - If reproduction logs or error output already exist in the conversation,

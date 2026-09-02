@@ -9,7 +9,6 @@ with pkgs;
 (
   [
     bat
-    c4
     cargo
     deck
     delta

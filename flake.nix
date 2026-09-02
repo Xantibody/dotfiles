@@ -65,10 +65,6 @@
     arto.url = "github:arto-app/Arto";
     ichigyo-ls.url = "github:Xantibody/ichigyo-ls";
     kotdiff.url = "github:Xantibody/kotdiff";
-    c4 = {
-      url = "github:Xantibody/c4";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     magical-merchant.url = "github:Xantibody/magical-merchant";
   };
   outputs =

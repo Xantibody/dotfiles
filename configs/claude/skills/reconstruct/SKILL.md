@@ -20,10 +20,13 @@ Do not assume the base branch is `main`. Determine it by:
    ```bash
    gh pr view --json baseRefName --jq '.baseRefName' 2>/dev/null
    ```
-2. If no PR exists, infer from merge-base:
+2. If no PR exists, ask the repo for its default branch and find the merge base:
    ```bash
-   git merge-base --fork-point main HEAD 2>/dev/null || git merge-base main HEAD
+   BASE=$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)
+   git fetch origin "$BASE"
+   git merge-base "origin/$BASE" HEAD
    ```
+   Use `origin/$BASE`, not the local branch — a local default that is ahead of the remote would fold the user's unpushed commits into the reconstruction.
 3. **Always confirm with the user** which branch to reconstruct against before proceeding.
 
 ### Step 2: Survey changes
@@ -33,7 +36,7 @@ git log --oneline <base>..HEAD
 git diff --stat <base>..HEAD
 ```
 
-Show the user the commit list and changed files. If there are uncommitted changes, ask whether to stash them first.
+Show the user the commit list and changed files. If there are uncommitted changes, ask whether they belong in the reconstruction (commit them via the `commit` skill first) or not (stash them). Leaving them in the working tree means `git reset --soft` mixes them into the unstaged pool and they get silently absorbed into whichever group is staged next.
 
 ### Step 3: Analyze and propose logical groups
 
@@ -119,10 +122,9 @@ git diff <base>..HEAD
 
 The `git diff` output should be empty — the final state must be identical to what it was before the reconstruction. If there is any diff, investigate and resolve with the user.
 
-Remind the user that a force push (`git push --force-with-lease`) will be needed if the branch was already pushed to the remote.
+If the branch was already on the remote, the rewritten history needs a force push. `git push` is deny-listed on purpose — hand the user the exact command in the form `! git push --force-with-lease origin <branch>` (`--force-with-lease` refuses to overwrite commits that arrived on the remote since the last fetch, which `--force` would silently destroy).
 
 ## Important
 
 - Never execute `git reset --soft` without explicit user approval
-- Never force push without explicit user approval — use `--force-with-lease` over `--force`
 - If the user wants to abort mid-reconstruction, recover with `git reflog` and `git reset --hard <original-HEAD>`
