@@ -13,8 +13,13 @@ grows loses adherence per rule; keep it roughly line-neutral.
 ## Data location
 
 - Primary: `~/.claude/c4.csv` (current schema, 14 columns)
+- `~/.claude/c4-raw.jsonl` — the raw hook payload for every row, kept by
+  `C4_DUMP`: the full command in `tool_input.command`, stdout/stderr in
+  `tool_response`, plus `effort`, `agent_type`, `permission_mode`,
+  `tool_input.timeout`, `tool_response.timedOutAfterMs`. This is where
+  argument shape lives (query 7). It also holds secrets and file contents —
+  aggregate it, never quote a raw command or output into a rule or report
 - `~/.claude/c4.csv.v*.bak` are rotations of the old schema. **Do not read them**
-- Once migrated to R2, switch to `read_json_auto('s3://<bucket>/logs/dt=*/*.jsonl')`
 
 ## How to run
 
@@ -48,11 +53,14 @@ nix run nixpkgs#duckdb -- -c "<SQL>"    # fallback
    segment, so that view is blind to anything that only ever appears mid-chain
    (`sleep`, `nc`, loop bodies). Always also run query 5.
 4. The first segment's `connector` is **NULL**, not `''`
-5. **Raw arguments are not stored.** Frequency alone cannot tell a violation
-   from a legitimate use — split by position/connector first. `| head` (truncating
-   command output) and `head file` (reading a file) are the same `base_command`
-   but only the latter breaks a rule. Same for `cat`: heredoc writes and
-   `cat f | rg` are fine
+5. **The CSV has no arguments.** Frequency alone cannot tell a violation
+   from a legitimate use — `| head` (truncating command output) and
+   `head file` (reading a file) are the same `base_command` but only the
+   latter breaks a rule. Same for `cat`: heredoc writes and `cat f | rg` are
+   fine. Split by position/connector in the CSV first, then confirm the
+   shape against the raw dump with query 7 — in the current data the
+   `| head/tail` form outnumbers file reads more than ten to one, so a
+   CSV-only count of `head` is mostly noise
 
 ## Standard queries
 
@@ -136,6 +144,19 @@ SELECT era, count(DISTINCT tool_use_id) AS inv,
        round(avg(CASE WHEN status = 'failure' THEN 1 ELSE 0 END) * 100)
          FILTER (base_command = '<targeted>') AS targeted_fail_pct
 FROM d GROUP BY 1;
+
+-- 7. Argument shape from the raw dump. The regexes are starting points —
+--    adjust them to the command under suspicion, and report only the counts.
+WITH raw AS (
+  SELECT tool_input.command AS cmd
+  FROM read_json_auto('~/.claude/c4-raw.jsonl', union_by_name=true, ignore_errors=true)
+)
+SELECT CASE
+  WHEN regexp_matches(cmd, '(^|[|&;]\s*)cat\s*(>[^<]*)?<<') THEN 'heredoc write'
+  WHEN regexp_matches(cmd, '\|\s*(head|tail)\b') THEN 'pipe | head/tail'
+  WHEN regexp_matches(cmd, '(^|[|&;]\s*)(cat|head|tail)\s+[^-<|]') THEN 'read file'
+  ELSE 'other' END AS shape, count(*) AS n
+FROM raw GROUP BY 1 ORDER BY n DESC;
 ```
 
 ## Procedure
