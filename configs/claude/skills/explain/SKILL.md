@@ -22,6 +22,12 @@ fact that the structure is wrong. Match the structure to the content instead:
 A colon is fine when what follows fits on the same line — `**役割**: 説明` is
 a label, not a smuggled section.
 
+The rule is about the shape, not the character. `**見出し** — <数行ぶんの中身>`
+is the same violation with the colon swapped for a dash, and so is a bullet
+that avoids the `。` by chaining clauses with `、`. If the content would not
+fit on the label's line with a colon, no other separator makes it fit; nest
+it or promote it.
+
 ## PR and issue bodies
 
 The full catalogue of GitHub constructs — when a table beats bullets, what

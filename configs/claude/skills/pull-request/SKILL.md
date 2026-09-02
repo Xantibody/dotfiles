@@ -134,7 +134,12 @@ only makes sense with the diff open is at the wrong altitude.
   are pointers, not content — at most one per bullet, in parentheses, and
   only when the reviewer will want to jump there. (This budget is for
   やったこと; なぜやるか names whatever the problem is about, and a type
-  mismatch is about the type.)
+  mismatch is about the type.) A role name has to be one the reader
+  already uses; when nothing has one, spend the identifier rather than
+  coin a term — 「生成物パッチ」 for a recipe nobody calls that sends the
+  reader to the diff to decode it, which is what the identifier would have
+  done more honestly. Watch for translated English idioms the same way:
+  「畳んだ」 for fold-into reads as jargon where 「統合した」 does not.
 - **Say what became true, not what was done.** 「同じテンプレの今日のノート
   があれば作らず開く」 is a behavior the reviewer can check; 「重複判定を
   追加」 is an operation they have to reverse-engineer.
