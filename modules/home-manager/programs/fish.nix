@@ -16,6 +16,17 @@
     cc = "claude";
     ccp = "claude --permission-mode plan";
     ccD = "claude --dangerously-skip-permissions";
+
+    # magical-merchant CLI。abbr は CLI のサブコマンドをそのまま略したもので、
+    # 引数を足す余地を残すため -m や --last は畳み込んでいない
+    mm = "magical-merchant";
+    mml = "magical-merchant list";
+    mmn = "magical-merchant new";
+    mme = "magical-merchant edit";
+    mms = "magical-merchant show";
+    mmta = "magical-merchant timeline add";
+    mmts = "magical-merchant timeline show";
+    mmtd = "magical-merchant timeline dates";
   };
   interactiveShellInit = ''
     fish_vi_key_bindings
