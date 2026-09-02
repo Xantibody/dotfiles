@@ -193,6 +193,19 @@ no default changed, no behaviour the reviewer has to think hard about. A
 rider that needs thinking is a second PR, not a longer body. The length
 scales with what the reviewer must doubt, not with what was done.
 
+### One bullet, one claim
+
+A bullet that needs a colon to carry its content is a subsection wearing a
+bullet's clothes. `- 問い方が増えた: <続けて数行ぶんの中身>` reads as a single
+list item but holds a section's worth of text, and the colon papers over the
+fact that the structure is wrong. Match the structure to the content instead:
+
+- one claim → one bullet, no colon
+- a claim plus supporting detail → nest the detail as indented sub-bullets
+- more than a couple of lines → promote it to a `###` heading
+
+The same applies to the report you give the user after creating the PR.
+
 ### Diagrams
 
 A diagram earns its place by showing **relationships** — which parts now talk
