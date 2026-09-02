@@ -184,6 +184,15 @@ Drawing is a way to delete text. The bullets under a diagram get shorter
 because the structure moved into the picture; if the body is as long with
 the diagram as it would be without, the diagram is decoration.
 
+The budget is per purpose, and a PR normally has one. When a second
+purpose rides along — a cleanup that was found on the way and wouldn't
+earn a review of its own — it gets its own paragraph in なぜやるか and
+its own bullet, and the body grows by that much. That is allowed only
+because the rider is low-risk: nothing deleted that someone depends on,
+no default changed, no behaviour the reviewer has to think hard about. A
+rider that needs thinking is a second PR, not a longer body. The length
+scales with what the reviewer must doubt, not with what was done.
+
 ### Diagrams
 
 A diagram earns its place by showing **relationships** — which parts now talk
