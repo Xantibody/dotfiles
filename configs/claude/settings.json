@@ -29,30 +29,6 @@
     ]
   },
   "plansDirectory": "./sample",
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "STORAGE_TYPE=csv CSV_PATH=$HOME/.claude/c4.csv C4_DUMP=$HOME/.claude/c4-raw.jsonl c4"
-          }
-        ]
-      }
-    ],
-    "PostToolUseFailure": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "STORAGE_TYPE=csv CSV_PATH=$HOME/.claude/c4.csv C4_DUMP=$HOME/.claude/c4-raw.jsonl c4"
-          }
-        ]
-      }
-    ]
-  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"

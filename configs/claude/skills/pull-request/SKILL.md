@@ -173,9 +173,9 @@ characters; past ~900 you are narrating something the diff or the diagram
 already shows.
 
 A `。` in the middle of a bullet is the tell. 「issue にするか聞く。テンプレ
-を追加」 is two things that happened and wants two bullets; 「c4 の改善。
-引数の形、ツール名、ハッシュ」 is an item followed by its members and
-wants a nested list. The only second sentence that stays is the reason for
+を追加」 is two things that happened and wants two bullets; 「設定画面の
+改善。並び順、検索、既定値」 is an item followed by its members and wants
+a nested list. The only second sentence that stays is the reason for
 the first — and in やらなかったこと that sentence is mandatory, because
 the reason is the part the next person cannot reconstruct. Budget is not
 a license to drop it; nest the members instead.
