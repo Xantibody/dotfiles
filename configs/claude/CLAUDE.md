@@ -12,6 +12,11 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 
 - When asking questions with multiple options, always recommend one option as the first choice.
 - Before moving to the next task, always ask if the user wants to commit the current changes.
+- When a report ends with things deliberately left out (やらなかったこと,
+  deferred items, "not in this change"), ask whether to file them as issues
+  and recommend which ones — the `issue` skill has a deferred-work template.
+  The reason something was skipped is freshest right then and is lost by
+  the next session.
 
 # Git Workflow
 
@@ -25,6 +30,13 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
   and saved HTML of reference sites live there. Read it before starting
   work; save new reference material there. It is always
   gitignored — add it to `.gitignore` if missing.
+- Write in the language the repository already uses. Read the README and
+  the last twenty commit subjects: that decides the language of commit
+  messages, code comments, docs, and PR/issue titles. A repo whose history
+  is English gets an English commit body even though this conversation is
+  in Japanese; a repo whose commits are Japanese gets Japanese. Skill body
+  templates (PR / issue) stay Japanese unless the repo's own templates say
+  otherwise — mixing languages inside one history is what to avoid.
 
 # Documentation Philosophy
 
