@@ -126,10 +126,11 @@ only makes sense with the diff open is at the wrong altitude.
 - **Counts and measurements stay when they are the reason.** 「21 箇所の
   写経を 1 つのヘルパーに」 justifies a refactor; a list of the 21 call
   sites does not.
-  The test: a teammate on a different project should be able to read every
-  bullet and understand what changed. If they would need the diff, raise the
-  altitude; if they would still need the diff after that, that is what the
-  diff is for.
+
+The test: a teammate on a different project should be able to read every
+bullet and understand what changed. If they would need the diff, raise the
+altitude; if they would still need the diff after that, that is what the
+diff is for.
 
 ### Structure
 
