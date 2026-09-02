@@ -1,14 +1,14 @@
 ---
 name: pull-request
-description: Creates GitHub pull requests with a concise Japanese body (なぜやるか / やったこと / やらなかったこと / 資料). Use this skill whenever the user wants to open, create, raise, submit, or update a PR — including phrasings like "PRを作って", "プルリク出して", "push して PR まで", "gh pr create", or simply "レビューに出したい". Also use it when updating the description of a PR that already exists.
+description: Creates GitHub pull requests with a concise Japanese body (なぜやるか / やったこと / やらなかったこと / 資料), written one level above the diff and with a mermaid diagram whenever the change rewires three or more parts. Use this skill whenever the user wants to open, create, raise, submit, or update a PR — including phrasings like "PRを作って", "プルリク出して", "push して PR まで", "gh pr create", "PRの説明を直して", or simply "レビューに出したい". Also use it when updating the description of a PR that already exists.
 ---
 
 # Pull requests
 
-GitHub already shows the reviewer the diff. The body's job is to convey the two
-things the diff cannot: **why this change exists** and **what was deliberately
-left out**. Restating the diff only makes the body longer and wastes the
-reviewer's time. Brevity is courtesy, not laziness.
+GitHub already shows the reviewer the diff. The body's job is to convey what
+the diff cannot: **why this change exists**, **what shape it has**, and
+**what was deliberately left out**. Restating the diff only makes the body
+longer and wastes the reviewer's time. Brevity is courtesy, not laziness.
 
 ## Pre-flight
 
@@ -53,6 +53,10 @@ git log --format='%s%n%b' "origin/$BASE..HEAD"   # commit bodies hold the why
 git diff "origin/$BASE...HEAD"
 ```
 
+A large diff overflows the Bash output cap and gets truncated silently.
+Past a few hundred lines, write it to a file under `$(mktemp -d)` and Read
+it in pieces — what you didn't see doesn't make it into the body.
+
 Commit bodies are the primary source for the _why_, but verify their claims
 against the diff before repeating them. On bot branches (Renovate etc.) with
 no bodies, go read the upstream release notes. Never invent a
@@ -77,7 +81,9 @@ The body is written in Japanese, in this format:
 
 ## やったこと
 
-- <何をしたか、簡潔に>
+<図を入れる場合はここに。1 行のキャプション + mermaid>
+
+- <何が新しくできるようになったか / 何が変わったか、役割の言葉で>
 
 ## やらなかったこと
 
@@ -90,29 +96,95 @@ The body is written in Japanese, in this format:
 
 - **なぜやるか** is the core of the body. If the motivation lives in a commit
   body, lift it from there.
-- **やったこと** only needs to be a table of contents for the diff. GitHub
-  already shows file lists and line counts.
+- **やったこと** is a map of the change, not a table of contents for the
+  diff. GitHub already shows file lists and line counts. See "Altitude" below.
 - **やらなかったこと** is the most valuable section when you can write it —
   stating "this is out of scope" saves the reviewer from wondering whether to
   flag it. If there is truly nothing, drop the section. Never leave an empty
   section.
 - **資料** — likewise, drop it if there are no links.
 
+### Altitude
+
+Write やったこと one level above the diff. The reader has not opened the diff
+yet; they are deciding whether to, and where to look first. A bullet that
+only makes sense with the diff open is at the wrong altitude.
+
+- **Name things by their role, not their identifier.** 「テンプレの読み書き
+  を core に足した」 reads without the repo open; 「`template/` に
+  `read_template` / `create_from_template` を足した」 does not. Identifiers
+  are pointers, not content — at most one per bullet, in parentheses, and
+  only when the reviewer will want to jump there. (This budget is for
+  やったこと; なぜやるか names whatever the problem is about, and a type
+  mismatch is about the type.)
+- **Say what became true, not what was done.** 「同じテンプレの今日のノート
+  があれば作らず開く」 is a behavior the reviewer can check; 「重複判定を
+  追加」 is an operation they have to reverse-engineer.
+- **Counts and measurements stay when they are the reason.** 「21 箇所の
+  写経を 1 つのヘルパーに」 justifies a refactor; a list of the 21 call
+  sites does not.
+- **Sub-bullets are a smell.** A bullet with three or more sub-bullets is
+  the diff's table of contents creeping back. Either the parent bullet
+  already says enough, or the structure wants a diagram.
+- **Preparatory commits get one bullet, together.** A feature branch
+  usually carries a refactor or two that made the feature possible. Fold
+  them into a single 「先に構造を直した」 bullet that says why they were
+  needed; they don't go in the diagram, and listing each one is the diff
+  again.
+
+The test: a teammate on a different project should be able to read every
+bullet and understand what changed. If they would need the diff, raise the
+altitude; if they would still need the diff after that, that is what the
+diff is for.
+
 ### Diagrams
 
-Include a diagram **only when the architecture changed** — module structure,
-direction of dependencies, or flow of control changed in a way prose conveys
-poorly. Put the mermaid block inside やったこと and draw only what changed,
-not a restatement of the whole system.
+A diagram earns its place by showing **relationships** — which parts now talk
+to which, what step appeared or disappeared — and prose is bad at exactly
+that. "Only when the architecture changed" turned out to be a gate that never
+opens: a feature that adds a module, a pipeline stage, and a screen is
+architecture too, but it never feels like it from inside the diff. So the
+gate is a count, not a judgment. Draft やったこと once, count on that
+draft, decide; if you draw, the bullets get rewritten to sit under the
+diagram, and that rewrite does not reopen the decision.
 
-Everything else — version bumps, config tweaks, typo fixes, simple additions —
-gets no diagram. A forced diagram is decoration that looks like information,
-and it costs the body its credibility. When in doubt, don't draw.
+1. **Count the actors** whose exchange the change touched — modules,
+   processes, services, screens, external systems, and the data that flows
+   between them. An unchanged neighbour counts only when it is an endpoint
+   of a new, removed, or rerouted exchange. **Three or more** means the
+   reviewer is assembling a picture from text. Draw the exchange.
+2. **Check the length.** If やったこと runs past ~6 bullets (sub-bullets
+   included), or the body carries more than ~10 backtick identifiers, the
+   text is doing a diagram's job. Either draw, or raise the altitude until
+   the count drops. Both are correct answers; leaving it as is, is not.
 
-If you do draw: always quote labels (`n["foo (bar)"]` — parentheses break the
-parse), never use lowercase `end` as a node id, and past ~15 nodes you are
-drawing the system instead of the change. Emphasize with `stroke`, not `fill`
-(fills swallow labels on GitHub's dark theme).
+Two actors or fewer — a version bump, a config tweak, a typo fix, a single
+function change — gets no diagram. A forced diagram is decoration that looks
+like information, and it costs the body its credibility.
+
+When you draw:
+
+- Put it at the top of やったこと with a one-line caption saying what the
+  reader should see in it. The bullets below then explain, not enumerate.
+- Draw the change, not the system. Keep only enough unchanged context for the
+  new parts to read as a delta. Past ~15 nodes you are drawing the system.
+- Mark what appeared or disappeared with a stroke class, and say which is
+  which in the caption. Mark nothing else — marks only mean something
+  against unchanged neighbours.
+
+```mermaid
+flowchart LR
+  tpl["テンプレ (data/templates/*.md)"] --> core["core: ノート作成"]
+  core --> note["ノート (frontmatter: template)"]
+  sync["同期の走査"] -.-> tpl
+
+  classDef added stroke:#3fb950,stroke-width:3px
+  class tpl,core added
+```
+
+Read `references/mermaid.md` before writing the block. It has the diagram
+type per kind of change, the syntax that breaks GitHub's renderer, and how to
+render the body locally to catch layout that parses but lies.
 
 ## Verify, hand off the push, create
 
@@ -142,5 +214,13 @@ to route around — hand that command over the same way.
 ## Report
 
 Give the user the PR URL, the title, and the CI outcome. State explicitly what
-you left out — files not committed, checks that couldn't run. A PR that looks
-complete but isn't is the most expensive failure here.
+you left out — files not committed, checks that couldn't run, a diagram you
+could not render. A PR that looks complete but isn't is the most expensive
+failure here.
+
+Then ask whether any of the やらなかったこと should become issues, and
+recommend which — the ones that are follow-up work in this repo, not the
+ones that are out of scope for good. On yes, file them with the `issue`
+skill's deferred-work template, one per item, linking back to the PR. The
+reason each was left out is already written; the issue is where it survives
+the merge.
