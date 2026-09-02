@@ -32,6 +32,15 @@ in
           # Home Manager Apps / trampoline 版は /nix/store 解決 or ad-hoc 署名で 1Password に弾かれる。
           { app = "/Applications/Nix Apps/Zen Browser (Beta).app"; }
           { app = "${pkgs.kitty}/Applications/kitty.app"; }
+          { app = "${pkgs.magical-merchant}/Applications/Magical Merchant.app"; }
+          # 常駐 pin と「起動中なだけの app」の境目。show-recents = false だと
+          # macOS は両者の間に区切り線を描かないので、spacer tile を末尾に
+          # 置いて自前で区切る。
+          {
+            spacer = {
+              small = true;
+            };
+          }
         ];
       };
     };
