@@ -1,11 +1,11 @@
 ---
 name: design
-description: Architecture and design consultation for applications. Use this skill when discussing system architecture, design patterns, tech stack decisions, API design, or module structure. Covers Unix/Linux Philosophy for CLI tools and Twelve-Factor App for web applications and microservices.
+description: Architecture and design consultation for new applications and features. Use this skill when discussing system architecture, design patterns, tech stack decisions, API design, or module structure — including phrasings like "設計相談", "アーキテクチャどうする", "技術選定", "構成を考えたい". Covers Unix/Linux Philosophy for CLI tools and Twelve-Factor App for web applications and microservices. For reshaping code that already exists, the refactor skill has the migration patterns.
 ---
 
 # Design Consultation
 
-Use this skill when discussing architecture, design patterns, or system structure.
+The two checklists below are not rules; they are the accumulated answers to "what makes this kind of program pleasant to operate". A CLI that writes diagnostics to stdout breaks the next pipe; a web process that keeps session state can't be restarted or scaled. Use them to notice what a proposed design will cost later, then recommend the simpler option.
 
 ## Workflow
 

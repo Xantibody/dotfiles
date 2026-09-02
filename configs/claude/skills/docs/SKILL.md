@@ -1,11 +1,11 @@
 ---
 name: docs
-description: Automated documentation and technical writing. Use this skill when the user wants to create, update, or audit documentation — including README, /docs directory, and inline code comments. Also use when adding a new module, after refactoring, or when the user mentions "docs", "documentation", "README", or "comments need updating". This skill both analyzes and executes documentation changes.
+description: Automated documentation and technical writing. Use this skill when the user wants to create, update, or audit documentation — including README, /docs directory, and inline code comments. Also use when adding a new module, after refactoring, or when the user mentions "docs", "documentation", "README", "comments need updating", "ドキュメント書いて", "README 更新して", "コメント直して". This skill both analyzes and executes documentation changes.
 ---
 
 # Docs
 
-Maintain a world-class documentation structure inspired by high-star, modern OSS projects. Ensure seamless synchronization between the codebase, inline comments, and the `/docs` directory.
+Keep the codebase, its inline comments, and the `/docs` directory telling the same story. If the repository already has a documentation structure, follow it — the layout below is the default for repositories that have none, not a target to migrate existing docs toward.
 
 ## Core Principle: Single Source of Truth
 
@@ -46,11 +46,11 @@ Detailed technical documentation per component:
 
 ## Inline Code Comments
 
-Comments explain **why**, not **what**. The code itself should be readable enough to explain what it does.
+Comments explain **why not** — the decision that isn't visible in the code. The code says what it does; the commit log says why it changed; the comment is for the alternative that was rejected, the constraint that forces the odd shape, the workaround that looks wrong on purpose. A future reader about to "fix" it is the audience.
 
 ### Rules
 
-- **Why comments**: Explain non-obvious decisions, workarounds, constraints, and business rules
+- **Why-not comments**: Explain rejected approaches, workarounds, constraints, and business rules that make the obvious refactor wrong
 - **No narration**: Do not restate what the code does (`// increment counter` on `counter++`)
 - **Link to docs**: For complex business logic, add a brief inline comment and reference the relevant doc (`// See docs/modules/billing.md for rate calculation details`)
 - **TODO/FIXME**: Use sparingly. Include a reason and ideally a tracking reference
@@ -105,7 +105,7 @@ All documentation must follow:
   - `> [!WARNING]` — Potential issues
   - `> [!CAUTION]` — Dangerous actions
 - **Mermaid diagrams** for architecture and flow visualization (only when they add clarity)
-- **Concise English** for technical references — short sentences, active voice
+- **The repository's existing language** — match whatever the README and commit history already use; short sentences, active voice either way
 - **Code blocks** with language identifiers for all code examples
 
 ### 5. Verify

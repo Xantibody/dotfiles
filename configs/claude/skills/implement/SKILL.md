@@ -1,16 +1,13 @@
 ---
 name: implement
-description: Feature implementation with TDD methodology. Use this skill when the user asks to implement a feature, fix a bug, add functionality, or build something new. Guides development through the Red-Green-Refactor cycle with Tidy First principles to keep structural and behavioral changes separate.
+description: Feature implementation with TDD methodology. Use this skill whenever the user asks to implement a feature, fix a bug, add functionality, or build something new — including phrasings like "実装して", "バグを直して", "機能を追加して", "作って", "対応して". Guides development through the Red-Green-Refactor cycle with Tidy First principles to keep structural and behavioral changes separate.
 ---
 
 # Feature Implementation
 
-Use this skill when implementing features or fixing bugs.
+Use `design` for architecture questions, `test-design` when deciding what to test, `verify` to run the project's checks, and `commit` when ready to commit.
 
-Use `design` skill for architecture and design principles.
-Use `commit` skill when ready to commit.
-
-Before starting new work, confirm the working branch: create a feature branch from the default branch for new work; never begin on an unrelated non-default branch without asking the user first.
+Before starting, run `git branch --show-current`. Whether new work belongs on the default branch or its own branch is a per-repository decision (the repo's CLAUDE.md usually says; a single-maintainer repo often commits straight to the default), so follow that rather than a fixed rule. What is never fine is beginning on an unrelated non-default branch without asking — the work ends up in someone else's PR.
 
 ## Red-Green-Refactor Cycle
 
@@ -77,4 +74,4 @@ Build features incrementally — one test at a time, never in batch. Follow the 
 5. **Refactor**: Consolidate test structure (e.g., table-driven tests) and improve code quality. Commit structural changes separately (use `commit` skill).
 6. Repeat for the next increment of the feature.
 
-Each cycle is: write ONE failing test → make it pass → run ALL tests → commit. Never write multiple tests before implementing. This incremental approach catches design issues early and keeps each step small and reversible.
+Each cycle is: write ONE failing test → make it pass → run the checks (`verify` skill) → commit (`commit` skill). Never write multiple tests before implementing. This incremental approach catches design issues early and keeps each step small and reversible. Committing does not include pushing — `git push` is the user's; report and stop.

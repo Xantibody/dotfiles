@@ -1,6 +1,6 @@
 ---
 name: test-design
-description: Design test cases following Kent Beck and t-wada principles. Use this skill when the user asks what to test, wants to design test cases, needs a test strategy, or wants to identify edge cases and boundary conditions for a feature. Focuses on behavior-driven testing with the 0-1-N rule.
+description: Design test cases following Kent Beck and t-wada principles. Use this skill when the user asks what to test, wants to design test cases, needs a test strategy, or wants to identify edge cases and boundary conditions for a feature — including phrasings like "テスト設計して", "何をテストすべき?", "エッジケース洗い出して", "テストケース考えて". Focuses on behavior-driven testing with the 0-1-N rule. This skill designs; writing the tests is the implement skill's job.
 disallowed-tools: Edit, Write, NotebookEdit
 ---
 
@@ -17,7 +17,7 @@ Inspired by Kent Beck (TDD creator) and t-wada (Takuto Wada).
 Before designing test cases, understand the context:
 
 - Read the target code or specification to understand expected behavior
-- Check the codebase for existing naming conventions, patterns, and common values (e.g., directory structures that map to identifiers, commit history patterns)
+- Check the codebase for existing naming conventions, patterns, and the values that actually flow through the code
 - Use actual values from the codebase in test cases rather than generic placeholders — this catches real-world edge cases and ensures tests match actual usage
 
 ### 2. Design Test Cases

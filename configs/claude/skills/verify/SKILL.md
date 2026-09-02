@@ -1,6 +1,6 @@
 ---
 name: verify
-description: Run all verification checks (static analysis, tests, formatting) on the codebase. Use this skill whenever the user asks to verify code quality, run all checks, lint, type check, run tests, format code, or ensure the codebase is clean before committing or deploying. Discovers project-configured commands from build files and runs them in the right order.
+description: Run all verification checks (static analysis, tests, formatting) on the codebase. Use this skill whenever the user asks to verify code quality, run all checks, lint, type check, run tests, format code, or ensure the codebase is clean before committing or deploying — including phrasings like "チェック回して", "lint して", "テスト通る?", "fmt かけて", "CI 通るか見て". Discovers project-configured commands from build files and runs them in the right order.
 ---
 
 # Verify
@@ -15,7 +15,7 @@ This skill is the single entry point for all routine quality checks, handling di
 
 Investigate available commands by checking project files in this priority order:
 
-1. **`flake.nix` / `flake.lock`**: prefer `nix flake check` for analysis+tests and `nix fmt` (treefmt) for formatting. Single command covers multi-language projects.
+1. **`flake.nix` / `flake.lock`**: prefer `nix flake check` for analysis+tests and `nix fmt` (treefmt) for formatting. Single command covers multi-language projects. Some flakes wire whole system builds into `checks` (this dotfiles repo builds NixOS hosts there), which takes minutes — when that is the case, run `nix fmt` plus the specific check the change touches (`nix build .#checks.<system>.<name>`), and say which ones you skipped.
 2. **`Makefile` / `justfile`**: look for `lint`, `check`, `typecheck`, `test`, `format`, `fmt` targets.
 3. **`package.json`**: check `scripts` for `lint`, `typecheck`, `test`, `format`, plus common tools (`eslint`, `tsc --noEmit`, `vitest`, `jest`, `prettier`, `biome`).
 4. **Language-native fallbacks** (when no project-configured command exists):
@@ -34,6 +34,8 @@ Run in this order, fixing issues before moving to the next step:
 3. **Formatter** (auto-fix style)
 
 Rationale: lint/type errors often surface issues that would otherwise cause confusing test failures; running the formatter last avoids reformatting code that you are about to fix.
+
+If the formatter rewrites files that the current change did not touch, that churn is a structural change — commit it separately (Tidy First) rather than folding it into the behavioral commit, where it hides the real diff from the reviewer.
 
 ### 3. Report and Fix
 
