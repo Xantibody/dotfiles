@@ -72,7 +72,9 @@ Past a few hundred lines, write it to a file under `$(mktemp -d)` and Read
 it in pieces — what you didn't see doesn't make it into the body.
 
 Commit bodies are the primary source for the _why_, but verify their claims
-against the diff before repeating them. On bot branches (Renovate etc.) with
+against the diff before repeating them. They are a source, not a draft:
+read them for the facts, close them, and write なぜやるか from scratch in
+the body's language (see Prose). On bot branches (Renovate etc.) with
 no bodies, go read the upstream release notes. Never invent a
 plausible-sounding rationale.
 
@@ -109,18 +111,21 @@ shared with the `issue` skill and with reports to the user. The body format:
 - <参考リンク、issue、議論>
 ```
 
-- **なぜやるか** is the core of the body. If the motivation lives in a commit
-  body, lift it from there.
+- **なぜやるか** is the core of the body: two or three sentences saying what
+  was wrong and why it is worth fixing. The commit body holds those facts;
+  it is not the draft.
 - **やったこと** is a map of the change, not a table of contents for the
   diff. GitHub already shows file lists and line counts.
 - **やらなかったこと** is the most valuable section when you can write it —
   stating "this is out of scope" saves the reviewer from wondering whether to
   flag it. It and 資料 are dropped when empty; never leave a blank section.
+- **資料** holds links: the failing run, the issue, the design note. An
+  argument that wants to go there belongs in なぜやるか or is cut.
 
-The three subsections below decide how the body reads: at what level it
-speaks (Altitude), how items are arranged (Structure), and how much of it
-there is (Length). Then Diagrams decides whether a picture replaces some
-of the text.
+The four subsections below decide how the body reads: at what level it
+speaks (Altitude), how items are arranged (Structure), how much of it
+there is (Length), and what its sentences sound like (Prose). Then
+Diagrams decides whether a picture replaces some of the text.
 
 ### Altitude
 
@@ -138,8 +143,7 @@ only makes sense with the diff open is at the wrong altitude.
   already uses; when nothing has one, spend the identifier rather than
   coin a term — 「生成物パッチ」 for a recipe nobody calls that sends the
   reader to the diff to decode it, which is what the identifier would have
-  done more honestly. Watch for translated English idioms the same way:
-  「畳んだ」 for fold-into reads as jargon where 「統合した」 does not.
+  done more honestly.
 - **Say what became true, not what was done.** 「同じテンプレの今日のノート
   があれば作らず開く」 is a behavior the reviewer can check; 「重複判定を
   追加」 is an operation they have to reverse-engineer.
@@ -190,15 +194,29 @@ Japanese does not wrap, so line counts hide length — count characters.
 The whole body fits in one screen: なぜやるか in two or three sentences,
 one idea per bullet everywhere else. Outside the diagram, stay under ~600
 characters; past ~900 you are narrating something the diff or the diagram
-already shows.
+already shows. The budget is a ceiling, not a target: a change of a few
+lines gets a body of a few sentences.
+
+Measure, don't estimate. After the draft, count the body file (`$BODY`
+from the Verify step below) with fences excluded, and cut while it is over:
+
+````bash
+sed '/^```/,/^```/d' "$BODY" | tr -d '\n' | wc -m
+````
+
+Cut the same information appearing a second time, in this order: a reason
+that なぜやるか already gives, restated on a bullet; a fact a comment in
+the diff already states; a sentence explaining a mechanism the reviewer
+can see in the diff.
 
 A `。` in the middle of a bullet is the tell. 「issue にするか聞く。テンプレ
 を追加」 is two things that happened and wants two bullets; 「設定画面の
 改善。並び順、検索、既定値」 is an item followed by its members and wants
 a nested list. The only second sentence that stays is the reason for
-the first — and in やらなかったこと that sentence is mandatory, because
-the reason is the part the next person cannot reconstruct. Budget is not
-a license to drop it; nest the members instead.
+the first, and only when なぜやるか has not already given it — a bullet
+whose reason is the PR's reason states the fact alone. In やらなかったこと
+the reason is mandatory, because it is the part the next person cannot
+reconstruct. Budget is not a license to drop it; nest the members instead.
 
 Drawing is a way to delete text. The bullets under a diagram get shorter
 because the structure moved into the picture; if the body is as long with
@@ -212,6 +230,29 @@ because the rider is low-risk: nothing deleted that someone depends on,
 no default changed, no behaviour the reviewer has to think hard about. A
 rider that needs thinking is a second PR, not a longer body. The length
 scales with what the reviewer must doubt, not with what was done.
+
+### Prose
+
+The body is written from scratch, in the plain declarative sentences a
+coworker would say aloud. The sources — commit bodies, comments in the
+diff, the diff itself — are read for facts and then closed; none of them
+is a draft. An English commit body translated paragraph by paragraph keeps
+its length and carries its idioms over verbatim: "wins or loses a race"
+becomes 「レースの勝敗で決まる」, "giving the 72 seconds back" becomes
+「72 秒を返さずに済む」, and the reader has to translate back to learn what
+happens. A comment written earlier in the same session is the same author
+repeating themself, in the same words.
+
+- **The subject is the thing; the verb is what happened to it.** 「`rm` が
+  終わる前に走ると落ちる」 names the step, the condition, and the outcome.
+  「レースの勝敗でビルドが決まる」 names none of them.
+- **No metaphor, no personification, no idiom.** Each stands in for a
+  plainer sentence that is always available: 「配信ビルドを預けている」 for
+  「リリースビルドがそのパスを使っている」, 「手当てを入れた」 for 「同じ変更を
+  入れた」, 「畳んだ」 for 「統合した」. Use the plainer one.
+
+The test: read each sentence back as if the reviewer had asked 「つまり何が
+起きる?」. If the answer is a different sentence, write that one instead.
 
 ### Diagrams
 
