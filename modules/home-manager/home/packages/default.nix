@@ -3,7 +3,7 @@ let
   k8s = import ./k8s.nix { inherit pkgs; };
   mcp = import ./mcp.nix { inherit pkgs; };
   darwin = import ./darwin.nix { inherit pkgs; };
-  isDarwin = pkgs.stdenv.isDarwin;
+  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
 in
 with pkgs;
 (

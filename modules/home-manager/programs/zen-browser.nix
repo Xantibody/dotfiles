@@ -18,7 +18,7 @@ in
     # /Applications/Nix Apps/ へ配置する (modules/darwin/zen-beta-signed.nix)。
     # 1Password の native core が /nix/store 配置を拒否するため、ここでは
     # package を入れず (null)、プロファイル/拡張/設定のみ home-manager で管理する。
-    package = lib.mkIf pkgs.stdenv.isDarwin null;
+    package = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin null;
 
     profiles.r-aizawa = {
       settings = {

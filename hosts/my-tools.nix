@@ -3,5 +3,5 @@
 
 with inputs;
 (final: _prev: {
-  ichigyo-ls = ichigyo-ls.packages.${final.system}.default;
+  ichigyo-ls = ichigyo-ls.packages.${final.stdenv.hostPlatform.system}.default;
 })

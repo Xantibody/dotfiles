@@ -6,7 +6,7 @@
   ...
 }:
 let
-  isLinux = pkgs.stdenv.isLinux;
+  isLinux = pkgs.stdenv.hostPlatform.isLinux;
   system = pkgs.stdenv.hostPlatform.system;
   lib = pkgs.lib;
 in

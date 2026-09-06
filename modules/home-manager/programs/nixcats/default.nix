@@ -9,7 +9,7 @@
 }:
 let
   utils = inputs.nixCats.utils;
-  isDarwin = pkgs.stdenv.isDarwin;
+  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
   sources = pkgs.callPackage ../../../../_sources/generated.nix { };
   arto = import ./arto.nix { inherit pkgs sources; };
 
