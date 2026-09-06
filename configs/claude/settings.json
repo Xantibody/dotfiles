@@ -28,7 +28,7 @@
       "Bash(curl)"
     ]
   },
-  "plansDirectory": "./sample",
+  "plansDirectory": ".ai/plans",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"

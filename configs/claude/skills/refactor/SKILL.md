@@ -8,7 +8,7 @@ when_to_use: When the user wants to clean up, reorganize, or redesign code that 
 
 Analyze a codebase that has grown organically (often through vibe coding) and produce a step-by-step refactoring plan. The plan preserves existing behavior while improving structure — no changes are made without test coverage first.
 
-This skill outputs numbered plan files to `sample/plans/` — `/sample` is the gitignored home for plans in every repository, so nothing needs adding to `.gitignore` — for execution in a later session (typically driven by `/goal` after `/clear`).
+This skill outputs numbered plan files to `.ai/plans/` — `.ai/` is the globally gitignored home for agent output in every repository, so nothing needs adding to `.gitignore` — for execution in a later session (typically driven by `/goal` after `/clear`).
 
 ## Why This Skill Exists
 
@@ -90,10 +90,10 @@ Identify **seams** — places in the code where you can intercept behavior to in
 
 ### 5. Generate the Plan
 
-Write plan files to `sample/plans/` with numbered prefixes:
+Write plan files to `.ai/plans/` with numbered prefixes:
 
 ```
-sample/plans/
+.ai/plans/
 ├── 01-add-characterization-tests.md
 ├── 02-extract-domain-logic.md
 ├── 03-introduce-repository-pattern.md

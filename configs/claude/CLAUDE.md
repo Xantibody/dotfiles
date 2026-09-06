@@ -26,10 +26,17 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 
 # Repository Conventions
 
-- Nearly every repository has a `/sample` directory: implementation plans
-  and saved HTML of reference sites live there. Read it before starting
-  work; save new reference material there. It is always
-  gitignored — add it to `.gitignore` if missing.
+- Every repository has a `.ai/` directory for material that exists for
+  AI sessions rather than for the product. `.ai/refs/` holds reference
+  inputs — saved HTML of reference sites, sample data, design handoffs.
+  Read it before starting work; save new reference material there.
+  Agent outputs go in a subdirectory named by purpose — `.ai/plans/`
+  (plan mode, refactor), `.ai/profiles/` (profile) — never into `refs/`.
+- `.ai/` is covered by the global git ignore, so do not add it to a
+  repository's `.gitignore`; the only exception is a repository shared
+  with other people, where it must be listed explicitly. An older
+  repository may still have `/sample` — that is `.ai/refs/` before the
+  rename, so move it rather than creating both.
 - Write in the language the repository already uses. Read the README and
   the last twenty commit subjects: that decides the language of commit
   messages, code comments, docs, and PR/issue titles. A repo whose history

@@ -20,7 +20,7 @@ Fix a reproducible scenario before measuring anything:
 - Release/optimized build (never profile debug builds; for Rust add `[profile.release] debug = true` to keep symbols)
 - Quiet machine conditions — note anything that could skew results
 
-Save all artifacts to `sample/profiles/` (`/sample` is already gitignored in every repository) with names like `<label>-before.folded`, `<label>-before.svg` so before/after pairs stay comparable.
+Save all artifacts to `.ai/profiles/` (`.ai/` is globally gitignored, so nothing needs adding to `.gitignore`) with names like `<label>-before.folded`, `<label>-before.svg` so before/after pairs stay comparable.
 
 ### 2. Choose the Profiler
 
@@ -40,23 +40,23 @@ Tool acquisition: everything here is in nixpkgs — `nix shell nixpkgs#flamegrap
 
 Always capture two kinds of data **before touching the code**:
 
-1. **Wall-clock**: `hyperfine --warmup 3 --export-json profiles/<label>-before.json '<cmd>'` — gives mean ± σ over ≥10 runs. For Go, `go test -bench=. -count=10 | tee profiles/<label>-before.txt` for benchstat.
+1. **Wall-clock**: `hyperfine --warmup 3 --export-json .ai/profiles/<label>-before.json '<cmd>'` — gives mean ± σ over ≥10 runs. For Go, `go test -bench=. -count=10 | tee .ai/profiles/<label>-before.txt` for benchstat.
 2. **CPU profile**: generate a flame graph and keep the intermediate folded stacks (needed later for the diff):
 
 **Linux (perf):**
 
 ```bash
 perf record -F 99 -g -- <cmd>
-perf script | stackcollapse-perf.pl > profiles/<label>-before.folded
-flamegraph.pl profiles/<label>-before.folded > profiles/<label>-before.svg
+perf script | stackcollapse-perf.pl > .ai/profiles/<label>-before.folded
+flamegraph.pl .ai/profiles/<label>-before.folded > .ai/profiles/<label>-before.svg
 ```
 
 **macOS (sample):**
 
 ```bash
 sample <pid-or-process-name> 30 -file /tmp/sample.txt
-stackcollapse-sample.awk /tmp/sample.txt > profiles/<label>-before.folded
-flamegraph.pl profiles/<label>-before.folded > profiles/<label>-before.svg
+stackcollapse-sample.awk /tmp/sample.txt > .ai/profiles/<label>-before.folded
+flamegraph.pl .ai/profiles/<label>-before.folded > .ai/profiles/<label>-before.svg
 ```
 
 (`cargo flamegraph` and `py-spy` do the collapse+render in one step; use `py-spy record --format raw` / `cargo flamegraph --post-process` when you need the folded file for diffing. For deep macOS dives, Instruments via `xctrace record --template 'Time Profiler'`.)
@@ -79,8 +79,8 @@ Repeat step 3 with the exact same workload, flags, and machine conditions, writi
 
 ### 6. Compare and Report
 
-- **Wall-clock**: `hyperfine` both commands in one invocation for a statistical comparison, or for Go: `benchstat profiles/<label>-before.txt profiles/<label>-after.txt` (shows delta with p-value)
-- **Differential flame graph**: `difffolded.pl profiles/<label>-before.folded profiles/<label>-after.folded | flamegraph.pl > profiles/<label>-diff.svg` — red = grew, blue = shrank
+- **Wall-clock**: `hyperfine` both commands in one invocation for a statistical comparison, or for Go: `benchstat .ai/profiles/<label>-before.txt .ai/profiles/<label>-after.txt` (shows delta with p-value)
+- **Differential flame graph**: `difffolded.pl .ai/profiles/<label>-before.folded .ai/profiles/<label>-after.folded | flamegraph.pl > .ai/profiles/<label>-diff.svg` — red = grew, blue = shrank
 
 Report using this structure:
 
@@ -95,7 +95,7 @@ Report using this structure:
 | wall-clock (mean ± σ)              | ...    | ...   | -XX%  |
 | <hot function> (flame graph width) | XX%    | XX%   | ...   |
 
-Flame graphs: profiles/<label>-{before,after,diff}.svg
+Flame graphs: .ai/profiles/<label>-{before,after,diff}.svg
 ```
 
 If the delta is within the noise (overlapping ±σ, or benchstat says ~), say so plainly — "no measurable improvement" is a valid, useful result.
