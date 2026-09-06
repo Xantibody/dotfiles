@@ -49,29 +49,19 @@ if nixCats("colorscheme") then
 	vim.cmd.colorscheme("dayfox")
 end
 
--- Load modules (order matches nixvim)
+-- oil replaces netrw; it used to set these itself, but it is now loaded on
+-- demand, after the point where netrw would already have been sourced.
+if nixCats("core") then
+	vim.g.loaded_netrw = 1
+	vim.g.loaded_netrwPlugin = 1
+end
+
+-- lualine is loaded after the first frame; hide the stock statusline until
+-- then so the screen does not flip from one to the other. lualine sets 2.
+if nixCats("display") then
+	opt.laststatus = 0
+end
+
 require("config.utils")
 require("config.ui")
-
--- Load Japanese input if enabled
-if nixCats("japanese") then
-	require("config.skkeleton")
-end
-
--- Load display modules
-if nixCats("display") then
-	require("config.hlslens")
-end
-
--- Load plugins (after skkeleton and hlslens)
 require("config.plugins")
-
--- Load alpha
-if nixCats("display") then
-	require("config.alpha")
-end
-
--- Load LSP if edit category is enabled
-if nixCats("edit") then
-	require("config.lsp")
-end

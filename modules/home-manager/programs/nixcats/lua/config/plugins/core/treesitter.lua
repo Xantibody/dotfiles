@@ -5,14 +5,18 @@ for _, path in ipairs(vim.api.nvim_get_runtime_file("runtime/queries", true)) do
 	vim.opt.runtimepath:append(runtime_dir)
 end
 
--- Register additional filetype mappings
-vim.treesitter.language.register("bash", "zsh")
-vim.treesitter.language.register("tsx", "typescriptreact")
-vim.treesitter.language.register("jsx", "javascriptreact")
-
--- Enable treesitter highlighting for all filetypes
+-- Enable treesitter highlighting for all filetypes.
+-- The filetype aliases are registered on the first FileType instead of at
+-- startup so that requiring vim.treesitter stays off the startup path.
+local registered = false
 vim.api.nvim_create_autocmd("FileType", {
 	callback = function()
+		if not registered then
+			registered = true
+			vim.treesitter.language.register("bash", "zsh")
+			vim.treesitter.language.register("tsx", "typescriptreact")
+			vim.treesitter.language.register("jsx", "javascriptreact")
+		end
 		pcall(vim.treesitter.start)
 	end,
 })

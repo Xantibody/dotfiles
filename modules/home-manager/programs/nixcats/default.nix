@@ -146,72 +146,88 @@ in
             ];
           };
 
-          # Plugins loaded at startup
+          # Plugins on the runtimepath from the start: the loader itself and
+          # libraries that other plugins require without a packadd.
           startupPlugins = {
             core = with pkgs.vimPlugins; [
-              # Dependencies
+              lze
               plenary-nvim
               nvim-web-devicons
               mini-icons
+              mini-nvim
+              fzf-lua
+              nvim-treesitter
+              nvim-treesitter.withAllGrammars
+            ];
 
+            # AI visualization (darwin-only)
+            display = lib.optionals isDarwin [ arto.plugin ];
+
+            edit = with pkgs.vimPlugins; [
+              # LSP configs are read from lsp/ on the runtimepath
+              nvim-lspconfig
+              lsp_signature-nvim
+              snacks-nvim
+
+              # blink.cmp sources and icons
+              lspkind-nvim
+              customPlugins.blink-cmp-skkeleton
+              customPlugins.blink-cmp-dictionary
+              friendly-snippets
+
+              customPlugins.vim-qfreplace
+            ];
+
+            colorscheme = with pkgs.vimPlugins; [
+              nightfox-nvim
+            ];
+          };
+
+          # Plugins packadd-ed by lze on first use (see lua/config/plugins/init.lua)
+          optionalPlugins = {
+            core = with pkgs.vimPlugins; [
               # File navigation
               telescope-nvim
               telescope-fzf-native-nvim
               oil-nvim
-              fzf-lua
 
               # Git
               diffview-nvim
               customPlugins.neogit
               gitsigns-nvim
 
-              # Syntax & parsing
-              nvim-treesitter
-              nvim-treesitter.withAllGrammars
-
               # UI
               barbar-nvim
               which-key-nvim
-              mini-nvim
             ];
 
-            display =
-              (with pkgs.vimPlugins; [
-                # Status line
-                lualine-nvim
+            display = with pkgs.vimPlugins; [
+              # Status line
+              lualine-nvim
 
-                # Visual enhancements
-                flash-nvim
-                neoscroll-nvim
-                alpha-nvim
-                hlchunk-nvim
-                nvim-hlslens
-                quick-scope
+              # Visual enhancements
+              flash-nvim
+              neoscroll-nvim
+              alpha-nvim
+              hlchunk-nvim
+              nvim-hlslens
+              quick-scope
 
-                # Custom plugins
-                customPlugins.smooth-cursor
-                customPlugins.tiny-glimmer
-              ])
-              # AI visualization (darwin-only)
-              ++ lib.optionals isDarwin [ arto.plugin ];
+              # Custom plugins
+              customPlugins.smooth-cursor
+              customPlugins.tiny-glimmer
+            ];
 
             edit = with pkgs.vimPlugins; [
               # LSP
-              nvim-lspconfig
-              lsp_signature-nvim
               fidget-nvim
               lazydev-nvim
-              snacks-nvim
 
               # Completion
               blink-cmp
-              lspkind-nvim
-              customPlugins.blink-cmp-skkeleton
-              customPlugins.blink-cmp-dictionary
 
               # Snippets
               luasnip
-              friendly-snippets
 
               # Formatting
               conform-nvim
@@ -221,7 +237,6 @@ in
               customPlugins.in-and-out
               customPlugins.tiny-code-action
               customPlugins.tiny-inline-diagnostic
-              customPlugins.vim-qfreplace
             ];
 
             preview = with pkgs.vimPlugins; [
@@ -230,18 +245,11 @@ in
               customPlugins.nvim-markdown
             ];
 
-            colorscheme = with pkgs.vimPlugins; [
-              nightfox-nvim
-            ];
-
             japanese = [
               pkgs.vimPlugins.denops-vim
               customPlugins.skkeleton
             ];
           };
-
-          # Optional plugins (lazy-loaded)
-          optionalPlugins = { };
 
           # Environment variables
           environmentVariables = { };
