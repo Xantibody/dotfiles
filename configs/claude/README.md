@@ -42,6 +42,7 @@ flowchart TD
     refactor["refactor<br/>整理の計画を立てる"]
     docs["docs<br/>ドキュメント"]
     profile["profile<br/>計測"]
+    anchors["anchors<br/>HACK / AIDEV-NOTE の一覧"]
   end
 
   subgraph shared["共通"]
