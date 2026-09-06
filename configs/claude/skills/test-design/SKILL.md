@@ -1,6 +1,7 @@
 ---
 name: test-design
-description: Design test cases following Kent Beck and t-wada principles. Use this skill when the user asks what to test, wants to design test cases, needs a test strategy, or wants to identify edge cases and boundary conditions for a feature — including phrasings like "テスト設計して", "何をテストすべき?", "エッジケース洗い出して", "テストケース考えて". Focuses on behavior-driven testing with the 0-1-N rule. This skill designs; writing the tests is the implement skill's job.
+description: Design test cases following Kent Beck and t-wada principles, with behavior-driven testing and the 0-1-N rule. This skill designs; writing the tests is the implement skill's job.
+when_to_use: When the user asks what to test, wants to design test cases, needs a test strategy, or wants to identify edge cases and boundary conditions — "テスト設計して", "何をテストすべき?", "エッジケース洗い出して", "テストケース考えて".
 disallowed-tools: Edit, Write, NotebookEdit
 ---
 

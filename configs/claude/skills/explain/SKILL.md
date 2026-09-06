@@ -1,6 +1,7 @@
 ---
 name: explain
-description: Structure rules for explanatory text a human will read — a PR body, an issue body, or the report given to the user after a task. Load it when drafting one of those, and whenever the pull-request or issue skill says to. Not for ordinary conversation. Covers one bullet, one claim (nesting vs. headings).
+description: Structure rules for explanatory text a human will read — a PR body, an issue body, or the report given to the user after a task. Covers one bullet, one claim (nesting vs. headings). Not for ordinary conversation.
+when_to_use: Load it when drafting a PR body, an issue body, or an end-of-task report, and whenever the pull-request or issue skill says to.
 ---
 
 # Explaining to a human reader

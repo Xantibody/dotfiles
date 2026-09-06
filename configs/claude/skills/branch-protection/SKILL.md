@@ -1,6 +1,7 @@
 ---
 name: branch-protection
-description: Applies a GitHub branch protection ruleset to a repository that has none, at the point the repository stops being disposable. Use this skill when the user cuts a version tag, says a PoC or prototype is finished, publishes a repo, or asks about branch protection, rulesets, main への直 push, "PoCが終わった", "tagを切った", "リポジトリを保護して", "ブランチ保護". Also use it right after the version skill creates a tag, to check whether protection is still missing.
+description: Applies a GitHub branch protection ruleset to a repository that has none, at the point the repository stops being disposable.
+when_to_use: When the user cuts a version tag, says a PoC or prototype is finished, publishes a repo, or asks about branch protection, rulesets, main への直 push — "PoCが終わった", "tagを切った", "リポジトリを保護して", "ブランチ保護". Also right after the version skill creates a tag, to check whether protection is still missing.
 ---
 
 # Branch Protection (branch-protection)

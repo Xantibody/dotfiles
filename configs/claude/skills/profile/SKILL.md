@@ -1,6 +1,7 @@
 ---
 name: profile
-description: Measure and quantify performance with profilers and flame graphs. Use this skill whenever the user wants to profile code, find hot spots or bottlenecks, generate a flame graph, benchmark code, or measure whether an optimization actually helped — including when the user just says something is "slow" / "遅い" and wants to know why, or says "プロファイル取って", "ボトルネック探して", "ベンチ取って". Covers FlameGraph (perf, sample), language-native profilers (go pprof, cargo flamegraph, py-spy), hyperfine, and differential flame graphs for before/after comparison.
+description: Measure and quantify performance with profilers and flame graphs. Covers FlameGraph (perf, sample), language-native profilers (go pprof, cargo flamegraph, py-spy), hyperfine, and differential flame graphs for before/after comparison.
+when_to_use: Whenever the user wants to profile code, find hot spots or bottlenecks, generate a flame graph, benchmark code, or measure whether an optimization actually helped — including when they just say something is "slow" / "遅い" and want to know why, or say "プロファイル取って", "ボトルネック探して", "ベンチ取って".
 ---
 
 # Profile

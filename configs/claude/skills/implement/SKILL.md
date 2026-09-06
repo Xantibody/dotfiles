@@ -1,6 +1,7 @@
 ---
 name: implement
-description: Feature implementation with TDD methodology. Use this skill whenever the user asks to implement a feature, fix a bug, add functionality, or build something new — including phrasings like "実装して", "バグを直して", "機能を追加して", "作って", "対応して". Guides development through the Red-Green-Refactor cycle with Tidy First principles to keep structural and behavioral changes separate.
+description: Feature implementation with TDD methodology. Guides development through the Red-Green-Refactor cycle with Tidy First principles to keep structural and behavioral changes separate.
+when_to_use: Whenever the user asks to implement a feature, fix a bug, add functionality, or build something new — "実装して", "バグを直して", "機能を追加して", "作って", "対応して".
 ---
 
 # Feature Implementation

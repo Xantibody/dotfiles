@@ -1,6 +1,7 @@
 ---
 name: commit
-description: Enforces Conventional Commits 1.0.0 for all git commit messages, with a body that records why the change was made. Use this skill whenever the user asks to commit changes, create a commit, or save progress to git — including phrasings like "コミットして", "コミット切って", "commit して", "ここまで保存して", or when another skill (implement, reconstruct, pull-request) reaches its commit step. Ensures commit messages follow the conventional format with proper type, scope, and description.
+description: Enforces Conventional Commits 1.0.0 for all git commit messages, with a body that records why the change was made, and infers type and scope from the staged files.
+when_to_use: Whenever the user asks to commit changes, create a commit, or save progress to git — "コミットして", "コミット切って", "commit して", "ここまで保存して" — and when another skill (implement, reconstruct, pull-request) reaches its commit step.
 ---
 
 # Conventional Commits (commit)

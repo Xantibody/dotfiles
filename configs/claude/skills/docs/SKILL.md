@@ -1,6 +1,7 @@
 ---
 name: docs
-description: Automated documentation and technical writing. Use this skill when the user wants to create, update, or audit documentation — including README, /docs directory, and inline code comments. Also use when adding a new module, after refactoring, or when the user mentions "docs", "documentation", "README", "comments need updating", "ドキュメント書いて", "README 更新して", "コメント直して". This skill both analyzes and executes documentation changes.
+description: Automated documentation and technical writing — README, the /docs directory, and inline code comments. Both analyzes and executes documentation changes.
+when_to_use: When the user wants to create, update, or audit documentation, when adding a new module, after refactoring, or when they mention "docs", "documentation", "README", "comments need updating", "ドキュメント書いて", "README 更新して", "コメント直して".
 ---
 
 # Docs
