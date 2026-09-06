@@ -10,6 +10,8 @@ Reset messy development branch history and rebuild it as logically coherent, min
 
 Since `git rebase -i` requires interactive input and cannot be used in Claude Code, this skill achieves equivalent or better results using `git reset --soft` combined with incremental `git add`.
 
+Whether a history needs this at all is the `history-review` skill's call; it is what the `implement` and `pull-request` skills run, and it ends by handing the user this command. This skill stays user-invocable only because the reset in Step 4 rewrites history, and that must never start on its own.
+
 ## Procedure
 
 ### Step 1: Identify the base branch
@@ -40,7 +42,7 @@ Show the user the commit list and changed files. If there are uncommitted change
 
 ### Step 3: Analyze and propose logical groups
 
-Classify the changed files into logical commit groups. Criteria:
+If a `history-review` verdict with a **Proposed commits** list is already in the conversation, start from that list rather than re-deriving it — the user has seen it, and re-grouping from scratch gives them two proposals to reconcile. Otherwise, classify the changed files into logical commit groups. Criteria:
 
 | Perspective  | Examples                                             |
 | ------------ | ---------------------------------------------------- |
