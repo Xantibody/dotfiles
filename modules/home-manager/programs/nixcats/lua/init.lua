@@ -1,6 +1,10 @@
 -- nixCats main configuration
 -- Migration from nixvim
 
+-- Cache compiled Lua modules under stdpath('cache'); the config lives in
+-- the Nix store so the cache is invalidated whenever the path changes.
+vim.loader.enable()
+
 -- Add config directory to Lua path
 local script_path = debug.getinfo(1, "S").source:sub(2):match("(.*/)")
 package.path = script_path .. "?.lua;" .. script_path .. "?/init.lua;" .. package.path
