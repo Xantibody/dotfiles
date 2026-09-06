@@ -53,6 +53,14 @@ longer and wastes the reviewer's time. Brevity is courtesy, not laziness.
    means step 1 went wrong. Unfamiliar commits are the user's unpushed work —
    don't silently include them, don't silently drop them; ask.
 
+4. **Read the history as the reviewer will:** the title and なぜやるか below
+   are built from these commits, so a history that needs rebuilding yields
+   a body that needs rewriting — and the rebuild is cheap only before the
+   push. Load the `history-review` skill. On **rebuild**, stop before
+   drafting and hand the user `/reconstruct`; come back to this skill once
+   the history is rebuilt. Skip this step when a PR already exists — its
+   reviewer has read the history that is there.
+
 Check for an existing PR with `gh pr view`; if one exists, use `gh pr edit`
 instead of `gh pr create`.
 

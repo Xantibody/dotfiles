@@ -75,3 +75,7 @@ Build features incrementally — one test at a time, never in batch. Follow the 
 6. Repeat for the next increment of the feature.
 
 Each cycle is: write ONE failing test → make it pass → run the checks (`verify` skill) → commit (`commit` skill). Never write multiple tests before implementing. This incremental approach catches design issues early and keeps each step small and reversible. Committing does not include pushing — `git push` is the user's; report and stop.
+
+## Finishing
+
+The per-cycle commits are checkpoints for you, not the history a reviewer reads — they see one feature, not the cycles and detours that produced it. When the feature is complete (every increment green, checks passing), load the `history-review` skill once and follow its verdict: on **rebuild**, hand the user `/reconstruct` before anything is pushed; on **pass**, report and stop. Once is the point — not after each cycle, when the answer is always "not yet", and not after the branch is pushed for review, when the history already belongs to the reviewer.
