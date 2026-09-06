@@ -313,6 +313,39 @@ Read `references/mermaid.md` before writing the block. It has the diagram
 type per kind of change, the syntax that breaks GitHub's renderer, and how to
 render the body locally to catch layout that parses but lies.
 
+### Screenshots
+
+A diagram shows relationships; a screenshot shows a result the reviewer
+would otherwise have to run the app to see — a screen, a chart, a TUI
+frame, a rendered document, a before/after pair. Same gate as the
+diagram: it earns its place only when the text would be describing
+pixels. Never for the mermaid block, which GitHub renders itself, and
+never for terminal text, which belongs in a code block where it can be
+searched and copied.
+
+`gh pr create --attach` (gh 2.100.0 or later) uploads the file and
+rewrites a matching `![alt](<path>)` in the body to the uploaded asset.
+Put the reference where the image belongs — at the top of やったこと,
+with the same one-line caption a diagram gets — and pass the same path
+string to `--attach`, alt text after `#`:
+
+```bash
+gh pr create --base "$BASE" --title "<title>" --body-file "$BODY" \
+  --attach "$IMG/after.png#設定画面: 並び順の切り替えが増えた"
+```
+
+Keep the images beside the body file under the same temp directory, and
+write the identical path in the body and on the flag — the rewrite is a
+match on the path; a file passed without a matching reference is
+appended to the end of the body. `gh pr edit` and `gh pr comment` take
+the flag too, so a PR that already exists gets its screenshot the same
+way. The limits as of gh 2.100.0: png, jpg, gif, webp, svg, mp4, mov,
+webm; images up to 10 MiB; 50 files per command; write access to the
+repo; GitHub.com and Enterprise Cloud only. The asset inherits the
+repo's visibility. If some attachments fail, gh still creates the PR
+and exits non-zero; read the body back for a reference left
+unrewritten.
+
 ## Verify, hand off the push, create
 
 Write the body outside the worktree so a later `git add -A` can't swallow it:
@@ -335,6 +368,7 @@ gh pr checks --watch
 ```
 
 Use `--body-file`, not `--body` (which mangles newlines and mermaid fences).
+Add `--attach` for each screenshot the body references (see Screenshots).
 If `gh pr create` is denied too, that is the user's decision, not an obstacle
 to route around — hand that command over the same way.
 

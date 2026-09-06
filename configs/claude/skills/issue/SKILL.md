@@ -147,6 +147,14 @@ issue. File the ones that are follow-up work this repo will actually do.
 - If reproduction logs or error output already exist in the conversation,
   paste them verbatim into 実際の動作 or 関連情報 instead of summarizing.
   Primary evidence beats a summary.
+- A screenshot of a wrong screen beats a description of it. Write
+  `![alt](<path>)` into 実際の動作 or 関連情報 and pass the same path to
+  `gh issue create --attach '<path>#<alt>'` (gh 2.99.0 or later); gh
+  uploads the file and rewrites the reference, or appends the image
+  when nothing references it. `issue edit` and `issue comment` take the
+  flag too. Images up to 10 MiB, png / jpg / gif / webp / svg and mp4 /
+  mov / webm, 50 per command, and the asset inherits the repo's
+  visibility. Terminal text stays a code block, never a screenshot.
 
 ## Create
 
@@ -155,7 +163,8 @@ mangles newlines):
 
 ```bash
 BODY=$(mktemp -d)/issue-body.md
-gh issue create --title "<title>" --body-file "$BODY"
+gh issue create --title "<title>" --body-file "$BODY" \
+  [--attach "<path>#<alt>"]
 ```
 
 Only add labels after confirming they exist with `gh label list` (use
