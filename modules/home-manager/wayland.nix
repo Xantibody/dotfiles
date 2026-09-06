@@ -25,7 +25,7 @@
           "$mod, V, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
           "$mod, R, exec, $menu"
           "$mod, P, pseudo, # dwindle"
-          "$mod, S, togglesplit, # dwindle"
+          "$mod, S, layoutmsg, togglesplit # dwindle"
           "$mod_SHIFT, E, exec, emacs"
 
           # Move focus with mod for vim key
