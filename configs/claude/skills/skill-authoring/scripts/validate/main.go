@@ -29,6 +29,34 @@ import (
 
 const docsURL = "https://code.claude.com/docs/en/skills.md"
 
+// commandsURLs are the pages that list Claude Code's bundled skills and
+// built-in commands. A user skill with the same directory name overrides
+// the bundled one (the docs say so), which is allowed but easy to do by
+// accident — `verify` is both a bundled skill that runs the app and, here,
+// the lint/test/fmt skill. The validator warns rather than fails.
+var commandsURLs = []string{
+	"https://code.claude.com/docs/en/slash-commands.md",
+	"https://code.claude.com/docs/en/commands.md",
+}
+
+// fallbackBundled is the set of bundled skill and built-in command names
+// seen on commandsURLs as of fallbackDate. Update it when the validator
+// reports a difference; the message lists the names to add or remove.
+var fallbackBundled = []string{
+	"agents", "artifacts", "auto-mode-setup", "chrome", "cost", "design-login",
+	"desktop", "diff", "doctor", "exit", "fewer-permission-prompts", "focus",
+	"heapdump", "help", "hooks", "ide", "init", "insights", "install-github-app",
+	"install-slack-app", "keybindings", "list-agents", "login", "logout",
+	"memory", "mobile", "passes", "permissions", "powerup", "privacy-settings",
+	"radio", "rate-limit-options", "recap", "release-notes", "reload-skills",
+	"remote-control", "remote-env", "rewind", "run", "run-skill-generator",
+	"sandbox", "scroll-speed", "security-review", "setup-bedrock",
+	"setup-vertex", "skill-doctor", "skills", "stats", "status", "statusline",
+	"stickers", "stop", "tasks", "team-onboarding", "teleport",
+	"terminal-setup", "theme", "upgrade", "usage", "usage-credits", "verify",
+	"vim", "web-setup", "workflow-authoring", "workflows",
+}
+
 // fallbackFields is the Frontmatter reference table as of fallbackDate.
 // Update both when the validator reports a difference from the live docs.
 const fallbackDate = "2026-09-06"
@@ -55,6 +83,7 @@ type spec struct {
 	fields     map[string]bool
 	listingCap int
 	source     string // "docs" or "fallback (<date>)"
+	bundled    map[string]bool
 }
 
 func main() {
@@ -93,7 +122,7 @@ func main() {
 // loadSpec fetches the live field list, falling back to the baked-in one and
 // reporting any drift between them.
 func loadSpec(offline bool) spec {
-	fb := spec{fields: toSet(fallbackFields), listingCap: fallbackListingCap, source: "fallback (" + fallbackDate + ")"}
+	fb := spec{fields: toSet(fallbackFields), listingCap: fallbackListingCap, source: "fallback (" + fallbackDate + ")", bundled: toSet(fallbackBundled)}
 	if offline {
 		return fb
 	}
@@ -105,7 +134,15 @@ func loadSpec(offline bool) spec {
 	if capN == 0 {
 		capN = fallbackListingCap
 	}
-	sp := spec{fields: toSet(live), listingCap: capN, source: "docs (" + docsURL + ")"}
+	sp := spec{fields: toSet(live), listingCap: capN, source: "docs (" + docsURL + ")", bundled: fb.bundled}
+	if names, err := fetchBundled(); err != nil {
+		fmt.Printf("warn:  could not fetch the command pages (%v); using the fallback bundled-name list\n", err)
+	} else {
+		sp.bundled = toSet(names)
+		if added, removed := diffSets(sp.bundled, fb.bundled); len(added) > 0 || len(removed) > 0 {
+			fmt.Printf("warn:  bundled command names differ from fallback: added %v, removed %v — update fallbackBundled in main.go\n", added, removed)
+		}
+	}
 	added, removed := diffSets(sp.fields, fb.fields)
 	if len(added) > 0 || len(removed) > 0 {
 		fmt.Printf("warn:  docs differ from fallback (%s): added %v, removed %v — update fallbackFields in %s\n",
@@ -163,6 +200,45 @@ func fetchDocs() ([]string, int, error) {
 		capN, _ = strconv.Atoi(strings.ReplaceAll(m[1], ",", ""))
 	}
 	return fields, capN, nil
+}
+
+// slashRe matches a command name in the first cell of a docs table row,
+// e.g. "| `/verify` |" — the form both the built-in command and the bundled
+// skill tables use.
+var slashRe = regexp.MustCompile("(?m)^\\|\\s*`/([a-z0-9-]+)`")
+
+// fetchBundled returns every command or bundled skill name the docs list,
+// across all commandsURLs. One unreachable page fails the whole fetch so
+// that a partial list never silently hides a collision.
+func fetchBundled() ([]string, error) {
+	client := &http.Client{Timeout: 10 * time.Second}
+	seen := map[string]bool{}
+	var names []string
+	for _, url := range commandsURLs {
+		resp, err := client.Get(url)
+		if err != nil {
+			return nil, err
+		}
+		raw, err := io.ReadAll(resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			return nil, err
+		}
+		if resp.StatusCode != http.StatusOK {
+			return nil, fmt.Errorf("%s: HTTP %d", url, resp.StatusCode)
+		}
+		for _, m := range slashRe.FindAllStringSubmatch(string(raw), -1) {
+			if !seen[m[1]] {
+				seen[m[1]] = true
+				names = append(names, m[1])
+			}
+		}
+	}
+	if len(names) == 0 {
+		return nil, fmt.Errorf("no `/name` table rows found")
+	}
+	sort.Strings(names)
+	return names, nil
 }
 
 // frontmatter is a flat view of the YAML block: top-level key → raw value
@@ -250,6 +326,9 @@ func validateSkill(dir string, sp spec) (problems, warnings []string) {
 		problems = append(problems, "missing `name` (house rule: every skill names itself after its directory)")
 	case name != base:
 		problems = append(problems, fmt.Sprintf("`name` is %q but the directory is %q; /%s would not match the path", name, base, name))
+	}
+	if sp.bundled[base] {
+		warnings = append(warnings, fmt.Sprintf("/%s is also a bundled skill or built-in command; this skill overrides it by name (its aliases still run the bundled one)", base))
 	}
 	desc := fm.scalar("description")
 	if desc == "" {

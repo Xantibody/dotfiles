@@ -100,6 +100,20 @@ read.
 Write two or three evals from real history in the repo — a range of
 commits, a file that exists — with assertions a grader can check against
 the transcript, and run one baseline without the skill so the report can
-say what the skill added. A baseline run in the same checkout can read
-the untracked skill under test from the working tree; say so in the
-report rather than presenting a contaminated baseline as clean.
+say what the skill added. Two leaks make that comparison worthless, and
+both happened the first time this was tried:
+
+- **The executor must see only the prompt.** `prepare_eval.py` writes
+  the assertions into `eval_metadata.json` next to the prompt, and
+  `copy_skill.py` copies `evals/evals.json` along with the skill. An
+  executor that reads either answers to the rubric — the baseline for
+  `history-review` reproduced the skill's exact vocabulary that way.
+  Paste the prompt into the executor's instructions and delete the
+  metadata and `evals/` from the run directory before it starts.
+- **The baseline must not see the skill.** An untracked skill in the
+  working tree, or an edited neighbour that names it, is readable from
+  the same checkout. Run the baseline in a worktree at the commit before
+  the skill existed (`git worktree add <dir> <commit>`).
+
+Say in the report which of these held for each run; a contaminated
+baseline presented as clean is worse than none.
