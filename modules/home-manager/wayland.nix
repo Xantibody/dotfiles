@@ -2,6 +2,8 @@
   windowManager = {
     hyprland = {
       enable = true;
+      # home.stateVersion 24.11 の既定値を明示する (26.05 以降の既定は lua)
+      configType = "hyprlang";
       settings = {
         exec-once = [
           # skk server起動
