@@ -32,6 +32,12 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
   Read it before starting work; save new reference material there.
   Agent outputs go in a subdirectory named by purpose — `.ai/plans/`
   (plan mode, refactor), `.ai/profiles/` (profile) — never into `refs/`.
+- `.ai/plans/` holds only plans still to be done: a session starting
+  work reads it as the open backlog. When a plan's implementation is
+  committed, move its file to `.ai/plans/done/` in the same step — done/
+  is an archive nobody reads, so first promote anything still worth
+  keeping: the why into the commit body, a rejected approach into a code
+  comment, leftovers into a deferred-work issue.
 - `.ai/` is covered by the global git ignore, so do not add it to a
   repository's `.gitignore`; the only exception is a repository shared
   with other people, where it must be listed explicitly. An older
