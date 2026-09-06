@@ -21,7 +21,7 @@
           "$mod, C, killactive,"
           "$mod, M, exit,"
           "$mod, E, exec, $fileManager"
-          "$mod, F, exec, google-chrome-stable"
+          "$mod, F, exec, zen"
           "$mod, V, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
           "$mod, R, exec, $menu"
           "$mod, P, pseudo, # dwindle"
