@@ -26,8 +26,9 @@ Compare against `origin/$BASE`, not the local branch — a local default
 that is ahead of the remote would hide the user's unpushed commits from
 the review, and those are exactly the ones still cheap to rebuild. When
 the range was handed to you — by the skill that loaded this one, or by
-the user naming two commits — use it as given and say which of these
-steps you therefore skipped.
+the user naming two commits — use it as given, print that range on the
+Range line of the verdict, and say which of these steps you therefore
+skipped.
 
 Then check whether a reviewer has already seen this history:
 
@@ -93,9 +94,10 @@ Report in this shape, then stop:
 
 ```markdown
 **Verdict:** pass | rebuild
-**Range:** origin/<base>..HEAD (<N> commits)
+**Range:** <the range reviewed> (<N> commits)
+**Skipped:** <only when the range was handed in — the fetch or PR check not run>
 
-<pass — one or two sentences on why the commits read cleanly, and stop here>
+<pass — one or two sentences on why the commits read cleanly, or that a PR already exists, and stop here>
 
 <rebuild — one bullet per offending commit: hash, subject, which rule it breaks>
 
@@ -110,7 +112,11 @@ The proposed list appears only on **rebuild**. It is the grouping
 a round trip. Order it the way that skill does: dependencies first,
 structure before behaviour, every intermediate state buildable. An
 unrelated change that rode along stays its own commit — it is not what
-is being rebuilt.
+is being rebuilt. The list never drops a change: the rebuild has to
+reproduce the branch's final diff exactly, so a whitespace-only commit
+whose unformatted text predates the range has no commit to fold into and
+becomes its own `style` commit, not a deletion. Whether that formatting
+should exist at all is a question for the PR, not for the history.
 
 On **rebuild**, hand the user `/reconstruct` — say plainly that the skill
 is user-invocable only, so it has to be typed. On **pass**, say so and

@@ -9,11 +9,11 @@
       "files": [],
       "assertions": [
         "The output contains a `**Verdict:** rebuild` line followed by a `**Range:**` line that states 13 commits.",
-        "The output names at least two of these commits as ones that ship nothing of their own (corrections, reversals, or whitespace-only): 0fcbdd1 (budget in characters, not lines), 98146e3 (やらなかったこと keeps its reason), 3ade882 (unglue the altitude test paragraph), 5c0b3cc (rider extends the budget).",
+        "The output names at least two of these commits as ones that ship nothing of their own (corrections, reversals, or whitespace-only): 0fcbdd1 (budget in characters, not lines), 98146e3 (やらなかったこと keeps its reason), 3ade882 (unglue the altitude test paragraph).",
         "The output identifies 9d63408 as a dead edit — it changes only `c4-analyze/SKILL.md`, which b4e7424 deletes later in the same range — or otherwise notes that edits to c4-analyze leave nothing in the final diff.",
         "The output points out that `configs/claude/skills/pull-request/SKILL.md` was touched repeatedly (8 of 13 commits) as evidence that one purpose is spread across several commits.",
         "The output flags 52d0226 as a commit carrying two purposes (deferred-work issues and the repo-language rule) and splits it in the proposed list.",
-        "The output contains a `**Proposed commits:**` list with fewer entries than 13, each entry in Conventional Commits form with a type and scope.",
+        "The output contains a `**Proposed commits:**` list with fewer entries than 13, each entry in Conventional Commits form with a type, and with a scope wherever the repo's CLAUDE.md scope table yields one (a commit spanning flake, hosts, and modules may be scopeless).",
         "The union of files named across the proposed commits equals the 21 files in `git diff --name-only 3dba1ed^1..3dba1ed^2` — no file dropped, none invented.",
         "The proposed list keeps the unrelated change (b4e7424, retiring the c4 command collector) as its own commit rather than folding it into the pull-request skill work, and orders it so that the dead c4-analyze edits never appear.",
         "The output tells the user to type `/reconstruct` themselves and states that the skill is user-invocable only; the transcript shows no attempt to invoke reconstruct via the Skill tool.",
@@ -31,7 +31,7 @@
         "The output contains a `**Verdict:** rebuild` line followed by a `**Range:**` line that states 3 commits.",
         "The output identifies a3d98c9 `fix fmt` as the offending commit and gives the evidence the skill asks for: it is whitespace-only (`git show -w --stat` prints nothing) and/or its subject cannot take a Conventional Commits type.",
         "The output keeps 67bbf7b `fix(nixos): permit insecure openssl-1.1.1w package` as its own commit in the proposed list, because it is a separate purpose from the lock-file update.",
-        "The proposed commit list has 2 or 3 entries, each in Conventional Commits form, and between them they cover all three changed files: `flake.lock`, `modules/nixos/default.nix`, `_sources/generated.json`.",
+        "The recommended commit list (not merely an alternative) has 2 or 3 entries, each in Conventional Commits form, and between them they cover all three changed files — `flake.lock`, `modules/nixos/default.nix`, `_sources/generated.json` — without recommending that any file change be dropped.",
         "The output tells the user to type `/reconstruct` themselves and states that the skill is user-invocable only; the transcript shows no attempt to invoke reconstruct via the Skill tool.",
         "The executor did not run `git reset`, `git rebase`, `git commit`, or any command that modifies history or the working tree."
       ]
@@ -48,7 +48,22 @@
         "The output explains why it passes in terms of the skill's rules — each commit is one logical change and they are in dependency order — and every dependency it claims between commits is true of the diffs (fcb82bb depends on 457286f's package; b80f6ff does not mention tsgo and is independent).",
         "The output's per-commit facts (files touched, what each adds) match `git log --stat` for the range.",
         "The executor did not run `git reset`, `git rebase`, `git commit`, or any command that modifies history or the working tree.",
-        "The report contains no `**Proposed commits:**` section and, outside code blocks, is under 1,000 characters."
+        "The report contains no `**Proposed commits:**` section and, outside code blocks, is under 1,000 characters counted as Unicode code points (not bytes)."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "messy-branch-with-open-pr",
+      "prompt": "You are on a feature branch of this repository whose commits against the base branch `main` are exactly the range `3dba1ed^1..3dba1ed^2` (13 commits): read them with `git log --stat --format='%h %s%n%b' 3dba1ed^1..3dba1ed^2`. Treat that range as `origin/main..HEAD` — ignore whatever is actually checked out. In this scenario the branch has already been pushed and reviewed: where the skill asks `gh pr view`, take the answer to be PR #55, state OPEN, with review comments already left on it. Do not run `gh pr view` yourself; use that answer.\n\nレビュー指摘の対応をする前に、commit 整理した方がいい?",
+      "expected_output": "A verdict of pass that gives the reason — a reviewer has already read this history, so it is not rewritten and review feedback is appended as new commits — without listing offending commits or a proposed commit list, even though the range itself is messy.",
+      "files": [],
+      "assertions": [
+        "The output contains a `**Verdict:** pass` line, not rebuild, even though the range contains commits that only correct earlier ones.",
+        "The output states the reason for the pass: a PR exists and its reviewer has read this history, so rewriting it would take away their way of seeing what changed since; review feedback is appended as new commits.",
+        "The output contains no `**Proposed commits:**` list and does not enumerate the fixup commits (0fcbdd1, 98146e3, 3ade882) as things to rebuild.",
+        "The output does not tell the user to run `/reconstruct`; if it mentions a squash at all, it says that would have to be the reviewer's request.",
+        "The executor did not run `git reset`, `git rebase`, `git commit`, or any command that modifies history or the working tree.",
+        "Outside code blocks, the report is under 800 characters counted as Unicode code points (not bytes), because there is nothing to rebuild."
       ]
     }
   ]
