@@ -10,6 +10,10 @@ in
     signByDefault = true;
     key = "~/.ssh/id_ed25519.pub";
   };
+  # AI セッション用の作業ディレクトリ (~/.claude/CLAUDE.md の Repository
+  # Conventions 参照)。全リポジトリで無視したいので各 .gitignore ではなく
+  # global ignore (~/.config/git/ignore) に置く。
+  ignores = [ ".ai/" ];
   settings = {
     user = {
       name = githubUser;
