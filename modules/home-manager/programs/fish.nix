@@ -17,6 +17,12 @@
     ccp = "claude --permission-mode plan";
     ccD = "claude --dangerously-skip-permissions";
 
+    # codex には plan mode がないので ccp 相当は置いていない。--sandbox read-only は
+    # 「書けない」だけで計画を出す挙動ではなく、同じ p を当てると cc 側と誤解を生む
+    cx = "codex";
+    cxr = "codex resume"; # 引数なしはピッカー。--last は畳み込まず後ろに足す
+    cxD = "codex --dangerously-bypass-approvals-and-sandbox";
+
     # magical-merchant CLI。abbr は CLI のサブコマンドをそのまま略したもので、
     # 引数を足す余地を残すため -m や --last は畳み込んでいない
     mm = "magical-merchant";
