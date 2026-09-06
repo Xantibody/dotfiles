@@ -131,7 +131,7 @@ in
               nixd
               rust-analyzer
               tinymist
-              typescript-go
+              typescript
               typos-lsp
               vscode-langservers-extracted
               yaml-language-server

@@ -27,9 +27,8 @@ with pkgs;
     nix-prefetch-github
     obsidian
     ripgrep
-    # tsgo-lsp プラグインが PATH 上の tsgo を起動する
-    # tsc も同梱されるので typescript は別途入れなくてよい
-    typescript-go
+    # tsgo-lsp プラグインが PATH 上の tsgo を起動する (typescript 7 系は tsc と tsgo を同梱)
+    typescript
     vhs
     yaskkserv2
 
