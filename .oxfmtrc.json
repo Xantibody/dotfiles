@@ -1,0 +1,10 @@
+{
+  "overrides": [
+    {
+      "files": ["configs/waybar/*.jsonc"],
+      "options": {
+        "trailingComma": "none"
+      }
+    }
+  ]
+}
