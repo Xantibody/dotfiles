@@ -13,7 +13,12 @@ in
   # AI セッション用の作業ディレクトリ (~/.claude/CLAUDE.md の Repository
   # Conventions 参照)。全リポジトリで無視したいので各 .gitignore ではなく
   # global ignore (~/.config/git/ignore) に置く。
-  ignores = [ ".ai/" ];
+  ignores = [
+    ".ai/"
+    # home-manager 管理前の ~/.config/git/ignore に Claude Code が書いていた行。
+    # ファイルを store のシンボリックリンクに置き換えるので、ここで引き継ぐ。
+    "**/.claude/settings.local.json"
+  ];
   settings = {
     user = {
       name = githubUser;
