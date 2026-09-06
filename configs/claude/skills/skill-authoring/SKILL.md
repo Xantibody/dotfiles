@@ -117,3 +117,10 @@ both happened the first time this was tried:
 
 Say in the report which of these held for each run; a contaminated
 baseline presented as clean is worse than none.
+
+When the loop is done, the numbers go into the commit body and the
+workspace is deleted. A `<name>-workspace/` left behind is gitignored
+but not invisible: the next session's executors and graders can read
+last time's transcripts and verdicts from it, and a comparison made
+with that in reach is no longer blind. The commit body is the record;
+the workspace is scaffolding.
