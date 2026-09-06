@@ -6,7 +6,7 @@ when_to_use: Whenever the user asks to implement a feature, fix a bug, add funct
 
 # Feature Implementation
 
-Use `design` for architecture questions, `test-design` when deciding what to test, `verify` to run the project's checks, and `commit` when ready to commit.
+Use `design` for architecture questions, `test-design` when deciding what to test, `check` to run the project's checks, and `commit` when ready to commit.
 
 Before starting, run `git branch --show-current`. Whether new work belongs on the default branch or its own branch is a per-repository decision (the repo's CLAUDE.md usually says; a single-maintainer repo often commits straight to the default), so follow that rather than a fixed rule. What is never fine is beginning on an unrelated non-default branch without asking — the work ends up in someone else's PR.
 
@@ -75,7 +75,7 @@ Build features incrementally — one test at a time, never in batch. Follow the 
 5. **Refactor**: Consolidate test structure (e.g., table-driven tests) and improve code quality. Commit structural changes separately (use `commit` skill).
 6. Repeat for the next increment of the feature.
 
-Each cycle is: write ONE failing test → make it pass → run the checks (`verify` skill) → commit (`commit` skill). Never write multiple tests before implementing. This incremental approach catches design issues early and keeps each step small and reversible. Committing does not include pushing — `git push` is the user's; report and stop.
+Each cycle is: write ONE failing test → make it pass → run the checks (`check` skill) → commit (`commit` skill). Never write multiple tests before implementing. This incremental approach catches design issues early and keeps each step small and reversible. Committing does not include pushing — `git push` is the user's; report and stop.
 
 ## Finishing
 

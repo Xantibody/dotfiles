@@ -71,7 +71,7 @@ EOF
 )"
 ```
 
-Before tagging, make sure the tree is clean and the checks pass (`verify` skill). A tag on a broken or half-committed state is the one kind of commit that is awkward to redo, because the name is already taken.
+Before tagging, make sure the tree is clean and the checks pass (`check` skill). A tag on a broken or half-committed state is the one kind of commit that is awkward to redo, because the name is already taken.
 
 After creating the tag, confirm success with `git tag -l "v<VERSION>"` and display the message with `git tag -n999 "v<VERSION>"`.
 

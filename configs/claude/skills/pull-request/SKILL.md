@@ -321,7 +321,7 @@ Write the body outside the worktree so a later `git add -A` can't swallow it:
 BODY=$(mktemp -d)/pr-body.md
 ```
 
-Before the push, run the project's checks via the `verify` skill. A PR that
+Before the push, run the project's checks via the `check` skill. A PR that
 fails its own repo's fmt/check burns a review round on nothing.
 
 `git push` is deny-listed on purpose — the user pushes. If the branch is not

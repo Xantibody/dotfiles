@@ -145,6 +145,6 @@ Revise based on feedback until the user is satisfied.
 
 ## What This Skill Does NOT Do
 
-- **Execute changes**: This skill produces plans. Execute them in a later session with `/goal`, committing each step with the `commit` skill after `verify` passes.
+- **Execute changes**: This skill produces plans. Execute them in a later session with `/goal`, committing each step with the `commit` skill after `check` passes.
 - **Make autonomous design decisions**: Design choices are always presented to the user with tradeoffs.
 - **Force a single methodology**: DDD, Transaction Script, FCIS — the right answer depends on the context.

@@ -1,5 +1,5 @@
 ---
-name: verify
+name: check
 description: Run all verification checks (static analysis, tests, formatting) on the codebase. Discovers project-configured commands from build files and runs them in the right order.
 when_to_use: Whenever the user asks to verify code quality, run all checks, lint, type check, run tests, format code, or ensure the codebase is clean before committing or deploying — "チェック回して", "lint して", "テスト通る?", "fmt かけて", "CI 通るか見て".
 ---
