@@ -24,6 +24,9 @@ in
         InitialKeyRepeat = 15;
         NSWindowShouldDragOnGesture = true;
       };
+      finder = {
+        AppleShowAllFiles = true;
+      };
       dock = {
         show-recents = false;
         autohide = true;
