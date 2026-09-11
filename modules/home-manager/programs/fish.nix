@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, packages, ... }:
 let
   # abbr は { cmd, desc } で持ち、shellAbbrs とパレットを出す `pal` 関数の両方をここから
   # 生成する。一覧を別に手書きすると必ずずれるので、定義はこのリストひとつに寄せている。
@@ -130,6 +130,15 @@ let
   rows = lib.concatMap (
     g: lib.mapAttrsToList (k: v: ''"abbr:::${k}:::${v.cmd}:::${v.desc}"'') g.items
   ) abbrGroups;
+
+  # meta.description は fish の "..." の中に置くので、そこで解釈される 3 文字を潰す。
+  # 現状どのパッケージも含まないが、パッケージが増えたときに壊れる場所にしたくない
+  escape = lib.replaceStrings [ "\\" "\"" "$" ] [ "\\\\" "\\\"" "\\$" ];
+
+  # AIDEV-NOTE: description なしを落とすのは hm-session-vars など home-manager の内部物を消すため
+  toolRows = map (p: ''"${lib.getName p}:::${escape p.meta.description}"'') (
+    lib.filter (p: (p.meta.description or "") != "") packages
+  );
 in
 {
   enable = true;
@@ -181,6 +190,31 @@ in
                 commandline -r $field[3]
                 commandline -f repaint
         end
+      '';
+    };
+    tools = {
+      description = "home-manager が入れたツールを fzf で引く";
+      body = ''
+        set -l query (string join ' ' -- $argv)
+        set -l rows${lib.concatMapStrings (row: " \\\n    ${row}") toolRows}
+
+        set -l picked (
+            for row in $rows
+                set -l f (string split ':::' -- $row)
+                printf '%-22s  %s\n' $f[1] $f[2]
+            end | sort | fzf --query "$query" \
+                --header 'Enter: コマンド名をプロンプトへ'
+        )
+
+        if test -z "$picked"
+            commandline -f repaint
+            return
+        end
+
+        # 名前はパッケージ名なので、コマンド名と違うことがある (ripgrep -> rg)。
+        # 実行せずプロンプトに置くだけなので、違っていてもその場で直せる
+        commandline -r (string split -f 1 ' ' -- $picked)
+        commandline -f repaint
       '';
     };
     # AIDEV-NOTE: root が private と work の 2 つあるので --full-path。相対パスからは root を戻せない

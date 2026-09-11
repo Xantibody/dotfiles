@@ -9,6 +9,9 @@ let
   isLinux = pkgs.stdenv.hostPlatform.isLinux;
   system = pkgs.stdenv.hostPlatform.system;
   lib = pkgs.lib;
+  # home.packages と、fish の `tools` が引く一覧の両方がこのリストを見るので、
+  # home/default.nix の中ではなくここで評価して双方に渡す
+  packages = import ./home/packages { inherit pkgs; };
 in
 {
   imports = [
@@ -23,6 +26,7 @@ in
       username
       isLinux
       self
+      packages
       ;
   };
   programs = import ./programs {
@@ -30,6 +34,7 @@ in
       pkgs
       lib
       isLinux
+      packages
       ;
   };
 }
