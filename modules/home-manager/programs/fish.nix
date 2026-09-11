@@ -125,9 +125,9 @@ let
 
   allItems = lib.foldl' (acc: g: acc // g.items) { } abbrGroups;
 
-  # 行は種別から始める。区切りは cmd にも desc にも現れない ":::"。
-  # kind はパレットが選択後の動作を決めるのに使う
-  rows = lib.concatMap (
+  # 行は "種別:::キー:::コマンド:::説明"。区切りはどの列にも現れない ":::"。
+  # 種別はパレットが選択後の動作を決めるのに使う
+  abbrRows = lib.concatMap (
     g: lib.mapAttrsToList (k: v: ''"abbr:::${k}:::${v.cmd}:::${v.desc}"'') g.items
   ) abbrGroups;
 
@@ -136,16 +136,20 @@ let
   escape = lib.replaceStrings [ "\\" "\"" "$" ] [ "\\\\" "\\\"" "\\$" ];
 
   # AIDEV-NOTE: description なしを落とすのは hm-session-vars など home-manager の内部物を消すため
-  toolRows = map (p: ''"${lib.getName p}:::${escape p.meta.description}"'') (
+  # ツールにキーはないので、キー列は空にする
+  toolRows = map (p: ''"tool:::${""}:::${lib.getName p}:::${escape p.meta.description}"'') (
     lib.filter (p: (p.meta.description or "") != "") packages
   );
+
+  rows = abbrRows ++ toolRows;
 in
 {
   enable = true;
   shellAbbrs = lib.mapAttrs (_: v: v.cmd) allItems;
   functions = {
+    # AIDEV-NOTE: commandline はコマンド実行中には効かないので、pal は Ctrl+P からしか使えない
     pal = {
-      description = "キーバインドと abbr を fzf から引いて実行する";
+      description = "キーバインド・abbr・入れたツールを fzf から引く (Ctrl+P)";
       body = ''
         # AIDEV-NOTE: 空のコマンド置換は引数ゼロ個に消えるので、--query には必ず変数をクォートで渡す
         set -l query (string join ' ' -- $argv)
@@ -171,7 +175,7 @@ in
                     $f[1] $f[2] $f[3] $f[4] $f[1] $f[3]
             end | sort | fzf --delimiter \t --with-nth 1 \
                 --query "$query" \
-                --header 'Enter: キーは実行 / abbr はプロンプトへ'
+                --header 'Enter: キーは実行 / abbr と tool はプロンプトへ'
         )
 
         if test -z "$picked"
@@ -186,35 +190,11 @@ in
                 # 引数を取らない widget なのでそのまま呼ぶ
                 $field[3]
             case '*'
-                # abbr は引数を前提にしているものが多いので、実行せず打ちかけの状態にする
+                # abbr は引数を前提にしているものが多く、tool はパッケージ名とコマンド名が
+                # 食い違うことがある (ripgrep -> rg)。どちらも実行せず打ちかけの状態にする
                 commandline -r $field[3]
                 commandline -f repaint
         end
-      '';
-    };
-    tools = {
-      description = "home-manager が入れたツールを fzf で引く";
-      body = ''
-        set -l query (string join ' ' -- $argv)
-        set -l rows${lib.concatMapStrings (row: " \\\n    ${row}") toolRows}
-
-        set -l picked (
-            for row in $rows
-                set -l f (string split ':::' -- $row)
-                printf '%-22s  %s\n' $f[1] $f[2]
-            end | sort | fzf --query "$query" \
-                --header 'Enter: コマンド名をプロンプトへ'
-        )
-
-        if test -z "$picked"
-            commandline -f repaint
-            return
-        end
-
-        # 名前はパッケージ名なので、コマンド名と違うことがある (ripgrep -> rg)。
-        # 実行せずプロンプトに置くだけなので、違っていてもその場で直せる
-        commandline -r (string split -f 1 ' ' -- $picked)
-        commandline -f repaint
       '';
     };
     # AIDEV-NOTE: root が private と work の 2 つあるので --full-path。相対パスからは root を戻せない
@@ -231,6 +211,8 @@ in
     fish_vi_key_bindings
 
     # fzf 側が insert にも張っているのに合わせ、default モードにも同じキーを置く
+    bind \cp pal
+    bind -M insert \cp pal
     bind \cg ghq-cd
     bind -M insert \cg ghq-cd
 
