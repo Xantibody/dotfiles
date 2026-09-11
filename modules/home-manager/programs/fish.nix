@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-  # abbr は { cmd, desc } で持ち、shellAbbrs と一覧を出す `abbrs` 関数の両方をここから
+  # abbr は { cmd, desc } で持ち、shellAbbrs とパレットを出す `pal` 関数の両方をここから
   # 生成する。一覧を別に手書きすると必ずずれるので、定義はこのリストひとつに寄せている。
   # グループの並びは表示順なので attrset ではなくリスト。
   abbrGroups = [
@@ -123,42 +123,80 @@ let
     }
   ];
 
+  # abbr ではないので shellAbbrs には入らないが、パレットには出したいもの。
+  # キーバインドは bind から実行時に拾えるのに対し、素のコマンドは手がかりがない
+  commandGroups = [
+    {
+      name = "ディレクトリ移動";
+      items = {
+        z = {
+          cmd = "z";
+          desc = "よく行く場所へ名前の一部でジャンプ";
+        };
+        zi = {
+          cmd = "zi";
+          desc = "よく行く場所を fzf で選ぶ";
+        };
+      };
+    }
+  ];
+
   allItems = lib.foldl' (acc: g: acc // g.items) { } abbrGroups;
 
-  widest = f: lib.foldl' (w: v: lib.max w (lib.stringLength v)) 0 (lib.mapAttrsToList f allItems);
-  nameWidth = widest (k: _: k);
-  cmdWidth = widest (_: v: v.cmd);
-
-  # 行はグループ名から始める。区切りは cmd にも desc にも現れない ":::"
-  rows = lib.concatMap (
-    g: lib.mapAttrsToList (k: v: ''"${g.name}:::${k}:::${v.cmd}:::${v.desc}"'') g.items
-  ) abbrGroups;
+  # 行は種別から始める。区切りは cmd にも desc にも現れない ":::"。
+  # kind はパレットが選択後の動作を決めるのに使う
+  mkRows =
+    kind:
+    lib.concatMap (g: lib.mapAttrsToList (k: v: ''"${kind}:::${k}:::${v.cmd}:::${v.desc}"'') g.items);
+  rows = mkRows "abbr" abbrGroups ++ mkRows "cmd" commandGroups;
 in
 {
   enable = true;
   shellAbbrs = lib.mapAttrs (_: v: v.cmd) allItems;
   functions = {
-    abbrs = {
-      description = "定義済みの abbr を説明つきで一覧する";
+    pal = {
+      description = "キーバインドと abbr を fzf から引いて実行する";
       body = ''
-        set -l query (string join ' ' -- $argv)
         set -l rows${lib.concatMapStrings (row: " \\\n    ${row}") rows}
 
-        set -l shown_group ""
-        for row in $rows
-            set -l field (string split ':::' -- $row)
-            if test -n "$query"; and not string match -qi -- "*$query*" $row
-                continue
-            end
-            if test "$field[1]" != "$shown_group"
-                set shown_group $field[1]
-                set_color --bold
-                echo -n $shown_group
-                set_color normal
-                echo
-            end
-            printf '  %-${toString nameWidth}s  %-${toString cmdWidth}s  %s\n' \
-                $field[2] $field[3] $field[4]
+        # キーバインドだけは定義を書き写さずに bind から拾う。--preset は fish と vi の
+        # 組み込みで数百行あり、-M の行は default 側と同じ内容の重複
+        for line in (bind | string match -rv -- '^#|--preset|^bind -M ')
+            set -l f (string split -m 2 ' ' -- $line)
+            # functions -v -D の 5 行目が description (fish のドキュメントによる)
+            set -l detail (functions -v -D $f[3] 2>/dev/null)
+            set -l desc $detail[5]
+            test "$desc" = n/a; and set desc ""
+            set -a rows (string join ':::' key $f[2] $f[3] $desc)
+        end
+
+        # 表示列のうしろにタブで種別とコマンドを隠す。fzf は選んだ行をそのまま返すので、
+        # --with-nth で見せる列を絞っても隠した側は取り出せる
+        set -l picked (
+            for row in $rows
+                set -l f (string split ':::' -- $row)
+                printf '%-4s  %-12s  %-22s  %s\t%s\t%s\n' \
+                    $f[1] $f[2] $f[3] $f[4] $f[1] $f[3]
+            end | sort | fzf --delimiter \t --with-nth 1 \
+                --query (string join ' ' -- $argv) \
+                --header 'Enter: キーは実行 / abbr はプロンプトへ'
+        )
+
+        if test -z "$picked"
+            commandline -f repaint
+            return
+        end
+
+        set -l field (string split \t -- $picked)
+        switch $field[2]
+            case key
+                commandline -f repaint
+                # 引数を取らない widget なのでそのまま呼ぶ
+                $field[3]
+            case '*'
+                # abbr は引数を前提にしているものが多いので、実行せず打ちかけの状態にする
+                commandline -r $field[3]
+                commandline -f repaint
         end
       '';
     };
