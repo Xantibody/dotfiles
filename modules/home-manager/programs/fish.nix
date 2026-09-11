@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
 let
   # abbr は { cmd, desc } で持ち、shellAbbrs と一覧を出す `abbrs` 関数の両方をここから
   # 生成する。一覧を別に手書きすると必ずずれるので、定義はこのリストひとつに寄せている。
@@ -198,10 +198,4 @@ in
     set -g fish_pager_color_completion $foreground
     set -g fish_pager_color_description $comment
   '';
-  plugins = [
-    {
-      name = "z";
-      src = pkgs.fishPlugins.z;
-    }
-  ];
 }
