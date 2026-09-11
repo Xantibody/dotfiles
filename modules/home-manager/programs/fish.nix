@@ -123,32 +123,13 @@ let
     }
   ];
 
-  # abbr ではないので shellAbbrs には入らないが、パレットには出したいもの。
-  # キーバインドは bind から実行時に拾えるのに対し、素のコマンドは手がかりがない
-  commandGroups = [
-    {
-      name = "ディレクトリ移動";
-      items = {
-        z = {
-          cmd = "z";
-          desc = "よく行く場所へ名前の一部でジャンプ";
-        };
-        zi = {
-          cmd = "zi";
-          desc = "よく行く場所を fzf で選ぶ";
-        };
-      };
-    }
-  ];
-
   allItems = lib.foldl' (acc: g: acc // g.items) { } abbrGroups;
 
   # 行は種別から始める。区切りは cmd にも desc にも現れない ":::"。
   # kind はパレットが選択後の動作を決めるのに使う
-  mkRows =
-    kind:
-    lib.concatMap (g: lib.mapAttrsToList (k: v: ''"${kind}:::${k}:::${v.cmd}:::${v.desc}"'') g.items);
-  rows = mkRows "abbr" abbrGroups ++ mkRows "cmd" commandGroups;
+  rows = lib.concatMap (
+    g: lib.mapAttrsToList (k: v: ''"abbr:::${k}:::${v.cmd}:::${v.desc}"'') g.items
+  ) abbrGroups;
 in
 {
   enable = true;
