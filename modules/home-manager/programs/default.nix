@@ -8,6 +8,7 @@
   emacs = import ./emacs.nix;
   fastfetch = import ./fastfetch.nix;
   fish = import ./fish.nix { inherit pkgs lib; };
+  fzf = import ./fzf.nix;
   git = import ./git.nix;
   kitty = import ./kitty.nix { inherit pkgs; };
   starship = import ./starship.nix;
