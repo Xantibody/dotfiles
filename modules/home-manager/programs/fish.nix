@@ -157,6 +157,8 @@ in
     pal = {
       description = "キーバインドと abbr を fzf から引いて実行する";
       body = ''
+        # AIDEV-NOTE: 空のコマンド置換は引数ゼロ個に消えるので、--query には必ず変数をクォートで渡す
+        set -l query (string join ' ' -- $argv)
         set -l rows${lib.concatMapStrings (row: " \\\n    ${row}") rows}
 
         # キーバインドだけは定義を書き写さずに bind から拾う。--preset は fish と vi の
@@ -178,7 +180,7 @@ in
                 printf '%-4s  %-12s  %-22s  %s\t%s\t%s\n' \
                     $f[1] $f[2] $f[3] $f[4] $f[1] $f[3]
             end | sort | fzf --delimiter \t --with-nth 1 \
-                --query (string join ' ' -- $argv) \
+                --query "$query" \
                 --header 'Enter: キーは実行 / abbr はプロンプトへ'
         )
 
