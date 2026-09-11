@@ -15,6 +15,10 @@ let
           cmd = "eza --icons -lahF";
           desc = "隠しファイル込みの詳細一覧";
         };
+        gq = {
+          cmd = "ghq-cd";
+          desc = "ghq のリポジトリへ移動（Ctrl+G でも可）";
+        };
       };
     }
     {
@@ -158,9 +162,22 @@ in
         end
       '';
     };
+    # AIDEV-NOTE: root が private と work の 2 つあるので --full-path。相対パスからは root を戻せない
+    ghq-cd = {
+      description = "ghq 管理下のリポジトリを fzf で選んで移動する";
+      body = ''
+        set -l dir (ghq list --full-path | fzf --preview 'eza --icons -1 --color=always {}')
+        test -n "$dir"; and cd $dir
+        commandline -f repaint
+      '';
+    };
   };
   interactiveShellInit = ''
     fish_vi_key_bindings
+
+    # fzf 側が insert にも張っているのに合わせ、default モードにも同じキーを置く
+    bind \cg ghq-cd
+    bind -M insert \cg ghq-cd
 
     # Nightfox Color Palette
     # Style: dayfox
