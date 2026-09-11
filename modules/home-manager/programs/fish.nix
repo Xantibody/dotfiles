@@ -61,6 +61,10 @@ let
           cmd = "claude --permission-mode plan";
           desc = "plan mode で起動";
         };
+        ccA = {
+          cmd = "claude --permission-mode auto";
+          desc = "auto mode で起動。権限を自動判断させる";
+        };
         ccD = {
           cmd = "claude --dangerously-skip-permissions";
           desc = "権限確認をすべて飛ばす（危険）";
