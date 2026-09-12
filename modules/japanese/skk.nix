@@ -39,7 +39,12 @@ let
 in
 {
   flake.modules.homeManager.skk =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       options.my.skk.dictionary = lib.mkOption {
         type = lib.types.package;

@@ -10,7 +10,7 @@
       url = "github:hercules-ci/flake-parts";
     };
     # modules/ 配下の .nix を再帰的に flake-parts の module として読む。
-    # `_` を含むパスは読まないので、移行前のツリーは modules/_legacy/ に置いてある。
+    # 先頭が `_` のパスは読まないので、flake-parts module でないものはそこに置く。
     import-tree = {
       url = "github:vic/import-tree";
     };
