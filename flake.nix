@@ -102,7 +102,13 @@
         treefmt-nix.follows = "treefmt-nix";
       };
     };
-    kotdiff.url = "github:Xantibody/kotdiff";
+    kotdiff = {
+      url = "github:Xantibody/kotdiff";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
     magical-merchant = {
       url = "github:Xantibody/magical-merchant";
       inputs = {
