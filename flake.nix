@@ -103,7 +103,14 @@
       };
     };
     kotdiff.url = "github:Xantibody/kotdiff";
-    magical-merchant.url = "github:Xantibody/magical-merchant";
+    magical-merchant = {
+      url = "github:Xantibody/magical-merchant";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+        treefmt-nix.follows = "treefmt-nix";
+      };
+    };
   };
   outputs =
     {
