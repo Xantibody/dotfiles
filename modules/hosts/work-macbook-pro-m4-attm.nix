@@ -16,6 +16,7 @@ in
     { pkgs, ... }:
     {
       imports = lib.attrVals [
+        "nix"
         "user"
         "nixpkgs"
         "home-manager"

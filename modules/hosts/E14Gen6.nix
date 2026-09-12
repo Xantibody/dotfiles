@@ -8,6 +8,7 @@ in
 
   flake.modules.nixos.E14Gen6 = {
     imports = lib.attrVals [
+      "nix"
       "user"
       "nixpkgs"
       "home-manager"

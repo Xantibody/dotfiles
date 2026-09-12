@@ -6,7 +6,6 @@
       boot = import ./boot { inherit pkgs; };
       i18n = import ./i18n.nix { inherit pkgs; };
       services = import ./services { inherit pkgs; };
-      nix = import ./nix.nix;
       networking = import ./networking.nix;
       time.timeZone = "Asia/Tokyo";
       hardware = import ./hardware;
