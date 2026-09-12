@@ -20,11 +20,6 @@ private-macbook-pro-m3:
     sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#private-macbook-pro-m3 --show-trace
     @echo "Done."
 
-# Create skkserv data
-create-JISYO:
-    mkdir -p $HOME/.skk/
-    yaskkserv2_make_dictionary --dictionary-filename=$HOME/.skk/dictionary.yaskkserv2 ./configs/skk/SKK-JISYO.L
-    @echo "Done."
 
 # 構成の characterization test を .ai/profiles/snapshot-<host>.json に落とす
 snapshot host:

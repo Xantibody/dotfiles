@@ -20,6 +20,8 @@ in
       "apps"
       "profiling"
       "emacs"
+      "skk"
+      "clipboard"
       "mdsf"
       "git"
       "claude"

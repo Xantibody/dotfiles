@@ -18,6 +18,7 @@ in
       "apps"
       "profiling"
       "emacs"
+      "skk"
       "mdsf"
       "git"
       "claude"
