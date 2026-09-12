@@ -1,0 +1,6 @@
+# 印刷。
+{
+  flake.modules.nixos.printing = {
+    services.printing.enable = true;
+  };
+}

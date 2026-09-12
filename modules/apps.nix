@@ -36,7 +36,13 @@ in
       ];
     };
 
-  flake.modules.nixos.apps = {
-    home-manager.sharedModules = [ hm.apps ];
-  };
+  flake.modules.nixos.apps =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = with pkgs; [
+        gimp3
+        slack
+      ];
+      home-manager.sharedModules = [ hm.apps ];
+    };
 }

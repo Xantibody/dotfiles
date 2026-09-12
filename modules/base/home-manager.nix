@@ -13,6 +13,7 @@ let
           username = config.my.user.name;
           homeDirectory = config.my.user.home;
           stateVersion = "24.11";
+          sessionPath = [ "$HOME/.local/bin" ];
         };
       };
     };

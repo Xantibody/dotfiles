@@ -40,7 +40,6 @@ in
       "neovim"
       "zen"
       "magical-merchant"
-      "legacy"
     ] darwin;
 
     my.user = {

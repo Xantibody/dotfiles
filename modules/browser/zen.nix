@@ -146,5 +146,13 @@ in
   flake.modules.nixos.zen = {
     nixpkgs.overlays = [ inputs.firefox-addons.overlays.default ];
     home-manager.sharedModules = [ hm.zen ];
+
+    # 1Password の native messaging は許可したブラウザ名しか受け付けない
+    environment.etc."1password/custom_allowed_browsers" = {
+      text = ''
+        .zen-wrapped
+      ''; # or just "zen" if you use unwrapped package
+      mode = "0755";
+    };
   };
 }

@@ -46,7 +46,6 @@ in
         "neovim"
         "zen"
         "magical-merchant"
-        "legacy"
         "sops"
         "work-git"
       ] darwin;

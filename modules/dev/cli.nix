@@ -32,5 +32,17 @@ in
     };
 
   flake.modules.darwin.dev-cli = share;
-  flake.modules.nixos.dev-cli = share;
+
+  flake.modules.nixos.dev-cli =
+    { pkgs, ... }:
+    {
+      imports = [ share ];
+      # NixOS には macOS と違って素の Unix ツールが揃っていないので system 側にも置く
+      environment.systemPackages = with pkgs; [
+        gcc
+        unzip
+        coreutils
+        gawk
+      ];
+    };
 }

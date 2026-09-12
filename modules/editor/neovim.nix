@@ -102,6 +102,10 @@ in
     {
       imports = [ inputs.nixCats.homeModule ];
 
+      # nixCats には programs.neovim.defaultEditor 相当が無い
+      # See: https://github.com/BirdeeHub/nixCats-nvim/issues/297
+      config.home.sessionVariables.EDITOR = "nvim";
+
       config.nixCats = {
         enable = true;
 
