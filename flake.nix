@@ -34,7 +34,11 @@
     };
     brew-nix = {
       url = "github:BatteredBunny/brew-nix";
-      inputs.brew-api.follows = "brew-api";
+      inputs = {
+        brew-api.follows = "brew-api";
+        nixpkgs.follows = "nixpkgs";
+        nix-darwin.follows = "nix-darwin";
+      };
     };
     brew-api = {
       url = "github:BatteredBunny/brew-api";
