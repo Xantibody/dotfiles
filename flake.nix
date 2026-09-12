@@ -15,7 +15,10 @@
     };
     xremap = {
       url = "github:xremap/nix-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+      };
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
