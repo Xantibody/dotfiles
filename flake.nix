@@ -2,9 +2,6 @@
   description = "r-aizawa nix conf now!";
   inputs = {
     nixpkgs.url = "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-unstable-small";
-    nixos-hardware = {
-      url = "github:NixOS/nixos-hardware/master";
-    };
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
