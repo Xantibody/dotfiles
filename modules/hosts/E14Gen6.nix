@@ -19,6 +19,7 @@ in
       "profiling"
       "emacs"
       "skk"
+      "zen"
       "mdsf"
       "git"
       "claude"

@@ -21,9 +21,12 @@
 # 別途管理する。
 #
 # Refs: 0xc000022070/zen-browser-flake#82, #212; zen-browser/desktop#10788
-{ inputs, ... }:
+{ inputs, config, ... }:
 let
-  overlay = final: _prev: {
+  hm = config.flake.modules.homeManager;
+
+  # 署名保持版 (macOS 用)。理由は上のコメント。
+  signedOverlay = final: _prev: {
     zen-beta-signed =
       inputs.zen-browser.packages.${final.stdenv.hostPlatform.system}.beta-unwrapped.overrideAttrs
         (_: {
@@ -53,10 +56,81 @@ let
   };
 in
 {
+  flake.modules.homeManager.zen =
+    { pkgs, lib, ... }:
+    let
+      rycee-addons = pkgs.firefox-addons;
+      my-nur-addons = inputs.my-nur.legacyPackages.${pkgs.stdenv.hostPlatform.system}.firefox-addons;
+    in
+    {
+      imports = [ inputs.zen-browser.homeModules.beta ];
+
+      programs.zen-browser = {
+        enable = true;
+
+        # macOS では署名保持版を environment.systemPackages 経由で
+        # /Applications/Nix Apps/ へ配置するので、ここでは package を入れず (null)、
+        # プロファイル/拡張/設定だけを home-manager で管理する。
+        package = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin null;
+
+        profiles.r-aizawa = {
+          settings = {
+            "extensions.autoDisableScopes" = 0;
+            "zen.theme.content-element-separation" = 0;
+            "browser.translations.enable" = false;
+          };
+          extensions = {
+            packages = [
+              rycee-addons.keepa
+              rycee-addons.onepassword-password-manager
+              rycee-addons.vimium
+              rycee-addons.wayback-machine
+              my-nur-addons.plamo-translate
+            ];
+          };
+
+          search = {
+            force = true;
+            engines = {
+              nix-packages = {
+                name = "Nix Packages";
+                urls = [
+                  {
+                    template = "https://search.nixos.org/packages";
+                    params = [
+                      {
+                        name = "type";
+                        value = "packages";
+                      }
+                      {
+                        name = "query";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+                icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+                definedAliases = [ "@np" ];
+              };
+            };
+          };
+        };
+      };
+    };
+
   flake.modules.darwin.zen =
     { pkgs, ... }:
     {
-      nixpkgs.overlays = [ overlay ];
+      nixpkgs.overlays = [
+        signedOverlay
+        inputs.firefox-addons.overlays.default
+      ];
       environment.systemPackages = [ pkgs.zen-beta-signed ];
+      home-manager.sharedModules = [ hm.zen ];
     };
+
+  flake.modules.nixos.zen = {
+    nixpkgs.overlays = [ inputs.firefox-addons.overlays.default ];
+    home-manager.sharedModules = [ hm.zen ];
+  };
 }

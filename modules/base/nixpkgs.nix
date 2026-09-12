@@ -9,7 +9,6 @@ let
     (final: _prev: {
       ichigyo-ls = inputs.ichigyo-ls.packages.${final.stdenv.hostPlatform.system}.default;
     })
-    inputs.firefox-addons.overlays.default
   ];
   darwinOnly = [
     (final: _prev: {
