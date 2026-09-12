@@ -56,7 +56,10 @@
       url = "github:hraban/mac-app-util";
     };
     systems.url = "github:nix-systems/default";
-    mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
+    mcp-servers-nix = {
+      url = "github:natsukium/mcp-servers-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     llm-agents.url = "github:numtide/llm-agents.nix";
     arto.url = "github:arto-app/Arto";
     ichigyo-ls.url = "github:Xantibody/ichigyo-ls";

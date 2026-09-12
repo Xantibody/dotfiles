@@ -37,12 +37,7 @@
     {
       groupName: "home-manager",
       matchManagers: ["nix"],
-      matchPackageNames: [
-        "home-manager",
-        "zen-browser",
-        "firefox-addons",
-        "nixCats",
-      ],
+      matchPackageNames: ["home-manager", "zen-browser", "firefox-addons", "nixCats"],
       automerge: true,
     },
     // 共通/基盤パッケージ
