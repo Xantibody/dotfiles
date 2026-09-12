@@ -17,7 +17,11 @@ let
     })
     inputs.brew-nix.overlays.default
   ];
-  own = import ../../overlays;
+  # まだ機能ファイルへ移していない overlay。brew-casks は brew-nix の後でないと効かない
+  own = [
+    (import ../../overlays/yaskkserv2.nix)
+    (import ../../overlays/brew-casks.nix)
+  ];
 in
 {
   flake.modules.darwin.nixpkgs = {

@@ -9,7 +9,6 @@ let
 in
 {
   imports = [
-    ./programs/mdsf
     ./programs/zen-browser.nix
   ];
   home = import ./home { inherit packages; };

@@ -17,10 +17,6 @@
     source = ../../../../configs/rofi;
     recursive = true;
   };
-  ".config/k9s" = {
-    source = ../../../../configs/k9s;
-    recursive = true;
-  };
   ".via/via.json" = {
     source = ../../../../configs/via/via.json;
   };
