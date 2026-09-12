@@ -1,7 +1,6 @@
 {
   username,
   homeDirectory,
-  self,
   packages,
   ...
 }:
@@ -9,7 +8,7 @@
   username = username;
   homeDirectory = homeDirectory;
   stateVersion = "24.11";
-  file = import ./file.nix { inherit self; };
+  file = import ./file.nix;
   inherit packages;
   shell = import ./shell.nix;
   # Set EDITOR for nixCats (programs.neovim.defaultEditor is not available)

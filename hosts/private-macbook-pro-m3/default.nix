@@ -5,7 +5,6 @@ let
     home-manager
     nix-darwin
     nixpkgs
-    self
     zen-browser
     firefox-addons
     mac-app-util
@@ -75,7 +74,6 @@ nix-darwin.lib.darwinSystem {
                 inputs
                 homeDirectory
                 username
-                self
                 ;
             })
           ];

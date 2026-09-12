@@ -5,7 +5,6 @@ let
     home-manager
     nix-darwin
     nixpkgs
-    self
     sops-nix
     zen-browser
     firefox-addons
@@ -86,7 +85,6 @@ nix-darwin.lib.darwinSystem {
                 inputs
                 homeDirectory
                 username
-                self
                 ;
             })
             {

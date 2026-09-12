@@ -5,7 +5,6 @@ let
     xremap
     sops-nix
     home-manager
-    self
     ;
 
   commonOverlays = import ../overlays.nix { inherit inputs; };
@@ -51,7 +50,6 @@ nixpkgs.lib.nixosSystem {
               inputs
               homeDirectory
               username
-              self
               ;
           };
         };

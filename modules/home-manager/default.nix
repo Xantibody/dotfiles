@@ -2,7 +2,6 @@
   pkgs,
   username,
   homeDirectory,
-  self,
   ...
 }:
 let
@@ -25,7 +24,6 @@ in
       homeDirectory
       username
       isLinux
-      self
       packages
       ;
   };
