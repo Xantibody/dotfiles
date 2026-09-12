@@ -84,7 +84,15 @@
       url = "github:natsukium/mcp-servers-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    llm-agents.url = "github:numtide/llm-agents.nix";
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+        systems.follows = "systems";
+        treefmt-nix.follows = "treefmt-nix";
+      };
+    };
     arto.url = "github:arto-app/Arto";
     ichigyo-ls.url = "github:Xantibody/ichigyo-ls";
     kotdiff.url = "github:Xantibody/kotdiff";
