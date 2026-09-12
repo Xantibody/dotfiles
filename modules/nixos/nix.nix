@@ -1,3 +1,6 @@
+let
+  caches = import ../common/nix-caches.nix;
+in
 {
   settings = {
     experimental-features = [
@@ -5,7 +8,8 @@
       "flakes"
     ];
     auto-optimise-store = true;
-  };
+  }
+  // caches;
   gc = {
     automatic = true;
     dates = "daily";
