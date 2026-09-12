@@ -74,7 +74,7 @@ require("blink.cmp").setup({
 				name = "Dict",
 				min_keyword_length = 3,
 				score_offset = -1,
-				opts = { dictionary_directories = { vim.fn.expand("~/.config/nvim/dictionary") } },
+				opts = { dictionary_directories = { nixCats.extra("dictionary_dir") } },
 			},
 		},
 	},

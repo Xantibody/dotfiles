@@ -5,10 +5,6 @@
 # symlink になる、の 2 つが起きていた。path literal はそのサブツリーだけを store へ
 # コピーするので、ハッシュはその中身だけで決まり、存在しないパスは評価時に落ちる。
 {
-  # dictionary は blink-cmp-dictionary で使用
-  ".config/nvim/dictionary" = {
-    source = ../../../../configs/dictionary;
-  };
   ".config/waybar" = {
     source = ../../../../configs/waybar;
     recursive = true;
