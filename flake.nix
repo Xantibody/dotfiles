@@ -96,7 +96,10 @@
         treefmt-nix.follows = "treefmt-nix";
       };
     };
-    arto.url = "github:arto-app/Arto";
+    arto = {
+      url = "github:arto-app/Arto";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     ichigyo-ls = {
       url = "github:Xantibody/ichigyo-ls";
       inputs = {
