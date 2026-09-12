@@ -94,7 +94,14 @@
       };
     };
     arto.url = "github:arto-app/Arto";
-    ichigyo-ls.url = "github:Xantibody/ichigyo-ls";
+    ichigyo-ls = {
+      url = "github:Xantibody/ichigyo-ls";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+        treefmt-nix.follows = "treefmt-nix";
+      };
+    };
     kotdiff.url = "github:Xantibody/kotdiff";
     magical-merchant.url = "github:Xantibody/magical-merchant";
   };
