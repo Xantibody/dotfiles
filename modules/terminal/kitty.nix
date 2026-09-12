@@ -1,0 +1,111 @@
+# kitty。配色は dayfox で、fish と fzf が同じパレットを別々に持っている。
+{ config, ... }:
+let
+  hm = config.flake.modules.homeManager;
+  share = {
+    home-manager.sharedModules = [ hm.kitty ];
+  };
+in
+{
+  flake.modules.homeManager.kitty =
+    { pkgs, ... }:
+    {
+      programs.kitty = {
+        enable = true;
+        font = {
+          name = "Explex Console NF";
+          size = 11;
+        };
+
+        settings = {
+          shell = "${pkgs.fish}/bin/fish";
+          macos_option_as_alt = true;
+          enabled_layouts = "splits:split_axis=auto";
+
+          hide_window_decorations = "titlebar-only";
+          window_border_width = 0.5;
+          window_margin_width = 0;
+          draw_minimal_borders = "yes";
+
+          # Nightfox colors for Kitty
+          ## name: dayfox
+          ## upstream: https://github.com/edeneast/nightfox.nvim/raw/main/extra/dayfox/kitty.conf
+
+          background = "#f6f2ee";
+          foreground = "#3d2b5a";
+          selection_background = "#e7d2be";
+          selection_foreground = "#3d2b5a";
+          cursor_text_color = "#f6f2ee";
+          url_color = "#396847";
+
+          # Cursor
+          # uncomment for reverse background
+          # cursor none
+          cursor = "#3d2b5a";
+
+          # Border
+          active_border_color = "#2848a9";
+          inactive_border_color = "#aab0ad";
+          bell_border_color = "#955f61";
+
+          # Tabs
+          active_tab_background = "#2848a9";
+          active_tab_foreground = "#e4dcd4";
+          inactive_tab_background = "#e7d2be";
+          inactive_tab_foreground = "#837a72";
+
+          # normal
+          color0 = "#352c24";
+          color1 = "#a5222f";
+          color2 = "#396847";
+          color3 = "#ac5402";
+          color4 = "#2848a9";
+          color5 = "#6e33ce";
+          color6 = "#287980";
+          color7 = "#f2e9e1";
+
+          # bright
+          color8 = "#534c45";
+          color9 = "#b3434e";
+          color10 = "#577f63";
+          color11 = "#b86e28";
+          color12 = "#4863b6";
+          color13 = "#8452d5";
+          color14 = "#488d93";
+          color15 = "#f4ece6";
+
+          # extended colors
+          color16 = "#955f61";
+          color17 = "#a440b5";
+        };
+
+        keybindings = {
+          "cmd+1" = "goto_tab 1";
+          "cmd+2" = "goto_tab 2";
+          "cmd+3" = "goto_tab 3";
+          "cmd+4" = "goto_tab 4";
+          "cmd+5" = "goto_tab 5";
+          "cmd+6" = "goto_tab 6";
+          "cmd+7" = "goto_tab 7";
+          "cmd+8" = "goto_tab 8";
+          "cmd+9" = "goto_tab 9";
+          "cmd+enter" = "launch --cwd=current --location=split";
+          "cmd+\\" = "launch --cwd=current --location=vsplit";
+          "cmd+-" = "launch --cwd=current --location=hsplit";
+          "cmd+w" = "close_tab";
+          "ctrl+shift+enter" = "launch --cwd=current --location=split";
+          "ctrl+shift+\\" = "launch --cwd=current --location=vsplit";
+          "ctrl+shift+-" = "launch --cwd=current --location=hsplit";
+          "ctrl+shift+w" = "close_tab";
+        };
+      };
+    };
+  flake.modules.darwin.kitty =
+    { lib, pkgs, ... }:
+    {
+      home-manager.sharedModules = [ hm.kitty ];
+      my.dock.apps = lib.mkOrder 200 [ "${pkgs.kitty}/Applications/kitty.app" ];
+    };
+
+  flake.modules.nixos.kitty = share;
+}

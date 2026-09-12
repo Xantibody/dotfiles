@@ -23,7 +23,7 @@
     {
       groupName: "nixos",
       matchManagers: ["nix"],
-      matchPackageNames: ["nixos-hardware", "xremap"],
+      matchPackageNames: ["xremap"],
       automerge: true,
     },
     // Darwin専用パッケージ
@@ -37,13 +37,7 @@
     {
       groupName: "home-manager",
       matchManagers: ["nix"],
-      matchPackageNames: [
-        "home-manager",
-        "alacritty-theme",
-        "zen-browser",
-        "firefox-addons",
-        "nixCats",
-      ],
+      matchPackageNames: ["home-manager", "zen-browser", "firefox-addons", "nixCats"],
       automerge: true,
     },
     // 共通/基盤パッケージ
@@ -56,7 +50,6 @@
         "sops-nix",
         "my-nur",
         "systems",
-        "edgepkgs",
         "mcp-servers-nix",
       ],
       automerge: true,
