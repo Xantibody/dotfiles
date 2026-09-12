@@ -15,6 +15,9 @@ let
 in
 {
   flake.modules.darwin.nix = {
+    # nix-darwin が作る nixbld グループの gid。既存インストールに合わせて固定してある
+    ids.gids.nixbld = 350;
+
     nix = {
       optimise.automatic = true;
       settings = {

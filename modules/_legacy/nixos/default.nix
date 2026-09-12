@@ -12,7 +12,6 @@
       security = import ./security.nix;
       environment = import ./environment.nix { inherit pkgs; };
       virtualisation.docker.enable = true;
-      fonts = import ./fonts.nix { inherit pkgs; };
     }
     inputs.xremap.nixosModules.default
   ];

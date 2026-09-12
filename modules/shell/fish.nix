@@ -178,14 +178,18 @@ in
       };
     };
 
-  flake.modules.darwin.fish = {
-    imports = [ share ];
-    programs.fish = {
-      enable = true;
-      # https://github.com/nix-community/home-manager/issues/8435#issuecomment-3702010953
-      useBabelfish = true;
+  flake.modules.darwin.fish =
+    { pkgs, ... }:
+    {
+      imports = [ share ];
+      # chsh で選べるようにする
+      environment.shells = [ pkgs.fish ];
+      programs.fish = {
+        enable = true;
+        # https://github.com/nix-community/home-manager/issues/8435#issuecomment-3702010953
+        useBabelfish = true;
+      };
     };
-  };
 
   flake.modules.nixos.fish = {
     imports = [ share ];

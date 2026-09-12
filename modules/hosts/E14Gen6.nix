@@ -20,6 +20,7 @@ in
       "emacs"
       "skk"
       "zen"
+      "fonts"
       "mdsf"
       "git"
       "claude"

@@ -22,6 +22,11 @@ in
       "emacs"
       "skk"
       "clipboard"
+      "dock"
+      "keyboard"
+      "finder"
+      "touchid"
+      "fonts"
       "arto"
       "mdsf"
       "git"
@@ -43,5 +48,6 @@ in
       home = "/Users/ryu.aizawa";
     };
     nixpkgs.hostPlatform = "aarch64-darwin";
+    system.stateVersion = 4;
   };
 }

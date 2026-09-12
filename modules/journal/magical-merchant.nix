@@ -44,18 +44,25 @@ in
     };
   };
 
-  flake.modules.darwin.magical-merchant = {
-    imports = [ inputs.magical-merchant.darwinModules.default ];
-    nixpkgs.overlays = [
-      (final: _prev: {
-        magical-merchant = inputs.magical-merchant.packages.${final.stdenv.hostPlatform.system}.default;
-      })
-    ];
-    services.magical-merchant = {
-      enable = true;
-      cli.enable = true;
-      workersUrl = "https://magical-merchant.sync.r-aizawa.com";
+  flake.modules.darwin.magical-merchant =
+    { lib, pkgs, ... }:
+    {
+      imports = [ inputs.magical-merchant.darwinModules.default ];
+
+      nixpkgs.overlays = [
+        (final: _prev: {
+          magical-merchant = inputs.magical-merchant.packages.${final.stdenv.hostPlatform.system}.default;
+        })
+      ];
+
+      services.magical-merchant = {
+        enable = true;
+        cli.enable = true;
+        workersUrl = "https://magical-merchant.sync.r-aizawa.com";
+      };
+
+      my.dock.apps = lib.mkOrder 300 [ "${pkgs.magical-merchant}/Applications/Magical Merchant.app" ];
+
+      home-manager.sharedModules = [ hm.magical-merchant ];
     };
-    home-manager.sharedModules = [ hm.magical-merchant ];
-  };
 }

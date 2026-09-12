@@ -2,28 +2,19 @@
 # 以前は host ごとに `import nixpkgs { overlays = ...; }` を手で呼び、それを
 # specialArgs の pkgs として配っていたので、module system が組む
 # config.nixpkgs.pkgs と二重に instantiate される形になっていた。
+# overlay は機能ごとのファイルが自分で足すので、ここには残っていない。
 { inputs, ... }:
 let
-  # TODO: ここに残っている overlay は、それぞれの機能のファイルへ移していく
-  common = [
-    (final: _prev: {
-      ichigyo-ls = inputs.ichigyo-ls.packages.${final.stdenv.hostPlatform.system}.default;
-    })
-  ];
-  darwinOnly = [ inputs.brew-nix.overlays.default ];
-  # まだ機能ファイルへ移していない overlay。brew-casks は brew-nix の後でないと効かない
-  own = [
-    (import ../../overlays/brew-casks.nix)
-  ];
+  common = {
+    nixpkgs.config.allowUnfree = true;
+  };
 in
 {
   flake.modules.darwin.nixpkgs = {
-    nixpkgs.config.allowUnfree = true;
-    nixpkgs.overlays = common ++ darwinOnly ++ own;
+    imports = [ common ];
+    # brewCasks.* を生やす。使う側 (apps, clipboard) より先に要る
+    nixpkgs.overlays = [ inputs.brew-nix.overlays.default ];
   };
 
-  flake.modules.nixos.nixpkgs = {
-    nixpkgs.config.allowUnfree = true;
-    nixpkgs.overlays = common ++ own;
-  };
+  flake.modules.nixos.nixpkgs = common;
 }

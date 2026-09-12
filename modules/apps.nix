@@ -20,12 +20,22 @@ in
       home.packages = [ pkgs.slack ];
     };
 
-  flake.modules.darwin.apps = {
-    home-manager.sharedModules = [
-      hm.apps
-      hm.apps-darwin
-    ];
-  };
+  flake.modules.darwin.apps =
+    { pkgs, ... }:
+    {
+      # brew cask の Chrome は上流の url が版ごとに動くので、hash を固定した src に差し替える
+      nixpkgs.overlays = [ (import ../overlays/brew-casks.nix) ];
+      environment.systemPackages = [
+        # _1password-gui  # 1Password は Homebrew cask を手動導入したため一旦コメントアウト
+        # brewCasks.claude  # Claude は Homebrew cask を手動導入したため一旦コメントアウト
+        pkgs.google-chrome
+      ];
+      home-manager.sharedModules = [
+        hm.apps
+        hm.apps-darwin
+      ];
+    };
+
   flake.modules.nixos.apps = {
     home-manager.sharedModules = [ hm.apps ];
   };

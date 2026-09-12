@@ -100,7 +100,12 @@ in
         };
       };
     };
+  flake.modules.darwin.kitty =
+    { lib, pkgs, ... }:
+    {
+      home-manager.sharedModules = [ hm.kitty ];
+      my.dock.apps = lib.mkOrder 200 [ "${pkgs.kitty}/Applications/kitty.app" ];
+    };
 
-  flake.modules.darwin.kitty = share;
   flake.modules.nixos.kitty = share;
 }

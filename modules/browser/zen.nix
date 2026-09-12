@@ -119,7 +119,12 @@ in
     };
 
   flake.modules.darwin.zen =
-    { pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       nixpkgs.overlays = [
         signedOverlay
@@ -127,6 +132,15 @@ in
       ];
       environment.systemPackages = [ pkgs.zen-beta-signed ];
       home-manager.sharedModules = [ hm.zen ];
+
+      # 1Password 連携のため /Applications/Nix Apps/ 版 (署名保持コピー) を pin する。
+      # Home Manager Apps / trampoline 版は /nix/store 解決 or ad-hoc 署名で 1Password に弾かれる。
+      my.dock.apps = lib.mkOrder 100 [ "/Applications/Nix Apps/Zen Browser (Beta).app" ];
+
+      # 既定ブラウザを Zen にする。macOS には宣言的な設定が無いので毎回叩く。
+      system.activationScripts.postActivation.text = ''
+        sudo -u ${config.my.user.name} ${pkgs.defaultbrowser}/bin/defaultbrowser zen
+      '';
     };
 
   flake.modules.nixos.zen = {

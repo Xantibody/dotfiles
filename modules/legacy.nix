@@ -8,14 +8,9 @@ in
   flake.modules.homeManager.legacy = ./_legacy/home-manager;
   flake.modules.homeManager.legacy-linux = ./_legacy/home-manager/linux.nix;
 
-  flake.modules.darwin.legacy =
-    { config, ... }:
-    {
-      imports = [ ./_legacy/darwin ];
-      # launchd.nix と system.nix がまだ username を module 引数で受け取っている
-      _module.args.username = config.my.user.name;
-      home-manager.sharedModules = [ hm.legacy ];
-    };
+  flake.modules.darwin.legacy = {
+    home-manager.sharedModules = [ hm.legacy ];
+  };
 
   flake.modules.nixos.legacy = {
     imports = [

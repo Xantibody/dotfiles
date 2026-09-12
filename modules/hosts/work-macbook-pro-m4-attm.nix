@@ -28,6 +28,11 @@ in
         "emacs"
         "skk"
         "clipboard"
+        "dock"
+        "keyboard"
+        "finder"
+        "touchid"
+        "fonts"
         "arto"
         "mdsf"
         "git"
@@ -41,9 +46,9 @@ in
         "neovim"
         "zen"
         "magical-merchant"
+        "legacy"
         "sops"
         "work-git"
-        "legacy"
       ] darwin;
 
       my.user = {
@@ -51,6 +56,7 @@ in
         home = "/Users/r-aizawa";
       };
       nixpkgs.hostPlatform = "aarch64-darwin";
+      system.stateVersion = 4;
 
       environment.systemPackages = with pkgs; [
         meetingbar
