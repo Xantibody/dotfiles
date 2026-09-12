@@ -22,6 +22,7 @@ in
       "emacs"
       "skk"
       "clipboard"
+      "arto"
       "mdsf"
       "git"
       "claude"

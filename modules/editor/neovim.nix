@@ -18,20 +18,10 @@ in
   flake.modules.nixos.neovim = share;
 
   flake.modules.homeManager.neovim =
-    { lib, pkgs, ... }:
+    { pkgs, ... }:
     let
       utils = inputs.nixCats.utils;
-      isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
       sources = pkgs.callPackage ../../_sources/generated.nix { };
-
-      # AI の作業を可視化する Arto (darwin のみ)。本体は modules/ai/arto.nix。
-      arto = {
-        plugin = pkgs.vimUtils.buildVimPlugin {
-          name = "arto-vim";
-          inherit (sources.arto-vim) src;
-        };
-        extra.arto_path = "${pkgs.arto}/Applications/Arto.app";
-      };
 
       # blink-cmp-dictionary が読む英単語リスト。以前は 4.7 MB の words.txt を
       # repo に置いて ~/.config/nvim/dictionary へ symlink していた。
@@ -184,9 +174,6 @@ in
                 nvim-treesitter.withAllGrammars
               ];
 
-              # AI visualization (darwin-only)
-              display = lib.optionals isDarwin [ arto.plugin ];
-
               edit = with pkgs.vimPlugins; [
                 # LSP configs are read from lsp/ on the runtimepath
                 nvim-lspconfig
@@ -295,10 +282,7 @@ in
                 ];
               };
 
-              extra = {
-                dictionary_dir = "${dictionary}";
-              }
-              // lib.optionalAttrs isDarwin arto.extra;
+              extra.dictionary_dir = "${dictionary}";
 
               # Enable all categories
               categories = {

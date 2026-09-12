@@ -10,12 +10,7 @@ let
       ichigyo-ls = inputs.ichigyo-ls.packages.${final.stdenv.hostPlatform.system}.default;
     })
   ];
-  darwinOnly = [
-    (final: _prev: {
-      arto = inputs.arto.packages.${final.stdenv.hostPlatform.system}.default;
-    })
-    inputs.brew-nix.overlays.default
-  ];
+  darwinOnly = [ inputs.brew-nix.overlays.default ];
   # まだ機能ファイルへ移していない overlay。brew-casks は brew-nix の後でないと効かない
   own = [
     (import ../../overlays/brew-casks.nix)
