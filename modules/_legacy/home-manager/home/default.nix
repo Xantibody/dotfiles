@@ -1,13 +1,5 @@
+{ packages, ... }:
 {
-  username,
-  homeDirectory,
-  packages,
-  ...
-}:
-{
-  username = username;
-  homeDirectory = homeDirectory;
-  stateVersion = "24.11";
   file = import ./file.nix;
   inherit packages;
   shell = import ./shell.nix;

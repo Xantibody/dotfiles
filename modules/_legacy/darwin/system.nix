@@ -1,16 +1,11 @@
 {
   pkgs,
   username,
-  zen-browser,
   ...
 }:
-let
-  system = pkgs.stdenv.hostPlatform.system;
-in
 {
   system = {
     stateVersion = 4;
-    primaryUser = username;
     keyboard = {
       enableKeyMapping = true;
       remapCapsLockToControl = true;

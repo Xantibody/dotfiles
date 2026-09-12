@@ -9,7 +9,8 @@
 config:
 let
   sortStr = builtins.sort (a: b: a < b);
-  pkgNames = ps: sortStr (map (p: p.name) ps);
+  # 並びは buildEnv の入力順になるので、ソートせずそのまま記録する
+  pkgNames = ps: map (p: p.name) ps;
   has = name: builtins.hasAttr name config;
 
   # system.defaults には mkRemovedOptionModule で throw する枝が混ざっていて、

@@ -1,4 +1,4 @@
-# 署名保持版 Zen Beta (macOS) — 1Password 連携を成立させるための配置調整。
+# Zen Browser (Beta)。macOS では署名保持版を /Applications/Nix Apps/ に置く。
 #
 # 問題1 (署名) は解決済み: かつて zen-browser-flake の installDarwin は公式署名済み
 #   .app を改変後に `/usr/bin/codesign --sign -` で ad-hoc 再署名し、Zen 元来の
@@ -18,33 +18,45 @@
 #   (upstream をそのまま使えるようになるのは 1Password が /nix/store を受け付けた場合のみ)
 #
 # プロファイル/拡張/設定は home-manager の programs.zen-browser が package = null で
-# 別途管理し、Dock は /Applications/Nix Apps/ 版を pin する (modules/darwin/system.nix)。
-# 1Password 側では「Add Browser」で /Applications/Nix Apps/Zen Browser (Beta).app を
-# 一度登録すれば、署名要件ベースで照合されるため rebuild をまたいで有効。
+# 別途管理する。
 #
 # Refs: 0xc000022070/zen-browser-flake#82, #212; zen-browser/desktop#10788
-{ inputs, pkgs }:
-inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.beta-unwrapped.overrideAttrs (_: {
-  installPhase = ''
-    runHook preInstall
+{ inputs, ... }:
+let
+  overlay = final: _prev: {
+    zen-beta-signed =
+      inputs.zen-browser.packages.${final.stdenv.hostPlatform.system}.beta-unwrapped.overrideAttrs
+        (_: {
+          installPhase = ''
+            runHook preInstall
 
-    mkdir -p "$out/Applications" "$out/bin"
-    cp -r *.app "$out/Applications/Zen Browser (Beta).app"
+            mkdir -p "$out/Applications" "$out/bin"
+            cp -r *.app "$out/Applications/Zen Browser (Beta).app"
 
-    cat > "$out/bin/zen-beta" << EOF
-    #!/bin/bash
-    STABLE_PATH="/Applications/Nix Apps/Zen Browser (Beta).app"
-    if [[ -e "\$STABLE_PATH" ]]; then
-      exec /usr/bin/open -na "\$STABLE_PATH" --args "\$@"
-    else
-      exec /usr/bin/open -na "$out/Applications/Zen Browser (Beta).app" --args "\$@"
-    fi
-    EOF
+            cat > "$out/bin/zen-beta" << EOF
+            #!/bin/bash
+            STABLE_PATH="/Applications/Nix Apps/Zen Browser (Beta).app"
+            if [[ -e "\$STABLE_PATH" ]]; then
+              exec /usr/bin/open -na "\$STABLE_PATH" --args "\$@"
+            else
+              exec /usr/bin/open -na "$out/Applications/Zen Browser (Beta).app" --args "\$@"
+            fi
+            EOF
 
-    chmod +x "$out/bin/zen-beta"
-    ln -s "$out/bin/zen-beta" "$out/bin/zen"
+            chmod +x "$out/bin/zen-beta"
+            ln -s "$out/bin/zen-beta" "$out/bin/zen"
 
-    runHook postInstall
-  '';
-  dontFixup = true;
-})
+            runHook postInstall
+          '';
+          dontFixup = true;
+        });
+  };
+in
+{
+  flake.modules.darwin.zen =
+    { pkgs, ... }:
+    {
+      nixpkgs.overlays = [ overlay ];
+      environment.systemPackages = [ pkgs.zen-beta-signed ];
+    };
+}
