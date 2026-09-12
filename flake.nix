@@ -51,7 +51,10 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    my-nur.url = "github:Xantibody/nur-packages";
+    my-nur = {
+      url = "github:Xantibody/nur-packages";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     mac-app-util = {
       url = "github:hraban/mac-app-util";
     };
