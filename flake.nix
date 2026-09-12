@@ -61,8 +61,25 @@
     };
     mac-app-util = {
       url = "github:hraban/mac-app-util";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+        systems.follows = "systems";
+        treefmt-nix.follows = "treefmt-nix";
+        # cl-nix-lite は mac-app-util の trampoline を組むためだけの依存で、
+        # 自前の nixpkgs / flake-parts / treefmt-nix をさらに引いてくる
+        cl-nix-lite.inputs.nixpkgs.follows = "nixpkgs";
+        cl-nix-lite.inputs.flake-parts.follows = "flake-parts";
+        cl-nix-lite.inputs.systems.follows = "systems";
+        cl-nix-lite.inputs.treefmt-nix.follows = "treefmt-nix";
+      };
     };
     systems.url = "github:nix-systems/default";
+    # 自分では使わないが、下の input 群が持ち込む 4 コピーを 1 つに畳むために置く
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+      inputs.systems.follows = "systems";
+    };
     mcp-servers-nix = {
       url = "github:natsukium/mcp-servers-nix";
       inputs.nixpkgs.follows = "nixpkgs";
