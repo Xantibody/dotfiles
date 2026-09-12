@@ -11,6 +11,10 @@ in
     # 同名の名前が入ると黙って別のものを指す。attrVals なら typo はその場で落ちる。
     imports = lib.attrVals [
       "nix"
+      "fish"
+      "git"
+      "claude"
+      "agents"
       "user"
       "nixpkgs"
       "home-manager"

@@ -9,6 +9,10 @@ in
   flake.modules.nixos.E14Gen6 = {
     imports = lib.attrVals [
       "nix"
+      "fish"
+      "git"
+      "claude"
+      "agents"
       "user"
       "nixpkgs"
       "home-manager"

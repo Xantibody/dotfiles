@@ -3,7 +3,6 @@
   imports = [
     {
       environment = import ./environment.nix { inherit pkgs; };
-      programs = import ./programs.nix;
       security = import ./security.nix;
       fonts = import ./fonts.nix { inherit pkgs; };
       services = import ./services.nix;

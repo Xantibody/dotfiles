@@ -24,18 +24,4 @@
   ".via/via.json" = {
     source = ../../../../configs/via/via.json;
   };
-  ".claude/CLAUDE.md" = {
-    source = ../../../../configs/claude/CLAUDE.md;
-  };
-  ".claude/skills" = {
-    source = ../../../../configs/claude/skills;
-    recursive = true;
-  };
-  ".claude/settings.json" = {
-    source = ../../../../configs/claude/settings.json;
-  };
-  ".claude/statusline.sh" = {
-    source = ../../../../configs/claude/statusline.sh;
-    executable = true;
-  };
 }

@@ -17,6 +17,10 @@ in
     {
       imports = lib.attrVals [
         "nix"
+        "fish"
+        "git"
+        "claude"
+        "agents"
         "user"
         "nixpkgs"
         "home-manager"
