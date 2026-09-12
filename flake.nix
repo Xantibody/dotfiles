@@ -9,6 +9,11 @@
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
     };
+    # modules/ 配下の .nix を再帰的に flake-parts の module として読む。
+    # `_` を含むパスは読まないので、移行前のツリーは modules/_legacy/ に置いてある。
+    import-tree = {
+      url = "github:vic/import-tree";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -125,58 +130,13 @@
     };
   };
   outputs =
-    {
-      flake-parts,
-      treefmt-nix,
-      systems,
-      ...
-    }@inputs:
+    { flake-parts, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = import systems;
-      imports = [ treefmt-nix.flakeModule ];
-
-      flake = {
-        nixosConfigurations = {
-          E14Gen6 = import ./hosts/E14Gen6 { inherit inputs; };
-        };
-        darwinConfigurations = {
-          work-macbook-pro-m4-attm = import ./hosts/work-macbook-pro-m4-attm { inherit inputs; };
-          private-macbook-pro-m3 = import ./hosts/private-macbook-pro-m3 { inherit inputs; };
-        };
-      };
-      perSystem =
-        { pkgs, ... }:
-        {
-          devShells.default = pkgs.mkShell {
-            packages =
-              with pkgs;
-              [
-                vim-startuptime
-                just
-              ]
-              # NixOSの指紋キャッシュを消すための依存関係
-              ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux [
-                python312
-                libfprint
-                gobject-introspection
-                gtk3
-                python3Packages.pygobject3
-                gusb
-                json-glib
-              ];
-          };
-          treefmt = {
-            projectRootFile = "flake.nix";
-            programs = {
-              actionlint.enable = true;
-              gofmt.enable = true;
-              nixfmt.enable = true;
-              fish_indent.enable = true;
-              stylua.enable = true;
-              shfmt.enable = true;
-              oxfmt.enable = true;
-            };
-          };
-        };
+      imports = [
+        # flake.modules.<class>.<name> を生やす flake-parts の extras/modules.nix。
+        # lazyAttrsOf なので、host が列挙しない機能は評価されない。
+        inputs.flake-parts.flakeModules.modules
+        (inputs.import-tree ./modules)
+      ];
     };
 }

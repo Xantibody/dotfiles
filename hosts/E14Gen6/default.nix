@@ -30,8 +30,8 @@ nixpkgs.lib.nixosSystem {
         commonOverlays ++ [ inputs.firefox-addons.overlays.default ] ++ (import ../../overlays);
       system.stateVersion = "24.11";
     }
-    ../../modules/nixos
-    ../../modules/nixos/hardware-configuration.nix
+    ../../modules/_legacy/nixos
+    ../../modules/_legacy/nixos/hardware-configuration.nix
     sops-nix.nixosModules.sops
     home-manager.nixosModules.home-manager
     (
@@ -44,7 +44,7 @@ nixpkgs.lib.nixosSystem {
           sharedModules = commonHomeModules ++ [
             sops-nix.homeManagerModules.sops
           ];
-          users."${username}" = import ../../modules/home-manager {
+          users."${username}" = import ../../modules/_legacy/home-manager {
             inherit
               pkgs
               inputs

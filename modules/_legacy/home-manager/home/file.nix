@@ -7,35 +7,35 @@
 {
   # dictionary は blink-cmp-dictionary で使用
   ".config/nvim/dictionary" = {
-    source = ../../../configs/dictionary;
+    source = ../../../../configs/dictionary;
   };
   ".config/waybar" = {
-    source = ../../../configs/waybar;
+    source = ../../../../configs/waybar;
     recursive = true;
   };
   ".config/rofi" = {
-    source = ../../../configs/rofi;
+    source = ../../../../configs/rofi;
     recursive = true;
   };
   ".config/k9s" = {
-    source = ../../../configs/k9s;
+    source = ../../../../configs/k9s;
     recursive = true;
   };
   ".via/via.json" = {
-    source = ../../../configs/via/via.json;
+    source = ../../../../configs/via/via.json;
   };
   ".claude/CLAUDE.md" = {
-    source = ../../../configs/claude/CLAUDE.md;
+    source = ../../../../configs/claude/CLAUDE.md;
   };
   ".claude/skills" = {
-    source = ../../../configs/claude/skills;
+    source = ../../../../configs/claude/skills;
     recursive = true;
   };
   ".claude/settings.json" = {
-    source = ../../../configs/claude/settings.json;
+    source = ../../../../configs/claude/settings.json;
   };
   ".claude/statusline.sh" = {
-    source = ../../../configs/claude/statusline.sh;
+    source = ../../../../configs/claude/statusline.sh;
     executable = true;
   };
 }

@@ -48,7 +48,7 @@ nix-darwin.lib.darwinSystem {
     # useGlobalPkgs = true の home-manager は config.nixpkgs.pkgs を使うため、
     # overlay (firefox-addons など) を適用済みの let pkgs をここで登録する。
     { nixpkgs.pkgs = pkgs; }
-    ../../modules/darwin
+    ../../modules/_legacy/darwin
     home-manager.darwinModules.home-manager
     mac-app-util.darwinModules.default
     inputs.magical-merchant.darwinModules.default
@@ -68,7 +68,7 @@ nix-darwin.lib.darwinSystem {
         ])
         # 署名保持版 Zen を /Applications/Nix Apps/ へ署名保持コピーさせ、
         # 1Password 連携を成立させる (詳細は zen-beta-signed.nix のコメント)。
-        ++ [ (import ../../modules/darwin/zen-beta-signed.nix { inherit inputs pkgs; }) ];
+        ++ [ (import ../../modules/_legacy/darwin/zen-beta-signed.nix { inherit inputs pkgs; }) ];
     }
     {
       home-manager = {
@@ -79,7 +79,7 @@ nix-darwin.lib.darwinSystem {
             sops-nix.homeManagerModules.sops
             ./git.nix
             mac-app-util.homeManagerModules.default
-            (import ../../modules/home-manager {
+            (import ../../modules/_legacy/home-manager {
               inherit
                 pkgs
                 inputs

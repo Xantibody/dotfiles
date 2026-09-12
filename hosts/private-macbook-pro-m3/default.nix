@@ -44,7 +44,7 @@ nix-darwin.lib.darwinSystem {
       ;
   };
   modules = [
-    ../../modules/darwin
+    ../../modules/_legacy/darwin
     home-manager.darwinModules.home-manager
     mac-app-util.darwinModules.default
     inputs.magical-merchant.darwinModules.default
@@ -59,7 +59,7 @@ nix-darwin.lib.darwinSystem {
       environment.systemPackages =
         # 署名保持版 Zen を /Applications/Nix Apps/ へ署名保持コピーさせ、
         # 1Password 連携を成立させる (詳細は zen-beta-signed.nix のコメント)。
-        [ (import ../../modules/darwin/zen-beta-signed.nix { inherit inputs pkgs; }) ];
+        [ (import ../../modules/_legacy/darwin/zen-beta-signed.nix { inherit inputs pkgs; }) ];
     }
     {
       home-manager = {
@@ -68,7 +68,7 @@ nix-darwin.lib.darwinSystem {
         users."${username}" = {
           imports = commonHomeModules ++ [
             mac-app-util.homeManagerModules.default
-            (import ../../modules/home-manager {
+            (import ../../modules/_legacy/home-manager {
               inherit
                 pkgs
                 inputs

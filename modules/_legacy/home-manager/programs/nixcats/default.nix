@@ -10,7 +10,7 @@
 let
   utils = inputs.nixCats.utils;
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
-  sources = pkgs.callPackage ../../../../_sources/generated.nix { };
+  sources = pkgs.callPackage ../../../../../_sources/generated.nix { };
   arto = import ./arto.nix { inherit pkgs sources; };
 
   # Custom plugins built from nvfetcher-managed sources
