@@ -111,6 +111,7 @@
             projectRootFile = "flake.nix";
             programs = {
               actionlint.enable = true;
+              gofmt.enable = true;
               nixfmt.enable = true;
               fish_indent.enable = true;
               stylua.enable = true;
