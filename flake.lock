@@ -393,11 +393,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788683719,
-        "narHash": "sha256-jTOjhiHc5o94aPaNM/H2X5ebUCDQqeEM6l8FRxvV2ts=",
+        "lastModified": 1789253495,
+        "narHash": "sha256-1M4N/aXctVmpw7vKwmnNRRBNtNQPhtm2XyqhLzS0bGE=",
         "owner": "Xantibody",
         "repo": "magical-merchant",
-        "rev": "ac34a5bf7ee9de4cae8e133909d7282968fe960a",
+        "rev": "5de2248b21a25885ce15cece4ab0a25e8b249fc4",
         "type": "github"
       },
       "original": {
@@ -591,11 +591,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788332415,
-        "narHash": "sha256-BTFrmyh0oaVDsvA9NNw0YpbbeppTwU0t70iVx672Ew8=",
+        "lastModified": 1789196581,
+        "narHash": "sha256-yJr1Bt4fKkKIpPYbsKGqJ0VFdoDnURgRwuffmBQ2WzY=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "860d7c835ab91bfc8972b67092f5f2db8e9390a0",
+        "rev": "228ecefb6329d5a531b77b46b581a2f0c26ee056",
         "type": "github"
       },
       "original": {
