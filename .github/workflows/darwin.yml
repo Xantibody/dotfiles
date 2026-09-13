@@ -1,0 +1,37 @@
+# darwin の「ビルド」を見る。
+#
+# check.yml の nix flake check は ubuntu で回っていて、checks.eval-<host> のおかげで
+# mac 2 台も「評価」はされる。ただし評価が通ってもビルドは落ちる: nixpkgs f496248 の
+# _7zz 26.02 は darwin でのみコンパイルに失敗し、CI が緑のまま手元の switch が壊れた。
+# 実機と同じ aarch64-darwin で toplevel を実際に組むところまでやらないと捕まらない。
+#
+# 2 台のうち private-macbook-pro-m3 だけを組む。work 機との差分は仕事用の git 設定と
+# 数パッケージで、依存更新の壊れ方はほぼ共通なので、時間を倍払う価値が無い。
+name: Build (darwin)
+
+on:
+  # 実機と同じ aarch64 で所要時間を測るために手動でも回せるようにしておく
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - flake.nix
+      - flake.lock
+      - modules/**
+      - _sources/**
+
+concurrency:
+  group: darwin-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            extra-substituters = https://cache.numtide.com https://nix-community.cachix.org
+            extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+      - run: nix build --no-link --print-out-paths .#darwinConfigurations.private-macbook-pro-m3.system
