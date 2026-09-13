@@ -43,8 +43,10 @@ local servers = {
 vim.lsp.enable(servers)
 
 -- tsgo (TypeScript Go) - custom config
+-- AIDEV-NOTE: 実行ファイルは tsc。nixpkgs 3601590 で typescript = typescript_7 になり、
+-- postInstall が bin/tsgo を bin/tsc に改名したので tsgo という名前の実体はもう無い。
 vim.lsp.config("tsgo", {
-	cmd = { "tsgo", "--lsp", "-stdio" },
+	cmd = { "tsc", "--lsp", "-stdio" },
 	filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
 	root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
 })

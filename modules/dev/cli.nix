@@ -25,7 +25,7 @@ in
         iccheck
         nix-prefetch-github
         ripgrep
-        # tsgo-lsp プラグインが PATH 上の tsgo を起動する (typescript 7 系は tsc と tsgo を同梱)
+        # LSP は PATH 上の tsc を起動する (typescript 7 = 旧 typescript-go、実行ファイルも tsc に改名)
         typescript
         vhs
       ];

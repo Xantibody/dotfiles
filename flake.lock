@@ -393,11 +393,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1789253495,
-        "narHash": "sha256-1M4N/aXctVmpw7vKwmnNRRBNtNQPhtm2XyqhLzS0bGE=",
+        "lastModified": 1789276873,
+        "narHash": "sha256-UOhk7pK/8HAJGAfQErA5DY8Bft2icCUj96SSmTGvjxs=",
         "owner": "Xantibody",
         "repo": "magical-merchant",
-        "rev": "5de2248b21a25885ce15cece4ab0a25e8b249fc4",
+        "rev": "3ccd0fc938b4f3b28ca77434e56e9240331ae98e",
         "type": "github"
       },
       "original": {
@@ -504,10 +504,10 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1788659161,
-        "narHash": "sha256-rIzUUvgwhfJeWwm7y1ZF+xRo2Gep+QYkxpj9mJbG6cM=",
+        "lastModified": 1789250252,
+        "narHash": "sha256-MOtFbGVh0kFRlhmyyZwW+gbXRkCbDC/VP5gxsY92apQ=",
         "ref": "nixos-unstable-small",
-        "rev": "de0ba0a81b0f6eed798a97fdec6f03a754b9d966",
+        "rev": "3601590bb2a434071d612bbeb8e7cf6dd533702e",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/nixos/nixpkgs"
