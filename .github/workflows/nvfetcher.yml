@@ -19,6 +19,13 @@ jobs:
         run: nix run nixpkgs#nvfetcher
       - name: Format generated sources
         run: nix fmt _sources/
+
+      # PR を作る前にここで評価する。main に required status check が無いため
+      # gh pr merge --auto は即マージし、後追いの check.yml は打ち切られる
+      # (PR #62/#63 は作成 4 秒後にマージ済み)。CI を後ろに置いても意味が無い。
+      - name: Check
+        run: nix flake check
+
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v8
