@@ -5,7 +5,9 @@
   rebaseWhen: "conflicted",
   lockFileMaintenance: {
     enabled: true,
-    schedule: ["before 6am on monday"],
+    // 月曜いっぱいを窓にする。"before 6am on monday" は UTC 月曜 0-6 時の 6 時間しかなく、
+    // 無料枠の Mend アプリだとこの窓を外し続け、2026-04-20 以降 schedule 起動が 1 度も無かった。
+    schedule: ["* * * * 1"],
     automerge: true,
   },
   nix: {
