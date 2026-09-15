@@ -11,12 +11,13 @@ let
   overlay = _final: prev: {
     yaskkserv2 = prev.rustPlatform.buildRustPackage {
       pname = "yaskkserv2";
-      version = "unstable-2025-10-12";
+      version = "unstable-2026-03-20";
 
       src = prev.fetchFromGitHub {
         owner = "wachikun";
         repo = "yaskkserv2";
-        rev = "master";
+        # AIDEV-NOTE: rev は commit に固定する。"master" だと upstream が進んだ時点で hash mismatch で落ちる
+        rev = "f5bc4590c798c591e9861e02ea2e12d227a047ed";
         hash = "sha256-6XE/ujU+B/gTd+S4LWQRFk9JbZz1z9SR+Nr7cARqLtY=";
       };
 
