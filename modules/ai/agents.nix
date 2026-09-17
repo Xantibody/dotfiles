@@ -35,9 +35,9 @@ in
           cmd = "codex resume";
           desc = "セッション再開。引数なしはピッカー、--last で直近";
         };
-        cxD = {
-          cmd = "codex --dangerously-bypass-approvals-and-sandbox";
-          desc = "承認とサンドボックスを飛ばす（危険）";
+        cxA = {
+          cmd = "codex --approve-for-me";
+          desc = "承認を auto_review に委ねる。sandbox は workspace-write 固定";
         };
       };
     };
