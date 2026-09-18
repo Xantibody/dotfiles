@@ -171,7 +171,8 @@ Only add labels after confirming they exist with `gh label list` (use
 `kind/bug` / `kind/feature` equivalents if present). Passing a nonexistent
 label to `--label` fails the whole creation.
 
-Report the issue URL once created. If creation is denied by permissions, hand
+Once created, the issue URL is the closing line of the report, bare and alone
+on it, as the `explain` skill describes. If creation is denied by permissions, hand
 over the command with the real path substituted, in the form
 `! gh issue create --title "..." --body-file <path>`, so the user can run it
 in their own session.

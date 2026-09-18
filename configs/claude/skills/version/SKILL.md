@@ -75,7 +75,13 @@ Before tagging, make sure the tree is clean and the checks pass (`check` skill).
 
 After creating the tag, confirm success with `git tag -l "v<VERSION>"` and display the message with `git tag -n999 "v<VERSION>"`.
 
-A tag that only exists locally is the failure mode here — it is easy to forget, and nothing reminds you. `git push` is deny-listed on purpose, so hand the user the exact command in the form `! git push origin v<VERSION>` and say plainly that the tag is not on the remote until they run it.
+A tag that only exists locally is the failure mode here — it is easy to forget, and nothing reminds you. `git push` is deny-listed on purpose, so hand the user the exact command in the form `! git push origin v<VERSION>` and say plainly that the tag is not on the remote until they run it. Close the report with the tag's page, marked 「push 後に有効」 since it does not exist until the push, bare on its own line as the `explain` skill describes:
+
+```text
+https://github.com/<owner>/<repo>/releases/tag/v<VERSION>
+```
+
+GitHub serves that page for a plain tag too; a release is not required.
 
 A first tag is the point a repository stops being disposable, so it is also the
 natural moment to check branch protection — see the `branch-protection` skill.

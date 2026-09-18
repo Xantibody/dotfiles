@@ -29,6 +29,19 @@ that avoids the `。` by chaining clauses with `、`. If the content would not
 fit on the label's line with a colon, no other separator makes it fit; nest
 it or promote it.
 
+## The closing line
+
+A report on work that touched a remote ends with the URL of what it
+touched, so the reader opens it from the terminal without looking for it.
+The rule itself is in CLAUDE.md (Communication); this is its shape:
+
+- the URL is bare and alone on its line — the terminal makes `https://`
+  clickable, and `[text](url)` and a URL inside a sentence are not
+- it is the last line before any question the report goes on to ask
+- one line per artifact — a PR and the issue filed from it are two lines
+- an artifact that is not live yet is marked as such — a tag the user has
+  not pushed gets its future URL and the words 「push 後に有効」
+
 ## PR and issue bodies
 
 The full catalogue of GitHub constructs — when a table beats bullets, what

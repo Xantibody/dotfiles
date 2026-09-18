@@ -17,6 +17,13 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
   and recommend which ones — the `issue` skill has a deferred-work template.
   The reason something was skipped is freshest right then and is lost by
   the next session.
+- When the work touched something remote — a PR, an issue, a CI run, a
+  release, a ruleset, a deployed page — end the report with its URL, bare
+  and on its own line, before any question you ask next. The terminal
+  makes a bare `https://` clickable; link text is not, and a URL buried in
+  a sentence has to be selected by hand. One line per artifact. If it is
+  not live yet (a tag waiting for the user's push), give the URL it will
+  have and say so.
 
 # Git Workflow
 
