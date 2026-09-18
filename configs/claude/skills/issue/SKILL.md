@@ -159,11 +159,16 @@ issue. File the ones that are follow-up work this repo will actually do.
 ## Create
 
 Write the body outside the worktree and pass it via `--body-file` (`--body`
-mangles newlines):
+mangles newlines, and the lint hook refuses it). Spell the path out in the
+`gh` command — each Bash call is a fresh shell, and the hook reads the
+`--body-file` path from the command text, so `"$BODY"` there is refused.
+Lint the body first; the `explain` skill has the command and the house
+rules behind it, and the hook refuses a body with findings left.
 
 ```bash
-BODY=$(mktemp -d)/issue-body.md
-gh issue create --title "<title>" --body-file "$BODY" \
+mktemp -d    # then Write <dir>/issue-body.md
+lint-body <dir>/issue-body.md
+gh issue create --title "<title>" --body-file <dir>/issue-body.md \
   [--attach "<path>#<alt>"]
 ```
 
