@@ -111,7 +111,15 @@ the same as zero:
 
 Read the ruleset back after writing and show the user the resulting rule list.
 The API accepts a well-formed body that matches nothing, so a successful
-response is not evidence that the protection is live.
+response is not evidence that the protection is live. Close the report with
+the ruleset's page, where the same list is shown as GitHub enforces it:
+
+```text
+https://github.com/<owner>/<repo>/settings/rules/<id>
+```
+
+`id` is in the POST response (or `gh api repos/<owner>/<repo>/rulesets`).
+The URL goes bare on its own line, as the `explain` skill describes.
 
 ## After a tag
 

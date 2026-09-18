@@ -374,10 +374,11 @@ to route around — hand that command over the same way.
 
 ## Report
 
-Give the user the PR URL, the title, and the CI outcome. State explicitly what
-you left out — files not committed, checks that couldn't run, a diagram you
-could not render. A PR that looks complete but isn't is the most expensive
-failure here.
+Give the user the title and the CI outcome. State explicitly what you left
+out — files not committed, checks that couldn't run, a diagram you could not
+render. A PR that looks complete but isn't is the most expensive failure
+here. The PR URL is the closing line, bare and alone on it, as the `explain`
+skill describes — the user opens the PR from the terminal.
 
 Then ask whether any of the やらなかったこと should become issues, and
 recommend which — the ones that are follow-up work in this repo, not the
