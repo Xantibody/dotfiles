@@ -32,7 +32,6 @@ in
       "git"
       "ha"
       "claude"
-      "textlint"
       "agents"
       "user"
       "nixpkgs"

@@ -7,11 +7,20 @@ let
   hm = config.flake.modules.homeManager;
   share = {
     # AIDEV-NOTE: agent-browser は nixpkgs にもあるが上流の更新が速く、llm-agents.nix の方が追従が早い
-    nixpkgs.overlays = [ inputs.llm-agents.overlays.shared-nixpkgs ];
-    home-manager.sharedModules = [ hm.claude ];
+    nixpkgs.overlays = [
+      inputs.llm-agents.overlays.shared-nixpkgs
+      (import ../../overlays/textlint-rules.nix)
+    ];
+    home-manager.sharedModules = [
+      hm.claude
+      hm.textlint
+    ];
   };
 in
 {
+  # PR / issue 本文の lint。同じ feature だがファイルは分ける (perSystem の check まで持つ)
+  imports = [ ./_textlint.nix ];
+
   flake.modules.homeManager.claude =
     { pkgs, ... }:
     {

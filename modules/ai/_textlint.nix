@@ -3,14 +3,12 @@
 # skill が本文を書いた後に lint-body を回し、`gh pr create` などの --body-file は
 # lint-body-hook (pull-request / issue skill の frontmatter が登録する PreToolUse hook) が
 # もう一度かけて、指摘が残っていればコマンドを止める。
-{ config, ... }:
+#
+# claude feature の一部なので `_` 始まりにして import-tree から外し、claude.nix が imports で読む。
+# host が列挙するのは claude だけで、darwin / nixos への配線も claude.nix 側にある。
+{ ... }:
 let
-  hm = config.flake.modules.homeManager;
   overlay = import ../../overlays/textlint-rules.nix;
-  share = {
-    nixpkgs.overlays = [ overlay ];
-    home-manager.sharedModules = [ hm.textlint ];
-  };
 
   # AIDEV-NOTE: 設定と rulesdir は store パスで焼き込む。~/.claude に置くと cwd の .textlintrc に負ける
   mkLintBody =
@@ -61,9 +59,6 @@ in
         hook
       ];
     };
-
-  flake.modules.darwin.textlint = share;
-  flake.modules.nixos.textlint = share;
 
   # 自前ルールと設定の読み込みを fixture で検査する。
   # textlint は解決できないルールが 1 つでもあると設定全体を黙って捨てて exit 0 になるので、
