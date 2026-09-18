@@ -2,6 +2,8 @@
 
 `skills/` の skill がどう呼び合うか。実線は「その skill を読み込む」、点線は「必要な時だけ相談する」。`reconstruct` だけはモデルから隠れていて、ユーザーが `/reconstruct` と打った時にしか動かない。
 
+`~/.claude/skills/ha` はここに無い。flake input `kawarimidoll/ha` 同梱の skill を `modules/git/ha.nix` がそのまま置いている。
+
 ```mermaid
 flowchart TD
   subgraph build["実装"]

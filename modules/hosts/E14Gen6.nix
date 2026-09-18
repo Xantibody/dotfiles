@@ -42,6 +42,7 @@ in
       "emacs"
       "mdsf"
       "git"
+      "ha"
       "claude"
       "agents"
       "comma"

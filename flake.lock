@@ -233,6 +233,22 @@
         "type": "github"
       }
     },
+    "ha": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788752317,
+        "narHash": "sha256-lbjxlykFbvEOf/YVuzxHZDzyKjT3mbhBRVA+iJ+mE2w=",
+        "owner": "kawarimidoll",
+        "repo": "ha",
+        "rev": "2b85027750c41d7901a5e1b84b5c46be238e21d0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kawarimidoll",
+        "repo": "ha",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -556,6 +572,7 @@
         "firefox-addons": "firefox-addons",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
+        "ha": "ha",
         "home-manager": "home-manager",
         "ichigyo-ls": "ichigyo-ls",
         "import-tree": "import-tree",

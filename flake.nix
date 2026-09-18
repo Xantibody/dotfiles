@@ -52,6 +52,11 @@
       url = "github:BatteredBunny/brew-api";
       flake = false;
     };
+    # git worktree を <repo>@<branch> に切るシェル関数と、その規約を Claude に教える skill
+    ha = {
+      url = "github:kawarimidoll/ha";
+      flake = false;
+    };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs = {
