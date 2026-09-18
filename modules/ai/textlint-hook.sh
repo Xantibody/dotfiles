@@ -8,16 +8,35 @@ input=$(cat)
 cmd=$(jq -r '.tool_input.command // empty' <<<"$input")
 cwd=$(jq -r '.cwd // empty' <<<"$input")
 
-if ! grep -Eq 'gh (pr|issue) (create|edit|comment)' <<<"$cmd"; then
+# heredoc や echo の中身に gh の呼び出しが書かれていても発火しないよう、まず heredoc の
+# 本文を落とし、コマンド位置 (行頭か && ; | の直後) にある gh だけを見る。
+# 報告書を heredoc で書くと本文に gh の例が入るので、これが無いと lint が二重にかかる。
+stripped=""
+delim=""
+while IFS= read -r l; do
+  if [[ -n $delim ]]; then
+    [[ ${l#"${l%%[! 	]*}"} == "$delim" ]] && delim=""
+    continue
+  fi
+  if [[ $l =~ \<\<-?[[:space:]]*[\'\"]?([A-Za-z_][A-Za-z0-9_]*)[\'\"]? ]]; then
+    delim=${BASH_REMATCH[1]}
+  fi
+  stripped+="$l"$'\n'
+done <<<"$cmd"
+
+line=$(grep -E '(^|&&|;|\|)[[:space:]]*gh (pr|issue) (create|edit|comment)' <<<"$stripped" | head -1 || true)
+if [[ -z $line ]]; then
   exit 0
 fi
+line=${line#*gh }
+line="gh $line"
 
-if grep -Eq -- '(^|[[:space:]])(--body|-b)([[:space:]=]|$)' <<<"$cmd"; then
+if grep -Eq -- '(^|[[:space:]])(--body|-b)([[:space:]=]|$)' <<<"$line"; then
   echo "本文は --body ではなく --body-file で渡す。lint-body にかけられないので止めた" >&2
   exit 2
 fi
 
-if [[ ! $cmd =~ --body-file[=[:space:]]+(\"([^\"]*)\"|\'([^\']*)\'|([^[:space:]]+)) ]]; then
+if [[ ! $line =~ --body-file[=[:space:]]+(\"([^\"]*)\"|\'([^\']*)\'|([^[:space:]]+)) ]]; then
   exit 0
 fi
 path="${BASH_REMATCH[2]}${BASH_REMATCH[3]}${BASH_REMATCH[4]}"

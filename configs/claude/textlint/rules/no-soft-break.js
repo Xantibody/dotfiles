@@ -1,5 +1,5 @@
-// 段落の途中の改行を指摘する。GitHub は段落内の改行を半角スペースとして描画するので、
-// 80 桁で折り返した日本語は文の途中に空白が挟まる。--fix で 1 行に繋ぐ。
+// 段落の途中の改行を指摘する。PR / issue 本文では GitHub が段落内の改行を <br> として描画する
+// (repo 内の .md と違う) ので、80 桁で折り返した日本語は文の途中で行が切れて見える。--fix で 1 行に繋ぐ。
 // AIDEV-NOTE: 行末 2 スペースと \ の hard break は Markdown の意図した改行なので通す
 const NON_ASCII = /[^\x00-\x7f]/;
 
@@ -21,10 +21,13 @@ function reporter(context) {
         const range = [m.index, m.index + m[0].length];
         report(
           node,
-          new RuleError("段落の途中で改行しない。GitHub は改行を空白として描画する", {
-            padding: locator.range(range),
-            fix: fixer.replaceTextRange(range, glue),
-          }),
+          new RuleError(
+            "段落の途中で改行しない。PR / issue 本文では GitHub が改行をそのまま描画する",
+            {
+              padding: locator.range(range),
+              fix: fixer.replaceTextRange(range, glue),
+            },
+          ),
         );
       }
     },

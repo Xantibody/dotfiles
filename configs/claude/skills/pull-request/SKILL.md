@@ -200,8 +200,8 @@ diagram.
 ### Length
 
 A paragraph or bullet is one line — never hard-wrap, GitHub renders the
-break as a space — so line counts say nothing about length; count
-characters. The whole body fits in one screen: なぜやるか in two or three sentences,
+newline as a visible line break in a PR body — so line counts say
+nothing about length; count characters. The whole body fits in one screen: なぜやるか in two or three sentences,
 one idea per bullet everywhere else. Outside the diagram, stay under ~600
 characters; past ~900 you are narrating something the diff or the diagram
 already shows. The budget is a ceiling, not a target: a change of a few

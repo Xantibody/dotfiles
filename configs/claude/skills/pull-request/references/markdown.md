@@ -7,10 +7,12 @@ shape the information has. This file is the catalogue — what each construct
 is for, and the misuse that makes it lie.
 
 One thing specific to PR and issue bodies: GitHub renders a single newline
-inside a paragraph as a line break there (unlike in `.md` files in the
-repo). Japanese does not wrap on its own, so a paragraph is one sentence
-per line, and a wall of text is a paragraph that should have been
-something else.
+inside a paragraph as a visible line break there (unlike in `.md` files in
+the repo, where it is folded into a space). So a paragraph or a bullet is
+one line, however long — a wrap at 80 columns or a newline after each
+sentence shows up as a ragged line break in the middle of the text. The
+`lint-body` check refuses a body that wraps. A paragraph that is too long
+to read as one line is a paragraph that should have been something else.
 
 ## Prose vs. structure
 

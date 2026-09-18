@@ -69,9 +69,10 @@ The rules are the Japanese technical-writing preset plus a few that are
 house rules rather than textlint's, so know them before drafting instead
 of learning them from the findings:
 
-- **A paragraph or bullet is one line.** GitHub renders a line break
-  inside a paragraph as a space, so an 80-column wrap puts spaces in the
-  middle of Japanese sentences. `--fix` joins the lines.
+- **A paragraph or bullet is one line.** In PR and issue bodies GitHub
+  renders a newline inside a paragraph as a visible line break, so an
+  80-column wrap or a newline after each sentence breaks the text
+  mid-thought. `--fix` joins the lines.
 - **No separator after a bullet's head.** 「`foo` — 説明」 and
   「**重要**: 本文」 are a heading and a body pushed into one line; make
   it one sentence or nest the body beneath.
