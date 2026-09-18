@@ -44,6 +44,7 @@ in
       "git"
       "ha"
       "claude"
+      "textlint"
       "agents"
       "comma"
       "skk"

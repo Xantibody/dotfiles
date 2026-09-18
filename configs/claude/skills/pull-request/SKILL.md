@@ -2,6 +2,12 @@
 name: pull-request
 description: Creates GitHub pull requests with a concise Japanese body (なぜやるか / やったこと / やらなかったこと / 資料), written one level above the diff and with a mermaid diagram whenever the change rewires three or more parts.
 when_to_use: Whenever the user wants to open, create, raise, submit, or update a PR — "PRを作って", "プルリク出して", "push して PR まで", "gh pr create", "PRの説明を直して", or simply "レビューに出したい". Also when updating the description of a PR that already exists.
+hooks:
+  PreToolUse:
+    - matcher: Bash
+      hooks:
+        - type: command
+          command: lint-body-hook
 ---
 
 # Pull requests
@@ -199,18 +205,19 @@ diagram.
 
 ### Length
 
-Japanese does not wrap, so line counts hide length — count characters.
-The whole body fits in one screen: なぜやるか in two or three sentences,
+A paragraph or bullet is one line — never hard-wrap, GitHub renders the
+newline as a visible line break in a PR body — so line counts say
+nothing about length; count characters. The whole body fits in one screen: なぜやるか in two or three sentences,
 one idea per bullet everywhere else. Outside the diagram, stay under ~600
 characters; past ~900 you are narrating something the diff or the diagram
 already shows. The budget is a ceiling, not a target: a change of a few
 lines gets a body of a few sentences.
 
-Measure, don't estimate. After the draft, count the body file (`$BODY`
-from the Verify step below) with fences excluded, and cut while it is over:
+Measure, don't estimate. After the draft, count the body file with fences
+excluded, and cut while it is over:
 
 ````bash
-sed '/^```/,/^```/d' "$BODY" | tr -d '\n' | wc -m
+sed '/^```/,/^```/d' <dir>/pr-body.md | tr -d '\n' | wc -m
 ````
 
 Cut the same information appearing a second time, in this order: a reason
@@ -330,7 +337,7 @@ with the same one-line caption a diagram gets — and pass the same path
 string to `--attach`, alt text after `#`:
 
 ```bash
-gh pr create --base "$BASE" --title "<title>" --body-file "$BODY" \
+gh pr create --base "$BASE" --title "<title>" --body-file <dir>/pr-body.md \
   --attach "$IMG/after.png#設定画面: 並び順の切り替えが増えた"
 ```
 
@@ -348,11 +355,19 @@ unrewritten.
 
 ## Verify, hand off the push, create
 
-Write the body outside the worktree so a later `git add -A` can't swallow it:
+Write the body outside the worktree so a later `git add -A` can't swallow
+it. Take a directory from `mktemp -d` once and spell its path out in every
+later command — each Bash call is a fresh shell, and the lint hook on `gh`
+reads the `--body-file` path from the command text, so `"$BODY"` there is
+refused:
 
 ```bash
-BODY=$(mktemp -d)/pr-body.md
+mktemp -d    # then Write <dir>/pr-body.md
 ```
+
+Lint the body before `gh` sees it — the `explain` skill has the command
+and the house rules behind it — and fix every finding; the hook refuses a
+body with findings left.
 
 Before the push, run the project's checks via the `check` skill. A PR that
 fails its own repo's fmt/check burns a review round on nothing.
@@ -363,7 +378,7 @@ substituted, in the form `! git push -u origin <branch>`, and continue once
 they have run it:
 
 ```bash
-gh pr create --base "$BASE" --title "<title>" --body-file "$BODY"
+gh pr create --base "$BASE" --title "<title>" --body-file <dir>/pr-body.md
 gh pr checks --watch
 ```
 

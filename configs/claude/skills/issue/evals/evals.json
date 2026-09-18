@@ -1,0 +1,22 @@
+{
+  "skill_name": "issue",
+  "evals": [
+    {
+      "id": 0,
+      "name": "deferred-nixpkgs-upstream-passes-lint",
+      "prompt": "PR #72 of this repository (https://github.com/Xantibody/dotfiles/pull/72, `feat(textlint): lint PR and issue bodies before gh sees them`) left this out, quoted from its やらなかったこと: 「nixpkgs への PR はこの変更に含めない。ai-writing は lock を直さないとビルドできず、その直し方を nixpkgs 側でどう出すか調べてからにする」. The two packages are in `overlays/textlint-rules.nix`; read it. Assume the repo owner and the gh login are both Xantibody, that `.github/ISSUE_TEMPLATE/` does not exist, and do not add labels. Do not run `gh issue create` / `gh issue edit` / `gh issue comment` or modify the repository: stop where the skill would create the issue, and report the title, the absolute path of the body file, the exact `gh issue create` command you would run, and every shell command you ran, verbatim and in order.\n\nPR #72 のやらなかったことにある nixpkgs の件を issue にして",
+      "expected_output": "A `[Deferred]:` issue in the 見送ったこと / 見送った理由 / 再開の条件 / 出どころ shape, one line per paragraph and bullet, linted with `lint-body` before the gh step and passing it, linking back to PR #72, with a `gh issue create` command whose --body-file is a literal path.",
+      "files": [],
+      "assertions": [
+        "The list of commands run contains `lint-body <path>` on the body file at least once, and the final body file exists at the reported path.",
+        "Running `lint-body` on the final body file reports zero problems.",
+        "Outside fenced code blocks, no paragraph or list item in the body spans more than one line.",
+        "No list item in the body joins a head to its body with ` — `, ` – ` or ` - `, and no list item starts with a bold label followed by a colon.",
+        "The reported `gh issue create` command passes `--body-file` with a literal absolute path that contains no `$`, and does not use `--body`.",
+        "The title starts with `[Deferred]:`, the body has 見送ったこと, 見送った理由 and 出どころ, 出どころ references #72, and no section is left empty.",
+        "見送った理由 states the concrete reason from the PR (the ai-writing lock had to be repaired before it builds and the way to submit that upstream is undecided), not a generic \"later\".",
+        "The executor did not run `gh issue create`, `gh issue edit`, `gh issue comment`, `gh pr edit` or `git commit`."
+      ]
+    }
+  ]
+}

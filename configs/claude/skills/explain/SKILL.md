@@ -48,3 +48,40 @@ The full catalogue of GitHub constructs — when a table beats bullets, what
 goes in `<details>`, how many siblings a list can hold — is
 `pull-request/references/markdown.md`. Read it before writing a body longer
 than a few lines. The diagram gate lives in the `pull-request` skill.
+
+### Lint the body
+
+A body is linted before `gh` sees it, and the lint is the gate, not the
+prose above: the `pull-request` and `issue` skills register a PreToolUse
+hook (`lint-body-hook`, from their frontmatter) that runs the same check
+on the `--body-file` of `gh pr create` / `gh pr edit` / `gh issue create`
+/ `gh issue comment` and refuses the command while findings remain. It
+stays registered for the rest of the session once either skill has been
+invoked.
+
+```bash
+lint-body <path>         # 指摘を見る
+lint-body --fix <path>   # 機械的に直せるものは直す
+```
+
+Fix every finding and rerun until it is clean. Because each Bash call is
+a fresh shell, the hook can only follow a literal path — write the real
+path into `--body-file`, not `$BODY`, and never pass `--body` inline.
+
+The rules are the Japanese technical-writing preset plus a few that are
+house rules rather than textlint's, so know them before drafting instead
+of learning them from the findings:
+
+- **A paragraph or bullet is one line.** In PR and issue bodies GitHub
+  renders a newline inside a paragraph as a visible line break, so an
+  80-column wrap or a newline after each sentence breaks the text
+  mid-thought. `--fix` joins the lines.
+- **No separator after a bullet's head.** 「`foo` — 説明」 and
+  「**重要**: 本文」 are a heading and a body pushed into one line; make
+  it one sentence or nest the body beneath.
+- **No empty section.** A heading with nothing under it, or with only
+  「特になし」, is deleted, not left as a placeholder.
+- **Space between Japanese and Latin, including around inline code.**
+  「`rm` が終わる前に」, not 「`rm`が終わる前に」.
+- **Open the kanji the rule opens.** 事 → こと, 時 → とき, 為 → ため,
+  下さい → ください; the finding names the reading.

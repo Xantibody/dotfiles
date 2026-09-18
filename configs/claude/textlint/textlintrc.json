@@ -1,0 +1,33 @@
+{
+  "rules": {
+    "preset-ja-technical-writing": {
+      "no-exclamation-question-mark": false
+    },
+    "preset-ja-spacing": {
+      "ja-space-between-half-and-full-width": {
+        "space": "always",
+        "exceptPunctuation": true
+      },
+      "ja-space-around-code": {
+        "before": true,
+        "after": true
+      },
+      "ja-no-space-around-parentheses": false
+    },
+    "@textlint-ja/preset-ai-writing": {
+      "ai-tech-writing-guideline": false
+    },
+    "ja-hiraku": {
+      "other-doushi": false,
+      "other-jodoushi": false,
+      "other-kandoushi": false,
+      "other-keiyoushi": false,
+      "other-meishi": false
+    },
+    "period-in-list-item": {
+      "periodMark": ""
+    },
+    "no-start-duplicated-conjunction": true,
+    "max-comma": true
+  }
+}

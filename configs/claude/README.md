@@ -4,6 +4,8 @@
 
 `~/.claude/skills/ha` はここに無い。flake input `kawarimidoll/ha` 同梱の skill を `modules/git/ha.nix` がそのまま置いている。
 
+`textlint/` は skill ではなく、PR / issue 本文にかける textlint の設定と自前ルール。`modules/ai/textlint.nix` がこれを `lint-body` と `lint-body-hook` の 2 コマンドに焼き込む。hook は pull-request と issue の frontmatter が skill を呼んだときに登録し、`gh pr create` などの `--body-file` に指摘が残っていればコマンドを止める。
+
 ```mermaid
 flowchart TD
   subgraph build["実装"]
@@ -51,6 +53,7 @@ flowchart TD
     direction LR
     check["check<br/>lint / test / fmt"]
     commit["commit<br/>Conventional Commits"]
+    lint["lint-body<br/>本文の textlint (hook も同じ検査)"]
   end
 
   implement -.->|"設計に迷った時"| design
@@ -68,6 +71,7 @@ flowchart TD
   implement -->|"毎サイクル"| check
   implement -->|"毎サイクル"| commit
   pr -->|"push 前"| check
+  explain -->|"gh に渡す前"| lint
   reconstruct -->|"1 commit ずつ"| commit
   version -->|"tag 前"| check
   refactor -.->|"計画を実行する時"| commit
