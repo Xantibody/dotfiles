@@ -49,9 +49,13 @@ in
     {
       imports = [ inputs.magical-merchant.darwinModules.default ];
 
+      # stabilizeApp は下の cachix から来た .app を再署名するだけで、組み直しはしない。
+      # 素の ad-hoc 署名だと通知などの許可が rebuild ごとに飛ぶ
       nixpkgs.overlays = [
         (final: _prev: {
-          magical-merchant = inputs.magical-merchant.packages.${final.stdenv.hostPlatform.system}.default;
+          magical-merchant =
+            (final.callPackage inputs.nix-mac-app-identity { }).stabilizeApp
+              inputs.magical-merchant.packages.${final.stdenv.hostPlatform.system}.default;
         })
       ];
 

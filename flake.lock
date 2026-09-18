@@ -501,6 +501,26 @@
         "type": "github"
       }
     },
+    "nix-mac-app-identity": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789748373,
+        "narHash": "sha256-LRXWnVNCaL2Q+5s5wctCjPyYaN9FzqVoMW1ujShnQfs=",
+        "owner": "natsukium",
+        "repo": "nix-mac-app-identity",
+        "rev": "f9b3523c42c987f712304fc8ab2fa14191b91072",
+        "type": "github"
+      },
+      "original": {
+        "owner": "natsukium",
+        "repo": "nix-mac-app-identity",
+        "type": "github"
+      }
+    },
     "nixCats": {
       "locked": {
         "lastModified": 1787720571,
@@ -584,6 +604,7 @@
         "my-nur": "my-nur",
         "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",
+        "nix-mac-app-identity": "nix-mac-app-identity",
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs_2",
         "sops-nix": "sops-nix",

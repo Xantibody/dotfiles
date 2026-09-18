@@ -1,5 +1,5 @@
 # kitty。配色は dayfox で、fish と fzf が同じパレットを別々に持っている。
-{ config, ... }:
+{ config, inputs, ... }:
 let
   hm = config.flake.modules.homeManager;
   share = {
@@ -103,6 +103,17 @@ in
   flake.modules.darwin.kitty =
     { lib, pkgs, ... }:
     {
+      # フルディスクアクセスと画面収録の許可は ad-hoc 署名の cdhash に紐づくので、
+      # rebuild して kitty が入れ替わるたびに取り直しになる。pkgs.kitty ごと
+      # 差し替えるのは、hm 側の programs.kitty も下の Dock のパスも同じ .app を
+      # 指さないと意味がないため。home-manager module は NixOS とも共用なので、
+      # darwin でしか動かない再署名はここに置く。
+      nixpkgs.overlays = [
+        (final: prev: {
+          kitty = (final.callPackage inputs.nix-mac-app-identity { }).stabilizeApp prev.kitty;
+        })
+      ];
+
       home-manager.sharedModules = [ hm.kitty ];
       my.dock.apps = lib.mkOrder 200 [ "${pkgs.kitty}/Applications/kitty.app" ];
     };

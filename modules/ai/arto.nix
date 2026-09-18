@@ -28,9 +28,13 @@
     };
 
   flake.modules.darwin.arto = {
+    # stabilizeApp は上流のビルド結果を再署名するだけなので、下の cachix は効いたまま。
+    # 素の .app は ad-hoc 署名で、rebuild のたびにアクセシビリティ等を取り直しになる
     nixpkgs.overlays = [
       (final: _prev: {
-        arto = inputs.arto.packages.${final.stdenv.hostPlatform.system}.default;
+        arto =
+          (final.callPackage inputs.nix-mac-app-identity { }).stabilizeApp
+            inputs.arto.packages.${final.stdenv.hostPlatform.system}.default;
       })
     ];
 

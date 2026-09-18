@@ -87,6 +87,12 @@
         cl-nix-lite.inputs.treefmt-nix.follows = "treefmt-nix";
       };
     };
+    # nix がビルドした .app の ad-hoc 署名を、bundle id だけを名乗る designated
+    # requirement で署名し直す。TCC の許可が cdhash に紐づかなくなり rebuild を越える
+    nix-mac-app-identity = {
+      url = "github:natsukium/nix-mac-app-identity";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     systems.url = "github:nix-systems/default";
     # 自分では使わないが、下の input 群が持ち込む 4 コピーを 1 つに畳むために置く
     flake-utils = {
