@@ -30,6 +30,7 @@ in
       "arto"
       "mdsf"
       "git"
+      "ha"
       "claude"
       "agents"
       "user"

@@ -30,6 +30,10 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 - `git push` is deny-listed on purpose — don't chain it after `git commit`,
   and treat a push denial as the handoff, not an error: commit, report, and
   let the user push. They ask for a PR after pushing.
+- Worktrees follow `ha`'s layout — `<repo>@<branch>` next to the repo, hooks
+  in `.ha/hooks/`; the `ha` skill has the model. Its functions exist only
+  after sourcing, and under zsh the join is `;`, not `&&`:
+  `source ~/.local/share/ha/ha.sh; ha new <branch>`.
 
 # Repository Conventions
 
