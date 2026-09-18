@@ -33,7 +33,6 @@ in
       "ha"
       "claude"
       "textlint"
-      "agent-browser"
       "agents"
       "user"
       "nixpkgs"

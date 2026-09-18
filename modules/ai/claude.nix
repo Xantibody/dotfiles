@@ -1,41 +1,53 @@
 # Claude Code。設定ファイルの実体は configs/claude/ にあり、home.file で配る。
-{ config, ... }:
+# Claude が画面を見るための agent-browser (headless Chrome の CLI) もここに置く。
+# 手順は configs/claude/skills/browser-verify にあり、上流の使い方 skill は本体が同梱している。
+# Chrome 本体は store に無く、初回に `agent-browser install` が Chrome for Testing を落とす。
+{ inputs, config, ... }:
 let
   hm = config.flake.modules.homeManager;
   share = {
+    # AIDEV-NOTE: agent-browser は nixpkgs にもあるが上流の更新が速く、llm-agents.nix の方が追従が早い
+    nixpkgs.overlays = [ inputs.llm-agents.overlays.shared-nixpkgs ];
     home-manager.sharedModules = [ hm.claude ];
   };
 in
 {
-  flake.modules.homeManager.claude = {
-    home.file = {
-      ".claude/CLAUDE.md".source = ../../configs/claude/CLAUDE.md;
-      ".claude/settings.json".source = ../../configs/claude/settings.json;
-      ".claude/skills" = {
-        source = ../../configs/claude/skills;
-        recursive = true;
-      };
-      ".claude/statusline.sh" = {
-        source = ../../configs/claude/statusline.sh;
-        executable = true;
-      };
-    };
+  flake.modules.homeManager.claude =
+    { pkgs, ... }:
+    {
+      home.packages = [ pkgs.llm-agents.agent-browser ];
 
-    my.shell.abbr = {
-      cc = {
-        cmd = "claude";
-        desc = "Claude Code";
+      home.file = {
+        ".claude/CLAUDE.md".source = ../../configs/claude/CLAUDE.md;
+        ".claude/settings.json".source = ../../configs/claude/settings.json;
+        ".claude/skills" = {
+          source = ../../configs/claude/skills;
+          recursive = true;
+        };
+        # AIDEV-NOTE: ha と同じく configs/claude/skills にコピーしない。package の版と skill の版が常に揃う
+        ".claude/skills/agent-browser".source =
+          "${pkgs.llm-agents.agent-browser}/share/agent-browser/skills/agent-browser";
+        ".claude/statusline.sh" = {
+          source = ../../configs/claude/statusline.sh;
+          executable = true;
+        };
       };
-      ccp = {
-        cmd = "claude --permission-mode plan";
-        desc = "plan mode で起動";
-      };
-      ccA = {
-        cmd = "claude --permission-mode auto";
-        desc = "auto mode で起動。権限を自動判断させる";
+
+      my.shell.abbr = {
+        cc = {
+          cmd = "claude";
+          desc = "Claude Code";
+        };
+        ccp = {
+          cmd = "claude --permission-mode plan";
+          desc = "plan mode で起動";
+        };
+        ccA = {
+          cmd = "claude --permission-mode auto";
+          desc = "auto mode で起動。権限を自動判断させる";
+        };
       };
     };
-  };
 
   flake.modules.darwin.claude = share;
 
