@@ -1,7 +1,8 @@
 # Claude が書く PR / issue 本文を textlint にかける。
 # ルールの選定と自前ルールは configs/claude/textlint/ にあり、`lint-body <file>` がそれを読む。
 # skill が本文を書いた後に lint-body を回し、`gh pr create` などの --body-file は
-# PreToolUse hook がもう一度かけて、指摘が残っていればコマンドを止める。
+# lint-body-hook (pull-request / issue skill の frontmatter が登録する PreToolUse hook) が
+# もう一度かけて、指摘が残っていればコマンドを止める。
 { config, ... }:
 let
   hm = config.flake.modules.homeManager;
@@ -53,8 +54,12 @@ in
       };
     in
     {
-      home.packages = [ lintBody ];
-      home.file.".claude/hooks/lint-body".source = "${hook}/bin/lint-body-hook";
+      # hook は settings.json ではなく pull-request / issue skill の frontmatter が登録する。
+      # skill が呼ばれたセッションだけ効き、無関係な Bash 呼び出しに hook が付いて回らない。
+      home.packages = [
+        lintBody
+        hook
+      ];
     };
 
   flake.modules.darwin.textlint = share;

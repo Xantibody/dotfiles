@@ -52,9 +52,12 @@ than a few lines. The diagram gate lives in the `pull-request` skill.
 ### Lint the body
 
 A body is linted before `gh` sees it, and the lint is the gate, not the
-prose above: a PreToolUse hook runs the same check on the `--body-file`
-of `gh pr create` / `gh pr edit` / `gh issue create` / `gh issue comment`
-and refuses the command while findings remain.
+prose above: the `pull-request` and `issue` skills register a PreToolUse
+hook (`lint-body-hook`, from their frontmatter) that runs the same check
+on the `--body-file` of `gh pr create` / `gh pr edit` / `gh issue create`
+/ `gh issue comment` and refuses the command while findings remain. It
+stays registered for the rest of the session once either skill has been
+invoked.
 
 ```bash
 lint-body <path>         # 指摘を見る

@@ -2,6 +2,12 @@
 name: pull-request
 description: Creates GitHub pull requests with a concise Japanese body (なぜやるか / やったこと / やらなかったこと / 資料), written one level above the diff and with a mermaid diagram whenever the change rewires three or more parts.
 when_to_use: Whenever the user wants to open, create, raise, submit, or update a PR — "PRを作って", "プルリク出して", "push して PR まで", "gh pr create", "PRの説明を直して", or simply "レビューに出したい". Also when updating the description of a PR that already exists.
+hooks:
+  PreToolUse:
+    - matcher: Bash
+      hooks:
+        - type: command
+          command: lint-body-hook
 ---
 
 # Pull requests

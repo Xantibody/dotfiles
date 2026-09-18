@@ -2,6 +2,12 @@
 name: issue
 description: Creates GitHub issues with a concise Japanese body, modeled on traP NeoShowcase's issue templates (bug report / feature request), plus a deferred-work template for things a PR or task left out.
 when_to_use: Whenever the user wants to file, open, or create an issue — "issueを立てて", "issue作って", "バグ報告して", "機能要望を出して", "この問題をissueにして", "やらなかったことをissueに", "見送ったやつをissueにして", "gh issue create". Also when the user describes a bug, wants to track future work as an issue, or agrees to file the やらなかったこと reported at the end of a task.
+hooks:
+  PreToolUse:
+    - matcher: Bash
+      hooks:
+        - type: command
+          command: lint-body-hook
 ---
 
 # Issues

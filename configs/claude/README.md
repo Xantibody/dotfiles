@@ -4,7 +4,7 @@
 
 `~/.claude/skills/ha` はここに無い。flake input `kawarimidoll/ha` 同梱の skill を `modules/git/ha.nix` がそのまま置いている。
 
-`textlint/` は skill ではなく、PR / issue 本文にかける textlint の設定と自前ルール。`modules/ai/textlint.nix` がこれを `lint-body` コマンドと PreToolUse hook に焼き込み、hook は `gh pr create` などの `--body-file` に指摘が残っていればコマンドを止める。
+`textlint/` は skill ではなく、PR / issue 本文にかける textlint の設定と自前ルール。`modules/ai/textlint.nix` がこれを `lint-body` と `lint-body-hook` の 2 コマンドに焼き込む。hook は pull-request と issue の frontmatter が skill を呼んだときに登録し、`gh pr create` などの `--body-file` に指摘が残っていればコマンドを止める。
 
 ```mermaid
 flowchart TD
