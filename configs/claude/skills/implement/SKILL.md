@@ -76,7 +76,7 @@ Build features incrementally — one test at a time, never in batch. Follow the 
 5. **Refactor**: Consolidate test structure (e.g., table-driven tests) and improve code quality. Commit structural changes separately (use `commit` skill).
 6. Repeat for the next increment of the feature.
 
-Each cycle is: write ONE failing test → make it pass → run the checks (`check` skill) → commit (`commit` skill). Never write multiple tests before implementing. This incremental approach catches design issues early and keeps each step small and reversible. Committing does not include pushing — `git push` is the user's; report and stop.
+Each cycle is: write ONE failing test → make it pass → run the checks (`check` skill) → commit (`commit` skill). When the increment changes something a browser renders — a page, a component, a style — tests prove the behaviour but not the picture: before committing, load the `browser-verify` skill and look at the screen. Never write multiple tests before implementing. This incremental approach catches design issues early and keeps each step small and reversible. Committing does not include pushing — `git push` is the user's; report and stop.
 
 ## Finishing
 
