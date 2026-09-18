@@ -330,6 +330,11 @@ pixels. Never for the mermaid block, which GitHub renders itself, and
 never for terminal text, which belongs in a code block where it can be
 searched and copied.
 
+When the gate opens for something a browser renders, load the
+`browser-verify` skill: it captures the base branch and the head at the
+same URL and viewport, into the same temp directory as the body, and has
+you read both images before writing the caption.
+
 `gh pr create --attach` (gh 2.100.0 or later) uploads the file and
 rewrites a matching `![alt](<path>)` in the body to the uploaded asset.
 Put the reference where the image belongs — at the top of やったこと,
