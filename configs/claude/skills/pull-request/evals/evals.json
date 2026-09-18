@@ -8,13 +8,49 @@
       "expected_output": "A body in the なぜやるか / やったこと / やらなかったこと / 資料 shape with a mermaid diagram (the change wires skill, lint-body, hook and packages), written on one line per paragraph and bullet, linted with `lint-body` before the gh step and passing it, and a `gh pr create` command whose --body-file is a literal path.",
       "files": [],
       "assertions": [
-        "The list of commands run contains `lint-body <path>` on the body file at least once, before any `gh pr create` command would run, and the final body file exists at the reported path.",
+        "The list of commands run contains `lint-body \u003cpath\u003e` on the body file at least once, before any `gh pr create` command would run, and the final body file exists at the reported path.",
         "Running `lint-body` on the final body file reports zero problems.",
         "Outside fenced code blocks, no paragraph or list item in the body spans more than one line: every non-blank line outside fences is a heading, a list item, a table row, or a whole paragraph.",
         "No list item in the body joins a head to its body with ` — `, ` – ` or ` - `, and no list item starts with a bold label followed by a colon.",
         "The reported `gh pr create` command passes `--body-file` with a literal absolute path that contains no `$`, and does not use `--body`.",
         "The body has the sections なぜやるか and やったこと, and any やらなかったこと or 資料 section present has content beneath it (no empty section).",
         "The body contains a mermaid fenced block, and やったこと has at most three top-level bullets.",
+        "Outside fenced code blocks, the body is under 900 characters counted as Unicode code points.",
+        "The executor did not run `git push`, `gh pr create`, `gh pr edit`, `git commit`, `git switch` or `git branch -f`."
+      ]
+    },
+    {
+      "id": 1,
+      "name": "magical-merchant-widget-hardening",
+      "prompt": "Working directory: /Users/r-aizawa/Repository/private/github.com/Xantibody/magical-merchant. You are on branch `fix/widget-hardening`. Its unpushed commits against the base branch `main` are exactly the range `d457cd3^1..d457cd3^2` (4 commits): read them with `git log --stat --format='%h %s%n%b' d457cd3^1..d457cd3^2` and `git diff d457cd3^1...d457cd3^2`. Treat that range as `origin/main..HEAD` — ignore whatever is actually checked out. Assume no PR exists for the branch, that the repo owner and the gh login are both Xantibody, that the working tree is clean, that history-review says pass, and that the project checks pass. Do not push, do not run `gh pr create` / `gh pr edit`, do not commit or modify the repository: stop where the skill would hand the push to the user, and report the title, the absolute path of the body file, the exact `gh pr create` command you would run, and every shell command you ran, verbatim and in order.\n\nPRを作って",
+      "expected_output": "A body for the widget hardening branch (sheet keeps its text when the native save throws, lazy native library load, English strings) in the four-section shape, one line per paragraph, no `**label** —` bullets, no `以下は...できない:` colon lead-ins, linted clean with lint-body, under 900 characters. The original PR #270 body was 2241 characters with 4 bold-dash bullets and 4 separator bullets.",
+      "files": [],
+      "assertions": [
+        "The body's なぜやるか states that the widget's native save call was outside the error handling so a thrown JNI error lost the sheet's text, and that a missing .so could kill the widget; やったこと covers the lazy library load and the English/Japanese strings.",
+        "The list of commands run contains `lint-body \u003cpath\u003e` on the body file at least once, and the final body file exists at the reported path.",
+        "Running `lint-body` on the final body file reports zero problems.",
+        "Outside fenced code blocks, no paragraph or list item in the body spans more than one line.",
+        "No list item in the body joins a head to its body with ` — `, ` – ` or ` - `, and no list item starts with a bold label followed by a colon or dash.",
+        "No paragraph ends with a colon that introduces a following list or code block.",
+        "The reported `gh pr create` command passes `--body-file` with a literal absolute path that contains no `$`, and does not use `--body`.",
+        "Outside fenced code blocks, the body is under 900 characters counted as Unicode code points.",
+        "The executor did not run `git push`, `gh pr create`, `gh pr edit`, `git commit`, `git switch` or `git branch -f`."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "raizawa-blog-direction-doc",
+      "prompt": "Working directory: /Users/r-aizawa/Repository/private/github.com/Xantibody/raizawa-blog. You are on branch `docs/direction`. Its unpushed commits against the base branch `main` are exactly the range `eaf52ce^1..eaf52ce^2` (1 commit): read it with `git log --stat --format='%h %s%n%b' eaf52ce^1..eaf52ce^2` and `git diff eaf52ce^1...eaf52ce^2`. Treat that range as `origin/main..HEAD` — ignore whatever is actually checked out. Assume no PR exists for the branch, that the repo owner and the gh login are both Xantibody, that the working tree is clean, that history-review says pass, and that the project checks pass. Do not push, do not run `gh pr create` / `gh pr edit`, do not commit or modify the repository: stop where the skill would hand the push to the user, and report the title, the absolute path of the body file, the exact `gh pr create` command you would run, and every shell command you ran, verbatim and in order.\n\nPRを作って",
+      "expected_output": "A short body for a single docs commit that adds the repository's direction document: なぜやるか and やったこと, no diagram (one actor), one line per paragraph, no `**principle** — explanation` bullets, linted clean, well under 900 characters. The original PR #80 body was 1161 characters with 7 bold-dash bullets.",
+      "files": [],
+      "assertions": [
+        "The body contains no mermaid block, since the change adds documentation and touches no exchange between parts.",
+        "The list of commands run contains `lint-body \u003cpath\u003e` on the body file at least once, and the final body file exists at the reported path.",
+        "Running `lint-body` on the final body file reports zero problems.",
+        "Outside fenced code blocks, no paragraph or list item in the body spans more than one line.",
+        "No list item in the body joins a head to its body with ` — `, ` – ` or ` - `, and no list item starts with a bold label followed by a colon or dash.",
+        "No paragraph ends with a colon that introduces a following list or code block.",
+        "The reported `gh pr create` command passes `--body-file` with a literal absolute path that contains no `$`, and does not use `--body`.",
         "Outside fenced code blocks, the body is under 900 characters counted as Unicode code points.",
         "The executor did not run `git push`, `gh pr create`, `gh pr edit`, `git commit`, `git switch` or `git branch -f`."
       ]
