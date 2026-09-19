@@ -8,6 +8,7 @@ in
   flake.modules.homeManager.magical-merchant = {
     # abbr は CLI のサブコマンドをそのまま略したもので、
     # 引数を足す余地を残すため -m や --last は畳み込んでいない
+    # AIDEV-NOTE: scrawl は mms* 。mms (show) と紛らわしいが、旧名の mmt* を残すと t が何の頭文字でもなくなる
     my.shell.abbr = {
       mm = {
         cmd = "magical-merchant";
@@ -29,16 +30,16 @@ in
         cmd = "magical-merchant show";
         desc = "ノートの本文を表示";
       };
-      mmta = {
-        cmd = "magical-merchant timeline add";
-        desc = "今日のタイムラインに追記";
+      mmsa = {
+        cmd = "magical-merchant scrawl add";
+        desc = "今日の Scrawl に追記";
       };
-      mmts = {
-        cmd = "magical-merchant timeline show";
-        desc = "ある日のタイムラインを表示";
+      mmss = {
+        cmd = "magical-merchant scrawl show";
+        desc = "ある日の Scrawl を表示";
       };
-      mmtd = {
-        cmd = "magical-merchant timeline dates";
+      mmsd = {
+        cmd = "magical-merchant scrawl dates";
         desc = "記録のある日を新しい順に一覧";
       };
     };
