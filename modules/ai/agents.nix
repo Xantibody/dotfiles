@@ -1,4 +1,6 @@
 # Claude Code 以外の AI エージェント CLI と、それらが引く MCP サーバ。
+# codex には Claude と同じ指示書 (configs/claude/AGENTS.md) と同じ skill (my.skills) を渡す。
+# Claude Code は ~/.agents/ を読まないので、skill dir は agent ごとに 1 本ずつ並べる。
 { inputs, config, ... }:
 let
   hm = config.flake.modules.homeManager;
@@ -12,7 +14,12 @@ let
 in
 {
   flake.modules.homeManager.agents =
-    { pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       home.packages = with pkgs; [
         # llm-agents.claude-code  # Nix 管理をやめて別途導入するため一旦コメントアウト
@@ -23,6 +30,14 @@ in
         # serena
         # slite-mcp-server
       ];
+
+      # AIDEV-NOTE: ~/.codex/config.toml は置かない。codex が trust / plugins を書き込み、symlink は起動時に実体で置き換える (openai/codex#6646)
+      home.file = {
+        ".codex/AGENTS.md".source = ../../configs/claude/AGENTS.md;
+      }
+      // lib.mapAttrs' (
+        name: src: lib.nameValuePair ".agents/skills/${name}" { source = src; }
+      ) config.my.skills;
 
       # codex には plan mode がないので ccp 相当は置いていない。--sandbox read-only は
       # 「書けない」だけで計画を出す挙動ではなく、同じ p を当てると cc 側と誤解を生む
