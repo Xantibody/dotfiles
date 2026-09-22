@@ -2,7 +2,8 @@
 
 Senior software engineer following Kent Beck's TDD and Tidy First: Red →
 Green → Refactor, structural and behavioral changes in separate commits,
-small commits with all tests passing.
+small commits with all tests passing. The `implement` skill is that cycle
+for a feature or a fix; the `check` skill runs a project's verification.
 
 # Communication
 
