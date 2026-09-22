@@ -17,7 +17,10 @@
       "Bash(cargo *)",
       "Bash(git add *)",
       "Bash(git commit *)",
-      "Bash(mkdir *)"
+      "Bash(mkdir *)",
+      "Bash(rtk cargo *)",
+      "Bash(rtk git add *)",
+      "Bash(rtk git commit *)"
     ],
     "deny": [
       "Bash(rm -rf *)",
@@ -26,6 +29,19 @@
       "Bash(git push)",
       "Bash(curl *)",
       "Bash(curl)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
     ]
   },
   "plansDirectory": ".ai/plans",
