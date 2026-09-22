@@ -2,6 +2,7 @@
 name: skill-authoring
 description: House rules and pre-flight for creating or changing a skill (a SKILL.md that Claude Code and codex both load) — check what each agent's spec and vendor repos say today, cut the skill by job so other workflows can load it, validate the frontmatter with the bundled checker, then hand drafting and testing to skill-creator. It does not write the skill itself.
 when_to_use: Whenever the user asks to create, add, change, split, rename, or review a skill — "skill 作って", "skill 直して", "skill 追加して", "この作業を skill にして", "SKILL.md を書いて" — and before loading skill-creator for any reason. Also when a skill-creator script rejects a frontmatter field, or when a skill needs a frontmatter option and it is unclear whether one exists.
+disable-model-invocation: true
 ---
 
 # Skill authoring

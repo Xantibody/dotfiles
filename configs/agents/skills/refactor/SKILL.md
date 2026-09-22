@@ -2,6 +2,7 @@
 name: refactor
 description: Analyze and create a refactoring plan for codebases grown through vibe coding. Produces a plan — it does not execute changes itself.
 when_to_use: When the user wants to clean up, reorganize, or redesign code that has been built incrementally and become messy, or mentions technical debt, legacy code cleanup, code reorganization, or restructuring a project without breaking existing behavior.
+disable-model-invocation: true
 ---
 
 # Refactor

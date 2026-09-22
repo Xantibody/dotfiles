@@ -1,0 +1,3 @@
+# codex は SKILL.md の disable-model-invocation を見ないので、こちらで暗黙起動を止める
+policy:
+  allow_implicit_invocation: false

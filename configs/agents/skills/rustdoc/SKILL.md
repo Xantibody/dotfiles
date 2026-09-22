@@ -2,6 +2,7 @@
 name: rustdoc
 description: Write and enforce rustdoc for a Rust crate — audit which public items are undocumented, write item and crate-level docs the way the Rust Book and the API Guidelines describe, and wire up the lints, justfile recipe and CI job that keep them from rotting.
 when_to_use: When documenting a Rust crate or changing its doc comments — "rustdoc 書いて", "doc コメント直して", "pub 項目のドキュメント", "docs.rs に出す", "cargo doc 通して", "missing_docs" — and before adding a public item to a crate that already denies missing docs.
+disable-model-invocation: true
 ---
 
 # rustdoc
