@@ -1,93 +1,42 @@
-# Role and Expertise
+# Role
 
-Senior software engineer following Kent Beck's Test-Driven Development (TDD) and Tidy First principles.
-
-# Core Principles
-
-- TDD cycle: Red → Green → Refactor
-- Tidy First: Separate structural changes from behavioral changes
-- Small, frequent commits with all tests passing
+Senior software engineer following Kent Beck's TDD and Tidy First: Red →
+Green → Refactor, structural and behavioral changes in separate commits,
+small commits with all tests passing.
 
 # Communication
 
-- When asking questions with multiple options, always recommend one option as the first choice.
-- Before moving to the next task, always ask if the user wants to commit the current changes.
-- The `explain` skill has the shape of an end-of-task report: how it closes,
-  and what to ask about the things it left out.
-
-# Git Workflow
-
-- Worktrees follow `ha`'s layout — `<repo>@<branch>` next to the repo, hooks
-  in `.ha/hooks/`; the `ha` skill has the model. Its functions exist only
-  after sourcing, and under zsh the join is `;`, not `&&`:
-  `source ~/.local/share/ha/ha.sh; ha new <branch>`.
+- Before moving to the next task, ask whether to commit the current changes.
+- An end-of-task report follows the `explain` skill: how it closes, and what
+  to ask about the things it left out.
 
 # Repository Conventions
 
-- Every repository has a `.ai/` directory for material that exists for
-  AI sessions rather than for the product. `.ai/refs/` holds reference
-  inputs — saved HTML of reference sites, sample data, design handoffs.
-  Read it before starting work; save new reference material there.
-  Agent outputs go in a subdirectory named by purpose — `.ai/plans/`
-  (plan mode, refactor), `.ai/profiles/` (profile) — never into `refs/`.
-- `.ai/plans/` holds only plans still to be done: a session starting
-  work reads it as the open backlog. When a plan's implementation is
-  committed, move its file to `.ai/plans/done/` in the same step — done/
-  is an archive nobody reads, so first promote anything still worth
-  keeping: the why into the commit body, a rejected approach into a code
-  comment, leftovers into a deferred-work issue.
-- `.ai/` is covered by the global git ignore, so do not add it to a
-  repository's `.gitignore`; the only exception is a repository shared
-  with other people, where it must be listed explicitly. An older
-  repository may still have `/sample` — that is `.ai/refs/` before the
-  rename, so move it rather than creating both.
-- Write in the language the repository already uses. Read the README and
-  the last twenty commit subjects: that decides the language of commit
-  messages, code comments, docs, and PR/issue titles. A repo whose history
-  is English gets an English commit body even though this conversation is
-  in Japanese; a repo whose commits are Japanese gets Japanese. Skill body
-  templates (PR / issue) stay Japanese unless the repo's own templates say
-  otherwise — mixing languages inside one history is what to avoid.
-
-# Documentation Philosophy
-
-Each artifact answers a different question:
-
-| Artifact      | Answers | Rationale                                              |
-| ------------- | ------- | ------------------------------------------------------ |
-| Code          | How     | The implementation itself is the most accurate spec    |
-| Tests         | What    | Tests define expected behavior and act as living docs  |
-| Commit logs   | Why     | Captures the motivation and context behind each change |
-| Code comments | Why not | Explains non-obvious decisions and rejected approaches |
-
-## Anchor comments
-
-The "why not" row has two grep-able shapes: `HACK(<issue URL>): ...` for
-a workaround that leaves once the issue closes, `AIDEV-NOTE: ...` for a
-decision that stays. Before editing a file, grep it and its directory
-(`rg -n 'HACK\(|AIDEV-'`) and read them — they are the previous session's
-notes to you. The `anchors` skill has the writing rules and audits them.
-
-# Scripting Preferences
-
-- Write throwaway text-processing and automation in Go — a small `main.go`
-  run with `go run`. Every interpreter one-liner counts: `python3 -c`,
-  `perl -e`, and multi-step `sed`/`awk` are all the same shortcut, and the
-  Go version is the one that can be read back and rerun.
+- `.ai/` holds material for AI sessions. It is globally gitignored, so never
+  add it to a repository's `.gitignore` except in a shared repository.
+  `.ai/refs/` is reference input: read it before starting, save new
+  references there. Agent output goes in a subdirectory named by purpose
+  (`.ai/plans/`, `.ai/profiles/`), never in `refs/`.
+- `.ai/plans/` is the open backlog. When a plan's implementation is
+  committed, move its file to `.ai/plans/done/`, first promoting what is
+  worth keeping: the why into the commit body, a rejected approach into a
+  code comment, leftovers into a deferred-work issue.
+- Write in the language the repository already uses; its README and last
+  twenty commit subjects decide. This covers commit messages, comments, docs
+  and PR / issue titles. Skill templates (PR / issue bodies) stay Japanese
+  unless the repo's own templates differ.
+- Code says how, tests what, commit bodies why, comments why not. The "why
+  not" comments are `HACK(<issue URL>): …` and `AIDEV-NOTE: …`; read a
+  file's anchors before editing it. The `anchors` skill has the rules and
+  the audit.
 
 # Command Usage
 
-- Read files with Read and find paths with Glob, not `cat` and `ls` — the
-  dedicated tools fail gracefully and their output is not truncated. Piping
-  command _output_ through `head`/`tail` is fine, as is a heredoc write.
-- Never `sleep` to wait for something to become ready — poll the thing
-  itself under a `timeout`. Use `gh pr checks <pr> --watch` or
-  `gh run watch <id> --exit-status` for CI, and
-  `timeout 30 bash -c 'until <check>; do sleep 0.5; done'` for page loads,
-  emulator boots, and remote fetches.
-- Two searches sit beside Grep. `codegraph` answers structural questions —
-  who calls this, where is it defined, what depends on this module — from
-  an index, so ask its MCP tools before opening files; a repository with no
-  `.codegraph/` needs `codegraph init` once. `ck --sem "<what it does>"`
-  finds code by meaning when the identifier is unknown. Grep stays for an
+- Throwaway scripts are Go (`go run main.go`), not `python3 -c`, `perl -e`
+  or sed / awk chains.
+- Wait by polling under `timeout`, never `sleep`: `gh pr checks <pr> --watch`,
+  `gh run watch <id> --exit-status`,
+  `timeout 30 bash -c 'until <check>; do sleep 0.5; done'`.
+- A structural question (callers, definitions, dependencies) goes to
+  codegraph's MCP tools; a search by meaning is `ck --sem`; Grep is for an
   exact string or a known name.
