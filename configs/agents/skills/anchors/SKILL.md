@@ -7,7 +7,7 @@ disallowed-tools: Edit, Write, NotebookEdit
 
 # Anchors
 
-CLAUDE.md defines two anchor shapes: `HACK(<issue URL>): ...` for a
+CLAUDE.md / AGENTS.md defines two anchor shapes: `HACK(<issue URL>): ...` for a
 workaround waiting on something outside the repository, and
 `AIDEV-NOTE: <decision>` for a decision that stays. This skill finds them and
 asks GitHub whether the HACKs are still needed.

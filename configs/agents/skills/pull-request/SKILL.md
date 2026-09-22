@@ -96,7 +96,7 @@ plausible-sounding rationale.
 ## Title
 
 Conventional Commits. Type and scope rules come from the `commit` skill and
-the repo's CLAUDE.md. A single-commit branch reuses its subject verbatim. A
+the repo's CLAUDE.md or AGENTS.md. A single-commit branch reuses its subject verbatim. A
 multi-commit branch gets one line for what the branch achieves — not a list of
 operations. If it won't fit in one line, that is evidence the branch should be
 split; say so to the user.

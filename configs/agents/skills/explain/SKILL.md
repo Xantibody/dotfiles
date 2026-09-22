@@ -33,7 +33,7 @@ it or promote it.
 
 A report on work that touched a remote ends with the URL of what it
 touched, so the reader opens it from the terminal without looking for it.
-The rule itself is in CLAUDE.md (Communication); this is its shape:
+The rule itself is in CLAUDE.md / AGENTS.md (Communication); this is its shape:
 
 - the URL is bare and alone on its line — the terminal makes `https://`
   clickable, and `[text](url)` and a URL inside a sentence are not

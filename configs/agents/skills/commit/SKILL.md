@@ -37,7 +37,7 @@ Determine the scope from the staged changes:
 
 1. Run `git log --oneline -20` to learn the repository's existing scope conventions.
 2. Run `git diff --cached --name-only` and map staged files to a scope following those conventions (typically the top-level directory, module, or component name).
-3. If the project's CLAUDE.md defines explicit scope rules, those take precedence over inference.
+3. If the project's CLAUDE.md or AGENTS.md defines explicit scope rules, those take precedence over inference.
 
 ### Multi-Scope Resolution
 
