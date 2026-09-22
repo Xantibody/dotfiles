@@ -75,29 +75,11 @@ Each artifact answers a different question:
 
 ## Anchor comments
 
-The "why not" row has two grep-able shapes, so a later session finds
-the decision with `rg` instead of re-deriving it:
-
-- `HACK(<issue URL>): <what is broken upstream; what to remove once it is fixed>`
-  — a workaround that should disappear. The reference is a full issue
-  URL: it opens from a grep hit and can point at another repository. No
-  upstream issue yet means file one first; a HACK with nothing to wait
-  for is an AIDEV-NOTE.
-- `AIDEV-NOTE: <the decision and the rejected alternative>` — a
-  non-obvious choice that stays. One line, under 120 characters.
-
-Rules (the AIDEV-NOTE convention's, adopted as is):
-
-- Before editing a file, grep it and its directory for anchors
-  (`rg -n 'HACK\(|AIDEV-'`) and read them — they are the previous
-  session's notes to you.
-- Update an anchor when the code under it changes. Never delete one
-  without an explicit instruction, except a HACK whose issue has closed
-  and whose workaround leaves in the same change.
-- The `anchors` skill lists every anchor and reports which HACKs
-  reference a closed issue.
-- A bare `TODO` with no reference is not a third kind of anchor — file it
-  with the `issue` skill instead.
+The "why not" row has two grep-able shapes: `HACK(<issue URL>): ...` for
+a workaround that leaves once the issue closes, `AIDEV-NOTE: ...` for a
+decision that stays. Before editing a file, grep it and its directory
+(`rg -n 'HACK\(|AIDEV-'`) and read them — they are the previous session's
+notes to you. The `anchors` skill has the writing rules and audits them.
 
 # Scripting Preferences
 

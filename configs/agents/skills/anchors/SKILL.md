@@ -1,16 +1,33 @@
 ---
 name: anchors
-description: Lists the anchor comments in a repository — HACK(<issue URL>) workarounds and AIDEV-NOTE decisions — and reports which HACKs reference an issue that has since closed, so the workaround can be removed. Read-only; it never edits the anchors.
+description: The rules for writing anchor comments — HACK(<issue URL>) workarounds and AIDEV-NOTE decisions — and the audit that lists them and reports which HACKs reference an issue that has since closed. Read-only; it never edits the anchors.
 when_to_use: At the start of a session in a repository, before touching code that might carry a workaround, and whenever the user asks what hacks or notes are lying around — "HACK 一覧", "回避策どれが消せる?", "アンカー見せて", "AIDEV-NOTE 一覧", "issue 閉じたやつある?".
 disallowed-tools: Edit, Write, NotebookEdit
 ---
 
 # Anchors
 
-CLAUDE.md / AGENTS.md defines two anchor shapes: `HACK(<issue URL>): ...` for a
-workaround waiting on something outside the repository, and
-`AIDEV-NOTE: <decision>` for a decision that stays. This skill finds them and
-asks GitHub whether the HACKs are still needed.
+Two grep-able comment shapes carry the "why not" of a decision, so a
+later session finds it with `rg` instead of re-deriving it:
+
+- `HACK(<issue URL>): <what is broken upstream; what to remove once it is fixed>`
+  — a workaround that should disappear. The reference is a full issue
+  URL: it opens from a grep hit and can point at another repository. No
+  upstream issue yet means file one first; a HACK with nothing to wait
+  for is an AIDEV-NOTE.
+- `AIDEV-NOTE: <the decision and the rejected alternative>` — a
+  non-obvious choice that stays. One line, under 120 characters.
+
+Rules (the AIDEV-NOTE convention's, adopted as is):
+
+- Update an anchor when the code under it changes. Never delete one
+  without an explicit instruction, except a HACK whose issue has closed
+  and whose workaround leaves in the same change.
+- A bare `TODO` with no reference is not a third kind of anchor — file it
+  with the `issue` skill instead.
+
+The rest of this skill is the audit: it finds every anchor and asks
+GitHub whether the HACKs are still needed.
 
 ## Run
 
