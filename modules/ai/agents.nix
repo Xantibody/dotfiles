@@ -4,13 +4,29 @@
 { inputs, config, ... }:
 let
   hm = config.flake.modules.homeManager;
-  share = {
-    nixpkgs.overlays = [
-      inputs.mcp-servers-nix.overlays.default
-      inputs.llm-agents.overlays.shared-nixpkgs
-    ];
-    home-manager.sharedModules = [ hm.agents ];
-  };
+  share =
+    { pkgs, ... }:
+    {
+      nixpkgs.overlays = [
+        inputs.mcp-servers-nix.overlays.default
+        inputs.llm-agents.overlays.shared-nixpkgs
+      ];
+      home-manager.sharedModules = [ hm.agents ];
+
+      # codex の宣言分はシステム層に置く。codex は CLI > project > profile > user > cloud >
+      # /etc/codex/config.toml > builtin の順に重ねるので、ここに書けば user 層と衝突しない。
+      # AIDEV-NOTE: ~/.codex/config.toml は置かない。codex が trust / plugins を書き込み、symlink は起動時に実体で置き換える (openai/codex#6646)
+      # command は絶対パス。Codex app が spawn する MCP には shell の PATH が届かない
+      environment.etc."codex/config.toml".text = ''
+        [mcp_servers.ck]
+        command = "${pkgs.llm-agents.ck}/bin/ck"
+        args = ["--serve"]
+
+        [mcp_servers.codegraph]
+        command = "${pkgs.llm-agents.codegraph}/bin/codegraph"
+        args = ["serve", "--mcp"]
+      '';
+    };
 in
 {
   flake.modules.homeManager.agents =
@@ -36,9 +52,26 @@ in
         # slite-mcp-server
       ];
 
-      # AIDEV-NOTE: ~/.codex/config.toml は置かない。codex が trust / plugins を書き込み、symlink は起動時に実体で置き換える (openai/codex#6646)
       home.file = {
         ".codex/AGENTS.md".source = ../../configs/agents/AGENTS.md;
+        # rtk の hook。rtk に codex 用の処理は無いが、codex の PreToolUse は stdin
+        # (tool_name "Bash", tool_input.command) も出力 (hookSpecificOutput.updatedInput) も
+        # Claude Code と同形なので、Claude 用をそのまま当てている。効かなければ消す。
+        # rtk 公式の codex 対応は AGENTS.md に「常に rtk を前置」と書かせる方式で、
+        # `rtk test -d` のような誤用で壊れる (rtk-ai/rtk#1237)
+        ".codex/hooks.json".text = builtins.toJSON {
+          hooks.PreToolUse = [
+            {
+              matcher = "Bash";
+              hooks = [
+                {
+                  type = "command";
+                  command = "${pkgs.llm-agents.rtk}/bin/rtk hook claude";
+                }
+              ];
+            }
+          ];
+        };
       }
       // lib.mapAttrs' (
         name: src: lib.nameValuePair ".agents/skills/${name}" { source = src; }
