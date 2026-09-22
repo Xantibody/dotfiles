@@ -38,7 +38,6 @@ in
     }:
     {
       home.packages = with pkgs; [
-        # llm-agents.claude-code  # Nix 管理をやめて別途導入するため一旦コメントアウト
         # nixpkgs より追従が速いので llm-agents 版を使う
         llm-agents.gemini-cli
         context7-mcp
@@ -47,9 +46,6 @@ in
         llm-agents.rtk # Bash 出力を圧縮する proxy。Claude では PreToolUse hook が前置する
         llm-agents.ck # 意味検索の grep。`ck --sem`、MCP は `ck --serve`
         llm-agents.codegraph # コードのシンボルと呼び出しのグラフ。MCP は `codegraph serve --mcp`
-        # github-mcp-server
-        # serena
-        # slite-mcp-server
       ];
 
       home.file = {
