@@ -26,6 +26,7 @@ flowchart TD
     anchors["anchors<br/>HACK / AIDEV-NOTE の規則と一覧"]
     design["design<br/>設計相談"]
     testdesign["test-design<br/>何をテストするか"]
+    rustdoc["rustdoc<br/>Rust の doc (*.rs を触った時だけ)"]
   end
 
   user(["ユーザーが /name と打つ"])
@@ -37,7 +38,6 @@ flowchart TD
     bp["branch-protection<br/>main を保護する"]
     docs["docs<br/>ドキュメント"]
     refactor["refactor<br/>整理の計画"]
-    rustdoc["rustdoc<br/>Rust の doc"]
     sa["skill-authoring<br/>仕様確認と validator"]
     sc["skill-creator (plugin)<br/>草稿と eval"]
   end
@@ -67,7 +67,7 @@ flowchart TD
   hr -->|"rebuild なら /reconstruct を案内"| user
   bv --> ab
 
-  user --> reconstruct & version & docs & refactor & rustdoc & sa
+  user --> reconstruct & version & docs & refactor & sa
   reconstruct -->|"1 commit ずつ"| commit
   version -->|"tag 前"| check
   version -.->|"tag 後は /branch-protection を案内"| bp
