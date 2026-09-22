@@ -29,7 +29,7 @@ flowchart TD
   subgraph history["履歴"]
     direction LR
     hr["history-review<br/>pass か rebuild を返す"]
-    user(["ユーザーが /reconstruct を打つ"])
+    user(["ユーザーが /reconstruct を打つ (codex は $reconstruct)"])
     reconstruct["reconstruct<br/>最終 diff から積み直す"]
   end
 
@@ -61,6 +61,14 @@ flowchart TD
     bv["browser-verify<br/>agent-browser で画面を見る"]
   end
 
+  subgraph tools["ツール (skill ではない)"]
+    direction LR
+    ab["agent-browser<br/>headless Chrome の CLI"]
+    rtk["rtk<br/>Bash 出力を圧縮する hook"]
+    ck["ck<br/>意味で探す grep (MCP)"]
+    cg["codegraph<br/>呼び出しと定義のグラフ (MCP)"]
+  end
+
   implement -.->|"設計に迷った時"| design
   implement -.->|"何を試すか迷った時"| testdesign
   implement -->|"実装が終わった時"| hr
@@ -79,6 +87,7 @@ flowchart TD
   explain -->|"gh に渡す前"| lint
   implement -.->|"画面が変わった時"| bv
   pr -.->|"before / after を撮る時"| bv
+  bv --> ab
   reconstruct -->|"1 commit ずつ"| commit
   version -->|"tag 前"| check
   refactor -.->|"計画を実行する時"| commit
