@@ -116,3 +116,9 @@ Rules (the AIDEV-NOTE convention's, adopted as is):
   `gh run watch <id> --exit-status` for CI, and
   `timeout 30 bash -c 'until <check>; do sleep 0.5; done'` for page loads,
   emulator boots, and remote fetches.
+- Two searches sit beside Grep. `codegraph` answers structural questions —
+  who calls this, where is it defined, what depends on this module — from
+  an index, so ask its MCP tools before opening files; a repository with no
+  `.codegraph/` needs `codegraph init` once. `ck --sem "<what it does>"`
+  finds code by meaning when the identifier is unknown. Grep stays for an
+  exact string or a known name.
