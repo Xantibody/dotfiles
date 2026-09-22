@@ -1,0 +1,78 @@
+[
+  {
+    "query": "このプロジェクト、最初はclaude codeでサクッと作ったんだけど機能追加してるうちにぐちゃぐちゃになってきた。src/のファイルが30個くらいあって全部フラットに並んでる状態。整理したいんだけどどこから手をつければいいかな",
+    "should_trigger": true
+  },
+  {
+    "query": "I've been vibe coding this Next.js app for the past month and it works fine but the code is a mess. Components are doing API calls directly, there's business logic mixed into the UI, and half the utils/ folder is dead code. I want to refactor it properly before handing it off to my team",
+    "should_trigger": true
+  },
+  {
+    "query": "技術負債がやばい。controllers/にビジネスロジックが全部入ってて、モデルはただのデータ構造体になってる。テストもほぼない。段階的にリファクタしていく計画を立てたい",
+    "should_trigger": true
+  },
+  {
+    "query": "main.goが2000行超えてて、このファイルにHTTPハンドラもDB操作もバリデーションも全部入ってる。分割したいけど依存関係が複雑で怖い。安全に分解する方法ある？",
+    "should_trigger": true
+  },
+  {
+    "query": "we have this python flask app that started as a quick prototype 2 years ago and now it's in production serving 50k users. the codebase has grown to ~15k lines with no clear architecture. we need to restructure it but can't afford downtime or regressions",
+    "should_trigger": true
+  },
+  {
+    "query": "レガシーなRailsアプリを引き継いだんだけど、fat modelとfat controllerが混在してて、どのコードがどの機能に属してるか把握できない。DDDとかで整理し直すのがいいのか、もっとシンプルなアプローチがいいのか相談したい",
+    "should_trigger": true
+  },
+  {
+    "query": "コード全体を見直してリファクタリングの優先度をつけたい。特によく変更するファイルが複雑になっていて、毎回バグを入れてしまう。どのファイルから手をつけるべきか分析してほしい",
+    "should_trigger": true
+  },
+  {
+    "query": "このリポジトリ、最初cursorで一気に書いたんだけど、似たようなコードがあちこちにコピペされてて、1箇所直すと別の場所も直さないといけない。抽象化して共通化するplan作って",
+    "should_trigger": true
+  },
+  {
+    "query": "vibeコーディングで作ったCLIツールなんだけど、全部1ファイルに入ってて500行ある。機能追加するたびに辛くなってきた。きれいに分割して、テストも入れたい",
+    "should_trigger": true
+  },
+  {
+    "query": "今のプロジェクトにユーザー認証機能を追加したい。JWTトークンを使ったログイン/ログアウトの実装をお願いします",
+    "should_trigger": false
+  },
+  {
+    "query": "このテストが落ちてるんだけど原因を調べて直してほしい。tests/user_service_test.go の TestCreateUser が Expected 200 but got 500 になってる",
+    "should_trigger": false
+  },
+  {
+    "query": "新しいReactプロジェクトをセットアップしたい。Vite + TypeScript + Tailwind で、ディレクトリ構成はfeature-based architectureがいい",
+    "should_trigger": false
+  },
+  {
+    "query": "このAPIのパフォーマンスが遅い。/api/users のレスポンスが3秒かかってるからN+1クエリとかないか調べてチューニングして",
+    "should_trigger": false
+  },
+  {
+    "query": "src/utils/format.ts の formatDate 関数のロジックがおかしい。タイムゾーンの変換が間違ってるから修正して",
+    "should_trigger": false
+  },
+  {
+    "query": "CI/CDパイプラインを構築したい。GitHub Actionsでテスト→lint→ビルド→デプロイの流れを作って",
+    "should_trigger": false
+  },
+  {
+    "query": "このコンポーネントの関数名をsnake_caseからcamelCaseに一括変換して",
+    "should_trigger": false
+  },
+  {
+    "query": "DBスキーマのマイグレーションを書いてほしい。usersテーブルにroleカラムを追加して、既存データにはdefaultロールを設定する",
+    "should_trigger": false
+  },
+  {
+    "query": "Dockerfileを最適化してイメージサイズを小さくしたい。今3GBあるんだけどマルチステージビルドとかで減らせない？",
+    "should_trigger": false
+  },
+  {
+    "query": "このリポジトリのアーキテクチャについて相談したい。新しいマイクロサービスを追加するときのAPI設計やサービス間通信のパターンを検討したい",
+    "should_trigger": false
+  }
+]

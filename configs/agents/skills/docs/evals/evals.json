@@ -1,0 +1,99 @@
+{
+  "skill_name": "docs",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "このdotfilesリポジトリにドキュメントを整備して。README.mdも改善して、/docsディレクトリも作りたい",
+      "expected_output": "Improved README.md with value proposition, quick start, and TOC. docs/introduction.md with architecture overview. Proper GFM formatting with callouts.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "readme-has-value-proposition",
+          "description": "README.md contains a 1-2 sentence project overview",
+          "type": "llm_judge"
+        },
+        {
+          "id": "readme-has-quick-start",
+          "description": "README.md contains a Quick Start section",
+          "type": "content_check"
+        },
+        {
+          "id": "readme-has-toc",
+          "description": "README.md contains links to /docs files",
+          "type": "content_check"
+        },
+        {
+          "id": "docs-introduction-exists",
+          "description": "docs/introduction.md exists",
+          "type": "file_exists"
+        },
+        {
+          "id": "uses-gfm-callouts",
+          "description": "GFM callouts are used",
+          "type": "content_check"
+        },
+        {
+          "id": "uses-mermaid",
+          "description": "Mermaid diagram is included",
+          "type": "content_check"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "modules/darwin/以下のNixモジュール群について、docs/modules/darwin.mdを作成して。各.nixファイルが何をしてるかまとめてほしい",
+      "expected_output": "docs/modules/darwin.md with accurate summary of each .nix file, proper formatting, and links.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "darwin-md-exists",
+          "description": "docs/modules/darwin.md exists",
+          "type": "file_exists"
+        },
+        {
+          "id": "covers-all-nix-files",
+          "description": "All 10 .nix files mentioned",
+          "type": "content_check"
+        },
+        {
+          "id": "accurate-descriptions",
+          "description": "Descriptions match actual code",
+          "type": "llm_judge"
+        },
+        {
+          "id": "has-structure",
+          "description": "Organized with markdown headings",
+          "type": "content_check"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "flake.nixのコードコメントを見直して。なぜその設定にしてるかが分かるようにwhyコメントを追加して",
+      "expected_output": "flake.nix with why-focused comments, no narration, code unchanged, Nix comment style.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "has-why-comments",
+          "description": "Comments explain why, not what",
+          "type": "llm_judge"
+        },
+        {
+          "id": "no-narration-comments",
+          "description": "No restating-the-code comments",
+          "type": "llm_judge"
+        },
+        {
+          "id": "preserves-functionality",
+          "description": "Code logic unchanged",
+          "type": "llm_judge"
+        },
+        {
+          "id": "nix-comment-style",
+          "description": "Uses # or /* */ style",
+          "type": "content_check"
+        }
+      ]
+    }
+  ]
+}
