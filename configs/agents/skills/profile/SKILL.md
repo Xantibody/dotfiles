@@ -15,7 +15,7 @@ Two rules, no exceptions:
 
 ## Tools
 
-home-manager installs the toolchain on every host (`modules/home-manager/home/packages/profile.nix` in dotfiles): `flamegraph.pl`, `stackcollapse-*.pl`, `difffolded.pl`, the `inferno-*` ports (`inferno-collapse-xctrace` for macOS Instruments), `hyperfine`, `py-spy`, `cargo flamegraph`, and `perf` on Linux. `go tool pprof` and `go tool trace` come with Go; macOS has `sample` built in.
+home-manager installs the toolchain on every host (`modules/profiling.nix` in dotfiles): `flamegraph.pl`, `stackcollapse-*.pl`, `difffolded.pl`, the `inferno-*` ports (`inferno-collapse-xctrace` for macOS Instruments), `hyperfine`, `py-spy`, `cargo flamegraph`, and `perf` on Linux. `go tool pprof` and `go tool trace` come with Go; macOS has `sample` built in.
 
 Check before starting, and fall back to `nix shell nixpkgs#flamegraph nixpkgs#hyperfine` on a machine that is not from dotfiles:
 

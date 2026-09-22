@@ -24,6 +24,8 @@ flowchart TD
     bv["browser-verify<br/>画面を見る"]
     profile["profile<br/>計測"]
     anchors["anchors<br/>HACK / AIDEV-NOTE の規則と一覧"]
+    design["design<br/>設計相談"]
+    testdesign["test-design<br/>何をテストするか"]
   end
 
   user(["ユーザーが /name と打つ"])
@@ -33,8 +35,6 @@ flowchart TD
     reconstruct["reconstruct<br/>最終 diff から積み直す"]
     version["version<br/>次の SemVer"]
     bp["branch-protection<br/>main を保護する"]
-    design["design<br/>設計相談"]
-    testdesign["test-design<br/>何をテストするか"]
     docs["docs<br/>ドキュメント"]
     refactor["refactor<br/>整理の計画"]
     rustdoc["rustdoc<br/>Rust の doc"]
@@ -55,7 +55,8 @@ flowchart TD
   implement -->|"毎サイクル"| commit
   implement -->|"実装が終わった時"| hr
   implement -.->|"画面が変わった時"| bv
-  implement -.->|"設計やテストに迷った時は /design /test-design を案内"| user
+  implement -.->|"設計に迷った時"| design
+  implement -.->|"何を試すか迷った時"| testdesign
   pr -->|"pre-flight"| hr
   pr -->|"push 前"| check
   pr -->|"本文を書く時"| explain
@@ -66,7 +67,7 @@ flowchart TD
   hr -->|"rebuild なら /reconstruct を案内"| user
   bv --> ab
 
-  user --> reconstruct & version & design & testdesign & docs & refactor & rustdoc & sa
+  user --> reconstruct & version & docs & refactor & rustdoc & sa
   reconstruct -->|"1 commit ずつ"| commit
   version -->|"tag 前"| check
   version -.->|"tag 後は /branch-protection を案内"| bp

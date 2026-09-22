@@ -16,7 +16,7 @@ This skill is the single entry point for all routine quality checks, handling di
 
 Investigate available commands by checking project files in this priority order:
 
-1. **`flake.nix` / `flake.lock`**: prefer `nix flake check` for analysis+tests and `nix fmt` (treefmt) for formatting. Single command covers multi-language projects. Some flakes wire whole system builds into `checks` (this dotfiles repo builds NixOS hosts there), which takes minutes — when that is the case, run `nix fmt` plus the specific check the change touches (`nix build .#checks.<system>.<name>`), and say which ones you skipped.
+1. **`flake.nix` / `flake.lock`**: prefer `nix flake check` for analysis+tests and `nix fmt` (treefmt) for formatting. Single command covers multi-language projects. Some flakes wire whole system builds into `checks`, which takes minutes — when that is the case, run `nix fmt` plus the specific check the change touches (`nix build .#checks.<system>.<name>`), and say which ones you skipped.
 2. **`Makefile` / `justfile`**: look for `lint`, `check`, `typecheck`, `test`, `format`, `fmt` targets.
 3. **`package.json`**: check `scripts` for `lint`, `typecheck`, `test`, `format`, plus common tools (`eslint`, `tsc --noEmit`, `vitest`, `jest`, `prettier`, `biome`).
 4. **Language-native fallbacks** (when no project-configured command exists):
