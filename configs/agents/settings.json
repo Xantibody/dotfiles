@@ -20,7 +20,9 @@
       "Bash(mkdir *)",
       "Bash(rtk cargo *)",
       "Bash(rtk git add *)",
-      "Bash(rtk git commit *)"
+      "Bash(rtk git commit *)",
+      "mcp__plugin_mcp-defaults_ck",
+      "mcp__plugin_mcp-defaults_codegraph"
     ],
     "deny": [
       "Bash(rm -rf *)",

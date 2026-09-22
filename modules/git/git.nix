@@ -55,6 +55,10 @@ in
         # global ignore (~/.config/git/ignore) に置く。
         ignores = [
           ".ai/"
+          # agent 用の検索インデックス (modules/ai/agents.nix の ck / codegraph)。
+          # どちらも消して作り直せるので、リポジトリには入れない
+          ".ck/"
+          ".codegraph/"
           # home-manager 管理前の ~/.config/git/ignore に Claude Code が書いていた行。
           # ファイルを store のシンボリックリンクに置き換えるので、ここで引き継ぐ。
           "**/.claude/settings.local.json"
