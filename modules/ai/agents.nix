@@ -26,6 +26,11 @@ in
         # nixpkgs より追従が速いので llm-agents 版を使う
         llm-agents.gemini-cli
         context7-mcp
+        # agent が引くツール。hook / MCP の配線は Claude 側が configs/agents/settings.json と
+        # mcp-defaults、codex 側が /etc/codex/config.toml
+        llm-agents.rtk # Bash 出力を圧縮する proxy。Claude では PreToolUse hook が前置する
+        llm-agents.ck # 意味検索の grep。`ck --sem`、MCP は `ck --serve`
+        llm-agents.codegraph # コードのシンボルと呼び出しのグラフ。MCP は `codegraph serve --mcp`
         # github-mcp-server
         # serena
         # slite-mcp-server
