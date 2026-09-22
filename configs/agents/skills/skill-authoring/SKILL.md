@@ -1,6 +1,6 @@
 ---
 name: skill-authoring
-description: House rules and pre-flight for creating or changing a Claude Code skill (a SKILL.md under ~/.claude/skills) — check what the spec and Anthropic's repos say today, cut the skill by job so other workflows can load it, validate the frontmatter with the bundled checker, then hand drafting and testing to skill-creator. It does not write the skill itself.
+description: House rules and pre-flight for creating or changing a skill (a SKILL.md that Claude Code and codex both load) — check what each agent's spec and vendor repos say today, cut the skill by job so other workflows can load it, validate the frontmatter with the bundled checker, then hand drafting and testing to skill-creator. It does not write the skill itself.
 when_to_use: Whenever the user asks to create, add, change, split, rename, or review a skill — "skill 作って", "skill 直して", "skill 追加して", "この作業を skill にして", "SKILL.md を書いて" — and before loading skill-creator for any reason. Also when a skill-creator script rejects a frontmatter field, or when a skill needs a frontmatter option and it is unclear whether one exists.
 ---
 
@@ -15,26 +15,33 @@ against the live spec, and only then draft and test with skill-creator.
 
 ## 1. Read what is true today
 
-Fetch the spec, not memory. Three sources, in this order:
+Fetch the spec, not memory, for every agent that loads the skill: today
+Claude Code (`~/.claude/skills`) and codex (`~/.agents/skills`), from the
+one source tree. Three sources, in this order:
 
-- **The frontmatter reference:** `https://code.claude.com/docs/en/skills.md`
-  (the `.md` URL returns markdown). Read the `Frontmatter reference`
-  table. A field may already do what the skill was about to do in prose —
-  `paths` for file-scoped activation, `context: fork` for isolation,
-  `user-invocable: false` for background knowledge, `hooks` for something
-  that must run every time.
-- **The changelog:** `https://code.claude.com/docs/en/changelog.md`. Read
-  the entries since the skill directory's last commit
+- **The frontmatter references:** Claude Code's
+  `https://code.claude.com/docs/en/skills.md` (the `.md` URL returns
+  markdown; read the `Frontmatter reference` table) and codex's
+  `https://learn.chatgpt.com/docs/build-skills.md`. A field may already
+  do what the skill was about to do in prose — `paths` for file-scoped
+  activation, `context: fork` for isolation, `user-invocable: false` for
+  background knowledge, `hooks` for something that must run every time.
+  codex reads only `name` and `description`; what it must enforce goes in
+  the `agents/openai.yaml` sidecar (`policy.allow_implicit_invocation`)
+  or in the body.
+- **The changelogs:** `https://code.claude.com/docs/en/changelog.md` and
+  `gh api 'repos/openai/codex/releases?per_page=20' --jq '.[] | select(.prerelease | not) | .tag_name + " " + .body'`.
+  Read the entries since the skill directory's last commit
   (`git log -1 --format=%ad -- configs/agents/skills`) for "skill",
   "command", "frontmatter", "hook", "plugin". Note anything that changes
   how skills load or trigger.
-- **Anthropic's repos:** an official skill that covers the job is a
+- **The vendors' repos:** an official skill that covers the job is a
   reason to install it, not to write one.
 
   ```bash
   gh api repos/anthropics/skills/contents/skills --jq '.[].name'
   gh api repos/anthropics/claude-plugins-official/contents/plugins --jq '.[].name'
-  gh api 'repos/anthropics/claude-code/releases?per_page=5' --jq '.[].tag_name'
+  gh api repos/openai/skills/contents/skills/.curated --jq '.[].name'
   ```
 
 Write down, in the report to the user, what changed since the last skill
@@ -62,7 +69,10 @@ enough to be worth loading on its own.
   nobody would type as a command: `user-invocable: false`. A skill that
   only reads and reports: `disallowed-tools: Edit, Write, NotebookEdit`.
   Trigger phrases: `when_to_use`, which the listing appends to
-  `description` under one shared 1,536-character cap.
+  `description` under one shared 1,536-character cap. codex ignores
+  `when_to_use` and lists every skill's `description` under one budget of
+  2% of the context window (8,000 characters when unknown), so a longer
+  description costs every other skill room there.
 
 House conventions, since the repo's skills are read together: the body is
 English, trigger phrases in `when_to_use` are Japanese because that is
