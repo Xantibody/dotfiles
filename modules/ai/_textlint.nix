@@ -1,5 +1,5 @@
 # Claude が書く PR / issue 本文を textlint にかける。
-# ルールの選定と自前ルールは configs/claude/textlint/ にあり、`lint-body <file>` がそれを読む。
+# ルールの選定と自前ルールは configs/agents/textlint/ にあり、`lint-body <file>` がそれを読む。
 # skill が本文を書いた後に lint-body を回し、`gh pr create` などの --body-file は
 # lint-body-hook (pull-request / issue skill の frontmatter が登録する PreToolUse hook) が
 # もう一度かけて、指摘が残っていればコマンドを止める。
@@ -31,8 +31,8 @@ let
       ];
       text = ''
         exec textlint \
-          --config ${../../configs/claude/textlint/textlintrc.json} \
-          --rulesdir ${../../configs/claude/textlint/rules} \
+          --config ${../../configs/agents/textlint/textlintrc.json} \
+          --rulesdir ${../../configs/agents/textlint/rules} \
           "$@"
       '';
     };

@@ -58,7 +58,7 @@ Infer the Conventional Commits scope from staged file paths using these rules:
 | `flake.lock`               | `deps`                                               |
 | `flake.nix`                | `flake`                                              |
 | `.github/renovate*`        | `renovate`                                           |
-| `configs/<name>/`          | `<name>` (e.g., `claude`, `k9s`)                     |
+| `configs/<name>/`          | `<name>` (e.g., `agents`, `k9s`)                     |
 | `modules/<name>.nix`       | `<name>` (e.g., `apps`, `audio`)                     |
 | `modules/<dir>/<name>.nix` | `<name>` — the feature, not the directory            |
 | `modules/base/<name>.nix`  | the setting it configures (`nix`, `nixpkgs`, `user`) |

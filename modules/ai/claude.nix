@@ -1,9 +1,9 @@
-# Claude Code。設定ファイルの実体は configs/claude/ にあり、home.file で配る。
+# Claude Code。設定ファイルの実体は configs/agents/ にあり、home.file で配る。
 # 指示書は他の agent と共通なので AGENTS.md の名前で置き、Claude には CLAUDE.md として配る。
 # skill は my.skills に集めてここが ~/.claude/skills に並べる。codex 向けの
 # ~/.agents/skills は agents.nix が同じ my.skills から並べるので、skill を足すのは 1 箇所。
 # Claude が画面を見るための agent-browser (headless Chrome の CLI) もここに置く。
-# 手順は configs/claude/skills/browser-verify にあり、上流の使い方 skill は本体が同梱している。
+# 手順は configs/agents/skills/browser-verify にあり、上流の使い方 skill は本体が同梱している。
 # Chrome 本体は store に無く、初回に `agent-browser install` が Chrome for Testing を落とす。
 { inputs, config, ... }:
 let
@@ -32,7 +32,7 @@ in
       ...
     }:
     let
-      skillsDir = ../../configs/claude/skills;
+      skillsDir = ../../configs/agents/skills;
       entries = lib.filterAttrs (_: type: type == "directory") (builtins.readDir skillsDir);
       # SKILL.md を持つ dir だけが skill。mcp-defaults / tsgo-lsp は .claude-plugin を持つ
       # Claude 専用の plugin で、置き場所は同じ ~/.claude/skills だが他の agent には渡さない
@@ -52,15 +52,15 @@ in
         home.packages = [ pkgs.llm-agents.agent-browser ];
 
         my.skills = lib.mapAttrs (name: _: skillsDir + "/${name}") skills // {
-          # AIDEV-NOTE: ha と同じく configs/claude/skills にコピーしない。package の版と skill の版が常に揃う
+          # AIDEV-NOTE: ha と同じく configs/agents/skills にコピーしない。package の版と skill の版が常に揃う
           agent-browser = "${pkgs.llm-agents.agent-browser}/share/agent-browser/skills/agent-browser";
         };
 
         home.file = {
-          ".claude/CLAUDE.md".source = ../../configs/claude/AGENTS.md;
-          ".claude/settings.json".source = ../../configs/claude/settings.json;
+          ".claude/CLAUDE.md".source = ../../configs/agents/AGENTS.md;
+          ".claude/settings.json".source = ../../configs/agents/settings.json;
           ".claude/statusline.sh" = {
-            source = ../../configs/claude/statusline.sh;
+            source = ../../configs/agents/statusline.sh;
             executable = true;
           };
         }

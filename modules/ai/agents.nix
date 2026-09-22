@@ -1,5 +1,5 @@
 # Claude Code 以外の AI エージェント CLI と、それらが引く MCP サーバ。
-# codex には Claude と同じ指示書 (configs/claude/AGENTS.md) と同じ skill (my.skills) を渡す。
+# codex には Claude と同じ指示書 (configs/agents/AGENTS.md) と同じ skill (my.skills) を渡す。
 # Claude Code は ~/.agents/ を読まないので、skill dir は agent ごとに 1 本ずつ並べる。
 { inputs, config, ... }:
 let
@@ -33,7 +33,7 @@ in
 
       # AIDEV-NOTE: ~/.codex/config.toml は置かない。codex が trust / plugins を書き込み、symlink は起動時に実体で置き換える (openai/codex#6646)
       home.file = {
-        ".codex/AGENTS.md".source = ../../configs/claude/AGENTS.md;
+        ".codex/AGENTS.md".source = ../../configs/agents/AGENTS.md;
       }
       // lib.mapAttrs' (
         name: src: lib.nameValuePair ".agents/skills/${name}" { source = src; }

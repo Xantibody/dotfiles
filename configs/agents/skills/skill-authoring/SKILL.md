@@ -25,7 +25,7 @@ Fetch the spec, not memory. Three sources, in this order:
   that must run every time.
 - **The changelog:** `https://code.claude.com/docs/en/changelog.md`. Read
   the entries since the skill directory's last commit
-  (`git log -1 --format=%ad -- configs/claude/skills`) for "skill",
+  (`git log -1 --format=%ad -- configs/agents/skills`) for "skill",
   "command", "frontmatter", "hook", "plugin". Note anything that changes
   how skills load or trigger.
 - **Anthropic's repos:** an official skill that covers the job is a

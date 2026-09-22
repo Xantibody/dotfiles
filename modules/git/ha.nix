@@ -1,7 +1,7 @@
 # git worktree を <repo>@<branch> としてリポジトリの隣に切る kawarimidoll/ha。
 # 本体は bash/zsh の関数なので、fish からは bash に渡して終了時の cwd だけ受け取る。
 # 同梱の skill は my.skills に載せて各 agent の skill dir に並べてもらい、source する
-# 1 行は configs/claude/AGENTS.md の Git Workflow に書いてある。
+# 1 行は configs/agents/AGENTS.md の Git Workflow に書いてある。
 { inputs, config, ... }:
 let
   hm = config.flake.modules.homeManager;
@@ -18,7 +18,7 @@ in
     in
     {
       xdg.dataFile."ha/ha.sh".source = "${inputs.ha}/ha.sh";
-      # AIDEV-NOTE: configs/claude/skills にコピーしない。input から引けば flake update で上流に追従する
+      # AIDEV-NOTE: configs/agents/skills にコピーしない。input から引けば flake update で上流に追従する
       my.skills.ha = "${inputs.ha}/skills/ha";
 
       programs.fish.functions.ha = {
