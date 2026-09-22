@@ -1,7 +1,7 @@
 # git worktree を <repo>@<branch> としてリポジトリの隣に切る kawarimidoll/ha。
 # 本体は bash/zsh の関数なので、fish からは bash に渡して終了時の cwd だけ受け取る。
 # 同梱の skill は my.skills に載せて各 agent の skill dir に並べてもらい、source する
-# 1 行は configs/claude/CLAUDE.md の Git Workflow に書いてある。
+# 1 行は configs/claude/AGENTS.md の Git Workflow に書いてある。
 { inputs, config, ... }:
 let
   hm = config.flake.modules.homeManager;

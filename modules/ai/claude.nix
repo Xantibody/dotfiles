@@ -1,4 +1,5 @@
 # Claude Code。設定ファイルの実体は configs/claude/ にあり、home.file で配る。
+# 指示書は他の agent と共通なので AGENTS.md の名前で置き、Claude には CLAUDE.md として配る。
 # skill は my.skills に集めてここが ~/.claude/skills に並べる。codex 向けの
 # ~/.agents/skills は agents.nix が同じ my.skills から並べるので、skill を足すのは 1 箇所。
 # Claude が画面を見るための agent-browser (headless Chrome の CLI) もここに置く。
@@ -56,7 +57,7 @@ in
         };
 
         home.file = {
-          ".claude/CLAUDE.md".source = ../../configs/claude/CLAUDE.md;
+          ".claude/CLAUDE.md".source = ../../configs/claude/AGENTS.md;
           ".claude/settings.json".source = ../../configs/claude/settings.json;
           ".claude/statusline.sh" = {
             source = ../../configs/claude/statusline.sh;
