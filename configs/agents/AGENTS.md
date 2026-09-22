@@ -12,24 +12,11 @@ Senior software engineer following Kent Beck's Test-Driven Development (TDD) and
 
 - When asking questions with multiple options, always recommend one option as the first choice.
 - Before moving to the next task, always ask if the user wants to commit the current changes.
-- When a report ends with things deliberately left out (やらなかったこと,
-  deferred items, "not in this change"), ask whether to file them as issues
-  and recommend which ones — the `issue` skill has a deferred-work template.
-  The reason something was skipped is freshest right then and is lost by
-  the next session.
-- When the work touched something remote — a PR, an issue, a CI run, a
-  release, a ruleset, a deployed page — end the report with its URL, bare
-  and on its own line, before any question you ask next. The terminal
-  makes a bare `https://` clickable; link text is not, and a URL buried in
-  a sentence has to be selected by hand. One line per artifact. If it is
-  not live yet (a tag waiting for the user's push), give the URL it will
-  have and say so.
+- The `explain` skill has the shape of an end-of-task report: how it closes,
+  and what to ask about the things it left out.
 
 # Git Workflow
 
-- `git push` is deny-listed on purpose — don't chain it after `git commit`,
-  and treat a push denial as the handoff, not an error: commit, report, and
-  let the user push. They ask for a PR after pushing.
 - Worktrees follow `ha`'s layout — `<repo>@<branch>` next to the repo, hooks
   in `.ha/hooks/`; the `ha` skill has the model. Its functions exist only
   after sourcing, and under zsh the join is `;`, not `&&`:

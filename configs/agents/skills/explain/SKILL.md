@@ -31,9 +31,9 @@ it or promote it.
 
 ## The closing line
 
-A report on work that touched a remote ends with the URL of what it
-touched, so the reader opens it from the terminal without looking for it.
-The rule itself is in CLAUDE.md / AGENTS.md (Communication); this is its shape:
+A report on work that touched a remote — a PR, an issue, a CI run, a
+release, a ruleset, a deployed page — ends with the URL of what it
+touched, so the reader opens it from the terminal without looking for it:
 
 - the URL is bare and alone on its line — the terminal makes `https://`
   clickable, and `[text](url)` and a URL inside a sentence are not
@@ -41,6 +41,14 @@ The rule itself is in CLAUDE.md / AGENTS.md (Communication); this is its shape:
 - one line per artifact — a PR and the issue filed from it are two lines
 - an artifact that is not live yet is marked as such — a tag the user has
   not pushed gets its future URL and the words 「push 後に有効」
+
+## What was left out
+
+When a report ends with things deliberately left out (やらなかったこと,
+deferred items, "not in this change"), ask whether to file them as issues
+and recommend which ones — the `issue` skill has a deferred-work template.
+The reason something was skipped is freshest right then and is lost by the
+next session.
 
 ## PR and issue bodies
 
@@ -57,7 +65,8 @@ hook (`lint-body-hook`, from their frontmatter) that runs the same check
 on the `--body-file` of `gh pr create` / `gh pr edit` / `gh issue create`
 / `gh issue comment` and refuses the command while findings remain. It
 stays registered for the rest of the session once either skill has been
-invoked.
+invoked. codex ignores frontmatter hooks, so there the `lint-body` step
+written in those skills' bodies is the only gate — do not skip it.
 
 ```bash
 lint-body <path>         # 指摘を見る
