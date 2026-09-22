@@ -49,7 +49,18 @@ in
       };
 
       config = {
-        home.packages = [ pkgs.llm-agents.agent-browser ];
+        home.packages = [
+          pkgs.llm-agents.agent-browser
+          # 編集前に anchor を見せる PreToolUse hook。settings.json が Edit / Write に登録する
+          (pkgs.writeShellApplication {
+            name = "anchors-hook";
+            runtimeInputs = [
+              pkgs.jq
+              pkgs.ripgrep
+            ];
+            text = builtins.readFile ./anchors-hook.sh;
+          })
+        ];
 
         my.skills = lib.mapAttrs (name: _: skillsDir + "/${name}") skills // {
           # AIDEV-NOTE: ha と同じく configs/agents/skills にコピーしない。package の版と skill の版が常に揃う

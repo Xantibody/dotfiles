@@ -30,7 +30,9 @@
       "Bash(git push *)",
       "Bash(git push)",
       "Bash(curl *)",
-      "Bash(curl)"
+      "Bash(curl)",
+      "Bash(sleep *)",
+      "Bash(sleep)"
     ]
   },
   "hooks": {
@@ -41,6 +43,15 @@
           {
             "type": "command",
             "command": "rtk hook claude"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "anchors-hook"
           }
         ]
       }
