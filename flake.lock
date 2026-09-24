@@ -3,16 +3,14 @@
     "arto": {
       "inputs": {
         "crane": "crane",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1790155390,
-        "narHash": "sha256-eJy6EKKBt5C/EkjwKeb+wzV+ru+IaA27MF0/s+40wuo=",
+        "lastModified": 1790258114,
+        "narHash": "sha256-zs9zjgXGR5ISehXNtScUN9fHsJqNVrpFEoa/llzbBwc=",
         "owner": "arto-app",
         "repo": "Arto",
-        "rev": "46f53ae4441e2d0ccb8403dd955b113bb6b5bf3c",
+        "rev": "ab0274d2767909859ea5ba6f7a14728fffb07ce3",
         "type": "github"
       },
       "original": {
@@ -400,7 +398,7 @@
         "flake-utils": [
           "flake-utils"
         ],
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "rust-overlay": "rust-overlay_2",
         "treefmt-nix": [
           "treefmt-nix"
@@ -538,11 +536,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1789073787,
-        "narHash": "sha256-xfX/toC2QV707s06GbP4II/TxYF0fNQj7s5/LClNDKc=",
+        "lastModified": 1788490200,
+        "narHash": "sha256-wX7GJ/pe7147AKZPfmVGIqFnEdlrnAJRhlhciaeKzWs=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "aff8a0b28396750446e5537a96461bc4facdb287",
+        "rev": "e5ead30d0824debba629dcf0720abeddee57b7d6",
         "type": "github"
       },
       "original": {
@@ -568,6 +566,22 @@
       }
     },
     "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1789073787,
+        "narHash": "sha256-xfX/toC2QV707s06GbP4II/TxYF0fNQj7s5/LClNDKc=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "aff8a0b28396750446e5537a96461bc4facdb287",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 1790196372,
         "narHash": "sha256-yj9y5GkHHQl2okt2z8cXzegaLEfPnVAFZMdWKjMOVpw=",
@@ -606,7 +620,7 @@
         "nix-index-database": "nix-index-database",
         "nix-mac-app-identity": "nix-mac-app-identity",
         "nixCats": "nixCats",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "sops-nix": "sops-nix",
         "systems": "systems",
         "treefmt-nix": "treefmt-nix",

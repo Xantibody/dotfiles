@@ -113,8 +113,9 @@
       };
     };
     arto = {
+      # nixpkgs は follows させない。上流 CI が自分の lock で組んだものを
+      # arto.cachix.org に置いていて、こちらの nixpkgs で組み直すと当たらない
       url = "github:arto-app/Arto";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     ichigyo-ls = {
       url = "github:Xantibody/ichigyo-ls";
