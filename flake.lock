@@ -405,11 +405,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1790269450,
-        "narHash": "sha256-8UeEOXP4ILHQj2teZHuQ4poMAiBbtBQZaFDxlnzVvew=",
+        "lastModified": 1790295769,
+        "narHash": "sha256-47Gh/zZZvMTQxDBlBEt1NwIVSOCs98DLtb7dklzlxLw=",
         "owner": "Xantibody",
         "repo": "magical-merchant",
-        "rev": "45c018e0797f8403232a2c09fa77bc4ec0cb02c5",
+        "rev": "357472bab3fd9907b22fc80962b5523862072069",
         "type": "github"
       },
       "original": {
