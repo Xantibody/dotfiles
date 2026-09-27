@@ -37,7 +37,6 @@ tooltip label {
 
 /* ──────────────────────────────────────────────────────────────┤ general ├───
 */
-#custom-theme,
 #workspaces,
 #window,
 #custom-temperature,
@@ -47,7 +46,6 @@ tooltip label {
 #clock,
 #custom-wifi,
 #bluetooth,
-#custom-update,
 #mpris,
 #pulseaudio,
 #backlight,
@@ -78,16 +76,6 @@ tooltip label {
   margin-bottom: 0;
   padding-right: 3px;
   text-shadow: 2px 0 2px rgba(0, 0, 0, 0.5);
-}
-
-/* ───────────────────────────────────────────────────────┤ theme switcher ├───
-*/
-#custom-theme {
-  background: @main-bg;
-}
-
-#custom-theme:hover {
-  color: @hover-fg;
 }
 
 /* ───────────────────────────────────────────────────────────┤ workspaces ├───
@@ -271,21 +259,10 @@ tooltip label {
 */
 #bluetooth {
   background: @tray;
-  padding-right: 5px;
+  padding-right: 8px;
 }
 
 #bluetooth:hover {
-  color: @hover-fg;
-}
-
-/* ────────────────────────────────────────────────────────┤ system update ├───
-*/
-#custom-update {
-  padding-right: 8px;
-  background: @tray;
-}
-
-#custom-update:hover {
   color: @hover-fg;
 }
 

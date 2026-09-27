@@ -10,7 +10,6 @@
   // ──────────────────────────────────────────────────────────┤ positions ├───
 
   "modules-left": [
-    "custom/theme", // theme switcher
     "custom/left1",
 
     "hyprland/workspaces", // workspaces
@@ -46,7 +45,6 @@
 
     "custom/wifi", // wi-fi
     "bluetooth", // bluetooth
-    "custom/update", // system update
     "custom/right5"
   ],
 
@@ -65,17 +63,6 @@
     "custom/leftin2",
     "custom/power" // power button
   ],
-
-  // ─────────────────────────────────────────────────────┤ theme switcher ├───
-
-  "custom/theme": {
-    "exec": "~/.config/waybar/scripts/current-theme.sh",
-    "return-type": "json",
-    "format": " 󰍜 ",
-    "on-click": "~/.config/waybar/scripts/theme-switcher.sh",
-    "min-length": 3,
-    "max-length": 3
-  },
 
   // ─────────────────────────────────────────────────────────┤ workspaces ├───
 
@@ -296,18 +283,6 @@
     "on-click": "~/.config/waybar/scripts/bluetooth-menu.sh",
     "on-click-right": "kitty --title '󰂯  Bluetooth TUI' bash -c bluetui",
     "interval": 1,
-    "min-length": 1,
-    "max-length": 1
-  },
-
-  // ──────────────────────────────────────────────────────┤ system update ├───
-
-  "custom/update": {
-    "exec": "~/.config/waybar/scripts/system-update.sh",
-    "return-type": "json",
-    "format": "{}",
-    "on-click": "~/.config/waybar/scripts/system-update.sh up",
-    "interval": 30,
     "min-length": 1,
     "max-length": 1
   },
