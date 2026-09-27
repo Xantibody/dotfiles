@@ -1,4 +1,5 @@
 # 指紋センサ。ThinkPad E14 Gen6 のセンサは FPC (10a5:d805) で、libfprint 本体の fpcmoc が扱う。
+# PAM の fprintAuth は fprintd を有効にした時点で全サービスの既定値が true になる。
 {
   flake.modules.nixos.fingerprint =
     { pkgs, ... }:
@@ -6,13 +7,8 @@
       # AIDEV-NOTE: tod (Goodix の blob) は載せない。この機体は FPC で、tod 版 libfprint は本体より古い
       services.fprintd.enable = true;
 
-      security.pam.services = {
-        login.fprintAuth = true;
-        sudo.fprintAuth = true;
-      };
-
-      # 指紋の登録は root でなく wheel から行いたい
-      environment.etc."polkit-1/rules.d/50-fprintd.rules".text = ''
+      # 指紋の登録は root でなく wheel から、パスワード入力なしで行いたい (既定は auth_self_keep)
+      security.polkit.extraConfig = ''
         polkit.addRule(function(action, subject) {
           if (action.id == "net.reactivated.fprint.device.enroll" &&
               subject.isInGroup("wheel")) {
