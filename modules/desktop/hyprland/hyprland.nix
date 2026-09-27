@@ -35,17 +35,17 @@ in
             "$mod, R, exec, $menu"
             "$mod, P, pseudo, # dwindle"
             "$mod, S, layoutmsg, togglesplit # dwindle"
-            "$mod_SHIFT, E, exec, emacs"
+            "$mod SHIFT, E, exec, emacs"
 
             # Move focus with mod for vim key
             "$mod, H, movefocus, l"
             "$mod, L, movefocus, r"
             "$mod, K, movefocus, u"
             "$mod, J, movefocus, d"
-            "$mod_SHIFT, H, swapwindow, l"
-            "$mod_SHIFT, L, swapwindow, r"
-            "$mod_SHIFT, K, swapwindow, u"
-            "$mod_SHIFT, J, swapwindow, d"
+            "$mod SHIFT, H, swapwindow, l"
+            "$mod SHIFT, L, swapwindow, r"
+            "$mod SHIFT, K, swapwindow, u"
+            "$mod SHIFT, J, swapwindow, d"
 
           ]
           ++ (
