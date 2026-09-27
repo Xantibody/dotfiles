@@ -93,6 +93,14 @@
       url = "github:natsukium/nix-mac-app-identity";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # base16 の配色を各アプリの設定に配る。配色そのものは nixpkgs の base16-schemes から引く
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+      };
+    };
     systems.url = "github:nix-systems/default";
     # 自分では使わないが、下の input 群が持ち込む 4 コピーを 1 つに畳むために置く
     flake-utils = {
