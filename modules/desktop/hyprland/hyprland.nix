@@ -6,7 +6,12 @@ let
 in
 {
   flake.modules.homeManager.hyprland =
-    { config, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       wayland.windowManager.hyprland = {
         enable = true;
@@ -23,10 +28,6 @@ in
           exec-once = [
             # skk server起動 (辞書の実体は modules/japanese/skk.nix が作る)
             "yaskkserv2 ${config.my.skk.dictionary}"
-            # 履歴が無限に消えないので起動時に消す
-            "cliphist wipe"
-            "wl-paste --type text --watch cliphist store # Stores only text data"
-            "wl-paste --type image --watch cliphist store # Stores only image data"
           ];
           "$mod" = "SUPER";
           "$terminal" = "kitty";
@@ -96,6 +97,14 @@ in
       };
 
       services.hyprpaper.enable = true;
+
+      # クリップボード履歴。$mod+V の rofi から選ぶ
+      services.cliphist = {
+        enable = true;
+        allowImages = true;
+      };
+      # 履歴が無限に溜まるので、セッションを始めるたびに消す
+      systemd.user.services.cliphist.Service.ExecStartPre = "${lib.getExe pkgs.cliphist} wipe";
     };
 
   flake.modules.nixos.hyprland =
@@ -106,6 +115,9 @@ in
       ...
     }:
     {
+      # PAM の hyprlock サービスもこれが作る
+      programs.hyprlock.enable = true;
+
       programs.hyprland = {
         enable = true;
         # セッションを systemd の graphical-session.target に載せる。waybar などの
@@ -129,11 +141,7 @@ in
       };
 
       environment.systemPackages = with pkgs; [
-        cliphist
         wl-clipboard
-        xsel
-        wofi
-        hyprlock
         libnotify
         brightnessctl
         playerctl
