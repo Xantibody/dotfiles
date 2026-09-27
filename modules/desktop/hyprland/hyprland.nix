@@ -10,6 +10,13 @@ in
     {
       wayland.windowManager.hyprland = {
         enable = true;
+        # 本体と portal は NixOS の programs.hyprland が入れる。ここで持つと別の版が
+        # 並びうるので、home-manager は設定ファイルだけを書く
+        package = null;
+        portalPackage = null;
+        # graphical-session.target は UWSM が張る。home-manager 側の
+        # hyprland-session.target と二重にしない
+        systemd.enable = false;
         # home.stateVersion 24.11 の既定値を明示する (26.05 以降の既定は lua)
         configType = "hyprlang";
         settings = {
@@ -92,16 +99,33 @@ in
     };
 
   flake.modules.nixos.hyprland =
-    { pkgs, ... }:
     {
-      programs.hyprland.enable = true;
-
-      services.xserver = {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      programs.hyprland = {
         enable = true;
-        xkb = {
-          layout = "us";
-          variant = "";
-        };
+        # セッションを systemd の graphical-session.target に載せる。waybar などの
+        # user service はこれを待って起動する
+        withUWSM = true;
+      };
+
+      # ログイン画面。X11 と LightDM は Hyprland に要らないので載せない
+      # (services.xserver.enable は既定で LightDM を起こしていた)。
+      # --cmd に uwsm start <id> と書くと greetd の環境で .desktop を探せるかに依存するので、
+      # store パスで Exec が埋まった session 一覧を渡して選ばせ、以後は記憶させる
+      services.greetd = {
+        enable = true;
+        settings.default_session.command = lib.concatStringsSep " " [
+          "${lib.getExe pkgs.tuigreet}"
+          "--time"
+          "--remember"
+          "--remember-session"
+          "--sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions"
+        ];
       };
 
       environment.systemPackages = with pkgs; [
