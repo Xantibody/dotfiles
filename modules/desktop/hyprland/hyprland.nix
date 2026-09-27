@@ -84,8 +84,13 @@ in
             "eDP-1, preferred, auto, 1"
             # ", preferred, auto,1, mirror, eDP-1"
           ];
-          # sysinfo はタイルに割り込ませず、画面の真ん中に浮かせる
-          windowrule = [ "float on, center on, match:class sysinfo" ];
+          windowrule = [
+            # アプリからの最大化要求は聞かない。kitty は終了時に最大化だったことを
+            # ~/.cache/kitty に覚え、次の窓を最大化で開いてタイルに入らなくなる
+            "suppress_event maximize, match:class .*"
+            # sysinfo はタイルに割り込ませず、画面の真ん中に浮かせる
+            "float on, center on, match:class sysinfo"
+          ];
         };
       };
 
