@@ -69,6 +69,7 @@ in
 
         home.file = {
           ".claude/CLAUDE.md".source = ../../configs/agents/AGENTS.md;
+          # AIDEV-NOTE: telemetry は個別 env で切る。CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC は auto-updater まで止める
           ".claude/settings.json".source = ../../configs/agents/settings.json;
           ".claude/statusline.sh" = {
             source = ../../configs/agents/statusline.sh;
