@@ -84,8 +84,25 @@ in
             "eDP-1, preferred, auto, 1"
             # ", preferred, auto,1, mirror, eDP-1"
           ];
+          # sysinfo はタイルに割り込ませず、画面の真ん中に浮かせる
+          windowrule = [ "float on, center on, match:class sysinfo" ];
         };
       };
+
+      # スペック一覧 (fastfetch) を浮いた窓で出し、キーを 1 つ押せば閉じる。waybar のロゴと
+      # which-key の i から呼ぶ。fish の起動を挟まないよう、kitty に bash を直接渡す。
+      # AIDEV-NOTE: 大きさは kitty 側で決める。windowrule の size は kitty に効かず全画面大になった
+      home.packages = [
+        (pkgs.writeShellApplication {
+          name = "sysinfo";
+          runtimeInputs = [ pkgs.kitty ];
+          text = ''
+            exec kitty --class sysinfo --title 'System Info' \
+              -o remember_window_size=no -o initial_window_width=110c -o initial_window_height=28c \
+              ${lib.getExe pkgs.bash} -c '${lib.getExe pkgs.fastfetch}; read -rsn1'
+          '';
+        })
+      ];
 
       # 壁紙は dayfox の明るさに合う KDE の3枚から、hyprpaper の起動 (ログイン) ごとに1枚選ぶ。
       # パッケージは 255MB あるので、使う3枚だけを写して closure に残す

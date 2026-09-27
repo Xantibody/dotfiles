@@ -207,7 +207,7 @@
     "format": " ",
     "tooltip": false,
     // スペック一覧。ターミナル起動のたびに出すとうるさいので、ここから開く
-    "on-click": "kitty --title 'System Info' --hold fastfetch"
+    "on-click": "sysinfo"
   },
 
   // ─────────────────────────────────────────────────────┤ idle inhibitor ├───

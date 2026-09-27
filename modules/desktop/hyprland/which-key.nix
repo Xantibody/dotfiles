@@ -93,7 +93,7 @@ in
             {
               key = "i";
               desc = "System info";
-              cmd = "kitty --title 'System Info' --hold fastfetch";
+              cmd = "sysinfo";
             }
             {
               key = "n";
