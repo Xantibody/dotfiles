@@ -132,12 +132,33 @@
     hoverable_in 0.25s ease-in 1.75s forwards;
 }
 
-#custom-temperature {
+#temperature {
   font-size: 0;
   color: transparent;
   animation:
     module_expand 0.25s ease-in 1.5s forwards,
     module_in 0.25s ease-in 1.75s forwards;
+}
+
+#temperature.critical {
+  color: transparent;
+  animation:
+    module_expand 0.25s ease-in 1.5s forwards,
+    state_critical_in 0.25s ease-in 1.75s forwards;
+}
+
+#cpu.warning {
+  color: transparent;
+  animation:
+    module_expand 0.25s ease-in 0.75s forwards,
+    state_warning_in 0.25s ease-in 1s forwards;
+}
+
+#cpu.critical {
+  color: transparent;
+  animation:
+    module_expand 0.25s ease-in 0.75s forwards,
+    state_critical_in 0.25s ease-in 1s forwards;
 }
 
 /* ────────────────────────────────────────────────────────────┤ keyframes ├───

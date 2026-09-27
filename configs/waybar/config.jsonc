@@ -22,7 +22,7 @@
   "modules-center": [
     "custom/paddc",
     "custom/left2",
-    "custom/temperature", // temperature
+    "temperature", // temperature
 
     "custom/left3",
     "memory", // memory
@@ -158,13 +158,16 @@
 
   // ────────────────────────────────────────────────────────┤ temperature ├───
 
-  "custom/temperature": {
-    "exec": "~/.config/waybar/scripts/cpu-temp.sh",
-    "return-type": "json",
-    "format": "{}",
-    "interval": 5,
-    "min-length": 8,
-    "max-length": 8
+  "temperature": {
+    // cpu-temp.sh の置き換え。k10temp (Tctl) を読む。hwmonN の番号は起動ごとに
+    // 変わりうるので、PCI デバイス側の固定パスで指す
+    "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+    "input-filename": "temp1_input",
+    "critical-threshold": 80,
+    "format": "{icon} {temperatureC}°C",
+    "format-icons": ["󱃃", "󰔏", "󱃂", "󰸁"],
+    "tooltip-format": "Tctl: {temperatureC}°C / {temperatureF}°F",
+    "interval": 5
   },
 
   // ─────────────────────────────────────────────────────────────┤ memory ├───
@@ -187,11 +190,15 @@
   // ────────────────────────────────────────────────────────────────┤ cpu ├───
 
   "cpu": {
-    "format": "󰍛 {usage}%",
+    // コアごとの使用率を棒の高さで並べる (12 スレッド分)
+    "format": "{icon0}{icon1}{icon2}{icon3}{icon4}{icon5}{icon6}{icon7}{icon8}{icon9}{icon10}{icon11} {usage}%",
+    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+    "states": {
+      "warning": 70,
+      "critical": 90
+    },
     "tooltip": false,
-    "interval": 5,
-    "min-length": 6,
-    "max-length": 6
+    "interval": 2
   },
 
   // ─────────────────────────────────────────────────────────────┤ distro ├───

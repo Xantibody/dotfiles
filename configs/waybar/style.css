@@ -39,7 +39,7 @@ tooltip label {
 */
 #workspaces,
 #window,
-#custom-temperature,
+#temperature,
 #memory,
 #cpu,
 #idle_inhibitor,
@@ -134,7 +134,7 @@ tooltip label {
   padding-left: 3px;
 }
 
-#custom-temperature {
+#temperature {
   background: @temperature;
   padding: 0 0 0 1px;
 }
