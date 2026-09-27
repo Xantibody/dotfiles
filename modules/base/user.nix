@@ -55,7 +55,6 @@ in
           "networkmanager"
           "wheel"
         ];
-        packages = [ ];
       };
     };
 }

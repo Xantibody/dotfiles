@@ -12,9 +12,7 @@
         pulse.enable = true;
       };
       security.rtkit.enable = true;
-      environment.systemPackages = with pkgs; [
-        pulseaudio
-        wireplumber
-      ];
+      # pactl (waybar の volume-control.sh が使う) のためだけに入れる。デーモンは pipewire-pulse
+      environment.systemPackages = [ pkgs.pulseaudio ];
     };
 }

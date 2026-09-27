@@ -10,8 +10,8 @@ in
     home-manager.sharedModules = [ hm.sops ];
   };
 
+  # 復号は home-manager 側だけなので、NixOS の sops module は載せない
   flake.modules.nixos.sops = {
-    imports = [ inputs.sops-nix.nixosModules.sops ];
     home-manager.sharedModules = [ hm.sops ];
   };
 }
