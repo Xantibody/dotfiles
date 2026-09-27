@@ -1,6 +1,6 @@
 # Hyprland。WM 本体と、その上で動く常駐・クリップボード・ランチャ。
 # 常駐 (waybar, cliphist, yaskkserv2 など) は各機能が systemd の user service として持つ。
-{ config, ... }:
+{ config, inputs, ... }:
 let
   hm = config.flake.modules.homeManager;
 in
@@ -161,6 +161,8 @@ in
   flake.modules.nixos.hyprland =
     { pkgs, ... }:
     {
+      imports = [ inputs.silentSDDM.nixosModules.default ];
+
       # PAM の hyprlock サービスもこれが作る
       programs.hyprlock.enable = true;
 
@@ -173,10 +175,13 @@ in
 
       # ログイン画面。X11 と LightDM は Hyprland に要らないので載せない
       # (services.xserver.enable は既定で LightDM を起こしていた)。
-      # greetd の上で ReGreet を cage に載せて出す。最後のユーザーとセッションを覚え、
-      # pam_fprintd の「指を置いて」も info として表示するので指紋でも入れる。
-      # AIDEV-NOTE: tuigreet は TUI なので見送った。GUI のログイン画面が欲しい
-      services.displayManager.regreet.enable = true;
+      # SDDM を Wayland で動かし、SilentSDDM のテーマを載せる。配色はデスクトップと同じ gruvbox。
+      # 指紋は促されないので、パスワード欄が空のまま Enter を押してからセンサに触る。
+      # AIDEV-NOTE: tuigreet は TUI、ReGreet は GTK の部品が並ぶだけでレイアウトを変えられず見送った
+      programs.silentSDDM = {
+        enable = true;
+        theme = "gruvbox";
+      };
 
       # Slack・Discord・Obsidian などの Electron を XWayland でなく Wayland で動かす。
       # XWayland だと拡大時にぼやけ、IME も通らない
