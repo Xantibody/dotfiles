@@ -35,6 +35,7 @@ in
       "notifications"
       "idle"
       "theme"
+      "which-key"
       # 道具
       "fish"
       "fzf"
