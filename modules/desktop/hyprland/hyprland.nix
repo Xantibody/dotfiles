@@ -131,6 +131,10 @@ in
         ];
       };
 
+      # Slack・Discord・Obsidian などの Electron を XWayland でなく Wayland で動かす。
+      # XWayland だと拡大時にぼやけ、IME も通らない
+      environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
       environment.systemPackages = with pkgs; [
         wl-clipboard
         libnotify
