@@ -114,10 +114,16 @@ in
         auto-optimise-store = true;
       }
       // caches;
-      gc = {
-        automatic = true;
+    };
+
+    # nix.gc の --delete-older-than 3d は数日 rebuild しないと現行以外の世代を全部消し、
+    # 戻り先が無くなる。nh clean は日数と世代数の両方で残すので、その穴が無い
+    programs.nh = {
+      enable = true;
+      clean = {
+        enable = true;
         dates = "daily";
-        options = "--delete-older-than 3d";
+        extraArgs = "--keep-since 3d --keep 5";
       };
     };
   };
