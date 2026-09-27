@@ -20,6 +20,7 @@ in
       # ハードウェア
       "hardware-configuration"
       "boot"
+      "firmware"
       "power"
       "bluetooth"
       "fingerprint"
