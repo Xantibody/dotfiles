@@ -127,7 +127,7 @@
   },
   "skkeleton": {
     "cargoLock": null,
-    "date": "2026-09-22",
+    "date": "2026-09-27",
     "extract": null,
     "name": "skkeleton",
     "passthru": null,
@@ -139,12 +139,12 @@
       "name": null,
       "owner": "vim-skk",
       "repo": "skkeleton",
-      "rev": "89980892b0c408d3fb3ba0b3fc78268a4d6f062a",
-      "sha256": "sha256-087Yolo79qMfKXTELYE2nQEDmMQoVZjHc2iA0AVNNl4=",
+      "rev": "c829533120aa95dc6f33e0f1254cfe7262a4ce23",
+      "sha256": "sha256-klyPGjWwbjlGqkqNz27Ax7cLJrGCSjrPrC1d8oSapcA=",
       "sparseCheckout": [],
       "type": "github"
     },
-    "version": "89980892b0c408d3fb3ba0b3fc78268a4d6f062a"
+    "version": "c829533120aa95dc6f33e0f1254cfe7262a4ce23"
   },
   "smooth-cursor": {
     "cargoLock": null,
