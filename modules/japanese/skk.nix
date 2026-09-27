@@ -49,7 +49,7 @@ in
     {
       options.my.skk.dictionary = lib.mkOption {
         type = lib.types.package;
-        description = "yaskkserv2 が読む変換済み辞書。常駐の起動行がこれを指す";
+        description = "yaskkserv2 が読む変換済み辞書。Linux の常駐 (skk-linux) がこれを指す";
       };
 
       config = {
@@ -81,8 +81,26 @@ in
       };
     };
 
+  # darwin の launchd agent と同じ常駐を systemd の user service で張る
+  flake.modules.homeManager.skk-linux =
+    { config, pkgs, ... }:
+    {
+      systemd.user.services.yaskkserv2 = {
+        Unit.Description = "yaskkserv2 SKK dictionary server";
+        Service = {
+          # 既定の fork だと親が即 exit して systemd が終了と見なすので、前面で動かす
+          ExecStart = "${pkgs.yaskkserv2}/bin/yaskkserv2 --no-daemonize ${config.my.skk.dictionary}";
+          Restart = "on-failure";
+        };
+        Install.WantedBy = [ "default.target" ];
+      };
+    };
+
   flake.modules.nixos.skk = {
     nixpkgs.overlays = [ overlay ];
-    home-manager.sharedModules = [ hm.skk ];
+    home-manager.sharedModules = [
+      hm.skk
+      hm.skk-linux
+    ];
   };
 }

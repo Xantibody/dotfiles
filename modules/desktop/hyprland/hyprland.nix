@@ -1,17 +1,12 @@
 # Hyprland。WM 本体と、その上で動く常駐・クリップボード・ランチャ。
-# exec-once は起動時に流す行なので、autostart したい機能の option をここから読む。
+# 常駐 (waybar, cliphist, yaskkserv2 など) は各機能が systemd の user service として持つ。
 { config, ... }:
 let
   hm = config.flake.modules.homeManager;
 in
 {
   flake.modules.homeManager.hyprland =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+    { lib, pkgs, ... }:
     {
       wayland.windowManager.hyprland = {
         enable = true;
@@ -25,10 +20,6 @@ in
         # home.stateVersion 24.11 の既定値を明示する (26.05 以降の既定は lua)
         configType = "hyprlang";
         settings = {
-          exec-once = [
-            # skk server起動 (辞書の実体は modules/japanese/skk.nix が作る)
-            "yaskkserv2 ${config.my.skk.dictionary}"
-          ];
           "$mod" = "SUPER";
           "$terminal" = "kitty";
           "$fileManager" = "dolphin";
