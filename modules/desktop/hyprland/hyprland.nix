@@ -31,7 +31,8 @@ in
             "$mod, C, killactive,"
             "$mod, M, exit,"
             "$mod, E, exec, $fileManager"
-            "$mod, F, exec, zen"
+            # zen-browser-flake の beta が入れるコマンドは zen-beta で、zen は存在しない
+            "$mod, F, exec, zen-beta"
             "$mod, V, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
             "$mod, R, exec, $menu"
             "$mod, P, pseudo, # dwindle"
