@@ -514,9 +514,6 @@
     },
     "magical-merchant": {
       "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
         "nixpkgs": "nixpkgs_2",
         "rust-overlay": "rust-overlay_2",
         "treefmt-nix": [
@@ -524,11 +521,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1790295769,
-        "narHash": "sha256-47Gh/zZZvMTQxDBlBEt1NwIVSOCs98DLtb7dklzlxLw=",
+        "lastModified": 1790541010,
+        "narHash": "sha256-XsxHCxo3FoznHmOYZm2/BFx94+Uk0bdtXmXYCVEMme8=",
         "owner": "Xantibody",
         "repo": "magical-merchant",
-        "rev": "357472bab3fd9907b22fc80962b5523862072069",
+        "rev": "61139c62d8e665313945d509eff1b9baeefb40f4",
         "type": "github"
       },
       "original": {

@@ -149,10 +149,7 @@
       # nixpkgs は follows させない。CI が自分の lock で組んだ .app と cli を
       # magical-merchant.cachix.org に置いていて、こちらの nixpkgs で組み直すと
       # derivation が変わって当たらず、Tauri アプリを手元で 10 分建てることになる
-      inputs = {
-        flake-utils.follows = "flake-utils";
-        treefmt-nix.follows = "treefmt-nix";
-      };
+      inputs.treefmt-nix.follows = "treefmt-nix";
     };
   };
   outputs =
