@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# nmcli / pactl は yes・enabled を locale に合わせて訳す (ja だと はい・有効)。
+# 出力の文字列で分岐しているので英語に固定する。UTF-8 のままにして SSID を崩さない
+export LC_ALL=C.UTF-8
+
 # Define functions
 print_error() {
   cat <<"EOF"

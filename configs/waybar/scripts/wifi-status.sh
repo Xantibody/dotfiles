@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# nmcli / pactl は yes・enabled を locale に合わせて訳す (ja だと はい・有効)。
+# 出力の文字列で分岐しているので英語に固定する。UTF-8 のままにして SSID を崩さない
+export LC_ALL=C.UTF-8
+
 # This script gathers detailed Wi-Fi connection information.
 # It collects the following fields:
 #
@@ -93,10 +97,10 @@ else
   # phy_mode=""
   signal=$(echo "$wifi_info" | awk -F: '{print $3}')
 
-  active_device=$(nmcli -t -f DEVICE,STATE device status |
-    grep -w "connected" |
-    grep -v -E "^(dummy|lo:|virbr0)" |
-    awk -F: '{print $1}')
+  # 接続中の Wi-Fi デバイスだけを取る。種類で絞らないと docker0 や br-* も混ざり、
+  # 複数行のまま device show に渡って失敗する
+  active_device=$(nmcli -t -f DEVICE,TYPE,STATE device status |
+    awk -F: '$2 == "wifi" && $3 == "connected" { print $1; exit }')
 
   if [ -n "$active_device" ]; then
     output=$(nmcli -e no -g ip4.address,ip4.gateway,general.hwaddr device show "$active_device")
