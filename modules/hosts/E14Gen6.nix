@@ -34,6 +34,7 @@ in
       "rofi"
       "notifications"
       "idle"
+      "theme"
       # 道具
       "fish"
       "fzf"

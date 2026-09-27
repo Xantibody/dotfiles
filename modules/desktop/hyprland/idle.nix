@@ -5,6 +5,9 @@ let
 in
 {
   flake.modules.homeManager.idle = {
+    # ロック画面の設定ファイルを置く。中身 (背景と入力欄の色) は Stylix の hyprlock target が書く
+    programs.hyprlock.enable = true;
+
     services.hypridle = {
       enable = true;
       settings = {
