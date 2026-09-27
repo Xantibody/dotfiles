@@ -108,6 +108,8 @@ in
       # パッケージは 255MB あるので、使う3枚だけを写して closure に残す
       services.hyprpaper = {
         enable = true;
+        # 既定では Hyprland の一言メッセージ (splash) を壁紙に重ねて描く
+        settings.splash = false;
         settings.wallpaper = [
           {
             monitor = "";
