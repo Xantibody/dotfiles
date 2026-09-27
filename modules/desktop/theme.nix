@@ -32,6 +32,8 @@ in
         base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
         polarity = "dark";
         autoEnable = false;
+        # ログイン画面 (ReGreet) の GTK にも同じ配色とフォントを配る
+        targets.regreet.enable = true;
         # 配る先のフォントを、ほかの場所と同じ Explex に寄せる
         fonts = {
           monospace = {

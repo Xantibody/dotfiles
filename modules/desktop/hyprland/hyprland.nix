@@ -135,12 +135,7 @@ in
     };
 
   flake.modules.nixos.hyprland =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+    { pkgs, ... }:
     {
       # PAM の hyprlock サービスもこれが作る
       programs.hyprlock.enable = true;
@@ -154,18 +149,10 @@ in
 
       # ログイン画面。X11 と LightDM は Hyprland に要らないので載せない
       # (services.xserver.enable は既定で LightDM を起こしていた)。
-      # --cmd に uwsm start <id> と書くと greetd の環境で .desktop を探せるかに依存するので、
-      # store パスで Exec が埋まった session 一覧を渡して選ばせ、以後は記憶させる
-      services.greetd = {
-        enable = true;
-        settings.default_session.command = lib.concatStringsSep " " [
-          "${lib.getExe pkgs.tuigreet}"
-          "--time"
-          "--remember"
-          "--remember-session"
-          "--sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions"
-        ];
-      };
+      # greetd の上で ReGreet を cage に載せて出す。最後のユーザーとセッションを覚え、
+      # pam_fprintd の「指を置いて」も info として表示するので指紋でも入れる。
+      # AIDEV-NOTE: tuigreet は TUI なので見送った。GUI のログイン画面が欲しい
+      services.displayManager.regreet.enable = true;
 
       # Slack・Discord・Obsidian などの Electron を XWayland でなく Wayland で動かす。
       # XWayland だと拡大時にぼやけ、IME も通らない
