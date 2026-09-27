@@ -16,7 +16,8 @@ in
         listener = [
           {
             timeout = 300;
-            on-timeout = "hyprlock";
+            # lock_cmd の pidof ガードを通すため、hyprlock を直接でなく lock-session で呼ぶ
+            on-timeout = "loginctl lock-session";
             on-resume = "hyprctl dispatch dpms on"; # 何か入力が来たら点灯
           } # 5分でロック
           {
