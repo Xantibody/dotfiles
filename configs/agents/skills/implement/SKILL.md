@@ -8,7 +8,7 @@ when_to_use: Whenever the user asks to implement a feature, fix a bug, add funct
 
 Use `design` for architecture questions, `test-design` when deciding what to test, `check` to run the project's checks, and `commit` when ready to commit.
 
-Before starting, run `git branch --show-current`. Whether new work belongs on the default branch or its own branch is a per-repository decision (the repo's CLAUDE.md usually says; a single-maintainer repo often commits straight to the default), so follow that rather than a fixed rule. What is never fine is beginning on an unrelated non-default branch without asking — the work ends up in someone else's PR.
+Before starting, run `git branch --show-current`. Whether new work belongs on the default branch or its own branch is a per-repository decision (the repo's CLAUDE.md usually says; a single-maintainer repo often commits straight to the default), so follow that rather than a fixed rule. When it gets its own branch, cut it with `ha new <type>/<slug>` rather than `git switch -c`, and run every command against the `<base>@<branch>` worktree (the `ha` skill has the layout); the base checkout stays on the default branch. What is never fine is beginning on an unrelated non-default branch without asking — the work ends up in someone else's PR.
 
 ## Red-Green-Refactor Cycle
 
