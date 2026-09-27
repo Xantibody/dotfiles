@@ -51,6 +51,7 @@ in
       "comma"
       "skk"
       "zen"
+      "magical-merchant"
       "1password"
       "k8s"
       "dev-cli"

@@ -1,5 +1,5 @@
 # 自作のジャーナル (github:Xantibody/magical-merchant)。
-# CLI とノートを同期する常駐サービスを darwin module 側が持っている。
+# アプリと CLI、同期設定は darwin / nixos module 側が持っている。
 { inputs, config, ... }:
 let
   hm = config.flake.modules.homeManager;
@@ -78,6 +78,26 @@ in
       nix.settings = cache;
 
       my.dock.apps = lib.mkOrder 300 [ "${pkgs.magical-merchant}/Applications/Magical Merchant.app" ];
+
+      home-manager.sharedModules = [ hm.magical-merchant ];
+    };
+
+  flake.modules.nixos.magical-merchant =
+    { config, ... }:
+    {
+      imports = [ inputs.magical-merchant.nixosModules.default ];
+
+      # NixOS には console user が決まらないので、sync-config.json を置く先を名指しする
+      services.magical-merchant = service // {
+        user = config.my.user.name;
+      };
+
+      # Linux 版はログインのトークンを Secret Service に置くので、それを提供する daemon が要る
+      services.gnome.gnome-keyring.enable = true;
+      # keyring が既定で連れてくる SSH agent は networking の programs.ssh.startAgent と共存できない
+      services.gnome.gcr-ssh-agent.enable = false;
+
+      nix.settings = cache;
 
       home-manager.sharedModules = [ hm.magical-merchant ];
     };
