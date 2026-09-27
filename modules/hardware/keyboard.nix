@@ -12,15 +12,8 @@ in
   flake.modules.nixos.keyboard =
     { pkgs, ... }:
     {
+      # qmk-udev-rules はこれが入れる
       hardware.keyboard.qmk.enable = true;
-
-      services.udev = {
-        enable = true;
-        packages = [ pkgs.qmk-udev-rules ];
-        extraRules = ''
-          SUBSYSTEM=="usb", ATTR{idVendor}=="10a5", ATTR{idProduct}=="d805", MODE="0666"
-        '';
-      };
 
       environment.systemPackages = [ pkgs.via ];
       home-manager.sharedModules = [ hm.keyboard ];
