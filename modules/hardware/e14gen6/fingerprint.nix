@@ -1,15 +1,10 @@
-# 指紋センサ。ThinkPad E14 Gen6 の Goodix は tod ドライバ経由でしか動かない。
+# 指紋センサ。ThinkPad E14 Gen6 のセンサは FPC (10a5:d805) で、libfprint 本体の fpcmoc が扱う。
 {
   flake.modules.nixos.fingerprint =
     { pkgs, ... }:
     {
-      services.fprintd = {
-        enable = true;
-        tod = {
-          enable = true;
-          driver = pkgs.libfprint-2-tod1-goodix;
-        };
-      };
+      # AIDEV-NOTE: tod (Goodix の blob) は載せない。この機体は FPC で、tod 版 libfprint は本体より古い
+      services.fprintd.enable = true;
 
       security.pam.services = {
         login.fprintAuth = true;
