@@ -1,4 +1,4 @@
-# キーの読み替え。CapsLock を Ctrl に、Ctrl+H を BackSpace に。
+# キーの読み替え。CapsLock を Ctrl に、Ctrl+H を BackSpace に。PageUp / PageDown は殺す。
 { inputs, ... }:
 {
   flake.modules.nixos.remap =
@@ -20,6 +20,14 @@
               name = "change CapsLock key to ctl";
               remap = {
                 CapsLock = "Ctrl_L";
+              };
+            }
+            {
+              # 矢印キーの隣にあって、押し間違えるとページが飛ぶ
+              name = "disable PageUp and PageDown";
+              remap = {
+                PageUp = [ ];
+                PageDown = [ ];
               };
             }
           ];
