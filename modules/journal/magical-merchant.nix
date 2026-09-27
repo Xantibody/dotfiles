@@ -3,6 +3,19 @@
 { inputs, config, ... }:
 let
   hm = config.flake.modules.homeManager;
+  service = {
+    enable = true;
+    cli.enable = true;
+    workersUrl = "https://magical-merchant.sync.r-aizawa.com";
+  };
+  # CI が main ごとに置く .app と cli。flake.nix 側で nixpkgs を
+  # follows させていないのは、この cache に当てるため
+  cache = {
+    extra-substituters = [ "https://magical-merchant.cachix.org" ];
+    extra-trusted-public-keys = [
+      "magical-merchant.cachix.org-1:r8cvPKg3xGAINHclAor7fWiS7YK5pZ1Bxs4XjGnyvp0="
+    ];
+  };
 in
 {
   flake.modules.homeManager.magical-merchant = {
@@ -60,20 +73,9 @@ in
         })
       ];
 
-      services.magical-merchant = {
-        enable = true;
-        cli.enable = true;
-        workersUrl = "https://magical-merchant.sync.r-aizawa.com";
-      };
+      services.magical-merchant = service;
 
-      # CI が main ごとに置く aarch64-darwin の .app と cli。flake.nix 側で nixpkgs を
-      # follows させていないのは、この cache に当てるため
-      nix.settings = {
-        extra-substituters = [ "https://magical-merchant.cachix.org" ];
-        extra-trusted-public-keys = [
-          "magical-merchant.cachix.org-1:r8cvPKg3xGAINHclAor7fWiS7YK5pZ1Bxs4XjGnyvp0="
-        ];
-      };
+      nix.settings = cache;
 
       my.dock.apps = lib.mkOrder 300 [ "${pkgs.magical-merchant}/Applications/Magical Merchant.app" ];
 
