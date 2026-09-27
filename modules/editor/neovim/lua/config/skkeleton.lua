@@ -3,6 +3,8 @@ vim.fn["skkeleton#config"]({
 	eggLikeNewline = true,
 	registerConvertResult = true,
 	sources = { "skk_server" },
+	-- yaskkserv2 の辞書は UTF-8 で作っている (modules/japanese/skk.nix)
+	skkServerResEnc = "utf-8",
 	showCandidatesCount = 999,
 })
 

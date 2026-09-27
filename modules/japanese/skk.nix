@@ -1,6 +1,6 @@
 # SKK 日本語入力。辞書サーバ (yaskkserv2) とその辞書、常駐の設定をまとめる。
 #
-# 辞書は nixpkgs の SKK-JISYO.L から derivation の中で作る。以前は 4.3 MB の
+# 辞書は nixpkgs の skkDictionaries から derivation の中で作る。以前は 4.3 MB の
 # SKK-JISYO.L を repo に入れ、`just create-JISYO` を手で叩いて ~/.skk/ に変換結果を
 # 置く手順だった。手元にファイルが無ければ常駐が黙って失敗し、更新の手段も無い。
 { config, ... }:
@@ -30,12 +30,32 @@ let
     };
   };
 
+  # AIDEV-NOTE: skkDictionaries を全部は入れない。s/m は L の部分集合、jis*・itaiji*・
+  # mazegaki は読みから稀な漢字を大量に候補へ出し、pinyin・china_taiwan・edict・assoc は
+  # 日本語変換とは用途が違う。
+  jisyoOf =
+    pkgs:
+    pkgs.lib.attrVals [
+      "l"
+      "emoji"
+      "jinmei"
+      "fullname"
+      "geo"
+      "station"
+      "propernoun"
+      "zipcode"
+      "law"
+      "okinawa"
+    ] pkgs.skkDictionaries;
+
+  # EUC-JP では絵文字を表せないので UTF-8 で作る。応答も UTF-8 になる
   dictionaryOf =
     pkgs:
     pkgs.runCommand "dictionary.yaskkserv2" { } ''
       ${pkgs.yaskkserv2}/bin/yaskkserv2_make_dictionary \
+        --utf8 \
         --dictionary-filename=$out \
-        ${pkgs.skkDictionaries.l}/share/skk/SKK-JISYO.L
+        ${pkgs.lib.concatMapStringsSep " " (d: "${d}/share/skk/*") (jisyoOf pkgs)}
     '';
 in
 {
