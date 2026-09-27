@@ -147,11 +147,15 @@ in
     nixpkgs.overlays = [ inputs.firefox-addons.overlays.default ];
     home-manager.sharedModules = [ hm.zen ];
 
-    # 1Password の native messaging は許可したブラウザ名しか受け付けない
+    # 1Password の native messaging は許可したブラウザ名しか受け付けない。
+    # beta の起動スクリプトは .zen-beta-wrapped を exec し、それは本体 zen への symlink。
+    # どの名前で照合されるかは確かめられていないので、途中の名前を全部並べる
     environment.etc."1password/custom_allowed_browsers" = {
       text = ''
-        .zen-wrapped
-      ''; # or just "zen" if you use unwrapped package
+        .zen-beta-wrapped
+        zen
+        zen-bin
+      '';
       mode = "0755";
     };
   };

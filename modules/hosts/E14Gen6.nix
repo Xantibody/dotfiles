@@ -51,6 +51,7 @@ in
       "comma"
       "skk"
       "zen"
+      "1password"
       "k8s"
       "dev-cli"
       "apps"
