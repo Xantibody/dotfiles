@@ -6,7 +6,22 @@ let
 in
 {
   flake.modules.homeManager.hyprland =
-    { lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    let
+      wallpapers = pkgs.runCommand "wallpapers" { } ''
+        mkdir $out
+        cd ${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers
+        cp PastelHills/contents/images/3200x2000.jpg $out/PastelHills.jpg
+        cp Volna/contents/images/5120x2880.jpg $out/Volna.jpg
+        cp summer_1am/contents/images/2560x1600.jpg $out/summer_1am.jpg
+      '';
+      wallpaper = "${config.xdg.cacheHome}/hyprpaper/wallpaper.jpg";
+    in
     {
       wayland.windowManager.hyprland = {
         enable = true;
@@ -110,7 +125,9 @@ in
       ];
 
       # 壁紙は dayfox の明るさに合う KDE の3枚から、hyprpaper の起動 (ログイン) ごとに1枚選ぶ。
-      # パッケージは 255MB あるので、使う3枚だけを写して closure に残す
+      # パッケージは 255MB あるので、使う3枚だけを写して closure に残す。
+      # AIDEV-NOTE: path にディレクトリを渡すと、hyprpaper は timeout (既定 30 秒) ごとに
+      # 次の画像へ替え続け、止める設定が無い。起動前に1枚選んだリンクだけを渡す
       services.hyprpaper = {
         enable = true;
         # 既定では Hyprland の一言メッセージ (splash) を壁紙に重ねて描く
@@ -118,17 +135,19 @@ in
         settings.wallpaper = [
           {
             monitor = "";
-            path = "${pkgs.runCommand "wallpapers" { } ''
-              mkdir $out
-              cd ${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers
-              cp PastelHills/contents/images/3200x2000.jpg $out/PastelHills.jpg
-              cp Volna/contents/images/5120x2880.jpg $out/Volna.jpg
-              cp summer_1am/contents/images/2560x1600.jpg $out/summer_1am.jpg
-            ''}";
-            order = "random";
+            path = wallpaper;
           }
         ];
       };
+      systemd.user.services.hyprpaper.Service.ExecStartPre = lib.getExe (
+        pkgs.writeShellApplication {
+          name = "pick-wallpaper";
+          text = ''
+            mkdir -p ${dirOf wallpaper}
+            ln -sfn "$(shuf -n1 -e ${wallpapers}/*)" ${wallpaper}
+          '';
+        }
+      );
 
       # クリップボード履歴。$mod+V の rofi から選ぶ
       services.cliphist = {
