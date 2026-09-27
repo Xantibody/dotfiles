@@ -60,6 +60,8 @@ in
       name = "raizawa";
       home = "/home/raizawa";
     };
+    # nixosConfigurations の名前と揃え、nixos-rebuild --flake . が名前なしで当たるようにする
+    networking.hostName = "E14Gen6";
     nixpkgs.hostPlatform = "x86_64-linux";
     system.stateVersion = "24.11";
   };
