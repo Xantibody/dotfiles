@@ -106,6 +106,9 @@ in
 
   flake.modules.nixos.nix = {
     nix = {
+      # flake だけで回すので nix-channel は使わない。NIX_PATH は nixosSystem が
+      # nixpkgs.flake.source から flake:nixpkgs に向ける
+      channel.enable = false;
       settings = {
         experimental-features = [
           "nix-command"
