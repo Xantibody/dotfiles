@@ -6,7 +6,7 @@ let
 in
 {
   flake.modules.homeManager.felis =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       imports = [ inputs.felis.homeManagerModules.felis ];
 
@@ -101,6 +101,81 @@ in
         # 窓を閉じて裏に回したセッションの OSC 9 / 99 / 777 を mako に流す
         notifications.enable = true;
       };
+
+      # waybar の custom/felis が呼ぶ。セッションを前面のプロセス名で並べ、窓の付いていない
+      # ものは薄くする。tooltip には id とタイトルを出す。
+      # AIDEV-NOTE: フォーカス中の窓のセッションは出さない。attachment に窓の pid が無く、
+      # Hyprland のタイトルとの突き合わせでは同じ "~" の fish を区別できない
+      home.packages = [
+        (pkgs.writeShellApplication {
+          name = "felis-waybar";
+          runtimeInputs = [
+            config.programs.felis.package
+            pkgs.jq
+          ];
+          text = ''
+            # daemon が居なければ空を返し、waybar にモジュールを隠させる
+            if ! sessions=$(felis sessions list --format json 2>/dev/null); then
+              echo '{"text":""}'
+              exit 0
+            fi
+            jq -c '
+              def esc: gsub("&"; "&amp;") | gsub("<"; "&lt;") | gsub(">"; "&gt;");
+              .sessions
+              | map(. + { fg: (.foreground // "?" | esc), detached: (.attachments | length == 0) })
+              | {
+                  text: map(if .detached then "<span alpha=\"45%\">\(.fg)</span>" else .fg end) | join("  "),
+                  tooltip: map("\(if .detached then "○" else "●" end) \(.short_id)  \(.fg)  \(.title | esc)") | join("\n")
+                }
+            ' <<<"$sessions"
+          '';
+        })
+
+        # waybar の custom/felis のクリックから開くメニュー。
+        #   felis-menu attach: 選んだセッションに窓を 1 枚足す (付いている窓はそのまま残る)
+        #   felis-menu manage: 選んだセッションの窓を全部外すか、セッションごと消す
+        # 見た目は waybar の Bluetooth メニューの rasi を借り、見出しと幅だけ差し替える
+        (pkgs.writeShellApplication {
+          name = "felis-menu";
+          runtimeInputs = [
+            config.programs.felis.package
+            pkgs.jq
+          ];
+          text = ''
+            menu() {
+              rofi -dmenu -i -p "" -config "$HOME/.config/rofi/bluetooth-menu.rasi" \
+                -theme-str "textbox-custom { content: \"felis\"; } window { width: 480px; }"
+            }
+
+            # 1 行 1 セッション。2 列目の short_id を選択結果から切り出す
+            pick() {
+              felis sessions list --format json \
+                | jq -r '.sessions[] | "\(if (.attachments | length) == 0 then "○" else "●" end) \(.short_id)  \(.foreground // "?")  \(.title)"' \
+                | menu | awk '{ print $2 }'
+            }
+
+            case "''${1:-}" in
+              attach)
+                id=$(pick)
+                [ -n "$id" ] || exit 0
+                exec felis attach "$id"
+                ;;
+              manage)
+                id=$(pick)
+                [ -n "$id" ] || exit 0
+                case "$(printf 'Evict windows\nKill session\n' | menu)" in
+                  "Evict windows") felis sessions evict "$id" ;;
+                  "Kill session") felis sessions kill "$id" ;;
+                esac
+                ;;
+              *)
+                echo "usage: felis-menu attach|manage" >&2
+                exit 2
+                ;;
+            esac
+          '';
+        })
+      ];
     };
 
   flake.modules.nixos.felis = {

@@ -271,6 +271,14 @@ tooltip label {
   background: @main-bg;
 }
 
+/* ───────────────────────────────────────────────────────┤ felis sessions ├───
+*/
+#custom-felis {
+  color: @module-fg;
+  background: @main-bg;
+  padding: 0 8px 0;
+}
+
 /* ───────────────────────────────────────────────────────────┤ media info ├───
 */
 #mpris {

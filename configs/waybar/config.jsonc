@@ -49,6 +49,7 @@
   ],
 
   "modules-right": [
+    "custom/felis", // felis sessions
     "mpris", // media info
 
     "custom/left6",
@@ -294,6 +295,21 @@
     "interval": 1,
     "min-length": 1,
     "max-length": 1
+  },
+
+  // ─────────────────────────────────────────────────────┤ felis sessions ├───
+
+  "custom/felis": {
+    // felis-waybar と felis-menu は modules/terminal/felis.nix にある。felis に
+    // セッションの変化を流すイベントが無いので、interval で読み直す
+    "exec": "felis-waybar",
+    "return-type": "json",
+    "format": " {}",
+    "interval": 2,
+    // 左: 選んだセッションを窓で開く / 中: 新しいセッション / 右: 窓を外すか消す
+    "on-click": "felis-menu attach",
+    "on-click-middle": "felis",
+    "on-click-right": "felis-menu manage"
   },
 
   // ─────────────────────────────────────────────────────────┤ media info ├───
