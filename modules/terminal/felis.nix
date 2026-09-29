@@ -51,17 +51,25 @@ in
           };
           cursor.color = "#3d2b5a";
 
+          # kitty の hide_window_decorations = titlebar-only に当たる
+          window.decorations = false;
+
           # felis に split も tab もない。kitty のタブに当たるのはセッションで、
-          # 上流が既定で割り当てていない操作に kitty と同じ指の形を当てる
+          # タブ操作の chord (kitty の既定と kitty.nix の上書き) をセッション操作に当てる。
+          # split の ctrl+shift+\ と ctrl+shift+- は当てる先がないので、
+          # ctrl+shift+- は felis 既定の文字縮小のまま
           keymap = {
+            "ctrl+shift+t" = {
+              kind = "new_session";
+            };
             "ctrl+shift+enter" = {
               kind = "new_session";
             };
-            "ctrl+shift+]" = {
+            "ctrl+shift+right" = {
               kind = "switch_session";
               to = "next";
             };
-            "ctrl+shift+[" = {
+            "ctrl+shift+left" = {
               kind = "switch_session";
               to = "previous";
             };
@@ -69,11 +77,23 @@ in
             "ctrl+shift+w" = {
               kind = "kill_session";
             };
-            # kitty の show_scrollback と同じ chord
+            "ctrl+shift+q" = {
+              kind = "kill_session";
+            };
             "ctrl+shift+h" = {
               kind = "pipe";
               source = "scrollback";
               ansi = true;
+            };
+            "ctrl+shift+backspace" = {
+              kind = "font_size";
+              step = "reset";
+            };
+            "ctrl+shift+f5" = {
+              kind = "reload";
+            };
+            "ctrl+shift+f11" = {
+              kind = "toggle_fullscreen";
             };
           };
         };
