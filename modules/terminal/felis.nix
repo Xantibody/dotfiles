@@ -85,6 +85,18 @@ in
               source = "scrollback";
               ansi = true;
             };
+            # kitty の hints (open_url) に当たる。felis は URL を自分で探さないので、
+            # 見えている範囲を urlscan に渡して選ばせる
+            "ctrl+shift+e" = {
+              kind = "pipe";
+              source = "visible";
+              target.command = [
+                "${pkgs.urlscan}/bin/urlscan"
+                "--compact"
+                "--dedupe"
+                "--single"
+              ];
+            };
             "ctrl+shift+backspace" = {
               kind = "font_size";
               step = "reset";
