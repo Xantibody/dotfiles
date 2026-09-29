@@ -34,8 +34,8 @@ in
               submenu = [
                 {
                   key = "t";
-                  desc = "Terminal (kitty)";
-                  cmd = "kitty";
+                  desc = "Terminal (felis)";
+                  cmd = "felis";
                 }
                 {
                   key = "b";

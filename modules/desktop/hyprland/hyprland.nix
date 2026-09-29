@@ -36,7 +36,7 @@ in
         configType = "hyprlang";
         settings = {
           "$mod" = "SUPER";
-          "$terminal" = "kitty";
+          "$terminal" = "felis";
           "$fileManager" = "dolphin";
           "$menu" = "rofi -modi drun,run -show drun";
           bind = [
