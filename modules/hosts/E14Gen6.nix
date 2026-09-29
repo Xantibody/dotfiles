@@ -41,6 +41,7 @@ in
       "fzf"
       "prompt"
       "kitty"
+      "felis"
       "neovim"
       "emacs"
       "mdsf"

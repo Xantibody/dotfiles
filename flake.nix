@@ -151,6 +151,12 @@
       # derivation が変わって当たらず、Tauri アプリを手元で 10 分建てることになる
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
+    felis = {
+      url = "git+https://git.natsukium.com/natsukium/felis?shallow=1";
+      # nixpkgs は follows させない。上流が自分の lock で組んだものを
+      # nix-cache.natsukium.com に置いていて、組み直すと Rust を手元で建てることになる
+      inputs.flake-parts.follows = "flake-parts";
+    };
   };
   outputs =
     { flake-parts, ... }@inputs:

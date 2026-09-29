@@ -209,6 +209,21 @@
     },
     "crane_2": {
       "locked": {
+        "lastModified": 1789760033,
+        "narHash": "sha256-jtT4yxZpR8seYnlCMMWSSPlFN92zO6ICuZ8pJrmi86k=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "73b980519cefc727a5f6cc8e5c0947a2f9be6edd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
+        "type": "github"
+      }
+    },
+    "crane_3": {
+      "locked": {
         "lastModified": 1785782307,
         "narHash": "sha256-MPaRdVkf6zZP5fCPxYCi8Dr4pZzgmXzg8T9nVEbp3Mw=",
         "owner": "ipetkov",
@@ -220,6 +235,29 @@
         "owner": "ipetkov",
         "repo": "crane",
         "type": "github"
+      }
+    },
+    "felis": {
+      "inputs": {
+        "crane": "crane_2",
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1790410947,
+        "narHash": "sha256-t+aMPntF8mJWmLym8U2sf6zc3Xw9talBR3nJHdoQ0ew=",
+        "ref": "refs/heads/main",
+        "rev": "1761d2a035d6ccf26da004f395e38b93da2f5686",
+        "shallow": true,
+        "type": "git",
+        "url": "https://git.natsukium.com/natsukium/felis"
+      },
+      "original": {
+        "shallow": true,
+        "type": "git",
+        "url": "https://git.natsukium.com/natsukium/felis"
       }
     },
     "firefox-addons": {
@@ -514,7 +552,7 @@
     },
     "magical-merchant": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "rust-overlay": "rust-overlay_2",
         "treefmt-nix": [
           "treefmt-nix"
@@ -683,6 +721,22 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1790178388,
+        "narHash": "sha256-kK3t7gwoz4Nx8RF46cs1Xz/skKNcK7y3KYP+gGqX6W8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "00455b0a3690d3f5dc61e9aef4277dc86235b73f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1789073787,
         "narHash": "sha256-xfX/toC2QV707s06GbP4II/TxYF0fNQj7s5/LClNDKc=",
         "owner": "NixOS",
@@ -697,7 +751,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_3": {
+    "nixpkgs_4": {
       "locked": {
         "lastModified": 1790196372,
         "narHash": "sha256-yj9y5GkHHQl2okt2z8cXzegaLEfPnVAFZMdWKjMOVpw=",
@@ -744,6 +798,7 @@
         "arto": "arto",
         "brew-api": "brew-api",
         "brew-nix": "brew-nix",
+        "felis": "felis",
         "firefox-addons": "firefox-addons",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
@@ -761,7 +816,7 @@
         "nix-index-database": "nix-index-database",
         "nix-mac-app-identity": "nix-mac-app-identity",
         "nixCats": "nixCats",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_4",
         "silentSDDM": "silentSDDM",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
@@ -1005,7 +1060,7 @@
     },
     "xremap": {
       "inputs": {
-        "crane": "crane_2",
+        "crane": "crane_3",
         "flake-parts": [
           "flake-parts"
         ],
