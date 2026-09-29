@@ -13,18 +13,18 @@ in
       # style.css が参照する役割名に base16 の色を割り当てる。見た目の調整はここではなく style.css で
       palette = ''
         @define-color main-bg         ${c.base00};
-        @define-color main-fg         ${c.base07};
-        @define-color main-br         ${c.base07};
+        @define-color main-fg         ${c.base05};
+        @define-color main-br         ${c.base05};
         @define-color shadow          shade(${c.base00}, 0.5);
 
         @define-color active-bg       ${c.base0A};
         @define-color active-fg       ${c.base00};
         @define-color hover-bg        ${c.base02};
-        @define-color hover-fg        alpha(${c.base07}, 0.75);
+        @define-color hover-fg        alpha(${c.base05}, 0.75);
 
-        /* モジュールの背景は base00 から明るくなる階段。1 段目は base00 と base01 の間 */
+        /* モジュールの背景は base00 から base02 へ向かう階段。1 段目は base00 と base01 の間 */
         @define-color step1           mix(${c.base00}, ${c.base01}, 0.3);
-        @define-color module-fg       ${c.base07};
+        @define-color module-fg       ${c.base05};
         @define-color workspaces      @step1;
         @define-color temperature     @step1;
         @define-color memory          ${c.base01};
