@@ -21,7 +21,7 @@ in
       xdg.configFile."rofi/theme.rasi".text = ''
         * {
           main-bg:   ${c.base00};
-          main-fg:   ${c.base07};
+          main-fg:   ${c.base05};
           main-br:   ${c.base0A};
           input-bg:  ${c.base01};
           select-bg: ${c.base0A};
