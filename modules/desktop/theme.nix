@@ -1,13 +1,15 @@
 # デスクトップの配色。Stylix が base16 の 1 スキームを各アプリに配る。
 #
 # 層は 3 つで、下ほど優先される:
-#   1. 配色: nixpkgs の base16-schemes (tinted-theming)。nixpkgs を上げれば上流に追従する
+#   1. 配色: nightfox.nvim 同梱の dayfox の base16。Neovim と同じ plugin から読むので、
+#      vim-plugins を上げれば一緒に追従する
 #   2. 色の上書き: stylix.override = { base0D = "..."; }; を足す (今は無し)
 #   3. 見た目: waybar と rofi の独自メニューは自前の CSS / rasi のまま、色だけ受け取る
 #      (modules/desktop/hyprland/{waybar,rofi}.nix が config.lib.stylix.colors を読む)
 #
-# kitty・Neovim・fish は dayfox (明るい配色) で揃えているので Stylix に触らせない。
-# そのため autoEnable を切り、配る先をここで列挙する。
+# kitty・Neovim・fish は同じ dayfox を上流の配布物そのままで持っていて、base16 に
+# 落とすと色数が減るので Stylix に触らせない。そのため autoEnable を切り、
+# 配る先をここで列挙する。
 { config, inputs, ... }:
 let
   hm = config.flake.modules.homeManager;
@@ -29,8 +31,8 @@ in
 
       stylix = {
         enable = true;
-        base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
-        polarity = "dark";
+        base16Scheme = "${pkgs.vimPlugins.nightfox-nvim}/extra/dayfox/base16.yaml";
+        polarity = "light";
         autoEnable = false;
         # 配る先のフォントを、ほかの場所と同じ Explex に寄せる
         fonts = {
