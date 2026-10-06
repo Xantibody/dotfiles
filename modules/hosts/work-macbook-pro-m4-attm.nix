@@ -21,6 +21,7 @@ in
         "fzf"
         "prompt"
         "kitty"
+        "felis"
         "k8s"
         "dev-cli"
         "apps"

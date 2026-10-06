@@ -1,12 +1,23 @@
 # felis: セッションがウィンドウより長生きする GPU ターミナル (git.natsukium.com/natsukium/felis)。
-# NixOS だけに入れる。darwin は kitty のまま。
+# Linux では Hyprland / niri、macOS では OmniWM が窓を並べる前提で、split も tab も持たない felis をそのまま使う。
 { inputs, config, ... }:
 let
   hm = config.flake.modules.homeManager;
+
+  # 上流が自分の lock で組んだものを置いているキャッシュ
+  cache = {
+    extra-substituters = [ "https://nix-cache.natsukium.com" ];
+    extra-trusted-public-keys = [ "niks3-1:SoIFTPtiPoCW3/OzUkIBKlLG5znMZfbihlr11XAOles=" ];
+  };
 in
 {
   flake.modules.homeManager.felis =
-    { config, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       imports = [ inputs.felis.homeManagerModules.felis ];
 
@@ -18,8 +29,8 @@ in
         settings = {
           font = {
             family = "Explex Console NF";
-            # kitty の 11pt に揃える (px = pt * 4/3)
-            size_px = 11 * 4.0 / 3.0;
+            # kitty の 11pt に揃える。Linux は 96dpi で px = pt * 4/3、macOS は 1pt が 1 論理 px
+            size_px = if pkgs.stdenv.hostPlatform.isDarwin then 11.0 else 11 * 4.0 / 3.0;
           };
 
           # dayfox。kitty.nix と同じ値。selection と url の色を持つ key は felis にない
@@ -110,15 +121,16 @@ in
           };
         };
 
-        # 窓を閉じて裏に回したセッションの OSC 9 / 99 / 777 を mako に流す
+        # 窓を閉じて裏に回したセッションの OSC 9 / 99 / 777 を通知に流す (Linux は mako、macOS は通知センター)
         notifications.enable = true;
       };
 
+      # 下の 2 本は waybar と rofi が前提なので Linux だけに置く。
       # waybar の custom/felis が呼ぶ。セッションを前面のプロセス名で並べ、窓の付いていない
       # ものは薄くする。tooltip には id とタイトルを出す。
       # AIDEV-NOTE: フォーカス中の窓のセッションは出さない。attachment に窓の pid が無く、
       # Hyprland のタイトルとの突き合わせでは同じ "~" の fish を区別できない
-      home.packages = [
+      home.packages = lib.mkIf pkgs.stdenv.hostPlatform.isLinux [
         (pkgs.writeShellApplication {
           name = "felis-waybar";
           runtimeInputs = [
@@ -191,11 +203,34 @@ in
     };
 
   flake.modules.nixos.felis = {
-    nix.settings = {
-      extra-substituters = [ "https://nix-cache.natsukium.com" ];
-      extra-trusted-public-keys = [ "niks3-1:SoIFTPtiPoCW3/OzUkIBKlLG5znMZfbihlr11XAOles=" ];
-    };
+    nix.settings = cache;
 
     home-manager.sharedModules = [ hm.felis ];
   };
+
+  flake.modules.darwin.felis =
+    { pkgs, ... }:
+    let
+      felis = inputs.felis.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    in
+    {
+      nix.settings = cache;
+
+      home-manager.sharedModules = [ hm.felis ];
+
+      # Hyprland の $mod+Q に当たる。OmniWM はアプリの起動をホットキーに持てないので skhd に任せる。
+      # Hyper (ctrl+alt+shift+cmd) は左 Control を OmniWM の Hyper トリガーにして押す。
+      # トリガーで作った Hyper は skhd にも 4 修飾として届くので Karabiner は要らない。
+      # cmd+q はどのアプリでも終了なので奪わない。
+      # felis は起動元の $SHELL を開く。macOS のログインシェルは zsh のままなので、
+      # kitty の shell と同じ fish を渡す
+      # AIDEV-NOTE: chsh で fish に変えないのは会社の Mac が Kandji 管理だから。
+      # users.users.shell は knownUsers に入れないと効かず、入れると nix-darwin がユーザを管理しだす
+      services.skhd = {
+        enable = true;
+        skhdConfig = ''
+          ctrl + alt + shift + cmd - q : /usr/bin/open -na ${felis}/Applications/felis.app --env SHELL=${pkgs.fish}/bin/fish
+        '';
+      };
+    };
 }
