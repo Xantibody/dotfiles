@@ -30,6 +30,7 @@ in
         "clipboard"
         "dock"
         "keyboard"
+        "omniwm"
         "finder"
         "touchid"
         "fonts"
