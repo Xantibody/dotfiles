@@ -125,9 +125,9 @@ Title: `[Deferred]: <one-line summary>`
 
 <なぜ今やらなかったか。動作未確認 / 別の判断が要る / 挙動変更を含む / 手元で検証できない、など具体的に>
 
-## 再開の条件
+## 閉じる条件
 
-<何が揃えば着手できるか。あれば>
+<何をしたら、または何が分かったらこの issue を閉じるか。完了と判断の両方を含む>
 
 ## 出どころ
 
@@ -135,9 +135,19 @@ Title: `[Deferred]: <one-line summary>`
 ```
 
 One issue per item, not one issue for the whole list — they get picked up at
-different times. Not every item deserves one: "out of scope forever"
-(a different feature, someone else's repo) is a sentence in the PR, not an
-issue. File the ones that are follow-up work this repo will actually do.
+different times. 閉じる条件 is required: an issue nobody can close only
+grows the backlog. Most left-out items have a better home than an issue:
+
+| The item is…                                     | Its home                                           |
+| ------------------------------------------------ | -------------------------------------------------- |
+| waiting on an upstream fix                       | `HACK(<upstream issue URL>)` in the code, no issue |
+| decided against                                  | `AIDEV-NOTE` or the commit body, with the reason   |
+| work this repo will do, with a closing condition | a deferred-work issue                              |
+| none of the above — no condition can be written  | nothing; if it matters it will come back           |
+
+An issue that only wraps an upstream issue goes stale: it never learns that
+upstream closed, and its paths rot as the code moves. The `anchors` audit
+watches a HACK's upstream issue instead.
 
 ## Common rules
 

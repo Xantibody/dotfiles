@@ -45,10 +45,13 @@ touched, so the reader opens it from the terminal without looking for it:
 ## What was left out
 
 When a report ends with things deliberately left out (やらなかったこと,
-deferred items, "not in this change"), ask whether to file them as issues
-and recommend which ones — the `issue` skill has a deferred-work template.
-The reason something was skipped is freshest right then and is lost by the
-next session.
+deferred items, "not in this change"), sort each into its home with the
+table in the `issue` skill's deferred-work section: a HACK, an
+AIDEV-NOTE or commit body, an issue, or nothing. Recommend an issue only
+for work this repo will do and whose closing condition you can state; the
+default is not to file. The reason something was skipped is freshest
+right then and is lost by the next session, so a reason with no issue
+still goes into the HACK, the note or the commit body.
 
 ## PR and issue bodies
 
