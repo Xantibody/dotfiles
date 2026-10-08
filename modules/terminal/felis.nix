@@ -161,9 +161,10 @@ in
           }
         )
         ++ [
-          # Linux は waybar の custom/felis のクリック、macOS は skhd の cmd+space から開くメニュー。
+          # Linux は waybar の custom/felis のクリック、macOS は skhd の cmd+shift+space から開くメニュー。
           #   felis-menu attach: 選んだセッションに窓を 1 枚足す (付いている窓はそのまま残る)
           #   felis-menu manage: 選んだセッションの窓を全部外すか、セッションごと消す
+          #   felis-menu all: 選んだセッションに attach / evict / kill のどれかをする (macOS 用)
           # Linux の見た目は waybar の Bluetooth メニューの rasi を借り、見出しと幅だけ差し替える。
           # macOS は rofi の代わりに Spotlight 風の choose を出す
           (pkgs.writeShellApplication {
@@ -192,18 +193,22 @@ in
                   | menu | awk '{ print $2 }'
               }
 
+              attach_session() {
+                ${
+                  # Hyper+Q と同じく LaunchServices 経由で .app として起動する。.app の実行ファイル
+                  # (felis-client) も attach を受け付ける
+                  if isDarwin then
+                    ''exec /usr/bin/open -na "${app}" --args attach "$1"''
+                  else
+                    ''exec felis attach "$1"''
+                }
+              }
+
               case "''${1:-}" in
                 attach)
                   id=$(pick)
                   [ -n "$id" ] || exit 0
-                  ${
-                    # Hyper+Q と同じく LaunchServices 経由で .app として起動する。.app の実行ファイル
-                    # (felis-client) も attach を受け付ける
-                    if isDarwin then
-                      ''exec /usr/bin/open -na "${app}" --args attach "$id"''
-                    else
-                      ''exec felis attach "$id"''
-                  }
+                  attach_session "$id"
                   ;;
                 manage)
                   id=$(pick)
@@ -213,8 +218,17 @@ in
                     "Kill session") felis sessions kill "$id" ;;
                   esac
                   ;;
+                all)
+                  id=$(pick)
+                  [ -n "$id" ] || exit 0
+                  case "$(printf 'Attach\nEvict windows\nKill session\n' | menu)" in
+                    "Attach") attach_session "$id" ;;
+                    "Evict windows") felis sessions evict "$id" ;;
+                    "Kill session") felis sessions kill "$id" ;;
+                  esac
+                  ;;
                 *)
-                  echo "usage: felis-menu attach|manage" >&2
+                  echo "usage: felis-menu attach|manage|all" >&2
                   exit 2
                   ;;
               esac
@@ -245,19 +259,6 @@ in
       home-manager.sharedModules = [
         hm.felis
         { programs.felis.package = felis; }
-        (
-          { lib, ... }:
-          {
-            # cmd+space を下の skhd に渡すため、Spotlight の検索ショートカット (64) だけ切る。
-            # AIDEV-NOTE: system.defaults.CustomUserPreferences は AppleSymbolicHotKeys を丸ごと
-            # 書き換えて他のショートカットを消すので、-dict-add で 1 件だけ差し替える
-            home.activation.disableSpotlightShortcut = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-              run /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 \
-                '<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>65535</integer><integer>49</integer><integer>1048576</integer></array><key>type</key><string>standard</string></dict></dict>'
-              run /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-            '';
-          }
-        )
       ];
 
       # Hyprland の $mod+Q に当たる。OmniWM はアプリの起動をホットキーに持てないので skhd に任せる。
@@ -266,12 +267,11 @@ in
       # kitty の shell と同じ fish を渡す
       # AIDEV-NOTE: chsh で fish に変えないのは会社の Mac が Kandji 管理だから。
       # users.users.shell は knownUsers に入れないと効かず、入れると nix-darwin がユーザを管理しだす
-      # cmd+space / cmd+shift+space は Spotlight の代わりに felis のセッション一覧を出し、
-      # felis-menu attach / manage に渡す
+      # cmd+shift+space で felis のセッション一覧を出し、選んだセッションを attach / evict / kill する。
+      # cmd+space は Spotlight に残す。奪うとアプリを名前で起動する手段が無くなる
       services.skhd.skhdConfig = ''
         ctrl + alt + shift + cmd - q : /usr/bin/open -na ${felis}/Applications/felis.app --env SHELL=${pkgs.fish}/bin/fish
-        cmd - space : ${felis-menu} attach
-        cmd + shift - space : ${felis-menu} manage
+        cmd + shift - space : ${felis-menu} all
       '';
     };
 }
