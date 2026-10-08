@@ -73,7 +73,11 @@ in
         })
       ];
 
-      services.magical-merchant = service;
+      # 上流 module は自前の package を mkDefault で入れるので、overlay だけでは
+      # 入るのは署名し直す前の .app のまま
+      services.magical-merchant = service // {
+        package = pkgs.magical-merchant;
+      };
 
       nix.settings = cache;
 
