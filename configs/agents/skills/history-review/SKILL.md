@@ -1,6 +1,6 @@
 ---
 name: history-review
-description: Reads a branch's unpushed commits the way a reviewer will and says whether the history needs rebuilding before it is pushed — which commits ship nothing of their own, which purpose is smeared across several, which commit carries two. It only judges and reports; the rewrite itself is the user's /reconstruct.
+description: Reads a branch's unpushed commits the way a reviewer will and says whether the history needs rebuilding before it is pushed — which commits ship nothing of their own, which purpose is smeared across several, which commit carries two. It only judges and reports; on rebuild the reconstruct skill does the rewrite.
 when_to_use: Whenever the user asks whether the commits are clean or ready — "コミット整理した方がいい?", "履歴見て", "commit きれい?", "このまま PR 出せる?", "squash した方がいい?" — and whenever the implement skill finishes a feature or the pull-request skill confirms its range. Also before any first push of a branch with more than one commit.
 disallowed-tools: Edit, Write, NotebookEdit
 ---
@@ -11,8 +11,9 @@ The commits made while working are checkpoints for the author — one per
 TDD cycle, one per detour, one per "oh, that broke". A reviewer reads
 history by logical change, and `git bisect` lands on whichever commit is
 there. This skill reads the log as that reviewer would and returns a
-verdict. It never rewrites: rewriting is `/reconstruct`, which the user
-runs, because history rewriting must never start on its own.
+verdict. It never rewrites: rewriting is the `reconstruct` skill's job,
+kept separate so that `implement` and `pull-request` can ask for a
+verdict without carrying the rewrite procedure.
 
 ## Range
 
@@ -108,8 +109,8 @@ Report in this shape, then stop:
 ```
 
 The proposed list appears only on **rebuild**. It is the grouping
-`/reconstruct` will ask for in its Step 3; writing it here saves the user
-a round trip. Order it the way that skill does: dependencies first,
+the `reconstruct` skill uses in its Step 3, and the user reads it before
+the rewrite starts. Order it the way that skill does: dependencies first,
 structure before behaviour, every intermediate state buildable. An
 unrelated change that rode along stays its own commit — it is not what
 is being rebuilt. The list never drops a change: the rebuild has to
@@ -118,8 +119,10 @@ whose unformatted text predates the range has no commit to fold into and
 becomes its own `style` commit, not a deletion. Whether that formatting
 should exist at all is a question for the PR, not for the history.
 
-On **rebuild**, hand the user `/reconstruct` — say plainly that the skill
-is user-invocable only, so it has to be typed. On **pass**, say so and
+On **rebuild**, load the `reconstruct` skill and let it rebuild the
+range — no approval first: the rewrite is local, its starting HEAD is
+recorded, and nothing reaches the remote until the user pushes. On
+**pass**, say so and
 move on to whatever asked for the review. Either way this runs **once,
 before the first push**: detours during implementation cost nothing
 extra, because the rebuild starts from the final diff and never looks
