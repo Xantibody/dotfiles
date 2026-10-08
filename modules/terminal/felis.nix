@@ -25,7 +25,8 @@ in
         enable = true;
         # 上流 module の既定はこちらの nixpkgs で組み直すので、下のキャッシュに当たらない。
         # flake.nix で nixpkgs を follows させていないのも同じ理由
-        package = inputs.felis.packages.${pkgs.stdenv.hostPlatform.system}.default;
+        # darwin module が再署名したものに差し替えるので mkDefault
+        package = lib.mkDefault inputs.felis.packages.${pkgs.stdenv.hostPlatform.system}.default;
         settings = {
           font = {
             family = "Explex Console NF";
@@ -211,12 +212,19 @@ in
   flake.modules.darwin.felis =
     { pkgs, ... }:
     let
-      felis = inputs.felis.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      # 素の ad-hoc 署名だと、アクセシビリティ等の許可が rebuild のたびに飛ぶ。
+      # hm の programs.felis と skhd の起動パスが同じ .app を指すよう、ここで一度だけ作る
+      felis =
+        (pkgs.callPackage inputs.nix-mac-app-identity { }).stabilizeApp
+          inputs.felis.packages.${pkgs.stdenv.hostPlatform.system}.default;
     in
     {
       nix.settings = cache;
 
-      home-manager.sharedModules = [ hm.felis ];
+      home-manager.sharedModules = [
+        hm.felis
+        { programs.felis.package = felis; }
+      ];
 
       # Hyprland の $mod+Q に当たる。OmniWM はアプリの起動をホットキーに持てないので skhd に任せる。
       # Hyper (ctrl+alt+shift+cmd) は左 Control を OmniWM の Hyper トリガーにして押す。

@@ -7,6 +7,8 @@ let
   };
 in
 {
+  # AIDEV-NOTE: Emacs.app は nix-mac-app-identity で再署名しない。emacsWithPackages が
+  # Contents/MacOS に置くラッパーがシェルスクリプトで、stabilizeApp が受け付けない
   flake.modules.homeManager.emacs = {
     programs.emacs = {
       enable = true;

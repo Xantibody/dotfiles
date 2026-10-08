@@ -60,9 +60,12 @@ in
       nixpkgs.hostPlatform = "aarch64-darwin";
       system.stateVersion = 4;
 
-      environment.systemPackages = with pkgs; [
-        meetingbar
-        zoom-us
+      # MeetingBar は ad-hoc 署名なので、カレンダーの許可を rebuild 越しに残すため再署名する
+      # AIDEV-NOTE: zoom も ad-hoc 署名だが、Frameworks/AnnoUI.bundle の Info.plist に
+      # CFBundleIdentifier が無く、stabilizeApp の rcodesign が止まるので素のまま入れる
+      environment.systemPackages = [
+        ((pkgs.callPackage inputs.nix-mac-app-identity { }).stabilizeApp pkgs.meetingbar)
+        pkgs.zoom-us
       ];
 
       home-manager.sharedModules = [
