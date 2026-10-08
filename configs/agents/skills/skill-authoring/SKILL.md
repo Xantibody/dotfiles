@@ -1,8 +1,7 @@
 ---
 name: skill-authoring
-description: House rules and pre-flight for creating or changing a skill (a SKILL.md that Claude Code and codex both load) — check what each agent's spec and vendor repos say today, cut the skill by job so other workflows can load it, validate the frontmatter with the bundled checker, then hand drafting and testing to skill-creator. It does not write the skill itself.
-when_to_use: Whenever the user asks to create, add, change, split, rename, or review a skill — "skill 作って", "skill 直して", "skill 追加して", "この作業を skill にして", "SKILL.md を書いて" — and before loading skill-creator for any reason. Also when a skill-creator script rejects a frontmatter field, or when a skill needs a frontmatter option and it is unclear whether one exists.
-disable-model-invocation: true
+description: House rules and pre-flight for creating or changing a skill (a SKILL.md that Claude Code and codex both load) — check what each agent's spec and vendor repos say today, cut the skill by job so other workflows can load it, validate the frontmatter with the bundled checker, hand drafting and testing to skill-creator, and redraw the skill map in configs/agents/README.md.
+when_to_use: Whenever the user asks to create, add, change, split, rename, or review a skill — "skill 作って", "skill 直して", "skill 追加して", "この作業を skill にして", "SKILL.md を書いて", "skill の図を更新して" — and before editing any file under configs/agents/skills or loading skill-creator for any reason. Also when a skill-creator script rejects a frontmatter field, or when a skill needs a frontmatter option and it is unclear whether one exists.
 ---
 
 # Skill authoring
@@ -59,12 +58,16 @@ enough to be worth loading on its own.
 - **Judgement and action are two skills.** `history-review` decides
   whether a branch needs rebuilding; `reconstruct` rebuilds it. The
   judgement can then run from `implement` and `pull-request` without
-  either of them being able to start a rewrite.
+  either of them carrying the rewrite procedure, and the judgement hands
+  over to the action by name.
 - **A rule two skills share is a third skill.** `explain` holds the
   bullet-structure rule that `pull-request` and `issue` both load. Copying
   it into both is how the copies drift.
-- **The frontmatter says who may start it.** Rewrites history, deletes,
-  tags, pushes: `disable-model-invocation: true`. That hides the skill
+- **The frontmatter says who may start it.** Something that cannot be
+  taken back from this machine — a tag, a ruleset, anything published:
+  `disable-model-invocation: true`. A local rewrite that `git reflog`
+  undoes is not that; `reconstruct` runs on its own because nothing
+  leaves the machine until the user pushes. That hides the skill
   from the model completely — description and all — so the skill that
   decides has to hand the user `/name` to type. Background knowledge
   nobody would type as a command: `user-invocable: false`. A skill that
@@ -135,3 +138,54 @@ but not invisible: the next session's executors and graders can read
 last time's transcripts and verdicts from it, and a comparison made
 with that in reach is no longer blind. The commit body is the record;
 the workspace is scaffolding.
+
+## 5. Redraw the skill map
+
+`configs/agents/README.md` maps every skill in three mermaid flowcharts —
+実装から PR まで, 打って使う skill, skill を作る時 — plus a list of the
+skills nothing loads. It is the only place the whole graph is visible,
+so it is redrawn in the same commit as any skill change that adds,
+removes or moves a node or an edge; a map that lags one commit is a map
+nobody trusts.
+
+Derive it from the files, not from memory of the last version:
+
+- **Diagram from the frontmatter.** A skill with
+  `disable-model-invocation: true` goes in 打って使う skill with an edge
+  from `user`. Every other skill goes in the diagram of the work that
+  loads it; one that nothing loads and that loads nothing goes in the
+  list under the diagrams. A node from another diagram is repeated by
+  its bare name, without the phrase.
+  ```bash
+  grep -l '^disable-model-invocation: true' configs/agents/skills/*/SKILL.md
+  ```
+- **Edges from the bodies.** Every reference that makes a skill load
+  another — "load the `<name>` skill", "via the `<name>` skill", "hand
+  over to", "hand the user `/name`" — is an edge: solid (`-->`) when it
+  loads it at that step every time, dotted (`-.->`) when only under a
+  condition. A reference that only points ("that is the `pull-request`
+  skill's question") is not an edge. The label says when, in Japanese,
+  the way the existing labels do; a hand-off to a hidden skill is
+  labelled "/name を案内", since the user has to type it.
+  ```bash
+  grep -n -E '`[a-z-]+` skill|`/[a-z-]+`' configs/agents/skills/*/SKILL.md
+  ```
+- **Tools** a skill calls (`agent-browser`, `lint-body`) are
+  parallelogram nodes, `id[/"name<br/>phrase"/]`. Tools no skill calls
+  (`rtk`, `ck`, `codegraph`) stay in the prose, not in a diagram.
+- **Node text.** `id["name<br/>one short Japanese phrase"]`, the phrase
+  saying what the skill returns or does, not how.
+
+Then reread the prose above the diagrams: when a skill moved between
+the two kinds, a sentence that names it may no longer be true. Render
+every block before committing and look at the images — a syntax error
+leaves GitHub showing raw text, and a diagram whose edges cross into a
+knot is a reason to split it, not to ship it. mermaid-cli finds no
+Chrome of its own under nix, so point it at the one agent-browser
+downloaded:
+
+````bash
+awk '/```mermaid/{f=1;n++;next}/```/{f=0;next}f{print > ("<scratch>/m" n ".mmd")}' configs/agents/README.md
+export PUPPETEER_EXECUTABLE_PATH="$(find ~/.agent-browser/browsers -type f -perm +111 -name 'Google Chrome for Testing' | head -1)"
+for m in <scratch>/m*.mmd; do nix run nixpkgs#mermaid-cli -- -i "$m" -o "${m%.mmd}.png" -w 1400; done
+````
