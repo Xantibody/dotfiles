@@ -32,6 +32,7 @@ in
         "dock"
         "keyboard"
         "omniwm"
+        "skhd"
         "finder"
         "touchid"
         "fonts"

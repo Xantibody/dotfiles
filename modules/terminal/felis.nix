@@ -227,18 +227,13 @@ in
       ];
 
       # Hyprland の $mod+Q に当たる。OmniWM はアプリの起動をホットキーに持てないので skhd に任せる。
-      # Hyper (ctrl+alt+shift+cmd) は左 Control を OmniWM の Hyper トリガーにして押す。
-      # トリガーで作った Hyper は skhd にも 4 修飾として届くので Karabiner は要らない。
       # cmd+q はどのアプリでも終了なので奪わない。
       # felis は起動元の $SHELL を開く。macOS のログインシェルは zsh のままなので、
       # kitty の shell と同じ fish を渡す
       # AIDEV-NOTE: chsh で fish に変えないのは会社の Mac が Kandji 管理だから。
       # users.users.shell は knownUsers に入れないと効かず、入れると nix-darwin がユーザを管理しだす
-      services.skhd = {
-        enable = true;
-        skhdConfig = ''
-          ctrl + alt + shift + cmd - q : /usr/bin/open -na ${felis}/Applications/felis.app --env SHELL=${pkgs.fish}/bin/fish
-        '';
-      };
+      services.skhd.skhdConfig = ''
+        ctrl + alt + shift + cmd - q : /usr/bin/open -na ${felis}/Applications/felis.app --env SHELL=${pkgs.fish}/bin/fish
+      '';
     };
 }
