@@ -23,9 +23,11 @@ for a feature or a fix; the `check` skill runs a project's verification.
   worth keeping: the why into the commit body, a rejected approach into a
   code comment, leftovers sorted by the `issue` skill's deferred-work table.
 - Write in the language the repository already uses; its README and last
-  twenty commit subjects decide. This covers commit messages, comments, docs
-  and PR / issue titles. Skill templates (PR / issue bodies) stay Japanese
+  twenty commit subjects decide. This covers commit messages, docs and
+  PR / issue titles. Skill templates (PR / issue bodies) stay Japanese
   unless the repo's own templates differ.
+- Code comments, anchors included, are English whatever the repository's
+  language, unless the file around them is already written in another.
 - Code says how, tests what, commit bodies why, comments why not. The "why
   not" comments are `HACK(<issue URL>): …` and `AIDEV-NOTE: …`; read a
   file's anchors before editing it. The `anchors` skill has the rules and
