@@ -10,7 +10,6 @@ skill も同じ 2 経路で配る。各 feature が `my.skills` に載せた dir
 
 `textlint/` は skill ではなく、PR / issue 本文にかける textlint の設定と自前ルール。`modules/ai/_textlint.nix` (claude feature の一部) がこれを `lint-body` と `lint-body-hook` の 2 コマンドに焼き込む。hook は pull-request と issue の frontmatter が skill を呼んだときに登録し、`gh pr create` などの `--body-file` に指摘が残っていればコマンドを止める。
 
-
 ## 実装から PR まで
 
 ```mermaid
@@ -23,17 +22,21 @@ flowchart TD
   pr["pull-request<br/>PR 本文を書く"]
   issue["issue<br/>issue を立てる"]
   explain["explain<br/>人が読む文の構造"]
-  bv["browser-verify<br/>画面を見る"]
+  subgraph shot ["画面を撮る"]
+    bv["browser-verify<br/>ブラウザ"]
+    tv["terminal-verify<br/>ターミナル"]
+  end
   anchors["anchors<br/>HACK / AIDEV-NOTE の規則と一覧"]
   design["design<br/>設計相談"]
   testdesign["test-design<br/>何をテストするか"]
   ab[/"agent-browser<br/>headless Chrome の CLI"/]
+  vhs[/"vhs<br/>tape から端末を撮る"/]
   lint[/"lint-body<br/>本文の textlint (hook も同じ検査)"/]
 
   implement -->|"毎サイクル"| check
   implement -->|"毎サイクル"| commit
   implement -->|"実装が終わった時"| hr
-  implement -.->|"画面が変わった時"| bv
+  implement -.->|"画面が変わった時"| shot
   implement -.->|"設計に迷った時"| design
   implement -.->|"何を試すか迷った時"| testdesign
   implement -.->|"HACK / AIDEV-NOTE を残す時"| anchors
@@ -45,12 +48,13 @@ flowchart TD
   pr -->|"push 前"| check
   pr -->|"本文を書く時"| explain
   pr -.->|"未コミットがある時"| commit
-  pr -.->|"before / after を撮る時"| bv
+  pr -.->|"before / after を撮る時"| shot
   pr -.->|"やらなかったことを残す時"| issue
   issue -->|"本文を書く時"| explain
   explain -.->|"やらなかったことの行き先"| issue
   explain -->|"gh に渡す前"| lint
   bv --> ab
+  tv --> vhs
 ```
 
 ## 打って使う skill

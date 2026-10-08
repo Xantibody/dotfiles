@@ -324,16 +324,28 @@ render the body locally to catch layout that parses but lies.
 
 A diagram shows relationships; a screenshot shows a result the reviewer
 would otherwise have to run the app to see — a screen, a chart, a TUI
-frame, a rendered document, a before/after pair. Same gate as the
-diagram: it earns its place only when the text would be describing
-pixels. Never for the mermaid block, which GitHub renders itself, and
-never for terminal text, which belongs in a code block where it can be
-searched and copied.
+frame, a prompt, a colour scheme, a rendered document. The gate is the
+opposite of the diagram's: a change whose result can be seen gets a
+before/after pair by default, because a reviewer who has to imagine the
+pixels from the diff reviews a guess. Skip it only when:
 
-When the gate opens for something a browser renders, load the
-`browser-verify` skill: it captures the base branch and the head at the
-same URL and viewport, into the same temp directory as the body, and has
-you read both images before writing the caption.
+- nothing renders differently — a dependency bump, a refactor, a config
+  value no screen shows;
+- the pair looks the same once captured — then the change is not visual
+  after all;
+- it cannot be captured — a desktop GUI neither skill reaches, a state
+  that needs hardware. Say so in the report instead of leaving it out
+  silently.
+
+Never for the mermaid block, which GitHub renders itself, and never for
+command output whose content is the point, which belongs in a code block
+where it can be searched and copied.
+
+Capture with the skill for where it renders: the `browser-verify` skill
+for a browser, the `terminal-verify` skill for a terminal. Both capture
+the base branch and the head under the same size into the same temp
+directory as the body, and have you read both images before writing the
+caption.
 
 `gh pr create --attach` (gh 2.100.0 or later) uploads the file and
 rewrites a matching `![alt](<path>)` in the body to the uploaded asset.
