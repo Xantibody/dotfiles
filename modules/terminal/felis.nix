@@ -126,81 +126,101 @@ in
         notifications.enable = true;
       };
 
-      # 下の 2 本は waybar と rofi が前提なので Linux だけに置く。
-      # waybar の custom/felis が呼ぶ。セッションを前面のプロセス名で並べ、窓の付いていない
-      # ものは薄くする。tooltip には id とタイトルを出す。
-      # AIDEV-NOTE: フォーカス中の窓のセッションは出さない。attachment に窓の pid が無く、
-      # Hyprland のタイトルとの突き合わせでは同じ "~" の fish を区別できない
-      home.packages = lib.mkIf pkgs.stdenv.hostPlatform.isLinux [
-        (pkgs.writeShellApplication {
-          name = "felis-waybar";
-          runtimeInputs = [
-            config.programs.felis.package
-            pkgs.jq
-          ];
-          text = ''
-            # daemon が居なければ空を返し、waybar にモジュールを隠させる
-            if ! sessions=$(felis sessions list --format json 2>/dev/null); then
-              echo '{"text":""}'
-              exit 0
-            fi
-            jq -c '
-              def esc: gsub("&"; "&amp;") | gsub("<"; "&lt;") | gsub(">"; "&gt;");
-              .sessions
-              | map(. + { fg: (.foreground // "?" | esc), detached: (.attachments | length == 0) })
-              | {
-                  text: map(if .detached then "<span alpha=\"45%\">\(.fg)</span>" else .fg end) | join("  "),
-                  tooltip: map("\(if .detached then "○" else "●" end) \(.short_id)  \(.fg)  \(.title | esc)") | join("\n")
+      home.packages =
+        let
+          inherit (pkgs.stdenv.hostPlatform) isDarwin;
+          app = "${config.programs.felis.package}/Applications/felis.app";
+        in
+        # waybar の custom/felis が呼ぶ。セッションを前面のプロセス名で並べ、窓の付いていない
+        # ものは薄くする。tooltip には id とタイトルを出す。waybar が前提なので Linux だけに置く。
+        # AIDEV-NOTE: フォーカス中の窓のセッションは出さない。attachment に窓の pid が無く、
+        # Hyprland のタイトルとの突き合わせでは同じ "~" の fish を区別できない
+        lib.optional pkgs.stdenv.hostPlatform.isLinux (
+          pkgs.writeShellApplication {
+            name = "felis-waybar";
+            runtimeInputs = [
+              config.programs.felis.package
+              pkgs.jq
+            ];
+            text = ''
+              # daemon が居なければ空を返し、waybar にモジュールを隠させる
+              if ! sessions=$(felis sessions list --format json 2>/dev/null); then
+                echo '{"text":""}'
+                exit 0
+              fi
+              jq -c '
+                def esc: gsub("&"; "&amp;") | gsub("<"; "&lt;") | gsub(">"; "&gt;");
+                .sessions
+                | map(. + { fg: (.foreground // "?" | esc), detached: (.attachments | length == 0) })
+                | {
+                    text: map(if .detached then "<span alpha=\"45%\">\(.fg)</span>" else .fg end) | join("  "),
+                    tooltip: map("\(if .detached then "○" else "●" end) \(.short_id)  \(.fg)  \(.title | esc)") | join("\n")
+                  }
+              ' <<<"$sessions"
+            '';
+          }
+        )
+        ++ [
+          # Linux は waybar の custom/felis のクリック、macOS は skhd の cmd+space から開くメニュー。
+          #   felis-menu attach: 選んだセッションに窓を 1 枚足す (付いている窓はそのまま残る)
+          #   felis-menu manage: 選んだセッションの窓を全部外すか、セッションごと消す
+          # Linux の見た目は waybar の Bluetooth メニューの rasi を借り、見出しと幅だけ差し替える。
+          # macOS は rofi の代わりに Spotlight 風の choose を出す
+          (pkgs.writeShellApplication {
+            name = "felis-menu";
+            runtimeInputs = [
+              config.programs.felis.package
+              pkgs.jq
+            ]
+            ++ lib.optional isDarwin pkgs.choose-gui;
+            text = ''
+              menu() {
+                ${
+                  if isDarwin then
+                    "choose -p felis -w 60"
+                  else
+                    ''
+                      rofi -dmenu -i -p "" -config "$HOME/.config/rofi/bluetooth-menu.rasi" \
+                        -theme-str "textbox-custom { content: \"felis\"; } window { width: 480px; }"''
                 }
-            ' <<<"$sessions"
-          '';
-        })
+              }
 
-        # waybar の custom/felis のクリックから開くメニュー。
-        #   felis-menu attach: 選んだセッションに窓を 1 枚足す (付いている窓はそのまま残る)
-        #   felis-menu manage: 選んだセッションの窓を全部外すか、セッションごと消す
-        # 見た目は waybar の Bluetooth メニューの rasi を借り、見出しと幅だけ差し替える
-        (pkgs.writeShellApplication {
-          name = "felis-menu";
-          runtimeInputs = [
-            config.programs.felis.package
-            pkgs.jq
-          ];
-          text = ''
-            menu() {
-              rofi -dmenu -i -p "" -config "$HOME/.config/rofi/bluetooth-menu.rasi" \
-                -theme-str "textbox-custom { content: \"felis\"; } window { width: 480px; }"
-            }
+              # 1 行 1 セッション。2 列目の short_id を選択結果から切り出す
+              pick() {
+                felis sessions list --format json \
+                  | jq -r '.sessions[] | "\(if (.attachments | length) == 0 then "○" else "●" end) \(.short_id)  \(.foreground // "?")  \(.title)"' \
+                  | menu | awk '{ print $2 }'
+              }
 
-            # 1 行 1 セッション。2 列目の short_id を選択結果から切り出す
-            pick() {
-              felis sessions list --format json \
-                | jq -r '.sessions[] | "\(if (.attachments | length) == 0 then "○" else "●" end) \(.short_id)  \(.foreground // "?")  \(.title)"' \
-                | menu | awk '{ print $2 }'
-            }
-
-            case "''${1:-}" in
-              attach)
-                id=$(pick)
-                [ -n "$id" ] || exit 0
-                exec felis attach "$id"
-                ;;
-              manage)
-                id=$(pick)
-                [ -n "$id" ] || exit 0
-                case "$(printf 'Evict windows\nKill session\n' | menu)" in
-                  "Evict windows") felis sessions evict "$id" ;;
-                  "Kill session") felis sessions kill "$id" ;;
-                esac
-                ;;
-              *)
-                echo "usage: felis-menu attach|manage" >&2
-                exit 2
-                ;;
-            esac
-          '';
-        })
-      ];
+              case "''${1:-}" in
+                attach)
+                  id=$(pick)
+                  [ -n "$id" ] || exit 0
+                  ${
+                    # Hyper+Q と同じく LaunchServices 経由で .app として起動する。.app の実行ファイル
+                    # (felis-client) も attach を受け付ける
+                    if isDarwin then
+                      ''exec /usr/bin/open -na "${app}" --args attach "$id"''
+                    else
+                      ''exec felis attach "$id"''
+                  }
+                  ;;
+                manage)
+                  id=$(pick)
+                  [ -n "$id" ] || exit 0
+                  case "$(printf 'Evict windows\nKill session\n' | menu)" in
+                    "Evict windows") felis sessions evict "$id" ;;
+                    "Kill session") felis sessions kill "$id" ;;
+                  esac
+                  ;;
+                *)
+                  echo "usage: felis-menu attach|manage" >&2
+                  exit 2
+                  ;;
+              esac
+            '';
+          })
+        ];
     };
 
   flake.modules.nixos.felis = {
@@ -210,13 +230,14 @@ in
   };
 
   flake.modules.darwin.felis =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     let
       # 素の ad-hoc 署名だと、アクセシビリティ等の許可が rebuild のたびに飛ぶ。
       # hm の programs.felis と skhd の起動パスが同じ .app を指すよう、ここで一度だけ作る
       felis =
         (pkgs.callPackage inputs.nix-mac-app-identity { }).stabilizeApp
           inputs.felis.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      felis-menu = "${config.home-manager.users.${config.my.user.name}.home.path}/bin/felis-menu";
     in
     {
       nix.settings = cache;
@@ -224,6 +245,19 @@ in
       home-manager.sharedModules = [
         hm.felis
         { programs.felis.package = felis; }
+        (
+          { lib, ... }:
+          {
+            # cmd+space を下の skhd に渡すため、Spotlight の検索ショートカット (64) だけ切る。
+            # AIDEV-NOTE: system.defaults.CustomUserPreferences は AppleSymbolicHotKeys を丸ごと
+            # 書き換えて他のショートカットを消すので、-dict-add で 1 件だけ差し替える
+            home.activation.disableSpotlightShortcut = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+              run /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 \
+                '<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>65535</integer><integer>49</integer><integer>1048576</integer></array><key>type</key><string>standard</string></dict></dict>'
+              run /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+            '';
+          }
+        )
       ];
 
       # Hyprland の $mod+Q に当たる。OmniWM はアプリの起動をホットキーに持てないので skhd に任せる。
@@ -232,8 +266,12 @@ in
       # kitty の shell と同じ fish を渡す
       # AIDEV-NOTE: chsh で fish に変えないのは会社の Mac が Kandji 管理だから。
       # users.users.shell は knownUsers に入れないと効かず、入れると nix-darwin がユーザを管理しだす
+      # cmd+space / cmd+shift+space は Spotlight の代わりに felis のセッション一覧を出し、
+      # felis-menu attach / manage に渡す
       services.skhd.skhdConfig = ''
         ctrl + alt + shift + cmd - q : /usr/bin/open -na ${felis}/Applications/felis.app --env SHELL=${pkgs.fish}/bin/fish
+        cmd - space : ${felis-menu} attach
+        cmd + shift - space : ${felis-menu} manage
       '';
     };
 }
