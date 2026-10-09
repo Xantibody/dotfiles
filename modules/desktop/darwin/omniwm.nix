@@ -12,14 +12,29 @@ let
   hm = config.flake.modules.homeManager;
 in
 {
-  flake.modules.homeManager.omniwm = {
-    programs.omniwm = {
-      enable = true;
-      settings = ../../../configs/omniwm/settings.toml;
-      # 終了させたら終了したままにする。既定の KeepAlive だと launchd が起こし直す
-      launchd.keepAlive = false;
+  flake.modules.homeManager.omniwm =
+    { lib, ... }:
+    {
+      programs.omniwm = {
+        enable = true;
+        settings = ../../../configs/omniwm/settings.toml;
+        # 終了させたら終了したままにする。既定の KeepAlive だと launchd が起こし直す
+        launchd.keepAlive = false;
+      };
+
+      # openCommandPalette の Control+Option+Space は macOS の「入力メニューで
+      # 次のソースを選択」(symbolic hotkey 61) と同じキー。入力の切り替えは
+      # macSKK の Ctrl+J で足りるので、macOS 側を無効にする。
+      # AIDEV-NOTE: targets.darwin.defaults / CustomUserPreferences は
+      # AppleSymbolicHotKeys の辞書を丸ごと書き換え、GUI で有効にした他の
+      # ショートカット (Ctrl+数字のデスクトップ切り替えなど) を消してしまう。
+      # だから 61 だけを -dict-add で足す
+      home.activation.disableInputSourceHotkey = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        run /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 \
+          '<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>32</integer><integer>49</integer><integer>786432</integer></array><key>type</key><string>standard</string></dict></dict>'
+        run /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+      '';
     };
-  };
 
   flake.modules.darwin.omniwm = {
     home-manager.sharedModules = [ hm.omniwm ];
