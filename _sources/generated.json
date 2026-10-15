@@ -190,7 +190,7 @@
   },
   "tiny-glimmer": {
     "cargoLock": null,
-    "date": "2026-07-05",
+    "date": "2026-10-15",
     "extract": null,
     "name": "tiny-glimmer",
     "passthru": null,
@@ -202,12 +202,12 @@
       "name": null,
       "owner": "rachartier",
       "repo": "tiny-glimmer.nvim",
-      "rev": "9a48d8a7436231cb16d47c88f924702e5602870a",
-      "sha256": "sha256-ONv/NE4D5vWNV56oJc/h5/nniOWjH5eUG0Q80dMVSxg=",
+      "rev": "b35d4f7b0eaedb75ff99fa694f4d1ea2ce8ce6c8",
+      "sha256": "sha256-J6DZcSDLhHLvMya/P5ylbHltfP7cdifMX4SFWbJyidg=",
       "sparseCheckout": [],
       "type": "github"
     },
-    "version": "9a48d8a7436231cb16d47c88f924702e5602870a"
+    "version": "b35d4f7b0eaedb75ff99fa694f4d1ea2ce8ce6c8"
   },
   "tiny-inline-diagnostic": {
     "cargoLock": null,
