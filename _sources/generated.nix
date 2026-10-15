@@ -116,15 +116,15 @@
   };
   tiny-glimmer = {
     pname = "tiny-glimmer";
-    version = "9a48d8a7436231cb16d47c88f924702e5602870a";
+    version = "b35d4f7b0eaedb75ff99fa694f4d1ea2ce8ce6c8";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-glimmer.nvim";
-      rev = "9a48d8a7436231cb16d47c88f924702e5602870a";
+      rev = "b35d4f7b0eaedb75ff99fa694f4d1ea2ce8ce6c8";
       fetchSubmodules = false;
-      sha256 = "sha256-ONv/NE4D5vWNV56oJc/h5/nniOWjH5eUG0Q80dMVSxg=";
+      sha256 = "sha256-J6DZcSDLhHLvMya/P5ylbHltfP7cdifMX4SFWbJyidg=";
     };
-    date = "2026-07-05";
+    date = "2026-10-15";
   };
   tiny-inline-diagnostic = {
     pname = "tiny-inline-diagnostic";
