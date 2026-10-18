@@ -3,9 +3,8 @@
   extends: ["config:recommended"],
   platformAutomerge: false,
   rebaseWhen: "conflicted",
-  // flake.lock は .github/workflows/flake-update.yml が毎朝更新し、darwin の構成を
-  // 組んで cachix に載せる。Renovate からも lock の PR が来ると衝突するので、
-  // ここでは nix を扱わない。
+  // flake.lock は .github/workflows/flake-update.yml が毎朝更新する。Renovate からも
+  // lock の PR が来ると衝突するので、ここでは nix を扱わない。
   nix: {
     enabled: false,
   },
