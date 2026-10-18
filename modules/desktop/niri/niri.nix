@@ -1,5 +1,5 @@
 # niri。Hyprland と並べて入れ、SDDM のセッション選択で切り替える。
-# 設定は niri 同梱の既定値を、このマシンにある道具 (kitty, rofi, hyprlock) に差し替えて使う。
+# 設定は niri 同梱の既定値を、このマシンにある道具 (felis, rofi, hyprlock) に差し替えて使う。
 { config, ... }:
 let
   hm = config.flake.modules.homeManager;
@@ -10,8 +10,8 @@ in
     {
       xdg.configFile."niri/config.kdl".source = pkgs.runCommand "niri-config.kdl" { } ''
         substitute ${pkgs.niri.src}/resources/default-config.kdl $out \
-          --replace-fail '"alacritty"' '"kitty"' \
-          --replace-fail 'Terminal: alacritty' 'Terminal: kitty' \
+          --replace-fail '"alacritty"' '"felis"' \
+          --replace-fail 'Terminal: alacritty' 'Terminal: felis' \
           --replace-fail '{ spawn "fuzzel"; }' '{ spawn "rofi" "-show" "drun"; }' \
           --replace-fail 'Application: fuzzel' 'Application: rofi' \
           --replace-fail '"swaylock"' '"hyprlock"' \

@@ -100,26 +100,22 @@ in
             # ", preferred, auto,1, mirror, eDP-1"
           ];
           windowrule = [
-            # アプリからの最大化要求は聞かない。kitty は終了時に最大化だったことを
-            # ~/.cache/kitty に覚え、次の窓を最大化で開いてタイルに入らなくなる
+            # アプリからの最大化要求は聞かない。最大化で開いた窓はタイルに入らない
             "suppress_event maximize, match:class .*"
-            # sysinfo はタイルに割り込ませず、画面の真ん中に浮かせる
-            "float on, center on, match:class sysinfo"
           ];
         };
       };
 
       # スペック一覧 (fastfetch) を浮いた窓で出し、キーを 1 つ押せば閉じる。waybar のロゴと
-      # which-key の i から呼ぶ。fish の起動を挟まないよう、kitty に bash を直接渡す。
-      # AIDEV-NOTE: 大きさは kitty 側で決める。windowrule の size は kitty に効かず全画面大になった
+      # which-key の i から呼ぶ。fish の起動を挟まないよう、felis に bash を直接渡す。
+      # AIDEV-NOTE: felis は app_id を変えられず、窓の大きさも指定できないので、
+      # windowrule ではなく exec ルールで起動した pid の窓だけを浮かせて大きさを決める
       home.packages = [
         (pkgs.writeShellApplication {
           name = "sysinfo";
-          runtimeInputs = [ pkgs.kitty ];
           text = ''
-            exec kitty --class sysinfo --title 'System Info' \
-              -o remember_window_size=no -o initial_window_width=110c -o initial_window_height=28c \
-              ${lib.getExe pkgs.bash} -c '${lib.getExe pkgs.fastfetch}; read -rsn1'
+            exec hyprctl dispatch exec \
+              "[float; center; size 980 520] felis -- ${lib.getExe pkgs.bash} -c '${lib.getExe pkgs.fastfetch}; read -rsn1'"
           '';
         })
       ];

@@ -43,7 +43,7 @@
               application = {
                 not = [
                   "Alacritty"
-                  "kitty"
+                  "felis"
                   "org.wezfurlong.wezterm"
                 ];
               };
