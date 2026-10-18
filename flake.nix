@@ -153,7 +153,9 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
     felis = {
-      url = "git+https://git.natsukium.com/natsukium/felis?shallow=1";
+      # 公式の install ガイドが案内する場所。git.natsukium.com/natsukium/felis は移転前の
+      # repo で、main が 1761d2a のまま止まり、その rev は nix-cache.natsukium.com にもない
+      url = "github:felis-terminal/felis";
       # nixpkgs は follows させない。上流が自分の lock で組んだものを
       # nix-cache.natsukium.com に置いていて、組み直すと Rust を手元で建てることになる
       inputs.flake-parts.follows = "flake-parts";
