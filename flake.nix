@@ -1,7 +1,10 @@
 {
   description = "r-aizawa nix conf now!";
   inputs = {
-    nixpkgs.url = "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-unstable-small";
+    # small は使わない。NixOS manual のとおりバイナリが少ないサーバー向けのチャンネルで、
+    # starship や vim plugin まで手元で組むことになる。darwin で nixpkgs-unstable と比べても
+    # cache に無いものは変わらなかったので、NixOS のテストを通った nixos-unstable に揃える
+    nixpkgs.url = "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-unstable";
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
