@@ -10,8 +10,9 @@ let
   hm = config.flake.modules.homeManager;
   share = {
     # AIDEV-NOTE: agent-browser は nixpkgs にもあるが上流の更新が速く、llm-agents.nix の方が追従が早い
+    # AIDEV-NOTE: llm-agents は overlays.shared-nixpkgs を使わない。こちらの nixpkgs で組み直すと上流と rev が揃わない限り cache.numtide.com に当たらない。README の推奨どおり上流の lock で組んだ packages を差す
     nixpkgs.overlays = [
-      inputs.llm-agents.overlays.shared-nixpkgs
+      (final: _: { llm-agents = inputs.llm-agents.packages.${final.stdenv.hostPlatform.system}; })
       (import ../../overlays/textlint-rules.nix)
     ];
     home-manager.sharedModules = [

@@ -116,9 +116,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     llm-agents = {
+      # nixpkgs は follows させない。上流 CI が自分の lock で組んだものを
+      # cache.numtide.com に置いていて、こちらの nixpkgs で組み直すと当たらない
       url = "github:numtide/llm-agents.nix";
       inputs = {
-        nixpkgs.follows = "nixpkgs";
         flake-parts.follows = "flake-parts";
         systems.follows = "systems";
         treefmt-nix.follows = "treefmt-nix";

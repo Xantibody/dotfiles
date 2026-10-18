@@ -9,7 +9,8 @@ let
     {
       nixpkgs.overlays = [
         inputs.mcp-servers-nix.overlays.default
-        inputs.llm-agents.overlays.shared-nixpkgs
+        # claude.nix と同じく上流の lock で組んだ packages を差す。理由はそちらの AIDEV-NOTE
+        (final: _: { llm-agents = inputs.llm-agents.packages.${final.stdenv.hostPlatform.system}; })
       ];
       home-manager.sharedModules = [ hm.agents ];
 
