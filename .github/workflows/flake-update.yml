@@ -1,0 +1,66 @@
+# flake.lock を更新し、手元が switch する前に darwin の構成を組んで cachix に載せておく。
+#
+# 上流のキャッシュに無いもの (darwin でしか組まれないものや、こちらの nixpkgs で
+# 組み直す input) は手元で毎回 40 分かかっていた。cachix-action の daemon は
+# post-build-hook で push するので、上流から substitute したパスは送らず、
+# この job で実際に組んだものだけが自前の cache に入る。
+#
+# PR を作る前にここでビルドまで済ませる。GITHUB_TOKEN で作った PR は他の workflow を
+# 起動せず、main に required status check も無いので、gh pr merge --auto は即マージする。
+# この job が唯一の関門になる (nvfetcher.yml と同じ事情)。
+name: Update flake inputs
+
+on:
+  schedule:
+    - cron: "0 21 * * *" # 6am JST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: macos-26
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            extra-substituters = https://cache.numtide.com https://nix-community.cachix.org
+            extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+      - uses: cachix/cachix-action@v16
+        with:
+          name: r-aizawa-nixos-configuration
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Update flake.lock
+        run: nix flake update
+
+      - name: Check
+        run: nix flake check
+
+      # mac 2 台とも組む。共通部分は 1 台目で組み終わっているので、2 台目の追加は
+      # 仕事用の数パッケージ分で済む
+      - name: Build
+        run: >-
+          nix build --no-link --print-out-paths
+          .#darwinConfigurations.private-macbook-pro-m3.system
+          .#darwinConfigurations.work-macbook-pro-m4-attm.system
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v8
+        with:
+          commit-message: "chore(deps): update flake inputs"
+          title: "chore(deps): update flake inputs"
+          body: "Automated flake.lock update. darwin の構成は cachix に push 済み。"
+          branch: flake-update
+          labels: automerge
+
+      - name: Enable auto-merge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        run: gh pr merge --auto --merge ${{ steps.cpr.outputs.pull-request-number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
