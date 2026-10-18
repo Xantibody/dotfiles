@@ -1,0 +1,84 @@
+# host の構成を、cache に無いときだけ組んで cachix に載せる。darwin.yml と nixos.yml の本体。
+#
+# probe → build → verify の 3 段に分けるのは、PR で push したものと同じ derivation を
+# マージ後の main push で組み直さないため。probe で全部揃っていれば build も verify も
+# skip され、required check は skip を成功として扱う。
+#
+# build は post-build-hook で push するので、上流から substitute したものは送らず、
+# この job で実際に組んだものだけが自前の cache に入る。verify はビルドした runner では
+# なく新しい runner で probe をやり直し、push が載ったことを空の store から確かめる。
+name: Cached build
+
+on:
+  workflow_call:
+    inputs:
+      hosts:
+        description: Space-separated flake attributes of the hosts
+        required: true
+        type: string
+      build-runner:
+        description: Runner whose platform matches the hosts
+        required: true
+        type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    outputs:
+      missing: ${{ steps.probe.outputs.missing }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-nix
+        with:
+          hosts: ${{ inputs.hosts }}
+      - id: probe
+        uses: ./.github/actions/cache-probe
+        with:
+          hosts: ${{ inputs.hosts }}
+
+  build:
+    needs: probe
+    if: needs.probe.outputs.missing == 'true'
+    runs-on: ${{ inputs.build-runner }}
+    timeout-minutes: 90
+    steps:
+      # NixOS の closure は ubuntu runner の空き (約 14 GB) に収まらないことがあるので、
+      # 使わない SDK を先に消す
+      - name: Free disk space
+        if: runner.os == 'Linux'
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-nix
+        with:
+          hosts: ${{ inputs.hosts }}
+          cachix-auth-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Build
+        env:
+          HOSTS: ${{ inputs.hosts }}
+        run: |
+          installables=()
+          for host in $HOSTS; do
+            installables+=(".#$host.config.system.build.toplevel")
+          done
+          nix build --no-link --print-out-paths "${installables[@]}"
+
+  verify:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-nix
+        with:
+          hosts: ${{ inputs.hosts }}
+      - id: probe
+        uses: ./.github/actions/cache-probe
+        with:
+          hosts: ${{ inputs.hosts }}
+      - name: Fail when something was not pushed
+        if: steps.probe.outputs.missing == 'true'
+        run: |
+          echo "::error::the build finished but some outputs are still missing from every substituter"
+          exit 1

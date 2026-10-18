@@ -2,14 +2,18 @@
 let
   # 上流の flake が publish しているキャッシュ。自前ビルドを避けるためだけの設定。
   # substituters ではなく extra- を使うのは cache.nixos.org のデフォルトを潰さないため。
+  # r-aizawa-nixos-configuration は自前の cache で、上流に無いものを
+  # .github/workflows/darwin.yml と nixos.yml が PR と main への push で組んで載せている。
   caches = {
     extra-substituters = [
       "https://cache.numtide.com"
       "https://nix-community.cachix.org"
+      "https://r-aizawa-nixos-configuration.cachix.org"
     ];
     extra-trusted-public-keys = [
       "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "r-aizawa-nixos-configuration.cachix.org-1:Scl5a9FJIOzSSrRaFhv2QejwBdWeb+XRylZuMjzI/oI="
     ];
   };
 in

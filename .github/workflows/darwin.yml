@@ -1,37 +1,36 @@
-# darwin の「ビルド」を見る。
+# darwin の「ビルド」を見て、組んだものを cachix に載せる。
 #
 # check.yml の nix flake check は ubuntu で回っていて、checks.eval-<host> のおかげで
 # mac 2 台も「評価」はされる。ただし評価が通ってもビルドは落ちる: nixpkgs f496248 の
 # _7zz 26.02 は darwin でのみコンパイルに失敗し、CI が緑のまま手元の switch が壊れた。
 # 実機と同じ aarch64-darwin で toplevel を実際に組むところまでやらないと捕まらない。
 #
-# 2 台のうち private-macbook-pro-m3 だけを組む。work 機との差分は仕事用の git 設定と
-# 数パッケージで、依存更新の壊れ方はほぼ共通なので、時間を倍払う価値が無い。
+# mac は 2 台とも組む。共通部分は cache から取れるので、2 台目の追加は仕事用の数
+# パッケージ分で済み、work 機の switch も cache だけで終わる。
+#
+# main への push でも回すのは、main に直接コミットした変更を組むため。PR から来た
+# マージは probe が cache に揃っていると見て build を飛ばす。
+# path フィルタを付けないのは required check にしているため。付けると対象外の PR で
+# check が報告されず、マージできなくなる。
 name: Build (darwin)
 
 on:
-  # 実機と同じ aarch64 で所要時間を測るために手動でも回せるようにしておく
   workflow_dispatch:
   pull_request:
-    paths:
-      - flake.nix
-      - flake.lock
-      - modules/**
-      - _sources/**
+  push:
+    branches: [main]
 
 concurrency:
   group: darwin-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: macos-26
-    timeout-minutes: 90
-    steps:
-      - uses: actions/checkout@v7
-      - uses: DeterminateSystems/nix-installer-action@main
-        with:
-          extra-conf: |
-            extra-substituters = https://cache.numtide.com https://nix-community.cachix.org
-            extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
-      - run: nix build --no-link --print-out-paths .#darwinConfigurations.private-macbook-pro-m3.system
+  darwin:
+    uses: ./.github/workflows/cached-build.yml
+    with:
+      hosts: >-
+        darwinConfigurations.private-macbook-pro-m3
+        darwinConfigurations.work-macbook-pro-m4-attm
+      build-runner: macos-26
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}

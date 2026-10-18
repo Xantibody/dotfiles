@@ -3,72 +3,9 @@
   extends: ["config:recommended"],
   platformAutomerge: false,
   rebaseWhen: "conflicted",
-  lockFileMaintenance: {
-    enabled: true,
-    // 月曜いっぱいを窓にする。"before 6am on monday" は UTC 月曜 0-6 時の 6 時間しかなく、
-    // 無料枠の Mend アプリだとこの窓を外し続け、2026-04-20 以降 schedule 起動が 1 度も無かった。
-    schedule: ["* * * * 1"],
-    automerge: true,
-  },
+  // flake.lock は .github/workflows/flake-update.yml が毎朝更新する。Renovate からも
+  // lock の PR が来ると衝突するので、ここでは nix を扱わない。
   nix: {
-    enabled: true,
+    enabled: false,
   },
-  packageRules: [
-    // nixpkgs関連をグループ化
-    {
-      groupName: "nixpkgs",
-      matchManagers: ["nix"],
-      matchPackageNames: ["/^nixpkgs/"],
-      automerge: true,
-    },
-    // NixOS専用パッケージ
-    {
-      groupName: "nixos",
-      matchManagers: ["nix"],
-      matchPackageNames: ["xremap"],
-      automerge: true,
-    },
-    // Darwin専用パッケージ
-    {
-      groupName: "darwin",
-      matchManagers: ["nix"],
-      matchPackageNames: ["nix-darwin", "brew-nix", "brew-api", "mac-app-util"],
-      automerge: true,
-    },
-    // home-manager関連パッケージ
-    {
-      groupName: "home-manager",
-      matchManagers: ["nix"],
-      matchPackageNames: ["home-manager", "zen-browser", "firefox-addons", "nixCats"],
-      automerge: true,
-    },
-    // 共通/基盤パッケージ
-    {
-      groupName: "nix-common",
-      matchManagers: ["nix"],
-      matchPackageNames: [
-        "flake-parts",
-        "treefmt-nix",
-        "sops-nix",
-        "my-nur",
-        "systems",
-        "mcp-servers-nix",
-      ],
-      automerge: true,
-    },
-    // ツール/アプリケーション
-    {
-      groupName: "nix-tools",
-      matchManagers: ["nix"],
-      matchPackageNames: ["llm-agents", "arto", "ichigyo-ls"],
-      automerge: true,
-    },
-    // その他のflake inputsは個別にautomerge
-    {
-      matchManagers: ["nix"],
-      automerge: true,
-      automergeType: "pr",
-      automergeStrategy: "squash",
-    },
-  ],
 }

@@ -1,0 +1,40 @@
+# flake.lock を毎朝更新して PR にする。
+#
+# 検証と cachix への push はこの PR に対して走る check.yml / darwin.yml / nixos.yml が
+# 行い、required check なので auto-merge はそれを待つ。手元の switch はマージ後なら
+# cache だけで済む。
+name: Update flake inputs
+
+on:
+  schedule:
+    - cron: "0 21 * * *" # 6am JST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: DeterminateSystems/nix-installer-action@main
+      - name: Update flake.lock
+        run: nix flake update
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v8
+        with:
+          commit-message: "chore(deps): update flake inputs"
+          title: "chore(deps): update flake inputs"
+          body: "Automated flake.lock update."
+          branch: flake-update
+          labels: automerge
+
+      - name: Enable auto-merge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        run: gh pr merge --auto --merge ${{ steps.cpr.outputs.pull-request-number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
