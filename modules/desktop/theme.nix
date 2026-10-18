@@ -7,7 +7,7 @@
 #   3. 見た目: waybar と rofi の独自メニューは自前の CSS / rasi のまま、色だけ受け取る
 #      (modules/desktop/hyprland/{waybar,rofi}.nix が config.lib.stylix.colors を読む)
 #
-# kitty・Neovim・fish は同じ dayfox を上流の配布物そのままで持っていて、base16 に
+# felis・Neovim・fish は同じ dayfox を上流の配布物そのままで持っていて、base16 に
 # 落とすと色数が減るので Stylix に触らせない。そのため autoEnable を切り、
 # 配る先をここで列挙する。
 { config, inputs, ... }:

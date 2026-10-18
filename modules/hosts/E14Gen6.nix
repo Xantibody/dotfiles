@@ -40,7 +40,6 @@ in
       "fish"
       "fzf"
       "prompt"
-      "kitty"
       "felis"
       "neovim"
       "emacs"

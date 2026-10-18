@@ -20,7 +20,6 @@ in
         "fish"
         "fzf"
         "prompt"
-        "kitty"
         "felis"
         "k8s"
         "dev-cli"

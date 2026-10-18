@@ -30,11 +30,11 @@ in
         settings = {
           font = {
             family = "Explex Console NF";
-            # kitty の 11pt に揃える。Linux は 96dpi で px = pt * 4/3、macOS は 1pt が 1 論理 px
+            # 11pt。Linux は 96dpi で px = pt * 4/3、macOS は 1pt が 1 論理 px
             size_px = if pkgs.stdenv.hostPlatform.isDarwin then 11.0 else 11 * 4.0 / 3.0;
           };
 
-          # dayfox。kitty.nix と同じ値。selection と url の色を持つ key は felis にない
+          # dayfox。selection と url の色を持つ key は felis にない
           theme = {
             background = "#f6f2ee";
             foreground = "#3d2b5a";
@@ -63,11 +63,11 @@ in
           };
           cursor.color = "#3d2b5a";
 
-          # kitty の hide_window_decorations = titlebar-only に当たる
+          # タイトルバーを出さない
           window.decorations = false;
 
-          # felis に split も tab もない。kitty のタブに当たるのはセッションで、
-          # タブ操作の chord (kitty の既定と kitty.nix の上書き) をセッション操作に当てる。
+          # felis に split も tab もない。タブに当たるのはセッションで、
+          # kitty でタブ操作だった chord をセッション操作に当てる。
           # split の ctrl+shift+\ と ctrl+shift+- は当てる先がないので、
           # ctrl+shift+- は felis 既定の文字縮小のまま
           keymap = {
@@ -97,7 +97,7 @@ in
               source = "scrollback";
               ansi = true;
             };
-            # kitty の hints (open_url) に当たる。felis は URL を自分で探さないので、
+            # URL を開く。felis は URL を自分で探さないので、
             # 見えている範囲を urlscan に渡して選ばせる
             "ctrl+shift+e" = {
               kind = "pipe";
@@ -264,7 +264,7 @@ in
       # Hyprland の $mod+Q に当たる。OmniWM はアプリの起動をホットキーに持てないので skhd に任せる。
       # cmd+q はどのアプリでも終了なので奪わない。
       # felis は起動元の $SHELL を開く。macOS のログインシェルは zsh のままなので、
-      # kitty の shell と同じ fish を渡す
+      # fish を渡す
       # AIDEV-NOTE: chsh で fish に変えないのは会社の Mac が Kandji 管理だから。
       # users.users.shell は knownUsers に入れないと効かず、入れると nix-darwin がユーザを管理しだす
       # cmd+shift+space で felis のセッション一覧を出し、選んだセッションを attach / evict / kill する。
