@@ -3,7 +3,7 @@ let
   # 上流の flake が publish しているキャッシュ。自前ビルドを避けるためだけの設定。
   # substituters ではなく extra- を使うのは cache.nixos.org のデフォルトを潰さないため。
   # r-aizawa-nixos-configuration は自前の cache で、上流に無いものを
-  # .github/workflows/flake-update.yml が毎朝組んで載せている。
+  # .github/workflows/darwin.yml と nixos.yml が PR と main への push で組んで載せている。
   caches = {
     extra-substituters = [
       "https://cache.numtide.com"

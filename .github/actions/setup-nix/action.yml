@@ -1,0 +1,41 @@
+# Nix を入れ、組む host と同じ substituter を使えるようにする。
+#
+# cache の一覧は host の nix.settings から引く。workflow 側に書き写すと arto や felis の
+# ように feature が足した cache を取りこぼし、上流に置いてあるものを CI が組み直して
+# 自前の cachix に積んでしまう。
+name: Set up Nix
+description: Install Nix with the substituters the given hosts use
+inputs:
+  hosts:
+    description: Space-separated flake attributes of the hosts, e.g. darwinConfigurations.foo
+    required: true
+  cachix-auth-token:
+    description: Token to push to the cache; omit to only pull
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - uses: DeterminateSystems/nix-installer-action@main
+    - name: Use the hosts' substituters
+      shell: bash
+      env:
+        HOSTS: ${{ inputs.hosts }}
+      run: |
+        conf=""
+        for host in $HOSTS; do
+          conf+=$(nix eval --raw ".#$host.config.nix.settings" --apply '
+            s: "extra-substituters = ${toString s.extra-substituters}\n"
+               + "extra-trusted-public-keys = ${toString s.extra-trusted-public-keys}\n"')
+          conf+=$'\n'
+        done
+        echo "$conf"
+        {
+          echo "NIX_CONFIG<<EOF"
+          echo "$conf"
+          echo "EOF"
+        } >> "$GITHUB_ENV"
+    - uses: cachix/cachix-action@v16
+      with:
+        name: r-aizawa-nixos-configuration
+        authToken: ${{ inputs.cachix-auth-token }}

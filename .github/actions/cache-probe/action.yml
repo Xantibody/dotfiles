@@ -1,0 +1,35 @@
+# host の toplevel がすべて substituter から取れるかを、何も取らずに調べる。
+#
+# dry-run は narinfo を問い合わせるだけなのでダウンロードもビルドもしない。空の store で
+# 回すことで、手元の switch が cache だけで済むかと同じ問いになる。
+name: Probe the cache
+description: Report whether any output of the hosts would have to be built
+inputs:
+  hosts:
+    description: Space-separated flake attributes of the hosts
+    required: true
+outputs:
+  missing:
+    description: "'true' when something is not in any substituter"
+    value: ${{ steps.probe.outputs.missing }}
+runs:
+  using: composite
+  steps:
+    - id: probe
+      shell: bash
+      env:
+        HOSTS: ${{ inputs.hosts }}
+      run: |
+        installables=()
+        for host in $HOSTS; do
+          installables+=(".#$host.config.system.build.toplevel")
+        done
+        # writeText などの allowSubstitutes = false は、既定だと cache にあっても
+        # 「組む」側に数えられる。手元の switch と同じく substitute させて数える
+        out=$(nix build --dry-run --option always-allow-substitutes true "${installables[@]}" 2>&1)
+        echo "$out"
+        if grep -q "will be built" <<<"$out"; then
+          echo "missing=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "missing=false" >> "$GITHUB_OUTPUT"
+        fi
