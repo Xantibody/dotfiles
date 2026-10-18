@@ -7,6 +7,9 @@
 # 差分だけを attrset で書かないのは、schema 4 は必須キーが 1 つでも欠けると
 # ファイルごと無効になるため (settings reference)。OmniWM はファイルを監視して
 # 読み直すので、rebuild すれば再起動なしで効く
+# AIDEV-NOTE: TOML にはモニター固有の値 (routing.arrangements の UUID、
+# monitor*Overrides) を書かない。この TOML は 2 台の Mac が読み、つなぐモニターも
+# 機種ごとに違う。ワークスペースは monitorAssignment の main / secondary で振り分ける
 { config, ... }:
 let
   hm = config.flake.modules.homeManager;

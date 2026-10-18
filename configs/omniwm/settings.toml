@@ -149,22 +149,8 @@ position = "center"
 widthPercent = 50.0
 
 [routing]
+arrangements = []
 mode = "macOS"
-
-[[routing.arrangements]]
-id = "8C94D0AF-8938-4FA3-8526-473C7DDE1F2E"
-
-[[routing.arrangements.monitors]]
-gridColumn = 0
-gridRow = 0
-monitorDisplayUUID = "8CC6A2D7-3F7E-4ADE-921D-5CF54D438ECF"
-monitorName = "DELL U3425WE"
-
-[[routing.arrangements.monitors]]
-gridColumn = 0
-gridRow = 1
-monitorDisplayUUID = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
-monitorName = "Built-in Retina Display"
 
 [scratchpads]
 
