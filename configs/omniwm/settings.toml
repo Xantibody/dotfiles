@@ -60,7 +60,7 @@ hotkeysEnabled = true
 hyperKeyModifiers = "Control+Option+Shift+Command"
 ipcEnabled = false
 preventSleepEnabled = false
-systemHyperTrigger = "Left Control"
+systemHyperTrigger = "None"
 updateChecksEnabled = true
 
 [gestures]

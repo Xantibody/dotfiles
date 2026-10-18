@@ -32,6 +32,7 @@ in
         "keyboard"
         "omniwm"
         "skhd"
+        "karabiner"
         "finder"
         "touchid"
         "fonts"
