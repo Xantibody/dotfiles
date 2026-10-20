@@ -1,7 +1,10 @@
 {
   description = "r-aizawa nix conf now!";
   inputs = {
-    nixpkgs.url = "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-unstable-small";
+    # small は使わない。NixOS manual のとおりバイナリが少ないサーバー向けのチャンネルで、
+    # starship や vim plugin まで手元で組むことになる。darwin で nixpkgs-unstable と比べても
+    # cache に無いものは変わらなかったので、NixOS のテストを通った nixos-unstable に揃える
+    nixpkgs.url = "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-unstable";
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -116,9 +119,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     llm-agents = {
+      # nixpkgs は follows させない。上流 CI が自分の lock で組んだものを
+      # cache.numtide.com に置いていて、こちらの nixpkgs で組み直すと当たらない
       url = "github:numtide/llm-agents.nix";
       inputs = {
-        nixpkgs.follows = "nixpkgs";
         flake-parts.follows = "flake-parts";
         systems.follows = "systems";
         treefmt-nix.follows = "treefmt-nix";
@@ -152,7 +156,9 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
     felis = {
-      url = "git+https://git.natsukium.com/natsukium/felis?shallow=1";
+      # 公式の install ガイドが案内する場所。git.natsukium.com/natsukium/felis は移転前の
+      # repo で、main が 1761d2a のまま止まり、その rev は nix-cache.natsukium.com にもない
+      url = "github:felis-terminal/felis";
       # nixpkgs は follows させない。上流が自分の lock で組んだものを
       # nix-cache.natsukium.com に置いていて、組み直すと Rust を手元で建てることになる
       inputs.flake-parts.follows = "flake-parts";
