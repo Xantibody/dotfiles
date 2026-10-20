@@ -1,14 +1,17 @@
-# Claude が書く PR / issue 本文を textlint にかける。
+# Claude が書く PR / issue 本文を textlint と osekkai lint にかける。
 # ルールの選定と自前ルールは configs/agents/textlint/ にあり、`lint-body <file>` がそれを読む。
+# osekkai のルールは osekkai 本体 (flake input) が持つ。
 # skill が本文を書いた後に lint-body を回し、`gh pr create` などの --body-file は
 # lint-body-hook (pull-request / issue skill の frontmatter が登録する PreToolUse hook) が
 # もう一度かけて、指摘が残っていればコマンドを止める。
 #
 # claude feature の一部なので `_` 始まりにして import-tree から外し、claude.nix が imports で読む。
 # host が列挙するのは claude だけで、darwin / nixos への配線も claude.nix 側にある。
-{ ... }:
+{ inputs, lib, ... }:
 let
-  overlay = import ../../overlays/textlint-rules.nix;
+  overlay = lib.composeExtensions inputs.osekkai.overlays.default (
+    import ../../overlays/textlint-rules.nix
+  );
 
   # AIDEV-NOTE: 設定と rulesdir は store パスで焼き込む。~/.claude に置くと cwd の .textlintrc に負ける
   mkLintBody =
@@ -28,12 +31,36 @@ let
             textlint-rule-max-comma
           ]
         ))
+        pkgs.osekkai
       ];
+      # 日本語の文は textlint、箇条と節の構造は osekkai が見る。fix できるのは textlint だけなので
+      # 先に回し、直った後のファイルを osekkai にかける。どちらかが鳴れば exit 1。
+      # osekkai lint はファイルと --format しか取らないので、textlint 向けの他のオプションは落とす。
       text = ''
-        exec textlint \
+        files=()
+        osekkai_args=()
+        args=("$@")
+        while (($#)); do
+          case $1 in
+            --format | -f)
+              [[ ''${2:-} == json ]] && osekkai_args+=(--format json)
+              shift 2 || shift
+              ;;
+            --format=json) osekkai_args+=(--format json) && shift ;;
+            -*) shift ;;
+            *) files+=("$1") && shift ;;
+          esac
+        done
+
+        status=0
+        textlint \
           --config ${../../configs/agents/textlint/textlintrc.json} \
           --rulesdir ${../../configs/agents/textlint/rules} \
-          "$@"
+          "''${args[@]}" || status=1
+        if ((''${#files[@]})); then
+          osekkai lint "''${osekkai_args[@]}" "''${files[@]}" || status=1
+        fi
+        exit "$status"
       '';
     };
 in
@@ -67,8 +94,10 @@ in
     { pkgs, ... }:
     let
       lintBody = mkLintBody (pkgs.extend overlay);
+      # textlint も osekkai も JSON の ruleId で名前を出すので、両方の規則をここに並べる
       rules = [
         "no-soft-break"
+        # osekkai のルール。dotfiles 側の同名ルールは消したので、これが鳴れば osekkai まで回っている
         "no-list-item-separator"
         "no-empty-section"
         "ja-spacing/ja-space-between-half-and-full-width"

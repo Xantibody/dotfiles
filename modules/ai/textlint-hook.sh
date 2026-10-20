@@ -54,7 +54,7 @@ if [[ ! -f $path ]]; then
 fi
 
 if ! result=$(lint-body "$path" 2>&1); then
-  echo "本文に textlint の指摘が残っている。直してから再実行する (fix 可能なものは lint-body --fix $path)" >&2
+  echo "本文に textlint / osekkai の指摘が残っている。直してから再実行する (fix 可能なものは lint-body --fix $path)" >&2
   echo "$result" >&2
   exit 2
 fi

@@ -5,6 +5,7 @@
 # Claude が画面を見るための agent-browser (headless Chrome の CLI) もここに置く。
 # 手順は configs/agents/skills/browser-verify にあり、上流の使い方 skill は本体が同梱している。
 # Chrome 本体は store に無く、初回に `agent-browser install` が Chrome for Testing を落とす。
+# 文章をまとめる osekkai の skill も同じく本体 (flake input) 同梱のものを載せる。
 { inputs, config, ... }:
 let
   hm = config.flake.modules.homeManager;
@@ -13,6 +14,7 @@ let
     # AIDEV-NOTE: llm-agents は overlays.shared-nixpkgs を使わない。こちらの nixpkgs で組み直すと上流と rev が揃わない限り cache.numtide.com に当たらない。README の推奨どおり上流の lock で組んだ packages を差す
     nixpkgs.overlays = [
       (final: _: { llm-agents = inputs.llm-agents.packages.${final.stdenv.hostPlatform.system}; })
+      inputs.osekkai.overlays.default
       (import ../../overlays/textlint-rules.nix)
     ];
     home-manager.sharedModules = [
@@ -52,6 +54,8 @@ in
       config = {
         home.packages = [
           pkgs.llm-agents.agent-browser
+          # skill の手順が osekkai steps / state show を直接呼ぶ。lint-body の runtimeInputs だけでは PATH に出ない
+          pkgs.osekkai
           # 編集前に anchor を見せる PreToolUse hook。settings.json が Edit / Write に登録する
           (pkgs.writeShellApplication {
             name = "anchors-hook";
@@ -66,6 +70,7 @@ in
         my.skills = lib.mapAttrs (name: _: skillsDir + "/${name}") skills // {
           # AIDEV-NOTE: ha と同じく configs/agents/skills にコピーしない。package の版と skill の版が常に揃う
           agent-browser = "${pkgs.llm-agents.agent-browser}/share/agent-browser/skills/agent-browser";
+          osekkai = "${pkgs.osekkai}/share/osekkai/skills/osekkai";
         };
 
         home.file = {

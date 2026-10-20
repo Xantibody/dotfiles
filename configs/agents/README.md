@@ -4,11 +4,11 @@
 
 `AGENTS.md` は Claude だけの指示書ではない。`modules/ai/claude.nix` が `~/.claude/CLAUDE.md` に、`modules/ai/agents.nix` が `~/.codex/AGENTS.md` に、同じファイルを配る。毎セッション両 agent が読むので、規則の本文は skill 側に置き、AGENTS.md は「いつ何を読むか」と skill 名だけを持つ。
 
-skill も同じ 2 経路で配る。各 feature が `my.skills` に載せた dir を、claude.nix が `~/.claude/skills/` に、agents.nix が codex 用の `~/.agents/skills/` に並べる (Claude Code は `~/.agents/` を読まない)。`~/.claude/skills/ha` と `~/.claude/skills/agent-browser` がここに無いのはそのためで、前者は flake input `kawarimidoll/ha` 同梱の skill を `modules/git/ha.nix` が、後者は llm-agents.nix の `agent-browser` 同梱の skill を `modules/ai/claude.nix` が `my.skills` に載せている。`mcp-defaults` と `tsgo-lsp` は SKILL.md を持たない Claude plugin なので `~/.claude/skills/` にだけ置く。codex は frontmatter の `name` と `description` しか見ないので、`when_to_use` のトリガー語や `disable-model-invocation`、`hooks` は codex では効かず、隠す skill には `agents/openai.yaml` で同じことを書く。
+skill も同じ 2 経路で配る。各 feature が `my.skills` に載せた dir を、claude.nix が `~/.claude/skills/` に、agents.nix が codex 用の `~/.agents/skills/` に並べる (Claude Code は `~/.agents/` を読まない)。`~/.claude/skills/ha`、`~/.claude/skills/agent-browser`、`~/.claude/skills/osekkai` がここに無いのはそのためで、ha は flake input `kawarimidoll/ha` 同梱の skill を `modules/git/ha.nix` が、agent-browser は llm-agents.nix の `agent-browser` 同梱の skill を、osekkai は flake input `Xantibody/osekkai` 同梱の skill を `modules/ai/claude.nix` が `my.skills` に載せている。`mcp-defaults` と `tsgo-lsp` は SKILL.md を持たない Claude plugin なので `~/.claude/skills/` にだけ置く。codex は frontmatter の `name` と `description` しか見ないので、`when_to_use` のトリガー語や `disable-model-invocation`、`hooks` は codex では効かず、隠す skill には `agents/openai.yaml` で同じことを書く。
 
 `rtk` / `ck` / `codegraph` も skill ではなく `modules/ai/agents.nix` が入れるツールで、Claude には `settings.json` の hook と `mcp-defaults` が、codex には `/etc/codex/config.toml` と `~/.codex/hooks.json` が配線する。
 
-`textlint/` は skill ではなく、PR / issue 本文にかける textlint の設定と自前ルール。`modules/ai/_textlint.nix` (claude feature の一部) がこれを `lint-body` と `lint-body-hook` の 2 コマンドに焼き込む。hook は pull-request と issue の frontmatter が skill を呼んだときに登録し、`gh pr create` などの `--body-file` に指摘が残っていればコマンドを止める。
+`textlint/` は skill ではなく、PR / issue 本文にかける textlint の設定と自前ルール。`modules/ai/_textlint.nix` (claude feature の一部) がこれを `lint-body` と `lint-body-hook` の 2 コマンドに焼き込む。`lint-body` は textlint のあとに同じファイルを `osekkai lint` にかけ、箇条や節の構造は osekkai のルールが見る。hook は pull-request と issue の frontmatter が skill を呼んだときに登録し、`gh pr create` などの `--body-file` に指摘が残っていればコマンドを止める。
 
 ## 実装から PR まで
 
@@ -22,6 +22,7 @@ flowchart TD
   pr["pull-request<br/>PR 本文を書く"]
   issue["issue<br/>issue を立てる"]
   explain["explain<br/>人が読む文の構造"]
+  osekkai["osekkai<br/>読み手を決めてまとめる"]
   subgraph shot ["画面を撮る"]
     bv["browser-verify<br/>ブラウザ"]
     tv["terminal-verify<br/>ターミナル"]
@@ -31,7 +32,7 @@ flowchart TD
   testdesign["test-design<br/>何をテストするか"]
   ab[/"agent-browser<br/>headless Chrome の CLI"/]
   vhs[/"vhs<br/>tape から端末を撮る"/]
-  lint[/"lint-body<br/>本文の textlint (hook も同じ検査)"/]
+  lint[/"lint-body<br/>本文の textlint と osekkai lint (hook も同じ検査)"/]
 
   implement -->|"毎サイクル"| check
   implement -->|"毎サイクル"| commit
@@ -52,6 +53,7 @@ flowchart TD
   pr -.->|"やらなかったことを残す時"| issue
   issue -->|"本文を書く時"| explain
   explain -.->|"やらなかったことの行き先"| issue
+  explain -->|"書き始める前"| osekkai
   explain -->|"gh に渡す前"| lint
   bv --> ab
   tv --> vhs
