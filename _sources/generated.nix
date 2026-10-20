@@ -80,15 +80,15 @@
   };
   skkeleton = {
     pname = "skkeleton";
-    version = "b322ded0e3264536342e0c6766d97c52452af570";
+    version = "e22d59fea70e46cf27f516c7a31ef4f52e6e8b06";
     src = fetchFromGitHub {
       owner = "vim-skk";
       repo = "skkeleton";
-      rev = "b322ded0e3264536342e0c6766d97c52452af570";
+      rev = "e22d59fea70e46cf27f516c7a31ef4f52e6e8b06";
       fetchSubmodules = false;
-      sha256 = "sha256-j2YwMSB9gisKb6UwZKi0Mbx2xhzBWT2r58V38bFd/9g=";
+      sha256 = "sha256-54XndUrCM5UIiOOs1u66tSc5R/I1/de7CRPNc2S2coc=";
     };
-    date = "2026-10-02";
+    date = "2026-10-16";
   };
   smooth-cursor = {
     pname = "smooth-cursor";
