@@ -9,6 +9,11 @@ when_to_use: Load it when drafting a PR body, an issue body, or an end-of-task r
 The reader has less context than you and less patience. Structure tells them
 what to skim and what to read; structure used wrongly lies to them.
 
+Load the `osekkai` skill first. It is the base for any prose a human
+reads: pick the reader, declare what they know, draft under that state,
+and make `osekkai lint` pass. This skill adds what is specific to PR
+bodies, issue bodies and reports on top of it.
+
 ## One bullet, one claim
 
 A bullet that needs a colon to carry its content is a subsection wearing a
@@ -80,9 +85,12 @@ Fix every finding and rerun until it is clean. Because each Bash call is
 a fresh shell, the hook can only follow a literal path — write the real
 path into `--body-file`, not `$BODY`, and never pass `--body` inline.
 
-The rules are the Japanese technical-writing preset plus a few that are
-house rules rather than textlint's, so know them before drafting instead
-of learning them from the findings:
+`lint-body` runs textlint and then `osekkai lint` on the same file, and
+fails if either reports anything; `--fix` only fixes textlint's findings.
+The textlint rules are the Japanese technical-writing preset plus a few
+that are house rules rather than textlint's, so know them before drafting
+instead of learning them from the findings (the structure rules are
+osekkai's, and its skill has them):
 
 - **A paragraph or bullet is one line.** In PR and issue bodies GitHub
   renders a newline inside a paragraph as a visible line break, so an

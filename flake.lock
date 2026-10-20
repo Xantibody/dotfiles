@@ -830,6 +830,26 @@
         "type": "github"
       }
     },
+    "osekkai": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792478927,
+        "narHash": "sha256-ruJWboR+t1FeMoXSPVc2PeXh9M29/NbBuvwNPnkTpK4=",
+        "owner": "Xantibody",
+        "repo": "osekkai",
+        "rev": "25d8db68e00909722264b306f8b9aec622c82d8b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Xantibody",
+        "repo": "osekkai",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "arto": "arto",
@@ -854,6 +874,7 @@
         "nix-mac-app-identity": "nix-mac-app-identity",
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs_5",
+        "osekkai": "osekkai",
         "silentSDDM": "silentSDDM",
         "sops-nix": "sops-nix",
         "stylix": "stylix",

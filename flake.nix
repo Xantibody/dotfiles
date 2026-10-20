@@ -148,6 +148,11 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    # 文章をまとめる手順の skill と、その手順を支える Markdown の lint
+    osekkai = {
+      url = "github:Xantibody/osekkai";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     magical-merchant = {
       url = "github:Xantibody/magical-merchant";
       # nixpkgs は follows させない。CI が自分の lock で組んだ .app と cli を
