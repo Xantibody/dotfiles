@@ -14,58 +14,89 @@ let
 in
 {
   flake.modules.homeManager.firefox =
-    { pkgs, lib, ... }:
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
     let
       rycee-addons = pkgs.firefox-addons;
       my-nur-addons = inputs.my-nur.legacyPackages.${pkgs.stdenv.hostPlatform.system}.firefox-addons;
-    in
-    {
-      programs.firefox = {
-        enable = true;
 
-        # macOS では systemPackages 経由で /Applications/Nix Apps/ へ置くので入れない
-        package = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin null;
+      names = [ "private" ] ++ config.my.firefox.profiles;
 
-        profiles.r-aizawa = {
-          settings = {
-            "extensions.autoDisableScopes" = 0;
-            "browser.translations.enable" = false;
-          };
-          extensions = {
-            packages = [
-              rycee-addons.keepa
-              rycee-addons.onepassword-password-manager
-              rycee-addons.vimium
-              rycee-addons.wayback-machine
-              my-nur-addons.plamo-translate
-            ];
-          };
+      # どのプロファイルも同じ拡張と設定から始める。ホスト固有の拡張は
+      # programs.firefox.profiles.<name>.extensions.packages に足せば結合される
+      base = {
+        settings = {
+          "extensions.autoDisableScopes" = 0;
+          "browser.translations.enable" = false;
+        };
+        extensions = {
+          packages = [
+            rycee-addons.keepa
+            rycee-addons.onepassword-password-manager
+            rycee-addons.vimium
+            rycee-addons.wayback-machine
+            my-nur-addons.plamo-translate
+          ];
+        };
 
-          search = {
-            force = true;
-            engines = {
-              nix-packages = {
-                name = "Nix Packages";
-                urls = [
-                  {
-                    template = "https://search.nixos.org/packages";
-                    params = [
-                      {
-                        name = "type";
-                        value = "packages";
-                      }
-                      {
-                        name = "query";
-                        value = "{searchTerms}";
-                      }
-                    ];
-                  }
-                ];
-                icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-                definedAliases = [ "@np" ];
-              };
+        search = {
+          force = true;
+          engines = {
+            nix-packages = {
+              name = "Nix Packages";
+              urls = [
+                {
+                  template = "https://search.nixos.org/packages";
+                  params = [
+                    {
+                      name = "type";
+                      value = "packages";
+                    }
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              definedAliases = [ "@np" ];
             };
           };
+        };
+      };
+    in
+    {
+      options.my.firefox.profiles = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "全ホスト共通の private に加えて作るプロファイル。仕事先ごとに分ける";
+      };
+
+      config = {
+        programs.firefox = {
+          enable = true;
+
+          # macOS では systemPackages 経由で /Applications/Nix Apps/ へ置くので入れない
+          package = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin null;
+
+          # 先頭の private が id 0 で既定になる
+          profiles = lib.listToAttrs (
+            lib.imap0 (
+              id: name:
+              lib.nameValuePair name (
+                base
+                // {
+                  inherit id;
+                  isDefault = id == 0;
+                }
+              )
+            ) names
+          );
         };
       };
     };

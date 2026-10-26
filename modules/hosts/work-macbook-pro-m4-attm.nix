@@ -77,7 +77,12 @@ in
           in
           {
             programs.zen-browser.profiles.r-aizawa.extensions.packages = kotdiff;
-            programs.firefox.profiles.r-aizawa.extensions.packages = kotdiff;
+            my.firefox.profiles = [
+              "work-attm"
+              "work-kikari"
+            ];
+            programs.firefox.profiles.work-attm.extensions.packages = kotdiff;
+            programs.firefox.profiles.work-kikari.extensions.packages = kotdiff;
           }
         )
       ];

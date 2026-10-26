@@ -53,5 +53,7 @@ in
     };
     nixpkgs.hostPlatform = "aarch64-darwin";
     system.stateVersion = 4;
+
+    home-manager.sharedModules = [ { my.firefox.profiles = [ "work-aizawa-llc" ]; } ];
   };
 }
