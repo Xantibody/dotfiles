@@ -89,7 +89,14 @@ in
             "ctrl+shift+w" = {
               kind = "kill_session";
             };
-            "ctrl+shift+q" = {
+            # AIDEV-NOTE: kitty の close_tab にあった ctrl+shift+q は当てない。Hyper+Q / $mod+Q が
+            # felis を開くキーなので、q で消えると紛らわしい
+            "ctrl+shift+k" = {
+              kind = "kill_session";
+            };
+            # Hyper+K (Karabiner が左 Control を ctrl+alt+shift+cmd にする)。
+            # ctrl と cmd が乗っていれば Option の文字合成は起きず k のまま届く
+            "ctrl+alt+shift+super+k" = {
               kind = "kill_session";
             };
             "ctrl+shift+h" = {
