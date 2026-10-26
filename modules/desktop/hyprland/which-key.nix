@@ -39,8 +39,8 @@ in
                 }
                 {
                   key = "b";
-                  desc = "Browser (Zen)";
-                  cmd = "zen-beta";
+                  desc = "Browser (Firefox)";
+                  cmd = "firefox";
                 }
                 {
                   key = "e";

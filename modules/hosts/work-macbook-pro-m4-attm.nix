@@ -1,5 +1,5 @@
 # 会社支給の MacBook Pro (M4)。私物との違いはこのファイルだけを見れば分かる:
-# 会社用の git 設定 (sops で復号)、会議用アプリ、Zen に載せる kotdiff。
+# 会社用の git 設定 (sops で復号)、会議用アプリ、Zen と Firefox に載せる kotdiff。
 {
   config,
   lib,
@@ -49,6 +49,7 @@ in
         "comma"
         "neovim"
         "zen"
+        "firefox"
         "magical-merchant"
         "sops"
         "work-git"
@@ -70,11 +71,15 @@ in
       ];
 
       home-manager.sharedModules = [
-        {
-          programs.zen-browser.profiles.r-aizawa.extensions.packages = [
-            inputs.kotdiff.packages.${pkgs.stdenv.hostPlatform.system}.default
-          ];
-        }
+        (
+          let
+            kotdiff = [ inputs.kotdiff.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+          in
+          {
+            programs.zen-browser.profiles.r-aizawa.extensions.packages = kotdiff;
+            programs.firefox.profiles.r-aizawa.extensions.packages = kotdiff;
+          }
+        )
       ];
     };
 }

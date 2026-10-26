@@ -51,6 +51,7 @@ in
       "comma"
       "skk"
       "zen"
+      "firefox"
       "magical-merchant"
       "1password"
       "k8s"
