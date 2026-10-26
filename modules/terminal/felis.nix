@@ -163,8 +163,8 @@ in
         ++ [
           # Linux は waybar の custom/felis のクリック、macOS は skhd の cmd+shift+space から開くメニュー。
           #   felis-menu attach: 選んだセッションに窓を 1 枚足す (付いている窓はそのまま残る)
-          #   felis-menu manage: 選んだセッションの窓を全部外すか、セッションごと消す
-          #   felis-menu all: 選んだセッションに attach / evict / kill のどれかをする (macOS 用)
+          #   felis-menu manage: 選んだセッションの窓を全部外すか、セッションごと消す。続けて何個でも
+          #   felis-menu all: 選んだセッションに attach / evict / kill のどれかをする (macOS 用)。attach 以外は続けて何個でも
           # Linux の見た目は waybar の Bluetooth メニューの rasi を借り、見出しと幅だけ差し替える。
           # macOS は rofi の代わりに Spotlight 風の choose を出す
           (pkgs.writeShellApplication {
@@ -210,22 +210,26 @@ in
                   [ -n "$id" ] || exit 0
                   attach_session "$id"
                   ;;
+                # evict / kill の後は一覧に戻り、Esc で抜けるまで続けて片付けられる。
+                # 操作の選択を Esc で閉じても一覧に戻る
+                # AIDEV-NOTE: 複数選択にしないのは、macOS の choose に複数選択が無いから
                 manage)
-                  id=$(pick)
-                  [ -n "$id" ] || exit 0
-                  case "$(printf 'Evict windows\nKill session\n' | menu)" in
-                    "Evict windows") felis sessions evict "$id" ;;
-                    "Kill session") felis sessions kill "$id" ;;
-                  esac
+                  while id=$(pick) && [ -n "$id" ]; do
+                    case "$(printf 'Evict windows\nKill session\n' | menu)" in
+                      "Evict windows") felis sessions evict "$id" ;;
+                      "Kill session") felis sessions kill "$id" ;;
+                    esac
+                  done
                   ;;
+                # Attach は attach_session が exec するので、そこでループごと終わる
                 all)
-                  id=$(pick)
-                  [ -n "$id" ] || exit 0
-                  case "$(printf 'Attach\nEvict windows\nKill session\n' | menu)" in
-                    "Attach") attach_session "$id" ;;
-                    "Evict windows") felis sessions evict "$id" ;;
-                    "Kill session") felis sessions kill "$id" ;;
-                  esac
+                  while id=$(pick) && [ -n "$id" ]; do
+                    case "$(printf 'Attach\nEvict windows\nKill session\n' | menu)" in
+                      "Attach") attach_session "$id" ;;
+                      "Evict windows") felis sessions evict "$id" ;;
+                      "Kill session") felis sessions kill "$id" ;;
+                    esac
+                  done
                   ;;
                 *)
                   echo "usage: felis-menu attach|manage|all" >&2
