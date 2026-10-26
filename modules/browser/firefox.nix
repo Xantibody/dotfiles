@@ -26,10 +26,32 @@ in
 
       names = [ "private" ] ++ config.my.firefox.profiles;
 
+      # 新しいプロファイル切り替えメニューは profiles.ini ではなく
+      # Profile Groups/<storeId>.sqlite を見る。全プロファイルを同じグループに入れる
+      storeId = "d0f11e5a";
+      root = "${config.home.homeDirectory}/${config.programs.firefox.configPath}";
+      # home-manager の profiles.ini と同じく、macOS だけ Profiles/ の下に置かれる
+      pathOf = name: if pkgs.stdenv.hostPlatform.isDarwin then "Profiles/${name}" else name;
+
+      # 色とアイコンは Firefox の画面で選び直す。登録済みの行は上書きしない
+      manifest = pkgs.writeText "firefox-profile-group.json" (
+        builtins.toJSON (
+          map (name: {
+            inherit name;
+            path = pathOf name;
+            avatar = if name == "private" then "star" else "briefcase";
+          }) names
+        )
+      );
+      profileGroup = pkgs.callPackage ./_firefox-profile-group/package.nix { };
+
       # どのプロファイルも同じ拡張と設定から始める。ホスト固有の拡張は
       # programs.firefox.profiles.<name>.extensions.packages に足せば結合される
       base = {
+        # storeId オプションは使わない。古い profiles.ini の 1 エントリに 1 つという
+        # 前提で重複を弾くが、新しい仕組みでは同じグループの全員が同じ値を持つ
         settings = {
+          "toolkit.profiles.storeID" = storeId;
           "extensions.autoDisableScopes" = 0;
           "browser.translations.enable" = false;
         };
@@ -78,6 +100,22 @@ in
       };
 
       config = {
+        # HACK(https://github.com/nix-community/home-manager/pull/10073): home-manager は
+        # 古い仕組みの profiles.ini しか書かないので、新しい仕組みの登録を自前でやる。
+        # Firefox は起動中に profiles.ini の Path を書き換えるので、/nix/store への
+        # symlink ではなく普通のファイルとして置く
+        home.file."${config.programs.firefox.configPath}/profiles.ini".enable = lib.mkForce false;
+
+        home.activation.firefoxProfileGroup = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+          run ${lib.getExe profileGroup} ${
+            lib.escapeShellArgs [
+              root
+              storeId
+              "${manifest}"
+            ]
+          }
+        '';
+
         programs.firefox = {
           enable = true;
 
