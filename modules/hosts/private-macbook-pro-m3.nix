@@ -35,6 +35,7 @@ in
       "git"
       "ha"
       "claude"
+      "autopilot"
       "agents"
       "user"
       "nixpkgs"
