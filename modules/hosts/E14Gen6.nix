@@ -47,6 +47,7 @@ in
       "git"
       "ha"
       "claude"
+      "autopilot"
       "agents"
       "comma"
       "skk"
