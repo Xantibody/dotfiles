@@ -74,8 +74,19 @@ flowchart LR
   anchors["anchors"]
   issue["issue"]
   rustdoc["rustdoc<br/>Rust の doc"]
+  autopilot["autopilot<br/>計画を無人で実装し切る"]
+  implement["implement"]
+  hr["history-review"]
+  ap[/"autopilot (CLI)<br/>headless 起動と再開ループ"/]
 
   user --> version & bp & docs & refactor
+  user -->|"autopilot <plan> を打つ"| ap
+  ap -->|"/autopilot <plan>"| autopilot
+  autopilot -->|"項目ごと"| implement
+  autopilot -->|"項目ごと"| check
+  autopilot -->|"項目ごと"| commit
+  autopilot -->|"全項目が済んだ時"| hr
+  autopilot -.->|"minute 0"| anchors
   version -->|"tag 前"| check
   version -->|"報告の URL"| explain
   version -.->|"tag 後は /branch-protection を案内"| bp
@@ -89,6 +100,8 @@ flowchart LR
 ```
 
 `rustdoc` は一覧に載る skill で、`*.rs` を触った時にも読み込まれる。
+
+`autopilot` はユーザーが打つのではなく、`autopilot` コマンド (`modules/ai/autopilot.nix`) が `claude -p "/autopilot <plan>"` で起動する。隠してあるのは、通常セッションの一覧に無人運転の手順が載らないようにするため。Stop hook (`autopilot-stop-hook`) が計画の未完了項目と監査時刻を差し戻し、監査役は skill ではなく `--agents` で渡す subagent (`configs/agents/autopilot/agents.json`)。
 
 ## skill を作る時
 
