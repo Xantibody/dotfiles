@@ -45,4 +45,29 @@ fi
 
 TOKEN_COUNT=$(echo -e "${token_display} tkns. (${color}${used_percentage}%\033[0m)")
 
-echo "󰚩 ${MODEL_DISPLAY} |  ${CURRENT_DIR##*/}${GIT_BRANCH} |  ${TOKEN_COUNT}"
+# Weekly rate limit, present only for claude.ai subscribers after the first response
+WEEKLY=""
+weekly_pct=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+weekly_reset=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
+if [ -n "$weekly_pct" ]; then
+  weekly_pct=$(printf "%.0f" "$weekly_pct")
+  if [ "$weekly_pct" -ge 90 ]; then
+    weekly_color="\033[31m"
+  elif [ "$weekly_pct" -ge 70 ]; then
+    weekly_color="\033[33m"
+  else
+    weekly_color="\033[32m"
+  fi
+  WEEKLY=" | 7d ${weekly_color}${weekly_pct}%\033[0m"
+  if [ -n "$weekly_reset" ]; then
+    left=$((weekly_reset - $(date +%s)))
+    if [ "$left" -ge 3600 ]; then
+      WEEKLY="${WEEKLY} ($((left / 86400))d$((left % 86400 / 3600))h)"
+    elif [ "$left" -gt 0 ]; then
+      WEEKLY="${WEEKLY} ($((left / 60))m)"
+    fi
+  fi
+  WEEKLY=$(echo -e "$WEEKLY")
+fi
+
+echo "󰚩 ${MODEL_DISPLAY} |  ${CURRENT_DIR##*/}${GIT_BRANCH} |  ${TOKEN_COUNT}${WEEKLY}"
