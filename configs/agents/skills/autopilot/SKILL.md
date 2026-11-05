@@ -24,9 +24,11 @@ tells you what to do next; treat its reason as the next instruction.
 3. Create `.ai/autopilot/journal.md` with the plan path, the start time,
    and one line per plan item saying how you intend to approach it. This
    is the record the auditor reads.
-4. `git branch --show-current`. If the repository's CLAUDE.md wants a
-   branch for this size of change, cut one now with `ha new`; otherwise
-   stay where you are. Note the choice in the journal.
+4. `git branch --show-current`, into the journal. The branch was chosen
+   before the run started (`autopilot -w` puts the run in its own
+   worktree); work on it and never switch branches or change directory
+   out of the repository root: the Stop hook finds the run's state by
+   the session's cwd.
 
 ## The loop
 
