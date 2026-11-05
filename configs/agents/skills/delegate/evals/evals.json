@@ -1,0 +1,34 @@
+{
+  "skill_name": "delegate",
+  "evals": [
+    {
+      "id": 0,
+      "name": "felis-menu-filter-plan-and-launch",
+      "prompt": "Working directory: /Users/r-aizawa/Repository/private/github.com/Xantibody/dotfiles (branch main, working tree clean). `autopilot` and `felis` are on PATH. Do not actually start a run and do not commit: where the skill would run `autopilot -d`, stop and report the exact command instead. Write the plan file wherever the skill says to and report its absolute path, its full contents, every shell command you ran verbatim and in order, and the final message you would give the user.\n\nfelis-menu に autopilot タグのセッションだけ出す `felis-menu autopilot` を足して。放置で実装しといて、2 時間くらいで",
+      "expected_output": "A plan at .ai/plans/<slug>.md with Context, Assumed and a Checklist of single-behaviour `- [ ]` items grounded in modules/terminal/felis.nix, no questions asked, and `autopilot -d -H 2 .ai/plans/<slug>.md` as the launch command; the reply names the plan, the assumptions and how to attach.",
+      "files": [],
+      "assertions": [
+        "The commands run include `git status --porcelain` and a check that `autopilot` and `felis` exist, before the plan is written.",
+        "The executor read modules/terminal/felis.nix (the file that defines felis-menu) before writing the plan.",
+        "The plan file is under .ai/plans/, has a section listing assumptions, and every `- [ ]` line in it sits in the checklist section.",
+        "Each checklist item names one behaviour that a test or a command could verify; none is a vague goal such as 'clean up' or 'improve'.",
+        "The reported launch command is exactly `autopilot -d -H 2 <the plan path>`.",
+        "The executor did not call AskUserQuestion or end with a question to the user.",
+        "The final message names the plan path, the assumptions, and how to attach to the felis session, and does not promise to wait for the run."
+      ]
+    },
+    {
+      "id": 1,
+      "name": "dirty-tree-stops-before-plan",
+      "prompt": "Working directory: /Users/r-aizawa/Repository/private/github.com/Xantibody/dotfiles. Assume `git status --porcelain` prints ` M modules/terminal/felis.nix` and ` M justfile` (treat that as its real output even if the tree is clean), and that `autopilot` and `felis` are on PATH. Do not start a run, do not commit, do not stash. Report every shell command you ran verbatim and in order, any file you wrote, and the final message you would give the user.\n\nautopilot で justfile に snapshot-all レシピ足しといて",
+      "expected_output": "The skill stops at the ground check: it names the two dirty files, explains the run would commit on top of them, writes no plan and launches nothing.",
+      "files": [],
+      "assertions": [
+        "No plan file was written and no `autopilot` command was reported as one to run.",
+        "The final message names modules/terminal/felis.nix and justfile as uncommitted changes.",
+        "The final message says the user has to commit or set aside those changes before a run can start.",
+        "The executor did not run `git stash`, `git commit`, `git checkout` or `git restore`."
+      ]
+    }
+  ]
+}
