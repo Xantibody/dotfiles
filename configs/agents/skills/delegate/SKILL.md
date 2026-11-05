@@ -71,11 +71,20 @@ Write `.ai/plans/<kebab-case-slug>.md`:
 ## 3. Start it
 
 ```bash
-autopilot -d -H <hours> .ai/plans/<slug>.md
+autopilot -d [-w <type>/<slug>] -H <hours> .ai/plans/<slug>.md
 ```
 
 `<hours>` is the user's if they gave one ("朝までに" from now, "2 時間で");
 otherwise 4. The command prints the felis session id and returns at once.
+
+Add `-w <type>/<slug>` (Conventional Commits type, the plan's slug) when
+the repository's CLAUDE.md wants a branch for a change of this size, and
+always when another run is already working in this checkout
+(`felis sessions list --tag autopilot` shows one with no
+`autopilot:done` / `autopilot:stopped` tag and the same `spawn_cwd`).
+The run then lives in `<repo>@<type>/<slug>`: its plan, journal and
+commits are there, not here, so the status commands below run in that
+directory. Without `-w` the run commits on the current branch.
 
 ## 4. Report and end the turn
 
@@ -87,7 +96,7 @@ arrives when the run ends. Then end the turn; do not poll the run.
 
 ```bash
 felis sessions list --tag autopilot --format json \
-  | jq -r '.sessions[] | "\(.short_id) \(.tags | join(",")) \(.title)"'
+  | jq -r '.sessions[] | "\(.short_id) \(.tags | join(",")) \(.spawn_cwd)"'
 grep -c '^\s*- \[x\]' .ai/plans/<slug>.md; grep -E '^\s*- \[ \]' .ai/plans/<slug>.md
 tail -40 .ai/autopilot/journal.md
 git log --oneline -20
