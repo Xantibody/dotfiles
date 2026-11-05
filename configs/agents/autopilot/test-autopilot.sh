@@ -35,14 +35,33 @@ project() {
   printf -- '- [ ] a\n' >"$dir/.ai/plans/p.md"
   echo "$dir"
 }
-launch() { # launch <dir> <done-at> <args...>
+felis=$root/felis
+cat >"$felis" <<'EOF'
+#!/usr/bin/env bash
+# fake felis: log argv and any inherited Claude Code session marker, answer spawn with an id
+printf '%s\n' "$*" >>"$FELIS_LOG"
+env | grep -q '^CLAUDECODE=' && echo "leaked CLAUDECODE" >>"$FELIS_LOG"
+[[ "$1 $2" == "sessions spawn" ]] && echo '{"v":1,"id":"0123456789abcdef0123456789abcdef"}'
+exit 0
+EOF
+chmod +x "$felis"
+
+# launch <dir> <done-at> <args...>; set in_felis=<id> first to run as if inside a felis session.
+# The suite itself may run inside felis, so the real FELIS_SESSION_ID never leaks into a case.
+in_felis=
+launch() {
   local dir=$1 done_at=$2
   shift 2
+  local session=()
+  [[ -n $in_felis ]] && session=(FELIS_SESSION_ID="$in_felis")
   status=0
-  out=$(cd "$dir" && STUB_COUNT=$dir/count STUB_LOG=$dir/argv STUB_DONE_AT=$done_at \
-    AUTOPILOT_CLAUDE=$stub AUTOPILOT_SHARE=$share bash "$launcher" "$@" 2>&1) || status=$?
+  out=$(cd "$dir" && env -u FELIS_SESSION_ID "${session[@]}" CLAUDECODE=1 \
+    STUB_COUNT="$dir/count" STUB_LOG="$dir/argv" STUB_DONE_AT="$done_at" FELIS_LOG="$dir/felis" \
+    AUTOPILOT_CLAUDE="$stub" AUTOPILOT_FELIS="$felis" AUTOPILOT_SHARE="$share" \
+    bash "$launcher" "$@" 2>&1) || status=$?
 }
 calls() { cat "$1/count" 2>/dev/null || echo 0; }
+felis_log() { cat "$1/felis" 2>/dev/null || true; }
 
 # 0-case: no plan -> usage, exit 2, claude never called
 d=$(project none)
@@ -96,6 +115,26 @@ launch "$d" 1 -H 1 .ai/plans/p.md
 launch "$d" 1 -H 1 .ai/plans/p.md
 check "previous state is archived" test "$(find "$d/.ai/autopilot" -maxdepth 1 -name 'prev-*' | wc -l | tr -d ' ')" -eq 1
 check "fresh DONE is not inherited" test "$(calls "$d")" -eq 2
+
+# outside felis: no notification escape, felis never called
+d=$(project plain)
+launch "$d" 1 -H 1 .ai/plans/p.md
+check "no OSC 9 outside felis" bash -c '! grep -q $'"'"'\e\]9;'"'"' <<<"$1"' _ "$out"
+check "felis is not called outside felis" test -z "$(felis_log "$d")"
+
+# inside felis, finished: OSC 9 says done and the session is tagged done
+in_felis=fs-1
+d=$(project notify-done)
+launch "$d" 1 -H 1 .ai/plans/p.md
+check "done run notifies through OSC 9" grep -q $'\e\\]9;autopilot: done' <<<"$out"
+check "done run tags its session" grep -qx 'sessions tag fs-1 autopilot:done' <<<"$(felis_log "$d")"
+
+# inside felis, unfinished: OSC 9 says stopped and the session is tagged stopped
+d=$(project notify-stopped)
+launch "$d" "" -H 0 .ai/plans/p.md
+check "stopped run notifies through OSC 9" grep -q $'\e\\]9;autopilot: stopped' <<<"$out"
+check "stopped run tags its session" grep -qx 'sessions tag fs-1 autopilot:stopped' <<<"$(felis_log "$d")"
+in_felis=
 
 echo
 if ((fails)); then

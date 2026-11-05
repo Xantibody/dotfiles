@@ -42,6 +42,7 @@ plan=$1
 
 share=${AUTOPILOT_SHARE:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 claude_bin=${AUTOPILOT_CLAUDE:-claude}
+felis_bin=${AUTOPILOT_FELIS:-felis}
 state=.ai/autopilot
 conditions=$state/CONDITIONS.md
 done_marker=$state/DONE
@@ -108,10 +109,22 @@ while [[ ! -e $done_marker ]] && (($(date +%s) < deadline)); do
   printf '%s\n' "$out" >>"$log"
 done
 
+# finish <done|stopped> <message>: inside a felis session, raise an OSC 9 notification
+# (the felis relay shows it once the window is gone) and tag the session so
+# `felis sessions list --tag autopilot:<outcome>` finds the finished runs.
+finish() {
+  [[ -n ${FELIS_SESSION_ID:-} ]] || return 0
+  printf '\e]9;autopilot: %s\a' "$2"
+  "$felis_bin" sessions tag "$FELIS_SESSION_ID" "autopilot:$1" >/dev/null 2>&1 || true
+}
+
+name=$(basename "$plan")
 if [[ -e $done_marker ]]; then
   echo "autopilot: done. Journal: $state/journal.md"
+  finish "done" "done $name"
   exit 0
 fi
 echo "autopilot: stopped before the plan was finished. Left in $plan:"
 grep -E '^\s*- \[ \]' "$plan" || true
+finish "stopped" "stopped $name, $(grep -cE '^\s*- \[ \]' "$plan" || true) items left"
 exit 1
