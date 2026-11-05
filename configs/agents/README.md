@@ -78,10 +78,15 @@ flowchart LR
   implement["implement"]
   hr["history-review"]
   ap[/"autopilot (CLI)<br/>headless 起動と再開ループ"/]
+  delegate["delegate<br/>依頼を計画にして無人実行に渡す"]
+  pr["pull-request"]
 
   user --> version & bp & docs & refactor
-  user -->|"autopilot <plan> を打つ"| ap
-  ap -->|"/autopilot <plan>"| autopilot
+  user -->|"autopilot #lt;plan#gt; を打つ"| ap
+  delegate -->|"autopilot -d #lt;plan#gt;"| ap
+  delegate -->|"計画を書く前"| anchors
+  delegate -.->|"終わって PR を頼まれた時"| pr
+  ap -->|"/autopilot #lt;plan#gt;"| autopilot
   autopilot -->|"項目ごと"| implement
   autopilot -->|"項目ごと"| check
   autopilot -->|"項目ごと"| commit
@@ -102,6 +107,8 @@ flowchart LR
 `rustdoc` は一覧に載る skill で、`*.rs` を触った時にも読み込まれる。
 
 `autopilot` はユーザーが打つのではなく、`autopilot` コマンド (`modules/ai/autopilot.nix`) が `claude -p "/autopilot <plan>"` で起動する。隠してあるのは、通常セッションの一覧に無人運転の手順が載らないようにするため。Stop hook (`autopilot-stop-hook`) が計画の未完了項目と監査時刻を差し戻し、監査役は skill ではなく `--agents` で渡す subagent (`configs/agents/autopilot/agents.json`)。
+
+`delegate` は隠していない。打たなくても「放置で実装して」のような依頼で一覧から読み込まれ、依頼を `.ai/plans/` の計画に書いて `autopilot -d` に渡し、待たずに戻る。`-d` は felis の裏セッションで走らせるので、窓を閉じても続き、終わると OSC 9 の通知と `autopilot:done` / `autopilot:stopped` のタグが残る。外に出る操作 (push) をしないので、モデルが自分で始めてよい側に置いた。
 
 ## skill を作る時
 
