@@ -18,6 +18,7 @@ cat >"$stub" <<'EOF'
 n=$(( $(cat "$STUB_COUNT" 2>/dev/null || echo 0) + 1 ))
 echo "$n" >"$STUB_COUNT"
 printf '%s\n' "$*" >>"$STUB_LOG"
+pwd >>"$STUB_LOG.pwd"
 [[ -n ${STUB_DONE_AT:-} && $n -ge $STUB_DONE_AT ]] && touch .ai/autopilot/DONE
 echo '{"session_id":"sid-123","result":"turn ended"}'
 EOF
@@ -33,6 +34,16 @@ project() {
   local dir=$root/$1
   mkdir -p "$dir/.ai/plans"
   printf -- '- [ ] a\n' >"$dir/.ai/plans/p.md"
+  echo "$dir"
+}
+# repo <name> -> a project that is also a git repository with one commit; .ai/ stays
+# untracked, as the global gitignore keeps it in real repositories
+repo() {
+  local dir
+  dir=$(project "$1")
+  git -C "$dir" init -q -b main
+  echo '.ai/' >"$dir/.git/info/exclude"
+  git -C "$dir" -c user.name=t -c user.email=t@t commit -q --allow-empty -m init
   echo "$dir"
 }
 felis=$root/felis
@@ -153,6 +164,35 @@ d=$(project detach-missing)
 launch "$d" "" -d .ai/plans/nope.md
 check "-d with a missing plan exits 2" test "$status" -eq 2
 check "-d with a missing plan spawns nothing" test -z "$(felis_log "$d")"
+
+# -w: the run starts inside a new worktree at <base>@<branch>, the ha convention
+d=$(repo wt)
+wt=$d@feat/x
+launch "$d" 1 -w feat/x -H 1 .ai/plans/p.md
+check "-w finishes with 0" test "$status" -eq 0
+check "-w creates the worktree on a new branch" test "$(git -C "$wt" branch --show-current 2>/dev/null)" = feat/x
+check "-w copies the untracked plan into the worktree" test -f "$wt/.ai/plans/p.md"
+check "-w runs claude inside the worktree" test "$(head -1 "$d/argv.pwd")" = "$(cd "$wt" && pwd)"
+check "-w writes CONDITIONS.md in the worktree" test -f "$wt/.ai/autopilot/CONDITIONS.md"
+check "-w leaves the base without run state" test ! -e "$d/.ai/autopilot"
+check "-w reports where the run worked" grep -q -- "$wt" <<<"$out"
+
+launch "$d" "" -w feat/x -H 1 .ai/plans/p.md
+check "-w refuses a worktree that already exists" test "$status" -eq 2
+check "-w on an existing worktree runs nothing" test "$(calls "$d")" -eq 1
+
+d=$(project wt-nogit)
+launch "$d" "" -w feat/x .ai/plans/p.md
+check "-w outside a git repository exits 2" test "$status" -eq 2
+
+# -d -w: the worktree is made before the spawn, and the session starts in it
+d=$(repo wt-detach)
+wt=$d@feat/y
+launch "$d" "" -d -w feat/y -H 2 .ai/plans/p.md
+spawn=$(felis_log "$d")
+check "-d -w creates the worktree before spawning" test -f "$wt/.ai/plans/p.md"
+check "-d -w starts the session in the worktree" grep -q -- "--cwd $wt " <<<"$spawn"
+check "-d -w does not pass -w on" grep -q -- "-- $launcher -H 2 .ai/plans/p.md\$" <<<"$spawn"
 
 echo
 if ((fails)); then

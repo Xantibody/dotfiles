@@ -44,6 +44,7 @@ in
             pkgs.gnugrep
             pkgs.coreutils
             pkgs.gnused
+            pkgs.git
           ];
           runtimeEnv.AUTOPILOT_SHARE = shareDir;
           text = builtins.readFile (src + "/autopilot.sh");
