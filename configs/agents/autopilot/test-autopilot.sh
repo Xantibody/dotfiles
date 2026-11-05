@@ -136,6 +136,25 @@ check "stopped run notifies through OSC 9" grep -q $'\e\\]9;autopilot: stopped' 
 check "stopped run tags its session" grep -qx 'sessions tag fs-1 autopilot:stopped' <<<"$(felis_log "$d")"
 in_felis=
 
+# -d: hand the same run to a detached felis session and return at once
+d=$(project detach)
+launch "$d" 1 -d -H 2 -m opus .ai/plans/p.md
+spawn=$(felis_log "$d")
+check "-d exits 0" test "$status" -eq 0
+check "-d does not run claude itself" test "$(calls "$d")" -eq 0
+check "-d spawns a felis session tagged autopilot" grep -q -- '^sessions spawn .*--tag autopilot' <<<"$spawn"
+check "-d starts the session in the project" grep -q -- "--cwd $d " <<<"$spawn"
+check "-d carries PATH into the session" grep -q -- '--env PATH=' <<<"$spawn"
+check "-d reruns itself without -d" grep -q -- "-- $launcher -H 2 -m opus .ai/plans/p.md\$" <<<"$spawn"
+check "-d drops the Claude Code session markers" bash -c '! grep -q leaked <<<"$1"' _ "$spawn"
+check "-d prints the session id" grep -q '0123456789abcdef0123456789abcdef' <<<"$out"
+
+d=$(project detach-missing)
+launch "$d" "" -d .ai/plans/nope.md
+check "-d with a missing plan exits 2" test "$status" -eq 2
+check "-d with a missing plan spawns nothing" test -z "$(felis_log "$d")"
+
+
 echo
 if ((fails)); then
   echo "$fails failing"

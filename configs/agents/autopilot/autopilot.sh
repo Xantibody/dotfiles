@@ -1,6 +1,10 @@
 # autopilot: run Claude Code unattended until a .ai/plans/ checklist is done.
 #
-#   autopilot [-H hours] [-m model] <plan.md>
+#   autopilot [-d] [-H hours] [-m model] <plan.md>
+#
+# -d hands the same run to a detached felis session and returns its id at once, so
+# a Claude Code session (or a closed window) can start a run without waiting on it.
+# Attach with `felis attach <id>`; the run notifies and tags the session when it ends.
 #
 # Writes .ai/autopilot/CONDITIONS.md (plan, start, deadline, audit slots), starts a
 # headless session with `/autopilot <plan>`, and resumes that session every time a
@@ -11,18 +15,21 @@
 # AUTOPILOT_SHARE  dir holding settings.json / agents.json / system-prompt.md
 #                  (default: this script's dir)
 # AUTOPILOT_CLAUDE claude binary (default: claude); the tests point it at a stub
+# AUTOPILOT_FELIS  felis binary (default: felis); the tests point it at a stub
 # AUTOPILOT_BUDGET_USD  optional --max-budget-usd per turn
 set -euo pipefail
 
 usage() {
-  echo "usage: autopilot [-H hours] [-m model] <plan.md>" >&2
+  echo "usage: autopilot [-d] [-H hours] [-m model] <plan.md>" >&2
   exit 2
 }
 
+detach=
 hours=4
 model=
-while getopts 'H:m:' opt; do
+while getopts 'dH:m:' opt; do
   case $opt in
+  d) detach=1 ;;
   H) hours=$OPTARG ;;
   m) model=$OPTARG ;;
   *) usage ;;
@@ -43,6 +50,24 @@ plan=$1
 share=${AUTOPILOT_SHARE:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 claude_bin=${AUTOPILOT_CLAUDE:-claude}
 felis_bin=${AUTOPILOT_FELIS:-felis}
+
+if [[ -n $detach ]]; then
+  self=$(cd "$(dirname "$0")" && pwd)/$(basename "$0")
+  args=(-H "$hours")
+  [[ -n $model ]] && args+=(-m "$model")
+  # A launch from inside Claude Code carries its session markers (CLAUDECODE and
+  # friends), and a claude that sees them treats itself as nested. The run is a
+  # session of its own, so drop every CLAUDE* variable before felis copies the env.
+  drop=()
+  while read -r var; do drop+=(-u "$var"); done < <(env | sed -n 's/^\(CLAUDE[A-Za-z0-9_]*\)=.*/\1/p')
+  # PATH is passed explicitly: a daemon started by launchd or systemd has a minimal one,
+  # and the run needs claude, git and the project's tools.
+  id=$(env "${drop[@]}" "$felis_bin" sessions spawn --format json --tag autopilot \
+    --cwd "$PWD" --env "PATH=$PATH" -- "$self" "${args[@]}" "$plan" | jq -r .id)
+  echo "autopilot: running $plan in felis session $id"
+  echo "attach: felis attach $id"
+  exit 0
+fi
 state=.ai/autopilot
 conditions=$state/CONDITIONS.md
 done_marker=$state/DONE
