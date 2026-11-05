@@ -6,20 +6,6 @@ input=$(cat)
 MODEL_DISPLAY=$(echo "$input" | jq -r '.model.display_name')
 CURRENT_DIR=$(echo "$input" | jq -r '.workspace.current_dir')
 
-# Get git branch information
-GIT_BRANCH=""
-if git -C "$CURRENT_DIR" rev-parse &>/dev/null; then
-  BRANCH=$(git -C "$CURRENT_DIR" branch --show-current 2>/dev/null)
-  if [ -n "$BRANCH" ]; then
-    GIT_BRANCH=" |  $BRANCH"
-  else
-    COMMIT_HASH=$(git -C "$CURRENT_DIR" rev-parse --short HEAD 2>/dev/null)
-    if [ -n "$COMMIT_HASH" ]; then
-      GIT_BRANCH=" |  HEAD ($COMMIT_HASH)"
-    fi
-  fi
-fi
-
 # Get token info from context_window (provided via stdin JSON)
 used_percentage=$(echo "$input" | jq -r '.context_window.used_percentage // 0')
 total_input=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
@@ -70,4 +56,4 @@ if [ -n "$weekly_pct" ]; then
   WEEKLY=$(echo -e "$WEEKLY")
 fi
 
-echo "󰚩 ${MODEL_DISPLAY} |  ${CURRENT_DIR##*/}${GIT_BRANCH} |  ${TOKEN_COUNT}${WEEKLY}"
+echo "󰚩 ${MODEL_DISPLAY} |  ${CURRENT_DIR##*/} |  ${TOKEN_COUNT}${WEEKLY}"

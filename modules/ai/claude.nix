@@ -84,7 +84,6 @@ in
               runtimeInputs = [
                 pkgs.jq
                 pkgs.bc
-                pkgs.git
               ];
               # 元のスクリプトは errexit 前提で書かれていないので、挙動を変えない
               bashOptions = [ ];
