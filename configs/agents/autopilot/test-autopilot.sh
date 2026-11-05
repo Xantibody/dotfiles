@@ -154,7 +154,6 @@ launch "$d" "" -d .ai/plans/nope.md
 check "-d with a missing plan exits 2" test "$status" -eq 2
 check "-d with a missing plan spawns nothing" test -z "$(felis_log "$d")"
 
-
 echo
 if ((fails)); then
   echo "$fails failing"
