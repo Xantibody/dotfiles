@@ -1,6 +1,11 @@
 # autopilot: run Claude Code unattended until a .ai/plans/ checklist is done.
 #
-#   autopilot [-d] [-H hours] [-m model] <plan.md>
+#   autopilot [-d] [-w branch] [-H hours] [-m model] <plan.md>
+#
+# -w makes a worktree for a new branch at <repo>@<branch> (ha's layout), copies the
+# plan into it, and runs there. The run has to start inside the worktree: the Stop
+# hook looks for .ai/autopilot/ in the session's cwd, so a run that moved into a
+# worktree halfway would lose its state and be let go.
 #
 # -d hands the same run to a detached felis session and returns its id at once, so
 # a Claude Code session (or a closed window) can start a run without waiting on it.
@@ -20,16 +25,18 @@
 set -euo pipefail
 
 usage() {
-  echo "usage: autopilot [-d] [-H hours] [-m model] <plan.md>" >&2
+  echo "usage: autopilot [-d] [-w branch] [-H hours] [-m model] <plan.md>" >&2
   exit 2
 }
 
 detach=
+branch=
 hours=4
 model=
-while getopts 'dH:m:' opt; do
+while getopts 'dw:H:m:' opt; do
   case $opt in
   d) detach=1 ;;
+  w) branch=$OPTARG ;;
   H) hours=$OPTARG ;;
   m) model=$OPTARG ;;
   *) usage ;;
@@ -50,6 +57,31 @@ plan=$1
 share=${AUTOPILOT_SHARE:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 claude_bin=${AUTOPILOT_CLAUDE:-claude}
 felis_bin=${AUTOPILOT_FELIS:-felis}
+
+if [[ -n $branch ]]; then
+  prefix=$(git rev-parse --show-prefix 2>/dev/null) || {
+    echo "autopilot: -w needs a git repository" >&2
+    usage
+  }
+  # $PWD, not --show-toplevel, so the path keeps the spelling the caller used
+  base=${PWD%/"${prefix%/}"}
+  worktree=$base@$branch
+  [[ -e $worktree ]] && {
+    echo "autopilot: $worktree already exists; pick another branch" >&2
+    usage
+  }
+  plan_abs=$(cd "$(dirname "$plan")" && pwd)/$(basename "$plan")
+  case $plan_abs in
+  "$base"/*) plan=${plan_abs#"$base"/} ;;
+  *) plan=.ai/plans/$(basename "$plan") ;;
+  esac
+  git -C "$base" worktree add -q -b "$branch" "$worktree"
+  # .ai/ is gitignored, so the plan does not come along with the checkout
+  mkdir -p "$worktree/$(dirname "$plan")"
+  cp "$plan_abs" "$worktree/$plan"
+  cd "$worktree"
+  echo "autopilot: working in $worktree on branch $branch"
+fi
 
 if [[ -n $detach ]]; then
   self=$(cd "$(dirname "$0")" && pwd)/$(basename "$0")
