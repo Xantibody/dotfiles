@@ -44,7 +44,7 @@ if [ -n "$weekly_pct" ]; then
   else
     weekly_color="\033[32m"
   fi
-  WEEKLY=" | 7d ${weekly_color}${weekly_pct}%\033[0m"
+  WEEKLY=" | 󰃰 7d ${weekly_color}${weekly_pct}%\033[0m"
   if [ -n "$weekly_reset" ]; then
     left=$((weekly_reset - $(date +%s)))
     if [ "$left" -ge 3600 ]; then
@@ -56,4 +56,4 @@ if [ -n "$weekly_pct" ]; then
   WEEKLY=$(echo -e "$WEEKLY")
 fi
 
-echo "󰚩 ${MODEL_DISPLAY} |  ${CURRENT_DIR##*/} |  ${TOKEN_COUNT}${WEEKLY}"
+echo "󰚩 ${MODEL_DISPLAY} | 󰉋 ${CURRENT_DIR##*/} | 󰧑 ${TOKEN_COUNT}${WEEKLY}"
