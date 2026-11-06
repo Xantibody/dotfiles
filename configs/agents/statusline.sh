@@ -59,17 +59,14 @@ time_left() {
   fi
 }
 
-# A five-cell bar, so three of them still fit on one row. The empty cells
-# are outlines rather than ░, which all but vanishes on a light background.
+# A five-cell bar, so three of them still fit on one row.
 meter() {
-  local label=$1 pct=$2 i filled color
+  local label=$1 pct=$2 bar="" i filled
   filled=$(((pct + 10) / 20))
-  color=$(usage_color "$pct")
-  printf '%s %s' "$label" "$color"
-  for ((i = 0; i < filled; i++)); do printf '■'; done
-  printf '%s' "$MUTED"
-  for ((i = filled; i < 5; i++)); do printf '□'; done
-  printf ' %s%d%%%s' "$color" "$pct" "$RESET"
+  for ((i = 0; i < 5; i++)); do
+    if [ "$i" -lt "$filled" ]; then bar+="▓"; else bar+="░"; fi
+  done
+  printf '%s %s%s %d%%%s' "$label" "$(usage_color "$pct")" "$bar" "$pct" "$RESET"
 }
 
 # Absent windows print nothing: the five-hour one is not on every plan.
