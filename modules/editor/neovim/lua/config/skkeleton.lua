@@ -10,8 +10,8 @@ vim.fn["skkeleton#config"]({
 
 -- Skkeleton keymaps
 local map = vim.keymap.set
-map("i", "<C-j>", "<Plug>(skkeleton-enable)")
-map("c", "<C-j>", "<Plug>(skkeleton-enable)")
+map("i", "<C-j>", "<Plug>(skkeleton-enable)", { desc = "SKK" })
+map("c", "<C-j>", "<Plug>(skkeleton-enable)", { desc = "SKK" })
 
 -- lualine refresh autocmd for skkeleton mode change
 vim.api.nvim_create_autocmd({ "User" }, {

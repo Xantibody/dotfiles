@@ -53,7 +53,11 @@ lze.load({
 		"telescope.nvim",
 		enabled = nixCats("core"),
 		cmd = "Telescope",
-		keys = { "<leader>f", "<leader>/", "<leader>b" },
+		keys = {
+			{ "<leader>f", desc = "Find files" },
+			{ "<leader>/", desc = "Grep" },
+			{ "<leader>b", desc = "Buffers" },
+		},
 		-- Neogit picks its menu picker with pcall(require, "telescope"); this
 		-- makes that call load telescope instead of falling back to vim.ui.select.
 		on_require = "telescope",
@@ -64,7 +68,7 @@ lze.load({
 		enabled = nixCats("core"),
 		lazy = not has_dir_arg,
 		cmd = "Oil",
-		keys = "<leader>o",
+		keys = { { "<leader>o", desc = "Explorer" } },
 		after = load("config.plugins.core.oil"),
 	},
 	{
@@ -92,7 +96,7 @@ lze.load({
 		"vimplugin-neogit",
 		enabled = nixCats("core"),
 		cmd = "Neogit",
-		keys = "<leader>gg",
+		keys = { { "<leader>gg", desc = "Git status" } },
 		after = load("config.plugins.core.neogit"),
 	},
 	{
@@ -133,8 +137,8 @@ lze.load({
 		"flash.nvim",
 		enabled = nixCats("display"),
 		keys = {
-			{ "s", mode = { "n", "x", "o" } },
-			{ "S", mode = { "n", "x", "o" } },
+			{ "s", mode = { "n", "x", "o" }, desc = "Jump" },
+			{ "S", mode = { "n", "x", "o" }, desc = "Select node" },
 		},
 		after = load("config.plugins.display.flash"),
 	},
@@ -216,13 +220,13 @@ lze.load({
 	{
 		"vimplugin-in-and-out-nvim",
 		enabled = nixCats("edit"),
-		keys = { { "<C-CR>", mode = "i" } },
+		keys = { { "<C-CR>", mode = "i", desc = "Jump out of pair" } },
 		after = load("config.plugins.edit.in-and-out"),
 	},
 	{
 		"vimplugin-tiny-code-action-nvim",
 		enabled = nixCats("edit"),
-		keys = { { "gra", mode = { "n", "v" } } },
+		keys = { { "gra", mode = { "n", "v" }, desc = "Code action" } },
 		after = load("config.plugins.edit.tiny-code-action"),
 	},
 	{

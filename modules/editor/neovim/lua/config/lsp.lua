@@ -110,4 +110,4 @@ vim.lsp.config("ichigyo_ls", {
 -- LSP keymaps live under the builtin gr prefix (gra, gri, grn, grr, grt, grx);
 -- definition is the one jump Neovim leaves out of it.
 local map = vim.keymap.set
-map("n", "grd", "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Go to definition" })
+map("n", "grd", "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Definition" })
