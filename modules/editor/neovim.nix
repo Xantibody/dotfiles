@@ -133,7 +133,6 @@ in
             lspsAndRuntimeDeps = {
               general = with pkgs; [
                 tree-sitter
-                fzf
                 wordnet
               ];
               lsp = with pkgs; [
@@ -173,7 +172,6 @@ in
                 nvim-web-devicons
                 mini-icons
                 mini-nvim
-                fzf-lua
                 nvim-treesitter
                 nvim-treesitter.withAllGrammars
               ];

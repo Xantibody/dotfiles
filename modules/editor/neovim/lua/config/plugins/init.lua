@@ -54,6 +54,9 @@ lze.load({
 		enabled = nixCats("core"),
 		cmd = "Telescope",
 		keys = { "<leader>ff", "<leader>fg", "<leader>fb", "<leader>fh" },
+		-- Neogit picks its menu picker with pcall(require, "telescope"); this
+		-- makes that call load telescope instead of falling back to vim.ui.select.
+		on_require = "telescope",
 		after = load("config.plugins.core.telescope"),
 	},
 	{

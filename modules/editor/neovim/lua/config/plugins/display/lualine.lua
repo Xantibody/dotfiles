@@ -22,5 +22,5 @@ require("lualine").setup({
 	inactive_sections = {
 		lualine_x = { "filename" },
 	},
-	extensions = { "fzf", "oil", "quickfix" },
+	extensions = { "oil", "quickfix" },
 })
