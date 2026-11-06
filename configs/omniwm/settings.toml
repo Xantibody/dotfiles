@@ -162,6 +162,7 @@ showWorkspaceName = false
 useWorkspaceId = false
 
 [workspaceBar]
+autoHide = true
 backgroundOpacity = 0.1
 deduplicateAppIcons = false
 enabled = true
@@ -172,10 +173,11 @@ hideInNativeFullscreen = false
 hoverPreviewsEnabled = true
 notchActiveZoneWidth = 180.0
 notchMode = "moveBelowMenuBar"
+notificationBadges = "dot"
 position = "overlappingMenuBar"
 reserveLayoutSpace = false
 revealHoldMilliseconds = 200.0
-revealModifier = "off"
+revealModifier = "option"
 showAccentHighlights = true
 showFloatingWindows = false
 showItemBackgrounds = true
