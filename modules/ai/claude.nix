@@ -77,13 +77,13 @@ in
           ".claude/CLAUDE.md".source = ../../configs/agents/AGENTS.md;
           # AIDEV-NOTE: telemetry は個別 env で切る。CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC は auto-updater まで止める
           ".claude/settings.json".source = ../../configs/agents/settings.json;
-          # jq と bc は macOS なら /usr/bin にあるが、NixOS には無いので runtimeInputs で持たせる
+          # jq は macOS なら /usr/bin にあるが、NixOS には無いので runtimeInputs で持たせる
           ".claude/statusline.sh".source = lib.getExe (
             pkgs.writeShellApplication {
               name = "claude-statusline";
               runtimeInputs = [
                 pkgs.jq
-                pkgs.bc
+                pkgs.git
               ];
               # 元のスクリプトは errexit 前提で書かれていないので、挙動を変えない
               bashOptions = [ ];
