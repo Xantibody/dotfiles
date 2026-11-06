@@ -1,14 +1,8 @@
 -- Zen mode as a reading mode: one centred window, the code around the
 -- function under the cursor dimmed by twilight, and the editing aids hidden.
 
--- hlchunk loads on DeferredUIEnter and tiny-inline-diagnostic on LspAttach,
--- so either may not be there yet when the window opens.
-local function hlchunk(cmd)
-	if vim.fn.exists(":" .. cmd) == 2 then
-		vim.cmd(cmd)
-	end
-end
-
+-- tiny-inline-diagnostic loads on LspAttach, so it may not be there yet when
+-- the window opens.
 local function inline_diagnostics(action)
 	local diag = package.loaded["tiny-inline-diagnostic"]
 	if diag then
@@ -20,6 +14,7 @@ require("zen-mode").setup({
 	window = {
 		width = 120,
 		options = {
+			number = false,
 			relativenumber = false,
 			list = false,
 			signcolumn = "no",
@@ -36,12 +31,14 @@ require("zen-mode").setup({
 	-- AIDEV-NOTE: plugins.diagnostics is left off on purpose. It calls
 	-- vim.diagnostic.enable(false), which also empties <C-w>d and ]d; only the
 	-- inline text is hidden here so diagnostics stay one keypress away.
+	--
+	-- AIDEV-NOTE: hlchunk's scope line is left on, unlike the other aids. Its
+	-- arrow points at where the block under the cursor begins, which is as
+	-- useful while reading as while editing.
 	on_open = function()
-		hlchunk("DisableHLChunk")
 		inline_diagnostics("disable")
 	end,
 	on_close = function()
-		hlchunk("EnableHLChunk")
 		inline_diagnostics("enable")
 	end,
 })
