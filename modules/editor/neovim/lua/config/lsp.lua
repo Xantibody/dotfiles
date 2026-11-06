@@ -107,8 +107,7 @@ vim.lsp.config("ichigyo_ls", {
 	root_markers = { ".textlintrc", ".textlintrc.json", ".git" },
 })
 
--- LSP keymaps (Neovim 0.11+ defaults: K=hover, grn=rename, gra=code_action, grr=references, gri=implementation, grt=type_definition)
+-- LSP keymaps live under the builtin gr prefix (gra, gri, grn, grr, grt, grx);
+-- definition is the one jump Neovim leaves out of it.
 local map = vim.keymap.set
-map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Show line diagnostics" })
-map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Go to definition" })
-map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "Go to declaration" })
+map("n", "grd", "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Go to definition" })

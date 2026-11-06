@@ -32,9 +32,3 @@ require("conform").setup({
 		yaml = { "oxfmt" },
 	},
 })
-
-vim.keymap.set({ "n", "i" }, "<C-F>", "<CMD>FormatToggle<CR>", {
-	noremap = true,
-	silent = true,
-	desc = "toggle save format",
-})

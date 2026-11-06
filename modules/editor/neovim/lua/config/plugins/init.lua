@@ -53,7 +53,7 @@ lze.load({
 		"telescope.nvim",
 		enabled = nixCats("core"),
 		cmd = "Telescope",
-		keys = { "<leader>ff", "<leader>fg", "<leader>fb", "<leader>fh" },
+		keys = { "<leader>f", "<leader>/", "<leader>b" },
 		-- Neogit picks its menu picker with pcall(require, "telescope"); this
 		-- makes that call load telescope instead of falling back to vim.ui.select.
 		on_require = "telescope",
@@ -92,7 +92,7 @@ lze.load({
 		"vimplugin-neogit",
 		enabled = nixCats("core"),
 		cmd = "Neogit",
-		keys = "<leader>ng",
+		keys = "<leader>gg",
 		after = load("config.plugins.core.neogit"),
 	},
 	{
@@ -135,9 +135,6 @@ lze.load({
 		keys = {
 			{ "s", mode = { "n", "x", "o" } },
 			{ "S", mode = { "n", "x", "o" } },
-			{ "r", mode = "o" },
-			{ "R", mode = { "o", "x" } },
-			{ "<C-s>", mode = "c" },
 		},
 		after = load("config.plugins.display.flash"),
 	},
@@ -150,7 +147,7 @@ lze.load({
 	{
 		"nvim-hlslens",
 		enabled = nixCats("display"),
-		keys = { "n", "N", "*", "#", "g*", "g#", "<Leader>l" },
+		keys = { "n", "N", "*", "#", "g*", "g#" },
 		event = { { event = "CmdlineEnter", pattern = { "/", "?" } } },
 		after = load("config.hlslens"),
 	},
@@ -246,7 +243,6 @@ lze.load({
 		enabled = nixCats("edit"),
 		event = "BufWritePre",
 		cmd = "ConformInfo",
-		keys = { { "<C-F>", mode = { "n", "i" } } },
 		after = load("config.plugins.edit.conform"),
 	},
 	{
