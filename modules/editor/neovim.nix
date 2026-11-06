@@ -179,8 +179,6 @@ in
               edit = with pkgs.vimPlugins; [
                 # LSP configs are read from lsp/ on the runtimepath
                 nvim-lspconfig
-                lsp_signature-nvim
-                snacks-nvim
 
                 # blink.cmp sources and icons
                 lspkind-nvim
