@@ -1,13 +1,9 @@
 -- Conform (formatter) configuration
 require("conform").setup({
-	format_on_save = function(bufnr)
-		if _G.utils.is_autoformat_enabled() then
-			return {
-				timeout_ms = 500,
-				lsp_format = "fallback",
-			}
-		end
-	end,
+	format_on_save = {
+		timeout_ms = 500,
+		lsp_format = "fallback",
+	},
 	formatters = {
 		typstyle = { command = "typstyle" },
 	},

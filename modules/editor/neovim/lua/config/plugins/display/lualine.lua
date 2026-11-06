@@ -11,9 +11,6 @@ require("lualine").setup({
 				local ok, mode = pcall(vim.fn["skkeleton#mode"])
 				return _G.utils.get_skkeleton_state(ok, mode)
 			end,
-			function()
-				return _G.utils.get_autoformat_state()
-			end,
 		},
 		lualine_x = { "filename" },
 		lualine_y = { "progress" },
