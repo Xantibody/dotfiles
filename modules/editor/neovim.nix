@@ -224,6 +224,10 @@ in
                 nvim-hlslens
                 quick-scope
 
+                # Reading mode
+                zen-mode-nvim
+                twilight-nvim
+
                 # Custom plugins
                 customPlugins.smooth-cursor
                 customPlugins.tiny-glimmer

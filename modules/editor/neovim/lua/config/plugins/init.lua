@@ -173,6 +173,20 @@ lze.load({
 		after = load("config.plugins.display.tiny-glimmer"),
 	},
 	{
+		"zen-mode.nvim",
+		enabled = nixCats("display"),
+		cmd = "ZenMode",
+		keys = { { "<leader>z", desc = "Reading mode" } },
+		after = load("config.plugins.display.zen-mode"),
+	},
+	{
+		"twilight.nvim",
+		enabled = nixCats("display"),
+		-- zen-mode requires it when the window opens.
+		on_require = "twilight",
+		after = load("config.plugins.display.twilight"),
+	},
+	{
 		"render-markdown.nvim",
 		enabled = nixCats("display"),
 		ft = "markdown",
