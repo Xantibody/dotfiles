@@ -43,7 +43,6 @@ in
       "spotlight"
       "comma"
       "neovim"
-      "zen"
       "firefox"
       "magical-merchant"
     ] darwin;

@@ -1,5 +1,5 @@
 # 会社支給の MacBook Pro (M4)。私物との違いはこのファイルだけを見れば分かる:
-# 会社用の git 設定 (sops で復号)、会議用アプリ、Zen と Firefox に載せる kotdiff。
+# 会社用の git 設定 (sops で復号)、会議用アプリ、Firefox に載せる kotdiff。
 {
   config,
   lib,
@@ -49,7 +49,6 @@ in
         "spotlight"
         "comma"
         "neovim"
-        "zen"
         "firefox"
         "magical-merchant"
         "sops"
@@ -77,7 +76,6 @@ in
             kotdiff = [ inputs.kotdiff.packages.${pkgs.stdenv.hostPlatform.system}.default ];
           in
           {
-            programs.zen-browser.profiles.r-aizawa.extensions.packages = kotdiff;
             my.firefox.profiles = [
               "work-attm"
               "work-kikari"

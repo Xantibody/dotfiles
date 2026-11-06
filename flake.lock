@@ -880,8 +880,7 @@
         "stylix": "stylix",
         "systems": "systems_2",
         "treefmt-nix": "treefmt-nix",
-        "xremap": "xremap",
-        "zen-browser": "zen-browser"
+        "xremap": "xremap"
       }
     },
     "rust-overlay": {
@@ -1177,29 +1176,6 @@
         "owner": "k0kubun",
         "ref": "v0.15.17",
         "repo": "xremap",
-        "type": "github"
-      }
-    },
-    "zen-browser": {
-      "inputs": {
-        "home-manager": [
-          "home-manager"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1793879729,
-        "narHash": "sha256-ZoqGR29kJSlqsgHyMKWjv3zEi6hrxDn+v5nwYntle+w=",
-        "owner": "0xc000022070",
-        "repo": "zen-browser-flake",
-        "rev": "9107affa07d1213f0e733ba62235bf23453cfb98",
-        "type": "github"
-      },
-      "original": {
-        "owner": "0xc000022070",
-        "repo": "zen-browser-flake",
         "type": "github"
       }
     }

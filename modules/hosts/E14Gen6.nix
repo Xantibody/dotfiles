@@ -51,7 +51,6 @@ in
       "agents"
       "comma"
       "skk"
-      "zen"
       "firefox"
       "magical-merchant"
       "1password"

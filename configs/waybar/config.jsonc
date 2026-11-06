@@ -103,9 +103,6 @@
       "(.*)Mozilla Firefox": "<span foreground='#cc241d'>󰈹 </span> Firefox",
       "(.*) — Mozilla Firefox": "<span foreground='#cc241d'>󰈹 </span> $1",
 
-      "(.*)Zen Browser": "<span foreground='#d65d0e'>󰺕 </span> Zen Browser",
-      "(.*) — Zen Browser": "<span foreground='#d65d0e'>󰺕 </span> $1",
-
       // ────────────────────────────────────────────────────── development ───
 
       "(.*) - Visual Studio Code": "<span foreground='#458588'>󰨞 </span> $1",

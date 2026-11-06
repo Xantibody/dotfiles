@@ -1,8 +1,8 @@
 # Firefox。macOS では Mozilla 署名のままの firefox-bin を /Applications/Nix Apps/ に置く。
 #
-# 1Password の native core は /nix/store 配置のブラウザを検証で拒否するので
-# (zen.nix の問題2 と同じ)、environment.systemPackages に入れて nix-darwin に
-# /Applications/Nix Apps/ へコピーさせる。firefox-bin-unwrapped は dmg の .app を
+# 1Password の native core は署名が正しくても /nix/store 配置のブラウザを検証で
+# 拒否する (BrowserVerificationFailed) ので、environment.systemPackages に入れて
+# nix-darwin に /Applications/Nix Apps/ へコピーさせる。firefox-bin-unwrapped は dmg の .app を
 # mv するだけで dontFixup なので署名は残る。wrap 版 (firefox-bin) は使わない。
 #
 # プロファイル/拡張/設定は home-manager の programs.firefox が macOS では
