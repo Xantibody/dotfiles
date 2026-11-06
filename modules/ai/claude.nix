@@ -103,9 +103,21 @@ in
             cmd = "claude --permission-mode plan";
             desc = "plan mode で起動";
           };
-          ccA = {
-            cmd = "claude --permission-mode auto";
-            desc = "auto mode で起動。権限を自動判断させる";
+          ccBy = {
+            cmd = "claude --permission-mode bypassPermissions";
+            desc = "bypassPermissions で起動。確認なしで実行する";
+          };
+          ccHi = {
+            cmd = "claude --effort high";
+            desc = "effort high で起動";
+          };
+          ccXh = {
+            cmd = "claude --effort xhigh";
+            desc = "effort xhigh で起動";
+          };
+          ccMa = {
+            cmd = "claude --effort max";
+            desc = "effort max で起動。settings.json には書けない session 限定の値";
           };
         };
       };
