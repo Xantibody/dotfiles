@@ -53,6 +53,7 @@ in
         "magical-merchant"
         "sops"
         "work-git"
+        "linux-builder"
       ] darwin;
 
       my.user = {
