@@ -44,5 +44,15 @@ in
 
     # 操作スペースを使用頻度で並べ替えられると、OmniWM のワークスペースと順番がずれる
     system.defaults.dock.mru-spaces = false;
+
+    # 窓を隙間なく敷き詰めたとき、角丸の外側から壁紙が覗かないよう角を直角にする。
+    # OmniWM の「System-wide Window Corners」が書くのと同じ macOS の隠し設定で、
+    # 1 は通常の窓、2 はパネル。0.01 は OmniWM が Square として書く値。
+    # macOS 26.4 以降で効き、反映はアプリの再起動かログインし直し
+    # AIDEV-NOTE: 非公開のキーなので、角が丸いまま戻ったら macOS 側で消えた疑いが強い
+    system.defaults.CustomUserPreferences.NSGlobalDomain = {
+      NSConvolutionOverride1 = 0.01;
+      NSConvolutionOverride2 = 0.01;
+    };
   };
 }
