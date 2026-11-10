@@ -220,7 +220,8 @@ lze.load({
 	{
 		"fidget.nvim",
 		enabled = nixCats("edit"),
-		event = "LspAttach",
+		-- It also takes over vim.notify, so it cannot wait for an LSP client.
+		event = "DeferredUIEnter",
 		after = load("config.plugins.edit.fidget"),
 	},
 	{
