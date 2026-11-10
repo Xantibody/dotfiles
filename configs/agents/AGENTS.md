@@ -8,8 +8,9 @@ for a feature or a fix; the `check` skill runs a project's verification.
 # Communication
 
 - Before moving to the next task, ask whether to commit the current changes.
-- An end-of-task report follows the `explain` skill: how it closes, and what
-  to ask about the things it left out.
+- An end-of-task report is written through the `osekkai` skill, which also
+  says how it closes. What it left out is sorted with the `issue` skill's
+  deferred-work table before asking whether to file any of it.
 
 # Repository Conventions
 

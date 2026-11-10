@@ -60,7 +60,7 @@ flowchart LR
   a legend it doesn't have is a diagram nobody reads.
 - When the new thing is an edge — an existing box now also feeds another
   existing box — mark the edge, not its endpoints: `linkStyle 2
-stroke:#3fb950,stroke-width:3px` (edges are numbered from 0 in source
+  stroke:#3fb950,stroke-width:3px` (edges are numbered from 0 in source
   order). Marking a box that didn't change claims a change that isn't there.
 
 ## Keeping it renderable

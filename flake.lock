@@ -837,11 +837,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793025912,
-        "narHash": "sha256-DXVp8sqmltz3vONvOt/ESioJdYk0iIsDhHjhczOCUfM=",
+        "lastModified": 1794332751,
+        "narHash": "sha256-nMzmWD0ApCuaTBhLaGfLMwOO88btRfOkFcLTj3/sDp4=",
         "owner": "Xantibody",
         "repo": "osekkai",
-        "rev": "42969c75d5fcb0dde8dbaa980e14ee7c39e0b791",
+        "rev": "f544b00a3918019382cec53ff8a00e71e129d162",
         "type": "github"
       },
       "original": {

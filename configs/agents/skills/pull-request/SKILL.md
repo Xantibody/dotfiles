@@ -103,7 +103,8 @@ split; say so to the user.
 
 ## Body
 
-Load the `explain` skill before drafting — it holds the bullet-structure rule
+Load the `osekkai` skill before drafting — every body a human reads is
+written through it: the reader, what they know, and the bullet structure
 shared with the `issue` skill and with reports to the user. The body format:
 
 ```markdown
@@ -205,9 +206,9 @@ diagram.
 
 ### Length
 
-A paragraph or bullet is one line — never hard-wrap, GitHub renders the
-newline as a visible line break in a PR body — so line counts say
-nothing about length; count characters. The whole body fits in one screen: なぜやるか in two or three sentences,
+A bullet is one line and a paragraph is one sentence per line — never
+wrap mid-sentence, GitHub renders the newline as a visible line break in
+a PR body — so line counts say nothing about length; count characters. The whole body fits in one screen: なぜやるか in two or three sentences,
 one idea per bullet everywhere else. Outside the diagram, stay under ~600
 characters; past ~900 you are narrating something the diff or the diagram
 already shows. The budget is a ceiling, not a target: a change of a few
@@ -382,7 +383,7 @@ refused:
 mktemp -d    # then Write <dir>/pr-body.md
 ```
 
-Lint the body before `gh` sees it — the `explain` skill has the command
+Lint the body before `gh` sees it — the `lint-body` skill has the command
 and the house rules behind it — and fix every finding; the hook refuses a
 body with findings left.
 
@@ -409,7 +410,7 @@ to route around — hand that command over the same way.
 Give the user the title and the CI outcome. State explicitly what you left
 out — files not committed, checks that couldn't run, a diagram you could not
 render. A PR that looks complete but isn't is the most expensive failure
-here. The PR URL is the closing line, bare and alone on it, as the `explain`
+here. The PR URL is the closing line, bare and alone on it, as the `osekkai`
 skill describes — the user opens the PR from the terminal.
 
 Then ask whether any of the やらなかったこと should become issues, and

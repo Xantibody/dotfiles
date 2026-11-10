@@ -43,13 +43,15 @@ var commandsURLs = []string{
 // seen on commandsURLs as of fallbackDate. Update it when the validator
 // reports a difference; the message lists the names to add or remove.
 var fallbackBundled = []string{
-	"agents", "artifacts", "auto-mode-setup", "chrome", "cost", "design-login",
-	"desktop", "diff", "doctor", "exit", "fewer-permission-prompts", "focus",
+	"agents", "artifact-capabilities", "artifact-diagramming", "artifacts",
+	"auto-mode-setup", "chrome", "cost", "design-login",
+	"desktop", "diff", "exit", "fewer-permission-prompts", "focus",
 	"heapdump", "help", "hooks", "ide", "init", "insights", "install-github-app",
 	"install-slack-app", "keybindings", "list-agents", "login", "logout",
-	"memory", "mobile", "passes", "permissions", "powerup", "privacy-settings",
-	"radio", "rate-limit-options", "recap", "release-notes", "reload-skills",
-	"remote-control", "remote-env", "rewind", "run", "run-skill-generator",
+	"memory", "mobile", "passes", "permissions", "plugin-authoring", "powerup",
+	"privacy-settings", "radio", "rate-limit-options", "recap", "release-notes",
+	"reload-skills", "remote-control", "remote-env", "restart", "rewind", "run",
+	"run-skill-generator",
 	"sandbox", "scroll-speed", "security-review", "setup-bedrock",
 	"setup-vertex", "skill-doctor", "skills", "stats", "status", "statusline",
 	"stickers", "stop", "tasks", "team-onboarding", "teleport",
@@ -59,7 +61,7 @@ var fallbackBundled = []string{
 
 // fallbackFields is the Frontmatter reference table as of fallbackDate.
 // Update both when the validator reports a difference from the live docs.
-const fallbackDate = "2026-09-06"
+const fallbackDate = "2026-11-11"
 
 var fallbackFields = []string{
 	"name", "description", "when_to_use", "argument-hint", "arguments",
@@ -359,8 +361,8 @@ func validateSkill(dir string, sp spec) (problems, warnings []string) {
 			continue
 		}
 		seen[ref] = true
-		if _, err := os.Stat(filepath.Join(parent, ref, "SKILL.md")); err != nil {
-			problems = append(problems, fmt.Sprintf("body refers to the `%s` skill but %s has no such skill", ref, parent))
+		if !skillExists(ref, parent) {
+			problems = append(problems, fmt.Sprintf("body refers to the `%s` skill but neither %s nor %s has such a skill", ref, parent, installedSkillsDir()))
 		}
 	}
 
@@ -373,6 +375,29 @@ func validateSkill(dir string, sp spec) (problems, warnings []string) {
 		}
 	}
 	return problems, warnings
+}
+
+// installedSkillsDir is where Claude Code loads skills from. Skills that a
+// flake input ships (osekkai, agent-browser, ha) land there without a
+// directory beside the one being validated.
+func installedSkillsDir() string {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return ""
+	}
+	return filepath.Join(home, ".claude", "skills")
+}
+
+func skillExists(name, siblings string) bool {
+	for _, dir := range []string{siblings, installedSkillsDir()} {
+		if dir == "" {
+			continue
+		}
+		if _, err := os.Stat(filepath.Join(dir, name, "SKILL.md")); err == nil {
+			return true
+		}
+	}
+	return false
 }
 
 func mustAbs(p string) string {

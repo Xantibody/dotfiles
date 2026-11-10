@@ -96,7 +96,7 @@ in
       lintBody = mkLintBody (pkgs.extend overlay);
       # textlint も osekkai も JSON の ruleId で名前を出すので、両方の規則をここに並べる
       rules = [
-        "no-soft-break"
+        "one-sentence-per-line"
         # osekkai のルール。dotfiles 側の同名ルールは消したので、これが鳴れば osekkai まで回っている
         "no-list-item-separator"
         "no-empty-section"
