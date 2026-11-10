@@ -359,8 +359,8 @@ func validateSkill(dir string, sp spec) (problems, warnings []string) {
 			continue
 		}
 		seen[ref] = true
-		if _, err := os.Stat(filepath.Join(parent, ref, "SKILL.md")); err != nil {
-			problems = append(problems, fmt.Sprintf("body refers to the `%s` skill but %s has no such skill", ref, parent))
+		if !skillExists(ref, parent) {
+			problems = append(problems, fmt.Sprintf("body refers to the `%s` skill but neither %s nor %s has such a skill", ref, parent, installedSkillsDir()))
 		}
 	}
 
@@ -373,6 +373,29 @@ func validateSkill(dir string, sp spec) (problems, warnings []string) {
 		}
 	}
 	return problems, warnings
+}
+
+// installedSkillsDir is where Claude Code loads skills from. Skills that a
+// flake input ships (osekkai, agent-browser, ha) land there without a
+// directory beside the one being validated.
+func installedSkillsDir() string {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return ""
+	}
+	return filepath.Join(home, ".claude", "skills")
+}
+
+func skillExists(name, siblings string) bool {
+	for _, dir := range []string{siblings, installedSkillsDir()} {
+		if dir == "" {
+			continue
+		}
+		if _, err := os.Stat(filepath.Join(dir, name, "SKILL.md")); err == nil {
+			return true
+		}
+	}
+	return false
 }
 
 func mustAbs(p string) string {
