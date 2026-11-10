@@ -1,8 +1,7 @@
 -- Lualine (statusline) configuration
 require("lualine").setup({
-	options = {
-		theme = "everforest",
-	},
+	-- No theme: lualine's "auto" loads the one nightfox ships for the
+	-- colorscheme in use (dayfox).
 	sections = {
 		lualine_a = { "mode" },
 		lualine_b = { "branch", "diff", "diagnostics" },
