@@ -54,18 +54,6 @@
     };
     date = "2025-08-16";
   };
-  neogit = {
-    pname = "neogit";
-    version = "73870229977fdd8747025820e15e98cfde787b9c";
-    src = fetchFromGitHub {
-      owner = "Xantibody";
-      repo = "neogit";
-      rev = "73870229977fdd8747025820e15e98cfde787b9c";
-      fetchSubmodules = false;
-      sha256 = "sha256-tvIJEHv/R8I1W3FBAwZHmn92JgiibqQtR75V9wQFSsE=";
-    };
-    date = "2026-01-24";
-  };
   nvim-markdown = {
     pname = "nvim-markdown";
     version = "37850581fdaec153ce84af677d43bf8fce60813a";

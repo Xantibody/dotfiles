@@ -83,27 +83,6 @@
     },
     "version": "03456b9c49365a28732378a7f2a72a613154e042"
   },
-  "neogit": {
-    "cargoLock": null,
-    "date": "2026-01-24",
-    "extract": null,
-    "name": "neogit",
-    "passthru": null,
-    "pinned": false,
-    "src": {
-      "deepClone": false,
-      "fetchSubmodules": false,
-      "leaveDotGit": false,
-      "name": null,
-      "owner": "Xantibody",
-      "repo": "neogit",
-      "rev": "73870229977fdd8747025820e15e98cfde787b9c",
-      "sha256": "sha256-tvIJEHv/R8I1W3FBAwZHmn92JgiibqQtR75V9wQFSsE=",
-      "sparseCheckout": [],
-      "type": "github"
-    },
-    "version": "73870229977fdd8747025820e15e98cfde787b9c"
-  },
   "nvim-markdown": {
     "cargoLock": null,
     "date": "2025-11-02",

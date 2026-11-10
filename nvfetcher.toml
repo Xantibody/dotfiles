@@ -48,11 +48,6 @@ src.git = "https://github.com/rachartier/tiny-glimmer.nvim.git"
 src.branch = "main"
 fetch.github = "rachartier/tiny-glimmer.nvim"
 
-[neogit]
-src.git = "https://github.com/Xantibody/neogit.git"
-src.branch = "master"
-fetch.github = "Xantibody/neogit"
-
 [arto-vim]
 src.git = "https://github.com/arto-app/arto.vim.git"
 src.branch = "main"

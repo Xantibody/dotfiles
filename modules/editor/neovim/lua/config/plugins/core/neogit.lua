@@ -1,9 +1,4 @@
 -- Neogit configuration
-require("neogit").setup({
-	external_diff = {
-		enabled = true,
-		tool = "difftastic",
-	},
-})
+require("neogit").setup({})
 
 vim.keymap.set("n", "<leader>gg", "<cmd>Neogit<CR>", { desc = "Git status" })

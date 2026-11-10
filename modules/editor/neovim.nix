@@ -84,19 +84,6 @@ in
           name = "tiny-glimmer-nvim";
           inherit (sources.tiny-glimmer) src;
         };
-
-        # Dogfooding: external diff integration branch
-        neogit = pkgs.vimUtils.buildVimPlugin {
-          name = "neogit";
-          inherit (sources.neogit) src;
-          checkInputs = [ pkgs.vimPlugins.diffview-nvim ];
-          dependencies = [ pkgs.vimPlugins.plenary-nvim ];
-          nvimSkipModules = [
-            "neogit.integrations.diffview"
-            "neogit.popups.diff.actions"
-            "neogit.popups.diff.init"
-          ];
-        };
       };
     in
     {
@@ -204,7 +191,7 @@ in
 
                 # Git
                 diffview-nvim
-                customPlugins.neogit
+                neogit
                 gitsigns-nvim
 
                 # UI

@@ -89,11 +89,11 @@ lze.load({
 			"DiffviewRefresh",
 			"DiffviewToggleFiles",
 		},
-		dep_of = "vimplugin-neogit",
+		dep_of = "neogit",
 		after = load("config.plugins.core.diffview"),
 	},
 	{
-		"vimplugin-neogit",
+		"neogit",
 		enabled = nixCats("core"),
 		cmd = "Neogit",
 		keys = { { "<leader>gg", desc = "Git status" } },
