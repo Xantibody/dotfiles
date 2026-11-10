@@ -191,7 +191,7 @@ lze.load({
 		enabled = nixCats("display"),
 		ft = "markdown",
 		cmd = "RenderMarkdown",
-		after = load("config.plugins.display.render-markdown"),
+		before = load("config.plugins.display.render-markdown"),
 	},
 
 	-- Edit ---------------------------------------------------------------
