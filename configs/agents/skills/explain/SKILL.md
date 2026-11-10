@@ -92,10 +92,11 @@ that are house rules rather than textlint's, so know them before drafting
 instead of learning them from the findings (the structure rules are
 osekkai's, and its skill has them):
 
-- **A paragraph or bullet is one line.** In PR and issue bodies GitHub
-  renders a newline inside a paragraph as a visible line break, so an
-  80-column wrap or a newline after each sentence breaks the text
-  mid-thought. `--fix` joins the lines.
+- **A bullet is one line; a paragraph is one sentence per line.** In PR
+  and issue bodies GitHub renders a newline inside a paragraph as a
+  visible line break, so the break goes after every 「。」 and nowhere
+  else: an 80-column wrap cuts a sentence mid-thought, and two sentences
+  on one line hide where one ends. `--fix` repairs both.
 - **No separator after a bullet's head.** 「`foo` — 説明」 and
   「**重要**: 本文」 are a heading and a body pushed into one line; make
   it one sentence or nest the body beneath.
