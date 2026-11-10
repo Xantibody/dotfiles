@@ -1,5 +1,13 @@
 -- Barbar (buffer tabs) configuration
-require("barbar").setup({})
+require("barbar").setup({
+	icons = {
+		gitsigns = {
+			added = { enabled = true, icon = "+" },
+			changed = { enabled = true, icon = "~" },
+			deleted = { enabled = true, icon = "-" },
+		},
+	},
+})
 
 -- Cycling uses the builtin [b / ]b and switching uses <leader>b (telescope);
 -- only closing needs barbar, since :bdelete would also close the window.
