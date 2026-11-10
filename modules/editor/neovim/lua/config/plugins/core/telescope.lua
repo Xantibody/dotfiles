@@ -1,5 +1,6 @@
 -- Telescope configuration
 require("telescope").setup({})
+require("telescope").load_extension("fzf")
 
 local map = vim.keymap.set
 map("n", "<leader>f", "<cmd>lua require('telescope.builtin').find_files()<CR>", { desc = "Find files" })
