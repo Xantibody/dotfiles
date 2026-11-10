@@ -120,7 +120,7 @@ https://github.com/<owner>/<repo>/settings/rules/<id>
 ```
 
 `id` is in the POST response (or `gh api repos/<owner>/<repo>/rulesets`).
-The URL goes bare on its own line, as the `explain` skill describes.
+The URL goes bare on its own line, as the `osekkai` skill describes.
 
 ## After a tag
 

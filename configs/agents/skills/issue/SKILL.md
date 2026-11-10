@@ -42,7 +42,8 @@ deliberately left out, being filed so the reason isn't lost. Tasks that are
 none of these (refactoring, investigation, TODO) borrow the feature-request
 shape and drop the sections that don't fit.
 
-Load the `explain` skill before drafting — it holds the bullet-structure rule
+Load the `osekkai` skill before drafting — every body a human reads is
+written through it: the reader, what they know, and the bullet structure
 shared with the `pull-request` skill and with reports to the user.
 
 ### Bug report
@@ -149,6 +150,11 @@ An issue that only wraps an upstream issue goes stale: it never learns that
 upstream closed, and its paths rot as the code moves. The `anchors` audit
 watches a HACK's upstream issue instead.
 
+The default for an item at the end of a PR or a task is not to file. The
+reason it was skipped is freshest right then and is lost by the next
+session, so a reason with no issue still goes into the HACK, the note or
+the commit body.
+
 ## Common rules
 
 - **Drop sections you can't fill.** Deleting a section beats leaving it blank
@@ -178,7 +184,7 @@ Write the body outside the worktree and pass it via `--body-file` (`--body`
 mangles newlines, and the lint hook refuses it). Spell the path out in the
 `gh` command — each Bash call is a fresh shell, and the hook reads the
 `--body-file` path from the command text, so `"$BODY"` there is refused.
-Lint the body first; the `explain` skill has the command and the house
+Lint the body first; the `lint-body` skill has the command and the house
 rules behind it, and the hook refuses a body with findings left.
 
 ```bash
@@ -193,7 +199,7 @@ Only add labels after confirming they exist with `gh label list` (use
 label to `--label` fails the whole creation.
 
 Once created, the issue URL is the closing line of the report, bare and alone
-on it, as the `explain` skill describes. If creation is denied by permissions, hand
+on it, as the `osekkai` skill describes. If creation is denied by permissions, hand
 over the command with the real path substituted, in the form
 `! gh issue create --title "..." --body-file <path>`, so the user can run it
 in their own session.

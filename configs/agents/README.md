@@ -21,7 +21,7 @@ flowchart TD
   reconstruct["reconstruct<br/>最終 diff から積み直す"]
   pr["pull-request<br/>PR 本文を書く"]
   issue["issue<br/>issue を立てる"]
-  explain["explain<br/>人が読む文の構造"]
+  lbskill["lint-body<br/>gh に渡す前の本文の検査"]
   osekkai["osekkai<br/>読み手を決めてまとめる"]
   subgraph shot ["画面を撮る"]
     bv["browser-verify<br/>ブラウザ"]
@@ -47,14 +47,14 @@ flowchart TD
   reconstruct -->|"1 commit ずつ"| commit
   pr -->|"pre-flight"| hr
   pr -->|"push 前"| check
-  pr -->|"本文を書く時"| explain
+  pr -->|"本文を書く時"| osekkai
+  pr -->|"gh に渡す前"| lbskill
   pr -.->|"未コミットがある時"| commit
   pr -.->|"before / after を撮る時"| shot
   pr -.->|"やらなかったことを残す時"| issue
-  issue -->|"本文を書く時"| explain
-  explain -.->|"やらなかったことの行き先"| issue
-  explain -->|"書き始める前"| osekkai
-  explain -->|"gh に渡す前"| lint
+  issue -->|"本文を書く時"| osekkai
+  issue -->|"gh に渡す前"| lbskill
+  lbskill --> lint
   bv --> ab
   tv --> vhs
 ```
@@ -70,7 +70,7 @@ flowchart LR
   refactor["refactor<br/>整理の計画"]
   check["check"]
   commit["commit"]
-  explain["explain"]
+  osekkai["osekkai"]
   anchors["anchors"]
   issue["issue"]
   rustdoc["rustdoc<br/>Rust の doc"]
@@ -93,9 +93,9 @@ flowchart LR
   autopilot -->|"全項目が済んだ時"| hr
   autopilot -.->|"minute 0"| anchors
   version -->|"tag 前"| check
-  version -->|"報告の URL"| explain
+  version -->|"報告の URL"| osekkai
   version -.->|"tag 後は /branch-protection を案内"| bp
-  bp -->|"報告の URL"| explain
+  bp -->|"報告の URL"| osekkai
   docs -.->|"Rust は /rustdoc を案内"| rustdoc
   docs -.->|"コードを直すなら /refactor を案内"| refactor
   docs -.->|"why-not を残す時"| anchors
