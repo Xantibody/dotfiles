@@ -8,11 +8,12 @@ is for, and the misuse that makes it lie.
 
 One thing specific to PR and issue bodies: GitHub renders a single newline
 inside a paragraph as a visible line break there (unlike in `.md` files in
-the repo, where it is folded into a space). So a paragraph or a bullet is
-one line, however long — a wrap at 80 columns or a newline after each
-sentence shows up as a ragged line break in the middle of the text. The
-`lint-body` check refuses a body that wraps. A paragraph that is too long
-to read as one line is a paragraph that should have been something else.
+the repo, where it is folded into a space). So the newline is placed on
+purpose: a bullet is one line, however long, and a paragraph puts one
+sentence on each line, breaking after every 「。」 and nowhere else. A wrap
+at 80 columns shows up as a ragged break in the middle of a sentence. The
+`lint-body` check refuses both a mid-sentence break and two sentences on
+one line, and `--fix` repairs either.
 
 ## Prose vs. structure
 
