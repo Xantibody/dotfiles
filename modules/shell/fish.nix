@@ -10,7 +10,12 @@ let
 in
 {
   flake.modules.homeManager.fish =
-    { config, lib, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
       # 行は "種別:::キー:::コマンド:::説明"。区切りはどの列にも現れない ":::"。
       # 種別はパレットが選択後の動作を決めるのに使う
@@ -54,6 +59,24 @@ in
           enable = true;
           shellAbbrs = lib.mapAttrs (_: v: v.cmd) config.my.shell.abbr;
           functions = {
+            # 起動時の挨拶の代わりに、今年の残り日数 (今日を含まない) を立体文字で出す
+            fish_greeting = {
+              description = "今年の残り日数を larry3d の figlet で出す";
+              body = ''
+                set -l year (date +%Y)
+                set -l days 365
+                if test (math "$year % 4") -eq 0 -a \( (math "$year % 100") -ne 0 -o (math "$year % 400") -eq 0 \)
+                    set days 366
+                end
+                # %j は 045 のように 0 埋めされるので、math に渡す前に先頭の 0 を落とす
+                set -l left (math $days - (string trim -l -c 0 -- (date +%j)))
+                set_color 6e33ce
+                # larry3d は下に伸びる字のために 2 行足すが、数字は使わないので空行を落とす
+                ${pkgs.figlet}/bin/figlet -f larry3d -w $COLUMNS -- $left | string match -rv '^\s*$'
+                set_color normal
+                echo "  days left in $year"
+              '';
+            };
             # AIDEV-NOTE: commandline はコマンド実行中には効かないので、pal は Ctrl+P からしか使えない
             pal = {
               description = "キーバインド・abbr・入れたツールを fzf から引く (Ctrl+P)";
