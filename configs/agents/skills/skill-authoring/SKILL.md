@@ -50,7 +50,7 @@ can see the result of was not done.
 
 ## 2. Cut by job
 
-One skill, one job, composed by name: a skill says "load the `explain`
+One skill, one job, composed by name: a skill says "load the `osekkai`
 skill" and the model does. The Skill tool is the only composition
 mechanism the docs describe, and it works only if each piece is small
 enough to be worth loading on its own.
@@ -60,9 +60,9 @@ enough to be worth loading on its own.
   judgement can then run from `implement` and `pull-request` without
   either of them carrying the rewrite procedure, and the judgement hands
   over to the action by name.
-- **A rule two skills share is a third skill.** `explain` holds the
-  bullet-structure rule that `pull-request` and `issue` both load. Copying
-  it into both is how the copies drift.
+- **A rule two skills share is a third skill.** `lint-body` holds the
+  body check and its house rules that `pull-request` and `issue` both
+  load. Copying it into both is how the copies drift.
 - **The frontmatter says who may start it.** Something that cannot be
   taken back from this machine — a tag, a ruleset, anything published:
   `disable-model-invocation: true`. A local rewrite that `git reflog`
