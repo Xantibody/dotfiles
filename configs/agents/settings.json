@@ -2,6 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "includeCoAuthoredBy": false,
   "language": "japanese",
+  "ultracode": true,
   "enabledPlugins": {
     "skill-creator@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true,
@@ -15,6 +16,7 @@
       "Write",
       "Grep",
       "Glob",
+      "Workflow",
       "Bash(cargo *)",
       "Bash(git add *)",
       "Bash(git commit *)",
