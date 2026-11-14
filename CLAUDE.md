@@ -39,15 +39,29 @@ configuration to `.ai/profiles/`, so a refactor is checked by diffing rather
 than by rereading; `just eval-profile <host>` measures evaluation cost the
 way the numbers in the commit history were measured.
 
+## Local Verification
+
+Do not evaluate or build a whole host locally to verify a change: no
+`nix eval .#…Configurations.<host>…`, `nix flake check` or
+`darwin-rebuild build`. CI evaluates and builds every host (`check.yml`,
+`darwin.yml`, `nixos.yml`), and a host for another platform takes more than
+ten minutes from this machine. Verify locally with `nix fmt`, a search for
+references the change should have removed, and the tests of the thing that
+changed; say in the report that host evaluation is left to CI.
+
+`just snapshot` and `just eval-profile` are for a module-layout refactor and
+run only when the user asks for them. When nix does run, it runs one at a
+time: one uncached host evaluation peaks above 2 GB, and overlapping two or
+three has frozen a 16 GB machine. That holds across agents — a workflow or a
+set of subagents may read and edit in parallel, but exactly one runs nix,
+after the others have finished.
+
 ## Git Workflow
 
 Commit straight to `main` — pushing is done by the user. This is a
-single-maintainer repo, so a branch and PR buy no review value for an
-ordinary change.
-
-Branch and open a PR only when the diff is large — roughly 200+ changed lines,
-or a change spanning several modules or hosts — where an isolated, reviewable
-unit is actually worth the ceremony.
+single-maintainer repo, so a branch and PR buy no review value, and that
+holds for a large diff too. Branch and open a PR only when the user asks
+for one.
 
 ## Commit Scopes
 
