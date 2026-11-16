@@ -9,5 +9,10 @@
     # でしか入れず手で直しにくいので、再起動で消えるようにする。失うのは builder の
     # キャッシュだけで、ほとんどは binary cache から取り直せる。
     nix.linux-builder.ephemeral = true;
+    # builder の名前解決は QEMU の DNS (10.0.2.3) が mac の DNS へ転送する。家のルーターの DNS は
+    # EDNS 付きの問い合わせに FORMERR を返し、Go はそれを "server misbehaving" として止まるので、
+    # go-modules のようにネットワークを使う derivation が builder で組めない。
+    # resolved は FORMERR を受けると EDNS なしで問い合わせ直すので、どのネットワークでも引ける。
+    nix.linux-builder.config.services.resolved.enable = true;
   };
 }
