@@ -13,6 +13,7 @@
     # EDNS 付きの問い合わせに FORMERR を返し、Go はそれを "server misbehaving" として止まるので、
     # go-modules のようにネットワークを使う derivation が builder で組めない。
     # resolved は FORMERR を受けると EDNS なしで問い合わせ直すので、どのネットワークでも引ける。
+    # AIDEV-NOTE: guest を変えると cache.nixos.org の builder と別物になるので、darwin.yml の linux-builder job が arm の ubuntu で組んで cachix に載せる。mac の DNS を公開 resolver に固定する案は、それを塞ぐネットワークがあるので採らない
     nix.linux-builder.config.services.resolved.enable = true;
   };
 }

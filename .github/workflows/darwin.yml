@@ -12,6 +12,11 @@
 # マージは probe が cache に揃っていると見て build を飛ばす。
 # path フィルタを付けないのは required check にしているため。付けると対象外の PR で
 # check が報告されず、マージできなくなる。
+#
+# work 機の linux-builder は guest の設定を変えているので、guest (aarch64-linux の NixOS)
+# は Hydra が組む darwin.linux-builder と別物になり、cache.nixos.org に無い。macos の
+# runner には aarch64-linux の builder が無く platform mismatch で落ちるので、arm の
+# ubuntu で先に guest を組んで cachix に載せ、darwin の build はそれを substitute する。
 name: Build (darwin)
 
 on:
@@ -25,7 +30,32 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  linux-builder:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 60
+    env:
+      GUEST: .#darwinConfigurations.work-macbook-pro-m4-attm.config.nix.linux-builder.package.nixosConfig.system.build.toplevel
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-nix
+        with:
+          hosts: darwinConfigurations.work-macbook-pro-m4-attm
+          cachix-auth-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      # cache に揃っていれば組まない。nix build は揃っていても closure を丸ごと落とすので、
+      # cache-probe と同じ dry-run で先に確かめる
+      - name: Build the guest when the cache lacks it
+        run: |
+          out=$(nix build --dry-run --option always-allow-substitutes true "$GUEST" 2>&1)
+          echo "$out"
+          if grep -q "will be built" <<<"$out"; then
+            nix build --no-link --print-out-paths "$GUEST"
+          fi
+
   darwin:
+    needs: linux-builder
+    # guest の job が落ちても darwin は回す。needs だけだと skip になり、required check は
+    # skip を成功として扱うので、壊れたままマージできてしまう
+    if: ${{ !cancelled() }}
     uses: ./.github/workflows/cached-build.yml
     with:
       hosts: >-
