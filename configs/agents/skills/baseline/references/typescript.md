@@ -440,7 +440,7 @@ setup-ts:
     pnpm install --frozen-lockfile
 
 # Lint with type information; warnings and unused disables fail
-lint-ts: setup-ts lint-ts-hatches
+lint-ts: setup-ts lint-ts-hatches (lint-comments "//" "*.ts" "*.tsx" "*.mts" "*.cts" "*.js" "*.jsx" "*.mjs" "*.cjs" "*.vue")
     oxlint --type-aware --deny-warnings --report-unused-disable-directives-severity=error
 
 # Every inline disable and @ts-expect-error must name the issue that removes it; no test retries

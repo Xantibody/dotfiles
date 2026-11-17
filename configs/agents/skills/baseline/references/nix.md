@@ -86,7 +86,7 @@ check that each statix `ignore` glob means the same there.)
 Guard the deadnix pragma in `lint` so the error says what to do:
 
 ```just
-lint:
+lint: (lint-comments "#" "*.nix")
     statix check .
     git ls-files -z '*.nix' | xargs -0 awk 'FNR == 1 { prev = "" } /#[[:space:]]*deadnix:[[:space:]]*skip/ && prev !~ /HACK\(https?:\/\// { printf "%s:%d: deadnix: skip needs a HACK(<issue URL>) comment on the line above. Prefer deleting the binding.\n", FILENAME, FNR; bad = 1 } { prev = $0 } END { exit bad }'
 ```
