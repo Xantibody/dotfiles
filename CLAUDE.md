@@ -53,7 +53,7 @@ so the rule holds without anyone remembering it.
 
 This repository is the first one under the commit gate in observe mode
 (`modules/git/verify-gate.nix`): when `git config verify.gate` prints
-`observe`, run the local checks above as `verify-gate run -- <command>` after
+`observe`, run the local checks above as `rat verify-gate run -- <command>` after
 the last edit, so the commit's `Verified-by:` trailer names them instead of
 `none`. The gate only records; a commit without verification still goes
 through.

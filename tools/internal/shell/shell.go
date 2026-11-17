@@ -114,22 +114,23 @@ var wrappers = map[string][]string{
 	"exec":    {"-a"},
 	"nice":    {"-n"},
 	"nohup":   nil,
+	// rat verify-gate run [--] <command> (tools/verifygate), which the check
+	// skill puts in front of every check where the commit gate is on; rat's
+	// other subcommands are commands of their own
+	"rat":     nil,
 	"rtk":     nil,
 	"sudo":    {"-u", "-g", "-C", "-D", "-h", "-p", "-r", "-t", "-U"},
 	"time":    {"-f", "-o"},
 	"timeout": {"-k", "-s"},
-	// verify-gate run [--] <command> (modules/git/verify-gate.sh), which the
-	// check skill puts in front of every check where the commit gate is on
-	"verify-gate": nil,
-	"xargs":       {"-a", "-d", "-E", "-I", "-L", "-n", "-P", "-s"},
+	"xargs":   {"-a", "-d", "-E", "-I", "-L", "-n", "-P", "-s"},
 }
 
 var shells = map[string]bool{"bash": true, "dash": true, "ksh": true, "sh": true, "zsh": true}
 
 // unwrap strips the wrappers in front of args and returns the command they
 // run; eval, sh -c and env -S expand to the commands of their script. A shell
-// running a script file, or verify-gate with another subcommand, is returned
-// as it is.
+// running a script file, or rat with a subcommand other than verify-gate run,
+// is returned as it is.
 func unwrap(args []string) [][]string {
 	for len(args) > 0 {
 		name := filepath.Base(args[0])
@@ -164,11 +165,11 @@ func unwrap(args []string) [][]string {
 			if len(rest) > 0 && rest[0] == "proxy" {
 				rest = rest[1:]
 			}
-		case "verify-gate":
-			if len(rest) == 0 || rest[0] != "run" {
+		case "rat":
+			if len(rest) < 2 || rest[0] != "verify-gate" || rest[1] != "run" {
 				return [][]string{args}
 			}
-			rest = SkipOptions(rest[1:], nil)
+			rest = SkipOptions(rest[2:], nil)
 		}
 		args = rest
 	}
