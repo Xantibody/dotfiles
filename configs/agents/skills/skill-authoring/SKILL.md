@@ -216,5 +216,5 @@ downloaded:
 ````bash
 awk '/```mermaid/{f=1;n++;next}/```/{f=0;next}f{print > ("<scratch>/m" n ".mmd")}' configs/agents/README.md
 export PUPPETEER_EXECUTABLE_PATH="$(find ~/.agent-browser/browsers -type f -perm +111 -name 'Google Chrome for Testing' | head -1)"
-for m in <scratch>/m*.mmd; do nix run nixpkgs#mermaid-cli -- -i "$m" -o "${m%.mmd}.png" -w 1400; done
+for m in <scratch>/m*.mmd; do nix run nixpkgs#mermaid-cli -- -i "$m" -o "${m%.mmd}.png" --size 1400; done
 ````
