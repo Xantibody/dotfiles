@@ -41,6 +41,49 @@ func TestCommands(t *testing.T) {
 	}
 }
 
+func TestLongValueOptions(t *testing.T) {
+	for _, cmd := range []string{
+		"sudo --user root git push",
+		"sudo --chdir /tmp --close-from 3 git push",
+		"timeout --signal KILL --kill-after 5 10 git push",
+		"nice --adjustment 5 git push",
+		"/usr/bin/time --format %e --output t git push", // a bare time is the shell keyword
+		"xargs --max-args 1 --delimiter , git push",
+	} {
+		if diff := cmp.Diff([][]string{{"git", "push"}}, Commands(cmd)); diff != "" {
+			t.Errorf("Commands(%q) mismatch (-want +got):\n%s", cmd, diff)
+		}
+	}
+}
+
+// An option whose argument is optional takes it only after =, so the word
+// after it is the command.
+func TestOptionalValueOptions(t *testing.T) {
+	if diff := cmp.Diff([][]string{{"git", "push"}}, Commands("xargs --replace git push")); diff != "" {
+		t.Errorf("mismatch (-want +got):\n%s", diff)
+	}
+}
+
+func TestCallsWrapped(t *testing.T) {
+	for _, tc := range []struct {
+		cmd  string
+		want []Call
+	}{
+		{"gh pr view", []Call{{Args: []string{"gh", "pr", "view"}}}},
+		{"FOO=1 gh pr view", []Call{{Args: []string{"gh", "pr", "view"}}}},
+		{"rtk gh pr view", []Call{{Args: []string{"gh", "pr", "view"}, Wrapped: true}}},
+		{"timeout 30 ionice -c3 gh pr view", []Call{{Args: []string{"ionice", "-c3", "gh", "pr", "view"}, Wrapped: true}}},
+		{"bash script.sh gh", []Call{{Args: []string{"bash", "script.sh", "gh"}, Wrapped: true}}},
+		{"bash -c 'gh pr view'", []Call{{Args: []string{"gh", "pr", "view"}}}},
+		{"rat hook deny", []Call{{Args: []string{"rat", "hook", "deny"}}}},
+		{"echo gh", []Call{{Args: []string{"echo", "gh"}}}},
+	} {
+		if diff := cmp.Diff(tc.want, Calls(tc.cmd)); diff != "" {
+			t.Errorf("Calls(%q) mismatch (-want +got):\n%s", tc.cmd, diff)
+		}
+	}
+}
+
 func TestSkipOptions(t *testing.T) {
 	for _, tc := range []struct {
 		args, withArg, want []string

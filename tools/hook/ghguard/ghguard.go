@@ -10,13 +10,14 @@
 // (the branch-protection skill, say) goes through after one confirmation.
 //
 // AIDEV-NOTE: a mid-pattern ask rule such as `Bash(gh api * rulesets*)` was rejected: whether it matches depends on argument order and where -X sits
-// AIDEV-NOTE: leans to asking too often over missing one (a dynamic method counts as a write); rat hook deny stays deny-only and never asks
+// AIDEV-NOTE: leans to asking too often over missing one (a dynamic method counts as a write, and behind any wrapper the first gh word counts); rat hook deny stays deny-only and never asks
 package ghguard
 
 import (
 	"io"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/Xantibody/dotfiles/tools/internal/pretooluse"
@@ -50,7 +51,15 @@ func run(stdin io.Reader, stdout io.Writer) error {
 // checkCommand returns the gh call in cmd that needs a confirmation, or ""
 // when there is none.
 func checkCommand(cmd string) string {
-	for _, args := range shell.Commands(cmd) {
+	for _, c := range shell.Calls(cmd) {
+		args := c.Args
+		if c.Wrapped {
+			// behind a wrapper, gh is looked for past whatever the shell
+			// package could not strip (ionice, a value of --some-option)
+			if i := slices.IndexFunc(args, isGh); i >= 0 {
+				args = args[i:]
+			}
+		}
 		if reason := checkGh(args); reason != "" {
 			return reason
 		}
@@ -58,8 +67,10 @@ func checkCommand(cmd string) string {
 	return ""
 }
 
+func isGh(word string) bool { return filepath.Base(word) == "gh" }
+
 func checkGh(args []string) string {
-	if filepath.Base(args[0]) != "gh" || len(args) < 2 {
+	if !isGh(args[0]) || len(args) < 2 {
 		return ""
 	}
 	switch args[1] {
