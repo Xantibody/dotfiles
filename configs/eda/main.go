@@ -18,6 +18,17 @@ const usage = `usage: eda <command>
       Create a branch and its worktree under the eda root; print the path.
   status [--json] [--no-pr] [--stale-days <n>]
       Judge every worktree of every known repository: done, active or stale.
+  sweep [--dry-run] [--no-pr]
+      Remove every done worktree and its branch, in every repository.
+  rm <branch|path> [--force]
+      Remove one worktree and its branch. Without --force it refuses to
+      lose uncommitted or unmerged work.
+  hook-create, hook-remove
+      Claude Code's WorktreeCreate and WorktreeRemove hooks; JSON on stdin.
+
+A worktree is done when removing it loses nothing: no uncommitted files,
+and either no commits the default branch lacks or a merged pull request
+whose head is still the worktree's HEAD.
 `
 
 // env is everything a command reads from the outside, so tests can replace it.
@@ -91,6 +102,14 @@ func run(args []string, e *env) int {
 		err = cmdNew(args[1:], e)
 	case "status":
 		err = cmdStatus(args[1:], e)
+	case "sweep":
+		err = cmdSweep(args[1:], e)
+	case "rm":
+		err = cmdRm(args[1:], e)
+	case "hook-create":
+		err = cmdHookCreate(e)
+	case "hook-remove":
+		err = cmdHookRemove(e)
 	case "help", "-h", "--help":
 		fmt.Fprint(e.stdout, usage)
 		return 0
