@@ -88,7 +88,7 @@ checked is what gets published:
 export NIXPKGS_ALLOW_UNFREE=1
 CHROME=$(nix build --impure --no-link --print-out-paths nixpkgs#google-chrome)
 PUPPETEER_EXECUTABLE_PATH="$CHROME/bin/google-chrome-stable" \
-  nix run nixpkgs#mermaid-cli -- -i "$BODY" -o /tmp/pr-diagram.png -w 1600 -b white
+  nix run nixpkgs#mermaid-cli -- -i "$BODY" -o /tmp/pr-diagram.png --size 1600 -b white
 ```
 
 Exit code 1 names the line it choked on. Exit code 0 only means it parsed —
