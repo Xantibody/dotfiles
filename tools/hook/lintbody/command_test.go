@@ -1,43 +1,35 @@
 package lintbody
 
 import (
-	"bytes"
-	"io"
 	"strings"
 	"testing"
 
+	"github.com/Xantibody/dotfiles/tools/hook"
 	"github.com/Xantibody/dotfiles/tools/internal/cli"
 )
 
-func execute(t *testing.T, stdin string) (string, error) {
+// execute runs `rat hook lint-body` with stdin and returns the code rat
+// exits with and the two streams.
+func execute(t *testing.T, stdin string) (code int, stdout, stderr string) {
 	t.Helper()
-	var out bytes.Buffer
-	cmd := Command()
-	cmd.SetIn(strings.NewReader(stdin))
-	cmd.SetOut(&out)
-	cmd.SetErr(&bytes.Buffer{})
-	cmd.SetArgs(nil)
-	err := cmd.Execute()
-	return out.String(), err
+	var out, errs strings.Builder
+	code = cli.Main(cli.Root(hook.Command(Command())), []string{"hook", "lint-body"}, strings.NewReader(stdin), &out, &errs)
+	return code, out.String(), errs.String()
 }
 
-// A body with findings ends in an error that makes rat exit 2, with nothing
-// on stdout.
+// A body with findings makes rat exit 2, with nothing on stdout and no
+// usage on stderr: the block is the hook's answer, not a usage mistake.
 func TestCommandExitsTwoOnFindings(t *testing.T) {
 	cwd := setup(t)
-	out, err := execute(t, `{"cwd":"`+cwd+`","tool_input":{"command":"gh pr create --body-file ng.md"}}`)
-	if code := cli.Exit(err, io.Discard); code != 2 {
-		t.Errorf("Execute = %v, rat exits %d, want 2", err, code)
-	}
-	if out != "" {
-		t.Errorf("stdout = %q, want none", out)
+	code, out, errs := execute(t, `{"cwd":"`+cwd+`","tool_input":{"command":"gh pr create --body-file ng.md"}}`)
+	if code != 2 || out != "" || strings.Contains(errs, "Usage:") {
+		t.Errorf("exit %d, stdout %q, stderr %q; want 2, nothing on stdout and no usage", code, out, errs)
 	}
 }
 
 func TestCommandPassesSilently(t *testing.T) {
 	cwd := setup(t)
-	out, err := execute(t, `{"cwd":"`+cwd+`","tool_input":{"command":"gh pr create --body-file ok.md"}}`)
-	if err != nil || out != "" {
-		t.Errorf("Execute = %q, %v, want no output and no error", out, err)
+	if code, out, errs := execute(t, `{"cwd":"`+cwd+`","tool_input":{"command":"gh pr create --body-file ok.md"}}`); code != 0 || out != "" || errs != "" {
+		t.Errorf("exit %d, stdout %q, stderr %q; want 0 and nothing", code, out, errs)
 	}
 }

@@ -25,11 +25,7 @@ func folded(t *testing.T, text string) string {
 // and the two streams.
 func run(args ...string) (code int, stdout, stderr string) {
 	var o, e strings.Builder
-	cmd := Command()
-	cmd.SetArgs(args)
-	cmd.SetOut(&o)
-	cmd.SetErr(&e)
-	code = cli.Exit(cmd.Execute(), &e)
+	code = cli.Main(cli.Root(Command()), append([]string{"hotspots"}, args...), strings.NewReader(""), &o, &e)
 	return code, o.String(), e.String()
 }
 
@@ -115,9 +111,9 @@ func TestFails(t *testing.T) {
 		code   int
 		stderr string
 	}{
-		{"no file", func(*testing.T) []string { return nil }, 2, "usage: rat hotspots"},
-		{"two files", func(*testing.T) []string { return []string{"a", "b"} }, 2, "usage: rat hotspots"},
-		{"bad -n", func(*testing.T) []string { return []string{"-n", "many", "a"} }, 2, "usage: rat hotspots"},
+		{"no file", func(*testing.T) []string { return nil }, 2, "Usage:\n  rat hotspots"},
+		{"two files", func(*testing.T) []string { return []string{"a", "b"} }, 2, "Usage:\n  rat hotspots"},
+		{"bad -n", func(*testing.T) []string { return []string{"-n", "many", "a"} }, 2, "Usage:\n  rat hotspots"},
 		{"missing file", func(t *testing.T) []string { return []string{filepath.Join(t.TempDir(), "none.folded")} }, 1, "no such file"},
 		{"no stacks", func(t *testing.T) []string { return []string{folded(t, "nothing here\n")} }, 1, "no folded stacks found"},
 	} {

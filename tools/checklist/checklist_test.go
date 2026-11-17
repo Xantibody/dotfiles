@@ -202,11 +202,7 @@ func gitT(t *testing.T, dir string, args ...string) {
 // returns the code rat exits with and the two streams.
 func runT(dir string, args ...string) (code int, stdout, stderr string) {
 	var o, e bytes.Buffer
-	cmd := command(dir)
-	cmd.SetArgs(args)
-	cmd.SetOut(&o)
-	cmd.SetErr(&e)
-	code = cli.Exit(cmd.Execute(), &e)
+	code = cli.Main(cli.Root(command(dir)), append([]string{"checklist"}, args...), strings.NewReader(""), &o, &e)
 	return code, o.String(), e.String()
 }
 

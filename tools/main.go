@@ -5,8 +5,6 @@ package main
 import (
 	"os"
 
-	"github.com/spf13/cobra"
-
 	"github.com/Xantibody/dotfiles/tools/checklist"
 	"github.com/Xantibody/dotfiles/tools/hook"
 	"github.com/Xantibody/dotfiles/tools/hook/anchors"
@@ -26,13 +24,7 @@ import (
 var buildVersion = "dev"
 
 func main() {
-	root := &cobra.Command{
-		Use:           "rat",
-		Short:         "Agent hooks and helper commands from the dotfiles repository",
-		SilenceUsage:  true,
-		SilenceErrors: true,
-	}
-	root.AddCommand(
+	root := cli.Root(
 		version.Command(buildVersion),
 		hook.Command(deny.Command(), ghguard.Command(), anchors.Command(), lintbody.Command()),
 		verifygate.Command(),
@@ -41,5 +33,5 @@ func main() {
 		checklist.Command(),
 		hotspots.Command(),
 	)
-	os.Exit(cli.Exit(root.Execute(), os.Stderr))
+	os.Exit(cli.Main(root, os.Args[1:], os.Stdin, os.Stdout, os.Stderr))
 }

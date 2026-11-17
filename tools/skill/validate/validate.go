@@ -106,16 +106,12 @@ type Options struct {
 
 // Run validates the skills in dirs, writes the report to out and usage
 // errors to errOut, and returns the exit code: 0 when everything passed, 1
-// when something failed, 2 on a usage error.
+// when something failed, 2 when a --known directory holds no skill.
 func Run(opts Options, dirs []string, out, errOut io.Writer) int {
-	if len(dirs) == 0 {
-		fmt.Fprintln(errOut, usage)
-		return 2
-	}
 	known := map[string]string{}
 	for _, d := range opts.Known {
 		if _, err := os.Stat(filepath.Join(d, "SKILL.md")); err != nil {
-			fmt.Fprintf(errOut, "--known %s: %v\n", d, err)
+			fmt.Fprintf(errOut, "skill validate: --known %s: %v; name a skill directory, one holding SKILL.md\n", d, err)
 			return 2
 		}
 		known[filepath.Base(mustAbs(d))] = d

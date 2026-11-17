@@ -19,15 +19,11 @@ import (
 	"strings"
 )
 
-// Run ranks the frames of the one file in args, listing n per table, and
+// Run ranks the frames of the file at path, listing n per table, and
 // returns the exit code: 0 when it printed, 1 when the file could not be
-// read or held no stacks, 2 on a usage error.
-func Run(n int, args []string, stdout, stderr io.Writer) int {
-	if len(args) != 1 {
-		fmt.Fprintln(stderr, usage)
-		return 2
-	}
-	f, err := os.Open(args[0])
+// read or held no stacks.
+func Run(n int, path string, stdout, stderr io.Writer) int {
+	f, err := os.Open(path)
 	if err != nil {
 		fmt.Fprintln(stderr, err)
 		return 1

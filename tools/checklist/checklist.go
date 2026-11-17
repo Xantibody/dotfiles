@@ -76,15 +76,10 @@ type hit struct {
 	matched []string
 }
 
-// Run applies the checklist from the directory to run git in, the --base
-// flag and the positional arguments, and returns the exit code: 0 when the
-// rows were applied, 1 on a broken table or a missing base, 2 on a usage
-// error.
-func Run(dir, base string, args []string, stdout, stderr io.Writer) int {
-	if len(args) > 0 {
-		fmt.Fprintf(stderr, "checklist: unexpected argument %q; the change is always the current repository's\n", args[0])
-		return 2
-	}
+// Run applies the checklist from the directory to run git in and the --base
+// flag, and returns the exit code: 0 when the rows were applied, 1 on a
+// broken table or a missing base.
+func Run(dir, base string, stdout, stderr io.Writer) int {
 	if err := apply(dir, base, stdout, stderr); err != nil {
 		fmt.Fprintf(stderr, "checklist: %v\n", err)
 		return 1
