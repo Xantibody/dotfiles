@@ -1,4 +1,4 @@
-// shot captures one terminal screen with vhs from flags instead of a
+// Package shot captures one terminal screen with vhs from flags instead of a
 // hand-written tape. Each trap that makes vhs fail without an error is a rule
 // in tape() below, and each rule has a test:
 //
@@ -16,23 +16,19 @@
 // screen before the config loaded. After running vhs it checks the version
 // (0.12.0 exits 0 and writes nothing) and that a PNG was written.
 //
-//	go run main.go -out /abs/dir/after.png -command <cmd> -wait <regex> \
-//	  [-setup <cmd>]... [-ready <regex>] [-width 1200] [-height 600] \
-//	  [-font-size 18] [-wait-timeout 15s] [-vhs vhs] [-tape-only]
+//	rat shot --out /abs/dir/after.png --command <cmd> --wait <regex> \
+//	  [--setup <cmd>]... [--ready <regex>] [--width 1200] [--height 600] \
+//	  [--font-size 18] [--wait-timeout 15s] [--vhs vhs] [--tape-only]
 //
 // The tape is kept next to the PNG (after.tape), with the recording beside
-// it (after.gif). stdout carries the PNG path, or the tape with -tape-only;
+// it (after.gif). stdout carries the PNG path, or the tape with --tape-only;
 // vhs's own output goes to stderr.
-//
-// Only the standard library is used, so `go run` works from any checkout or
-// store path.
-package main
+package shot
 
 import (
 	"bytes"
 	"context"
 	"errors"
-	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -77,25 +73,25 @@ func (s shot) gifPath() string { return s.base() + ".gif" }
 // tape returns the vhs tape for s, or an error naming the flag to fix.
 func (s shot) tape() (string, error) {
 	if !filepath.IsAbs(s.out) || filepath.Ext(s.out) != ".png" {
-		return "", fmt.Errorf("-out %q: want an absolute path ending in .png", s.out)
+		return "", fmt.Errorf("--out %q: want an absolute path ending in .png", s.out)
 	}
 	if s.command == "" {
-		return "", errors.New("-command is required: what the reviewer should see happen")
+		return "", errors.New("--command is required: what the reviewer should see happen")
 	}
 	if s.wait == "" {
-		return "", errors.New("-wait is required: a regex the screen matches once -command has drawn its result")
+		return "", errors.New("--wait is required: a regex the screen matches once --command has drawn its result")
 	}
 	if len(s.setup) > 0 && s.ready == "" {
-		return "", errors.New("-ready is required with -setup: a regex the screen matches once the setup is done, often the prompt")
+		return "", errors.New("--ready is required with --setup: a regex the screen matches once the setup is done, often the prompt")
 	}
 	if s.ready != "" && len(s.setup) == 0 {
-		return "", errors.New("-ready without -setup waits for nothing; drop it or add the -setup it waits for")
+		return "", errors.New("--ready without --setup waits for nothing; drop it or add the --setup it waits for")
 	}
 	if s.width <= 0 || s.height <= 0 || s.fontSize <= 0 {
-		return "", fmt.Errorf("-width %d, -height %d, -font-size %d: each must be positive", s.width, s.height, s.fontSize)
+		return "", fmt.Errorf("--width %d, --height %d, --font-size %d: each must be positive", s.width, s.height, s.fontSize)
 	}
 	if s.waitTimeout <= 0 {
-		return "", fmt.Errorf("-wait-timeout %s: must be positive", s.waitTimeout)
+		return "", fmt.Errorf("--wait-timeout %s: must be positive", s.waitTimeout)
 	}
 
 	var b strings.Builder
@@ -116,11 +112,11 @@ func (s shot) tape() (string, error) {
 		return nil
 	}
 
-	gif, err := quoted("-out", s.gifPath())
+	gif, err := quoted("--out", s.gifPath())
 	if err != nil {
 		return "", err
 	}
-	png, err := quoted("-out", s.out)
+	png, err := quoted("--out", s.out)
 	if err != nil {
 		return "", err
 	}
@@ -133,27 +129,27 @@ func (s shot) tape() (string, error) {
 	if len(s.setup) > 0 {
 		line("Hide")
 		for _, c := range s.setup {
-			q, err := quoted("-setup", c)
+			q, err := quoted("--setup", c)
 			if err != nil {
 				return "", err
 			}
 			line("Type %s", q)
 			line("Enter")
 		}
-		if err := waitFor("-ready", s.ready); err != nil {
+		if err := waitFor("--ready", s.ready); err != nil {
 			return "", err
 		}
 		line(`Type "clear"`)
 		line("Enter")
 		line("Show")
 	}
-	cmd, err := quoted("-command", s.command)
+	cmd, err := quoted("--command", s.command)
 	if err != nil {
 		return "", err
 	}
 	line("Type %s", cmd)
 	line("Enter")
-	if err := waitFor("-wait", s.wait); err != nil {
+	if err := waitFor("--wait", s.wait); err != nil {
 		return "", err
 	}
 	line("Screenshot %s", png)
@@ -209,7 +205,7 @@ func checkVersion(output string) error {
 			if got[i] > minVersion[i] {
 				return nil
 			}
-			return fmt.Errorf("vhs %s.%s.%s is older than %d.%d.%d (0.12.0 exits 0 and writes nothing); pass -vhs a newer one, e.g. from `nix build github:NixOS/nixpkgs/nixpkgs-unstable#vhs`",
+			return fmt.Errorf("vhs %s.%s.%s is older than %d.%d.%d (0.12.0 exits 0 and writes nothing); pass --vhs a newer one, e.g. from `nix build github:NixOS/nixpkgs/nixpkgs-unstable#vhs`",
 				m[1], m[2], m[3], minVersion[0], minVersion[1], minVersion[2])
 		}
 	}
@@ -231,46 +227,42 @@ func checkPNG(path string) error {
 	return nil
 }
 
-// repeated collects a repeatable flag.
-type repeated []string
-
-func (d *repeated) String() string     { return strings.Join(*d, ",") }
-func (d *repeated) Set(v string) error { *d = append(*d, v); return nil }
-
-func main() {
-	os.Exit(run(os.Args[1:], os.Stdout, os.Stderr))
+// Options are the flags of `rat shot`.
+type Options struct {
+	Out         string
+	Setup       []string
+	Ready       string
+	Command     string
+	Wait        string
+	Width       int
+	Height      int
+	FontSize    int
+	WaitTimeout time.Duration
+	VHS         string
+	TapeOnly    bool
 }
 
-// run captures the shot described by args and returns the exit code: 0 when
+// Run captures the shot opts describes and returns the exit code: 0 when
 // the PNG was written, 1 when vhs or a check failed, 2 on a usage error.
-func run(args []string, stdout, stderr io.Writer) int {
-	fs := flag.NewFlagSet("shot", flag.ContinueOnError)
-	fs.SetOutput(stderr)
-	var s shot
-	var setup repeated
-	out := fs.String("out", "", "PNG to write (the .tape and .gif go beside it)")
-	fs.Var(&setup, "setup", "command typed while hidden, such as loading the config under test (repeatable)")
-	fs.StringVar(&s.ready, "ready", "", "regex the screen matches once the setup is done (required with -setup)")
-	fs.StringVar(&s.command, "command", "", "command typed while shown")
-	fs.StringVar(&s.wait, "wait", "", "regex the screen matches once -command has drawn its result")
-	fs.IntVar(&s.width, "width", 1200, "terminal width in pixels")
-	fs.IntVar(&s.height, "height", 600, "terminal height in pixels")
-	fs.IntVar(&s.fontSize, "font-size", 18, "font size")
-	fs.DurationVar(&s.waitTimeout, "wait-timeout", 15*time.Second, "how long each wait may take before vhs fails")
-	vhs := fs.String("vhs", "vhs", "vhs executable")
-	tapeOnly := fs.Bool("tape-only", false, "print the tape to stdout and run nothing")
-	if err := fs.Parse(args); err != nil {
+func Run(opts Options, args []string, stdout, stderr io.Writer) int {
+	if len(args) > 0 {
+		fmt.Fprintf(stderr, "shot: unexpected argument %q; the command goes in --command\n", args[0])
 		return 2
 	}
-	if fs.NArg() > 0 {
-		fmt.Fprintf(stderr, "shot: unexpected argument %q; the command goes in -command\n", fs.Arg(0))
-		return 2
+	s := shot{
+		setup:       opts.Setup,
+		ready:       opts.Ready,
+		command:     opts.Command,
+		wait:        opts.Wait,
+		width:       opts.Width,
+		height:      opts.Height,
+		fontSize:    opts.FontSize,
+		waitTimeout: opts.WaitTimeout,
 	}
-	s.setup = setup
-	if *out != "" {
-		abs, err := filepath.Abs(*out)
+	if opts.Out != "" {
+		abs, err := filepath.Abs(opts.Out)
 		if err != nil {
-			fmt.Fprintf(stderr, "shot: -out: %v\n", err)
+			fmt.Fprintf(stderr, "shot: --out: %v\n", err)
 			return 2
 		}
 		s.out = abs
@@ -280,14 +272,14 @@ func run(args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintf(stderr, "shot: %v\n", err)
 		return 2
 	}
-	if *tapeOnly {
+	if opts.TapeOnly {
 		fmt.Fprint(stdout, tape)
 		return 0
 	}
 
-	version, err := exec.Command(*vhs, "--version").Output()
+	version, err := exec.Command(opts.VHS, "--version").Output()
 	if err != nil {
-		fmt.Fprintf(stderr, "shot: %s --version: %v\n", *vhs, err)
+		fmt.Fprintf(stderr, "shot: %s --version: %v\n", opts.VHS, err)
 		return 1
 	}
 	if err := checkVersion(string(version)); err != nil {
@@ -311,7 +303,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 
 	ctx, cancel := context.WithTimeout(context.Background(), runTimeout)
 	defer cancel()
-	cmd := exec.CommandContext(ctx, *vhs, s.tapePath())
+	cmd := exec.CommandContext(ctx, opts.VHS, s.tapePath())
 	cmd.Stdout = stderr
 	cmd.Stderr = stderr
 	if err := cmd.Run(); err != nil {
