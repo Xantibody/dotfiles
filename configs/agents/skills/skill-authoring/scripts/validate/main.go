@@ -1,8 +1,16 @@
 // validate checks SKILL.md frontmatter against the field list Claude Code
 // documents today, so a skill is never rejected — or silently ignored — for a
 // field that the spec added or removed after some validator froze its list.
+// It also checks what a skill's body and evals point at: a sibling skill the
+// body loads must exist and be visible to the model, and a repository path or
+// commit the body or an eval prompt names must exist.
 //
-//	go run main.go [-offline] <skill-dir>...
+//	go run main.go [-offline] [-strict] [-readme README.md] [-known <skill-dir>]... <skill-dir>...
+//
+// -known names a skill that is not validated but may be referred to, such as
+// one a flake input ships (osekkai, ha) that is not beside the others.
+// -readme checks that the skill map names every validated skill and no
+// skill that does not exist. -strict fails on warnings too; CI runs that way.
 //
 // The allowed fields come from the "Frontmatter reference" table on
 // https://code.claude.com/docs/en/skills.md, fetched on every run. When the
@@ -15,11 +23,14 @@
 package main
 
 import (
+	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"sort"
@@ -90,48 +101,95 @@ type spec struct {
 }
 
 func main() {
-	offline := flag.Bool("offline", false, "skip fetching the docs; use the baked-in field list")
-	flag.Parse()
-	dirs := flag.Args()
+	os.Exit(run(os.Args[1:], os.Stdout))
+}
+
+// dirList collects a repeatable flag.
+type dirList []string
+
+func (d *dirList) String() string     { return strings.Join(*d, ",") }
+func (d *dirList) Set(v string) error { *d = append(*d, v); return nil }
+
+// run validates the skills named in args, writes the report to out and
+// returns the exit code: 0 when everything passed, 1 when something failed,
+// 2 on a usage error.
+func run(args []string, out io.Writer) int {
+	fs := flag.NewFlagSet("validate", flag.ContinueOnError)
+	fs.SetOutput(os.Stderr)
+	offline := fs.Bool("offline", false, "skip fetching the docs; use the baked-in field list")
+	strict := fs.Bool("strict", false, "fail on warnings as well as errors")
+	readme := fs.String("readme", "", "skill map (configs/agents/README.md) that must name every validated skill")
+	var knownDirs dirList
+	fs.Var(&knownDirs, "known", "a skill that may be referred to but is not validated (repeatable)")
+	if err := fs.Parse(args); err != nil {
+		return 2
+	}
+	dirs := fs.Args()
 	if len(dirs) == 0 {
-		fmt.Fprintln(os.Stderr, "usage: go run main.go [-offline] <skill-dir>...")
-		os.Exit(2)
+		fmt.Fprintln(os.Stderr, "usage: go run main.go [-offline] [-strict] [-readme README.md] [-known <skill-dir>]... <skill-dir>...")
+		return 2
+	}
+	known := map[string]string{}
+	for _, d := range knownDirs {
+		if _, err := os.Stat(filepath.Join(d, "SKILL.md")); err != nil {
+			fmt.Fprintf(os.Stderr, "-known %s: %v\n", d, err)
+			return 2
+		}
+		known[filepath.Base(mustAbs(d))] = d
 	}
 
-	sp := loadSpec(*offline)
-	fmt.Printf("field list: %s\n", sp.source)
+	sp := loadSpec(*offline, out)
+	fmt.Fprintf(out, "field list: %s\n", sp.source)
 
 	failed := false
+	var names []string
 	for _, dir := range dirs {
-		problems, warnings := validateSkill(dir, sp)
+		names = append(names, filepath.Base(mustAbs(dir)))
+		problems, warnings, notes := validateSkill(dir, sp, known)
+		status := "OK"
+		if len(problems) > 0 || *strict && len(warnings) > 0 {
+			status = "FAIL"
+			failed = true
+		}
+		fmt.Fprintf(out, "%s: %s\n", filepath.Clean(dir), status)
+		for _, p := range problems {
+			fmt.Fprintf(out, "  error: %s\n", p)
+		}
+		for _, w := range warnings {
+			fmt.Fprintf(out, "  warn:  %s\n", w)
+		}
+		for _, n := range notes {
+			fmt.Fprintf(out, "  note:  %s\n", n)
+		}
+	}
+	if *readme != "" {
+		problems := checkReadme(*readme, names, known)
 		status := "OK"
 		if len(problems) > 0 {
 			status = "FAIL"
 			failed = true
 		}
-		fmt.Printf("%s: %s\n", filepath.Clean(dir), status)
+		fmt.Fprintf(out, "%s: %s\n", filepath.Clean(*readme), status)
 		for _, p := range problems {
-			fmt.Printf("  error: %s\n", p)
-		}
-		for _, w := range warnings {
-			fmt.Printf("  warn:  %s\n", w)
+			fmt.Fprintf(out, "  error: %s\n", p)
 		}
 	}
 	if failed {
-		os.Exit(1)
+		return 1
 	}
+	return 0
 }
 
 // loadSpec fetches the live field list, falling back to the baked-in one and
 // reporting any drift between them.
-func loadSpec(offline bool) spec {
+func loadSpec(offline bool, out io.Writer) spec {
 	fb := spec{fields: toSet(fallbackFields), listingCap: fallbackListingCap, source: "fallback (" + fallbackDate + ")", bundled: toSet(fallbackBundled)}
 	if offline {
 		return fb
 	}
 	live, capN, err := fetchDocs()
 	if err != nil {
-		fmt.Printf("warn:  could not fetch %s (%v); using %s\n", docsURL, err, fb.source)
+		fmt.Fprintf(out, "warn:  could not fetch %s (%v); using %s\n", docsURL, err, fb.source)
 		return fb
 	}
 	if capN == 0 {
@@ -139,20 +197,20 @@ func loadSpec(offline bool) spec {
 	}
 	sp := spec{fields: toSet(live), listingCap: capN, source: "docs (" + docsURL + ")", bundled: fb.bundled}
 	if names, err := fetchBundled(); err != nil {
-		fmt.Printf("warn:  could not fetch the command pages (%v); using the fallback bundled-name list\n", err)
+		fmt.Fprintf(out, "warn:  could not fetch the command pages (%v); using the fallback bundled-name list\n", err)
 	} else {
 		sp.bundled = toSet(names)
 		if added, removed := diffSets(sp.bundled, fb.bundled); len(added) > 0 || len(removed) > 0 {
-			fmt.Printf("warn:  bundled command names differ from fallback: added %v, removed %v — update fallbackBundled in main.go\n", added, removed)
+			fmt.Fprintf(out, "warn:  bundled command names differ from fallback: added %v, removed %v — update fallbackBundled in main.go\n", added, removed)
 		}
 	}
 	added, removed := diffSets(sp.fields, fb.fields)
 	if len(added) > 0 || len(removed) > 0 {
-		fmt.Printf("warn:  docs differ from fallback (%s): added %v, removed %v — update fallbackFields in %s\n",
+		fmt.Fprintf(out, "warn:  docs differ from fallback (%s): added %v, removed %v — update fallbackFields in %s\n",
 			fallbackDate, added, removed, "main.go")
 	}
 	if capN != fallbackListingCap {
-		fmt.Printf("warn:  docs listing cap is %d, fallback says %d — update fallbackListingCap\n", capN, fallbackListingCap)
+		fmt.Fprintf(out, "warn:  docs listing cap is %d, fallback says %d — update fallbackListingCap\n", capN, fallbackListingCap)
 	}
 	return sp
 }
@@ -305,15 +363,31 @@ func (fm *frontmatter) scalar(key string) string {
 // "via the `x` skill", "the `x` skill's". Plugin skills carry a colon.
 var skillRefRe = regexp.MustCompile("`([a-z0-9][a-z0-9:-]*)` skill")
 
-func validateSkill(dir string, sp spec) (problems, warnings []string) {
+// loadRefRe matches a reference that makes the model load a skill at that
+// step: "load the `x` skill", "use `x` for", "via the `x` skill", "hand over
+// to `x`". A reference that only points ("the `x` skill's question", "see the
+// `x` skill") is left out, and so is "hand the user `/x`", the way to reach a
+// skill the model cannot load.
+var loadRefRe = regexp.MustCompile("(?i)\\b(?:loads?|loading|uses?|using|via|hand(?:s|ing)?\\s+(?:it\\s+|them\\s+)?over\\s+to)\\s+(?:the\\s+)?`([a-z0-9][a-z0-9:-]*)`")
+
+// pathRefRe matches a repository path the body writes in backticks. Only
+// modules/ and configs/ are this repository's own; a body names other paths
+// (.github/, references/) in the repository the skill is used on.
+var pathRefRe = regexp.MustCompile("`((?:modules|configs)/[^`\\s]*)`")
+
+// validateSkill returns the skill's problems (which fail the run), warnings
+// (which fail it under -strict) and notes (checks it could not run here).
+// known maps a skill name to the directory of a skill that is not validated
+// but may be referred to.
+func validateSkill(dir string, sp spec, known map[string]string) (problems, warnings, notes []string) {
 	path := filepath.Join(dir, "SKILL.md")
 	raw, err := os.ReadFile(path)
 	if err != nil {
-		return []string{err.Error()}, nil
+		return []string{err.Error()}, nil, nil
 	}
 	fm, body, err := parseFrontmatter(string(raw))
 	if err != nil {
-		return []string{err.Error()}, nil
+		return []string{err.Error()}, nil, nil
 	}
 
 	for _, k := range fm.order {
@@ -362,9 +436,42 @@ func validateSkill(dir string, sp spec) (problems, warnings []string) {
 			continue
 		}
 		seen[ref] = true
-		if !skillExists(ref, parent) {
-			problems = append(problems, fmt.Sprintf("body refers to the `%s` skill but neither %s nor %s has such a skill", ref, parent, installedSkillsDir()))
+		if findSkill(ref, parent, known) == "" {
+			problems = append(problems, fmt.Sprintf("body refers to the `%s` skill but neither %s, %s nor -known has such a skill", ref, parent, installedSkillsDir()))
 		}
+	}
+	loaded := map[string]bool{}
+	for _, m := range loadRefRe.FindAllStringSubmatch(body, -1) {
+		ref := m[1]
+		if loaded[ref] || ref == name || strings.Contains(ref, ":") {
+			continue
+		}
+		loaded[ref] = true
+		// A name that is no skill (`git`) is not a skill reference at all.
+		if d := findSkill(ref, parent, known); d != "" && hiddenSkill(d) {
+			problems = append(problems, fmt.Sprintf("body loads the `%s` skill, which sets disable-model-invocation: true, so the model cannot load it; hand the user `/%s` instead", ref, ref))
+		}
+	}
+
+	root := repoRoot(dir)
+	if root != "" {
+		pathsSeen := map[string]bool{}
+		for _, m := range pathRefRe.FindAllStringSubmatch(body, -1) {
+			p := m[1]
+			if pathsSeen[p] || strings.ContainsAny(p, "<>*{}$") {
+				continue
+			}
+			pathsSeen[p] = true
+			if _, err := os.Stat(filepath.Join(root, p)); err != nil {
+				warnings = append(warnings, fmt.Sprintf("body names `%s`, which does not exist under %s", p, root))
+			}
+		}
+		w, n, err := checkEvals(dir, root)
+		if err != nil {
+			problems = append(problems, err.Error())
+		}
+		warnings = append(warnings, w...)
+		notes = append(notes, n...)
 	}
 
 	if n := strings.Count(body, "\n"); n > bodyLineWarn {
@@ -375,12 +482,13 @@ func validateSkill(dir string, sp spec) (problems, warnings []string) {
 			warnings = append(warnings, junk+" inside a skill directory is for humans; skills are read by the model")
 		}
 	}
-	return problems, warnings
+	return problems, warnings, notes
 }
 
 // installedSkillsDir is where Claude Code loads skills from. Skills that a
 // flake input ships (osekkai, agent-browser, ha) land there without a
-// directory beside the one being validated.
+// directory beside the one being validated; where nothing is installed (CI),
+// -known names them instead.
 func installedSkillsDir() string {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -389,16 +497,195 @@ func installedSkillsDir() string {
 	return filepath.Join(home, ".claude", "skills")
 }
 
-func skillExists(name, siblings string) bool {
+// findSkill returns the directory of the skill called name, or "".
+func findSkill(name, siblings string, known map[string]string) string {
+	if d, ok := known[name]; ok {
+		return d
+	}
 	for _, dir := range []string{siblings, installedSkillsDir()} {
 		if dir == "" {
 			continue
 		}
-		if _, err := os.Stat(filepath.Join(dir, name, "SKILL.md")); err == nil {
-			return true
+		d := filepath.Join(dir, name)
+		if _, err := os.Stat(filepath.Join(d, "SKILL.md")); err == nil {
+			return d
 		}
 	}
-	return false
+	return ""
+}
+
+// hiddenSkill reports whether the skill in dir sets disable-model-invocation,
+// which removes it from the model's listing and from the Skill tool.
+func hiddenSkill(dir string) bool {
+	raw, err := os.ReadFile(filepath.Join(dir, "SKILL.md"))
+	if err != nil {
+		return false
+	}
+	fm, _, err := parseFrontmatter(string(raw))
+	return err == nil && fm.scalar("disable-model-invocation") == "true"
+}
+
+// repoRoot returns the nearest directory at or above dir that holds
+// flake.nix, or "" for a skill outside this kind of repository (one a flake
+// input ships), whose paths mean something in another tree.
+func repoRoot(dir string) string {
+	for d := mustAbs(dir); ; d = filepath.Dir(d) {
+		if _, err := os.Stat(filepath.Join(d, "flake.nix")); err == nil {
+			return d
+		}
+		if filepath.Dir(d) == d {
+			return ""
+		}
+	}
+}
+
+// otherTreeRe marks an eval prompt that runs in another repository or a
+// fixture; its paths and commits are not this repository's.
+var otherTreeRe = regexp.MustCompile(`(?m)^Working directory:`)
+
+// evalPathRe matches a relative path in a prompt. The leading class keeps a
+// URL's or an absolute path's tail from matching. Prompts are often Japanese,
+// so a path ends at the first character outside ASCII.
+var evalPathRe = regexp.MustCompile(`(?:^|[^A-Za-z0-9_./:~@-])((?:[A-Za-z0-9_-][A-Za-z0-9_.-]*/)+[A-Za-z0-9_.-]*)`)
+
+var (
+	wordRe = regexp.MustCompile(`[0-9A-Za-z]+`)
+	hashRe = regexp.MustCompile(`^[0-9a-f]{7,40}$`)
+)
+
+// checkEvals reads dir/evals/evals.json and warns about each path and commit
+// hash a prompt names that root does not have. A path counts only when its
+// first segment is a directory at root, so a file the eval asks to create
+// under a new directory is not reported. A hash is a 7-40 character hex word
+// with both a digit and a letter, so "deadbeef" and "1234567" are not.
+func checkEvals(dir, root string) (warnings, notes []string, err error) {
+	path := filepath.Join(dir, "evals", "evals.json")
+	raw, err := os.ReadFile(path)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil, nil, nil
+	}
+	if err != nil {
+		return nil, nil, err
+	}
+	var doc struct {
+		Evals []struct {
+			ID     json.RawMessage `json:"id"`
+			Prompt string          `json:"prompt"`
+		} `json:"evals"`
+	}
+	if err := json.Unmarshal(raw, &doc); err != nil {
+		return nil, nil, fmt.Errorf("%s: %v", path, err)
+	}
+	_, gitErr := os.Stat(filepath.Join(root, ".git"))
+	hashesSkipped := false
+	for _, e := range doc.Evals {
+		if otherTreeRe.MatchString(e.Prompt) {
+			continue
+		}
+		seen := map[string]bool{}
+		for _, m := range evalPathRe.FindAllStringSubmatch(e.Prompt, -1) {
+			p := strings.TrimRight(m[1], ".")
+			first := strings.SplitN(p, "/", 2)[0]
+			if seen[p] {
+				continue
+			}
+			seen[p] = true
+			if fi, err := os.Stat(filepath.Join(root, first)); err != nil || !fi.IsDir() {
+				continue
+			}
+			if _, err := os.Stat(filepath.Join(root, p)); err != nil {
+				warnings = append(warnings, fmt.Sprintf("evals.json eval %s names %s, which does not exist under %s", e.ID, p, root))
+			}
+		}
+		for _, w := range wordRe.FindAllString(e.Prompt, -1) {
+			if seen[w] || !hashRe.MatchString(w) || !strings.ContainsAny(w, "0123456789") || !strings.ContainsAny(w, "abcdef") {
+				continue
+			}
+			seen[w] = true
+			if gitErr != nil {
+				hashesSkipped = true
+				continue
+			}
+			cmd := exec.Command("git", "-C", root, "cat-file", "-e", w+"^{commit}")
+			if err := cmd.Run(); err != nil {
+				var exit *exec.ExitError
+				if !errors.As(err, &exit) {
+					return warnings, notes, fmt.Errorf("checking commit %s: %v", w, err)
+				}
+				warnings = append(warnings, fmt.Sprintf("evals.json eval %s names commit %s, which %s does not have", e.ID, w, root))
+			}
+		}
+	}
+	if hashesSkipped {
+		notes = append(notes, fmt.Sprintf("commit hashes in evals.json not checked: %s has no git history", root))
+	}
+	return warnings, notes, nil
+}
+
+// nodeRe matches a rectangle node in a mermaid flowchart, `id["text"]`. A
+// tool is a parallelogram (`[/"`), the user a stadium (`(["`) and a subgraph
+// title follows a space, so none of them match.
+var (
+	nodeRe     = regexp.MustCompile(`\b[A-Za-z][A-Za-z0-9_]*\["([^"]*)"\]`)
+	listItemRe = regexp.MustCompile("(?m)^- `([a-z0-9][a-z0-9-]*)`")
+	skillName  = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
+)
+
+// checkReadme compares the skill map with the skills: every validated skill
+// must appear as a node or in the list of skills nothing loads, and every
+// node must be a validated or -known skill. A node marked "(plugin)" names a
+// skill from a plugin, which has no directory here.
+func checkReadme(path string, skills []string, known map[string]string) []string {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return []string{err.Error()}
+	}
+	content := string(raw)
+	named := map[string]bool{}
+	var problems []string
+	exists := toSet(skills)
+	for _, block := range mermaidBlocks(content) {
+		for _, m := range nodeRe.FindAllStringSubmatch(block, -1) {
+			text := strings.TrimSpace(strings.SplitN(m[1], "<br/>", 2)[0])
+			if strings.Contains(text, "(plugin)") || !skillName.MatchString(text) {
+				continue
+			}
+			if named[text] {
+				continue
+			}
+			named[text] = true
+			if _, ok := known[text]; !exists[text] && !ok {
+				problems = append(problems, fmt.Sprintf("the map has a node for `%s`, but no such skill was validated or given with -known", text))
+			}
+		}
+	}
+	for _, m := range listItemRe.FindAllStringSubmatch(content, -1) {
+		named[m[1]] = true
+	}
+	for _, s := range skills {
+		if !named[s] {
+			problems = append(problems, fmt.Sprintf("`%s` is a skill, but the map neither draws it nor lists it among the skills nothing loads", s))
+		}
+	}
+	return problems
+}
+
+func mermaidBlocks(content string) []string {
+	var blocks []string
+	rest := content
+	for {
+		i := strings.Index(rest, "```mermaid\n")
+		if i < 0 {
+			return blocks
+		}
+		rest = rest[i+len("```mermaid\n"):]
+		j := strings.Index(rest, "\n```")
+		if j < 0 {
+			return append(blocks, rest)
+		}
+		blocks = append(blocks, rest[:j])
+		rest = rest[j:]
+	}
 }
 
 func mustAbs(p string) string {
