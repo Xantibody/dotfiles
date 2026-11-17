@@ -18,7 +18,7 @@ absorb, not something to replace:
 | `.config/nextest.toml`                                                                | nextest is already adopted → use the nextest test recipe             |
 | `rust-version` in Cargo.toml                                                          | MSRV. Below 1.81, `reason =` and `#[expect]` don't exist (see Lints) |
 | `[workspace]` with `members`                                                          | put lints in `[workspace.lints]`; members inherit them               |
-| `[lints.rustdoc]` / `missing_docs` / `[package.metadata.docs.rs]`                     | the crate documents itself → doc lints and `rust-doc` apply          |
+| `[lints.rustdoc]` / `missing_docs` / `[package.metadata.docs.rs]`                     | the crate documents itself → doc lints and `lint-rust-doc` apply     |
 
 ## 1. devShell
 
@@ -34,7 +34,7 @@ devShells.default = pkgs.mkShell {
     rustfmt
     rust-analyzer # wrapper already sets RUST_SRC_PATH to rustPlatform.rustLibSrc
     just
-    ripgrep # rust-no-inner-allow recipe
+    ripgrep # lint-rust-inner-allow recipe
     cargo-deny # only if step "cargo-deny" applies
     # cargo-nextest  # only if the repo already uses nextest
   ];
@@ -165,7 +165,7 @@ Notes on the choices:
 - `allow_attributes` checks only outer `#[allow]`. It ignores inner
   `#![allow]` and anything written inside macros. Inner `#![allow]` still has to
   carry a `reason` (`allow_attributes_without_reason`), and the
-  `rust-no-inner-allow` recipe below closes the rest of the gap.
+  `lint-rust-inner-allow` recipe below closes the rest of the gap.
 - Both `allow_attributes*` lints are gated on MSRV 1.81, when `#[expect]`
   and `reason =` were stabilized. Below that `rust-version` they silently
   do nothing. Raise `rust-version`, or tell the user these two lints are
@@ -193,7 +193,7 @@ Doc lints are opt-in as well: for a crate published to docs.rs, a repo
 the survey found already documenting itself, or when the user asks. A
 plain library without either is offered them, not marked partial. The
 set is the one tokio, ripgrep and rust-lang/cargo turn on, at `warn` like
-every quality lint (the `-D warnings` in `rust-lint` and `rust-doc` fails
+every quality lint (the `-D warnings` in `lint-rust` and `lint-rust-doc` fails
 the gate):
 
 ```toml
@@ -216,9 +216,9 @@ redundant_explicit_links = "warn"
 all-features = true
 ```
 
-- `missing_docs` is a rustc lint, so `rust-lint` already catches it.
+- `missing_docs` is a rustc lint, so `lint-rust` already catches it.
   `[lints.rustdoc]` fires only while docs build, which is what the
-  `rust-doc` recipe is for.
+  `lint-rust-doc` recipe is for.
 - Count the gap before turning `missing_docs` on, once per library crate:
   `touch <crate>/src/lib.rs && cargo rustc -p <crate> --lib --all-features -- -W missing_docs 2>&1 | grep -c 'missing documentation'`
   (a cached build prints nothing). Land the docs first and the lint in
@@ -301,7 +301,7 @@ Split the checks by what can make them fail:
   `[bans.std-replacements]` is configured, so leave that table out of
   `check`'s config or run with `--offline`.
 - `advisories` fetches the RustSec database on every run and can fail a
-  PR that touched nothing. Give it its own `just audit` recipe and run it
+  PR that touched nothing. Give it its own `just audit-rust` recipe and run it
   from a scheduled workflow (and from `pull_request` when Cargo.lock
   changes). Do not put it in `check`. For an offline run, use the root
   flag: `cargo deny --offline check`. Since 0.20.0 it replaces
@@ -312,16 +312,16 @@ Split the checks by what can make them fail:
 ```just
 # Type-check and lint every target in every crate. Clippy runs `check`,
 # so no separate `cargo check` is needed.
-rust-lint:
+lint-rust: lint-rust-inner-allow
     cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
 
 # Unit, integration and doc tests. No --all-targets here: with it,
 # `cargo test` skips doctests.
-rust-test:
+test-rust:
     cargo test --workspace --all-features --locked
 
 # Inner #![allow] is invisible to clippy::allow_attributes.
-rust-no-inner-allow:
+lint-rust-inner-allow:
     #!/usr/bin/env bash
     set -euo pipefail
     if rg -n --glob '*.rs' '^\s*#!\[allow\(' .; then
@@ -331,20 +331,22 @@ rust-no-inner-allow:
 
 # Docs build, only with the doc lints. Private items too: that is where
 # broken intra-doc links hide.
-rust-doc:
+lint-rust-doc:
     RUSTDOCFLAGS="-D warnings" cargo doc --workspace --no-deps --all-features --locked --document-private-items
 
 # cargo-deny, offline-stable part (only if adopted)
-rust-deny:
+lint-rust-deny:
     cargo deny check bans licenses sources
 
 # Advisory DB check; network, not part of `check`
-audit:
+audit-rust:
     cargo deny check advisories
 ```
 
-Add `rust-lint rust-test rust-no-inner-allow` (and `rust-deny`, and
-`rust-doc` with the doc lints) as dependencies of the shared `check` recipe. Formatting comes from the
+Hang `lint-rust` (and `lint-rust-deny`, and `lint-rust-doc` with the doc
+lints) under the shared `lint`, and `test-rust` under `test`. Rust has no
+separate type check: clippy compiles every target, so a Rust-only
+repository drops `typecheck` from `check`. Formatting comes from the
 shared format step.
 
 - `--workspace`: when the root manifest is also a package, a bare `cargo`
