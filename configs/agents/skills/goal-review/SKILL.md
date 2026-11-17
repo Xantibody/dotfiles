@@ -1,7 +1,7 @@
 ---
 name: goal-review
-description: Judges where something stands against the Goal another skill declares — a repository against `baseline`'s, a branch's unpushed history against `reconstruct`'s — and returns that Goal's verdict. It reads the Goal and runs its tests, never the owning skill's procedure; the owning skill does the work.
-when_to_use: Whenever the user asks whether something is already in the state a skill aims for — "環境どこまでできてる?", "baseline 見て", "履歴見て", "コミット整理した方がいい?", "commit きれい?", "このまま PR 出せる?" — whenever the implement skill finishes a feature or the pull-request skill confirms its range (against reconstruct's Goal), and whenever the baseline skill starts (against its own Goal).
+description: Judges where something stands against the Goal another skill declares — a repository against `baseline`'s, a branch's unpushed history against `reconstruct`'s, a finished change against `implement`'s — and returns that Goal's verdict. It reads the Goal and runs its tests, never the owning skill's procedure; the owning skill does the work.
+when_to_use: Whenever the user asks whether something is already in the state a skill aims for — "環境どこまでできてる?", "baseline 見て", "履歴見て", "コミット整理した方がいい?", "commit きれい?", "このまま PR 出せる?", "実装終わった?", "完了でいい?" — whenever the implement skill finishes a feature (against its own Goal, then reconstruct's), whenever the pull-request skill confirms its range (against reconstruct's Goal), and whenever the baseline skill starts (against its own Goal).
 ---
 
 # Goal review
@@ -18,7 +18,8 @@ author's memory of what they did.
 The caller names the skill (`goal-review` against `reconstruct`). When the
 user asks without naming one, take it from what they ask about: a
 repository's setup, tooling or CI is `baseline`; a branch's commits are
-`reconstruct`. If neither fits, ask.
+`reconstruct`; whether a change is finished — its checks, its smoke run, its
+screen — is `implement`. If none fits, ask.
 
 Read `<name>/SKILL.md` in the directory this skill sits in (`~/.claude/skills`
 for Claude Code, `~/.agents/skills` for codex): its `## Goal` section, and the
