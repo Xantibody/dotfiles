@@ -399,6 +399,8 @@ Do not mass-fix, mass-disable or mass-`@ts-expect-error`.
    not occur anymore") until `eslint --prune-suppressions` lowers the file.
 3. Only `"error"` rules are suppressed, which is another reason the baseline has
    no warnings. Do not pass `--pass-on-unpruned-suppressions`.
+4. Running `--suppress-all` again absorbs new violations too; `ratchet-ts`
+   (below) fails a change whose suppressions file grew.
 
 **oxlint** (bulk suppressions, hidden flags): `oxlint --suppress-all` writes
 `oxlint-suppressions.json` in the working directory; `--prune-suppressions`
@@ -406,7 +408,9 @@ drops fixed entries; a new violation fails with "There are new violations not
 covered by the suppressions file", a stale one with "There are suppressions
 that do not occur anymore". The flags are hidden from `--help` and not yet
 documented (oxc 2026 Q4 plan: "The code is complete, but it has not been
-properly stabilized or documented"). Always run oxlint from the repo root so the file is found. If the
+properly stabilized or documented"). The file has ESLint's shape
+(`{ "<file>": { "<rule>": { "count": N } } }`), so `ratchet-ts` reads both.
+Always run oxlint from the repo root so the file is found. If the
 flags misbehave, fall back to an `overrides` entry listing the legacy files
 with the rule `"off"` and a HACK comment; delete files from the list as they
 are fixed.
@@ -417,7 +421,7 @@ are fixed.
   and code (`src/a.ts TS2345`), not per line, so edits elsewhere in a file do
   not churn it. More errors fail; fewer errors also fail until
   `just typecheck-ts-baseline` lowers `.tsc-baseline`, so the count only goes
-  down.
+  down. `ratchet-ts` fails a change that raised it instead.
 - Structural: put fixed directories under a strict `tsconfig.json` and the
   rest under a `tsconfig.legacy.json` with the new flags off, joined by project
   references (`tsc -b`). Move a directory across when it is clean. Use this when
@@ -608,6 +612,60 @@ A config error (`error TS5xxx` with no file) survives the `sed` as a whole
 line, is not in the baseline, and so fails the diff instead of being hidden.
 When `.tsc-baseline` reaches empty, delete it and the three ratchet recipes and
 go back to the plain `typecheck-ts` in one commit.
+
+The recipes above keep each baseline equal to the tree, so a change that adds
+a violation and rewrites the baseline in the same commit (`just
+typecheck-ts-baseline`, `--suppress-all` run again) passes them. `ratchet-ts`
+compares each baseline file with its copy at the base the Go ratchet uses and
+fails when any entry grew. Add it to `lint-ts`'s dependencies whenever one of
+the three files exists; `default_branch` is the Go reference's variable, set
+once at the top of the justfile.
+
+```just
+# Baselines may only shrink: compare each against LINT_BASE (CI) or the merge-base (local)
+[private]
+ratchet-ts:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    base="${LINT_BASE:-$(git merge-base HEAD origin/{{ default_branch }})}"
+    if ! git cat-file -e "$base^{commit}" 2> /dev/null; then
+        echo "ratchet-ts: base $base is not in this clone; CI needs actions/checkout with fetch-depth: 0" >&2
+        exit 1
+    fi
+    # One "<count> <file> <rule>" line per entry
+    entries() {
+        case "$1" in
+        .tsc-baseline) awk '{ $1 = $1; print }' ;;
+        *) node -e 'for (const [file, rules] of Object.entries(JSON.parse(require("fs").readFileSync(0, "utf8")))) for (const [rule, { count }] of Object.entries(rules)) console.log(count, file, rule)' ;;
+        esac
+    }
+    grew=$(
+        for f in .tsc-baseline eslint-suppressions.json oxlint-suppressions.json; do
+            [ -e "$f" ] || continue
+            if ! git cat-file -e "$base:$f" 2> /dev/null; then
+                echo "ratchet-ts: $f is new since $base; the ratchet starts from this copy" >&2
+                continue
+            fi
+            awk -v f="$f" '
+                { k = $0; sub(/^[0-9]+ /, "", k) }
+                NR == FNR { was[k] = $1; next }
+                $1 > was[k] + 0 { printf "%s: %s: %d, was %d\n", f, k, $1, was[k] + 0 }
+            ' <(git show "$base:$f" | entries "$f") <(entries "$f" < "$f")
+        done
+    )
+    if [ -n "$grew" ]; then
+        printf '%s\n' "$grew"
+        echo "These entries grew since $base: a new violation went into the baseline. Fix the new violation; a baseline only goes down."
+        exit 1
+    fi
+```
+
+An entry is per file and rule (per file and code for tsc), so fixing one
+violation does not pay for a new one elsewhere. A file renamed while it still
+has entries counts as new under its new name: fix its entries before the
+rename. A baseline file absent at the base passes, because that is the commit
+that starts the ratchet. The recipe lives in the justfile the same change can
+edit, so it holds only while edits to the justfile are reviewed.
 
 Notes:
 

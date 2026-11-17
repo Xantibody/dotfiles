@@ -332,7 +332,7 @@ v2 keys (config `issues.*`, same names as CLI flags):
   against the working tree).
 - CI must check out full history (`actions/checkout` with `fetch-depth: 0`) and
   set `LINT_BASE`: `github.event.pull_request.base.sha` on `pull_request`,
-  `github.event.before` on `push`.
+  `github.event.before` on `push`. `assets/check.yml` does both.
 - `--whole-files` (boy-scout: any issue in a touched file) is opt-in, not the
   default.
 - The ratchet covers lint only. Formatting, build, `go mod tidy -diff` and tests

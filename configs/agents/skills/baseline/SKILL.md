@@ -34,6 +34,8 @@ repository already is.
   it; a retry never does.
 - **Existing debt is ratcheted, not mass-fixed.** A rule raised on a mature
   repository fails only on new violations, so adopting it does not block work.
+  New is measured against the commit the change started from (`LINT_BASE`),
+  so a change cannot raise its own baseline to let a violation through.
   Formatting is the exception: it is mechanical, so it is one commit.
 
 ## Goal
@@ -48,16 +50,16 @@ that works best when building from nothing, not an order a repository must
 have followed. The tests for each, and the shapes that mean "started but not
 holding", are in `references/survey.md`.
 
-| #   | Step               | Holds when                                                                                                  |
-| --- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
-| 1   | devShell + direnv  | a tracked `flake.nix` / `flake.lock` with a devShell, `.envrc` loads it, `.direnv/` ignored                 |
-| 2   | `nix fmt`          | treefmt-nix formats every language the repo has, and the tree is formatted                                  |
-| 3   | `just check`       | one recipe runs the format check, lint (with zizmor and typos), type check and tests at the strict defaults |
-| 4   | CI                 | a workflow runs `nix develop --command just check` on pull requests and default-branch pushes               |
-| 5   | Architecture map   | one map with a codemap and the rules step 3 enforces                                                        |
-| 6   | Decision records   | a decision-record directory with a template                                                                 |
-| 7   | Dependency updates | a Renovate config that updates the language dependencies, the actions and `flake.lock`                      |
-| 8   | Run and smoke      | `just run` starts the app, `just smoke` drives the feature map's smoke rows, and a run skill holds the map  |
+| #   | Step               | Holds when                                                                                                                           |
+| --- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | devShell + direnv  | a tracked `flake.nix` / `flake.lock` with a devShell, `.envrc` loads it, `.direnv/` ignored                                          |
+| 2   | `nix fmt`          | treefmt-nix formats every language the repo has, and the tree is formatted                                                           |
+| 3   | `just check`       | one recipe runs the format check, lint (with zizmor and typos), type check and tests at the strict defaults                          |
+| 4   | CI                 | a workflow runs `nix develop --command just check` on pull requests and default-branch pushes, with full history and `LINT_BASE` set |
+| 5   | Architecture map   | one map with a codemap and the rules step 3 enforces                                                                                 |
+| 6   | Decision records   | a decision-record directory with a template                                                                                          |
+| 7   | Dependency updates | a Renovate config that updates the language dependencies, the actions and `flake.lock`                                               |
+| 8   | Run and smoke      | `just run` starts the app, `just smoke` drives the feature map's smoke rows, and a run skill holds the map                           |
 
 A passing `just check` is not yet step 3: compare the lint and type-check
 configuration with the stack's reference in `references/` (`typescript.md`,
@@ -144,7 +146,9 @@ out of it. CI runs `test-slow` as its own job on every `pull_request` and on a
 schedule, so a test too slow for `check` is still never skipped.
 
 **4. CI.** `assets/check.yml`, with the default branch written into
-`on.push.branches`. An existing workflow that already runs the lint and tests
+`on.push.branches`. It checks out full history and sets `LINT_BASE`, the
+commit every ratchet recipe compares against; keep both even before the
+repository has a ratchet. An existing workflow that already runs the lint and tests
 its own way is rewritten to call `just check`, keeping the job name if it is a
 required status check. When CI goes red on the first run, the fix belongs in
 the devShell or the recipe, never in a CI-only step.
