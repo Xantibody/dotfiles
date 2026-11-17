@@ -363,6 +363,10 @@ shared format step.
   run in earns the HACK form. A slow test leaves `check` as its own test
   target (`[[test]] name = "slow"` with `test = false`, run by `test-slow`
   as `cargo test --test slow`), not through `#[ignore]`.
+- Property tests: proptest as a dev-dependency, its `proptest!` tests run by
+  `test-rust` like any other, so no recipe is added. Commit the
+  `proptest-regressions/` files it writes on a failure: they replay the
+  shrunk case first on every later run.
 - `--workspace`: when the root manifest is also a package, a bare `cargo`
   command acts only on that root package.
 - `--all-features`: if features are mutually exclusive, this fails to
@@ -444,3 +448,4 @@ and the approach you chose to the user.
 - cargo-deny `--offline` (root flag, replaced `--disable-fetch` in 0.20.0), `expiry` (0.21.0), config search path: https://github.com/EmbarkStudios/cargo-deny/blob/main/CHANGELOG.md , https://github.com/EmbarkStudios/cargo-deny/pull/881 , https://github.com/EmbarkStudios/cargo-deny/blob/main/src/cargo-deny/check.rs , https://github.com/EmbarkStudios/cargo-deny/blob/main/src/cargo-deny/common.rs
 - nixpkgs cargo-deny version: https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/ca/cargo-deny/package.nix
 - nextest and doctests: https://nexte.st/docs/running/
+- proptest (failure persistence in `proptest-regressions/`): https://proptest-rs.github.io/proptest/proptest/failure-persistence.html

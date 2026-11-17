@@ -72,7 +72,7 @@ Build features incrementally — one test at a time, never in batch. Follow the 
 1. **0-case (empty/base)**: Write a failing test for the simplest case (empty input, zero state). Implement the minimum to pass.
 2. **1-case (single/minimal)**: Write a failing test for a single valid input. Extend the implementation.
 3. **N-case (multiple/general)**: Write a failing test for the general case. Implement the real algorithm.
-4. **Boundary tests**: After the core logic works (Green), add edge case tests to strengthen confidence. These should pass without code changes.
+4. **Boundary tests**: After the core logic works (Green), add edge case tests to strengthen confidence. These should pass without code changes. When the input space is too wide to list by example (a parser, an encoder, a pure transformation), write one property test instead — an invariant such as a round trip, idempotence or a preserved count, checked over generated inputs with the stack's tool from the `baseline` skill's references. For an optimization, keep the old implementation beside the new one as the reference (in the test file, or unexported) and write a property test that the two return the same output on generated inputs before deleting or replacing it.
 5. **Refactor**: Consolidate test structure (e.g., table-driven tests) and improve code quality. Commit structural changes separately (use `commit` skill).
 6. Repeat for the next increment of the feature.
 

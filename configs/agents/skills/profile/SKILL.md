@@ -141,7 +141,7 @@ Report the top hot spots with their percentage width, and the artifact path. Thi
 
 ### 6. Measure After the Change
 
-Repeat steps 2 and 4 with the exact same workload, flags, and machine conditions, writing `<label>-after.*` files.
+Repeat steps 2 and 4 with the exact same workload, flags, and machine conditions, writing `<label>-after.*` files. A faster wrong answer is not an improvement: whether the change still returns the same output is settled where it was written, by the property test the `implement` skill asks for between the old and the new implementation; this skill only names that test in the report.
 
 ### 7. Compare and Report
 
@@ -155,6 +155,7 @@ Report using this structure:
 
 **Workload**: <command / benchmark, input size, build flags; CPU-bound or wait-bound and why>
 **Environment**: <machine, OS, notable conditions>
+**Equivalence**: <the test that checked the old and new output match, e.g. `TestParseMatchesReference`; `none` if nothing checked it>
 
 | Metric                             | Before | After | Delta |
 | ---------------------------------- | ------ | ----- | ----- |

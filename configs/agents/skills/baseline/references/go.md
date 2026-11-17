@@ -429,6 +429,15 @@ Notes:
   (https://pkg.go.dev/cmd/go#hdr-Test_packages).
 - `-shuffle=on` randomizes test order and prints the seed; rerun a failure
   with `-shuffle=<seed>` (https://pkg.go.dev/cmd/go#hdr-Testing_flags).
+- Property tests: a standard fuzz target (`func FuzzX(f *testing.F)`) asserting
+  the invariant. Without `-fuzz`, `go test` runs it on its seed corpus
+  (`f.Add` and `testdata/fuzz/`) like any test, so `test-go` covers it and no
+  recipe is added; commit the `testdata/fuzz/` file a fuzzing run writes for
+  a failure. When the input needs a generator the fuzzer's primitive
+  arguments cannot express (a struct, a sequence of operations), use
+  `pgregory.net/rapid` in an ordinary test, which generates inputs on every
+  `go test` run. Not `testing/quick`: it is frozen, and fuzzing does its job.
+  A long `-fuzz` run is not part of `check`.
 - `go mod tidy -diff` (Go 1.23+) prints the diff and exits non-zero instead of
   writing (https://go.dev/doc/go1.23#go-command).
 - `just` `env(key, default)` exists since 1.15 if a recipe needs it in an
@@ -445,3 +454,5 @@ Notes:
 - treefmt-nix Go programs: https://github.com/numtide/treefmt-nix/tree/main/programs
 - nixpkgs: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/go/golangci-lint/package.nix
 - Go toolchain selection: https://go.dev/doc/toolchain
+- Go fuzzing (seed corpus run by plain `go test`): https://go.dev/doc/security/fuzz/ ; `testing/quick` frozen: https://pkg.go.dev/testing/quick
+- rapid: https://pkg.go.dev/pgregory.net/rapid
