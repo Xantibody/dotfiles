@@ -41,9 +41,14 @@ matches the installed version.
    Every Bash call is a fresh shell, so put the `export` in front of each
    command chain, or pass `--session <name>` explicitly.
 
-4. **A running app.** The project's dev server or preview — the `run`
-   skill knows how to start it; a static site is served from its build
-   output. Note the URL; the skill does not start servers itself.
+4. **A running app, started the way the repository says.** First the
+   repository's run skill (`.claude/skills/<repo>-run/`, or
+   `.agents/skills/<repo>-run/` under codex): its Start section and its
+   feature map in `references/features.md`. Without one, `just run`. With
+   neither, find the dev server or preview yourself (a static site is
+   served from its build output) and say in the report that the
+   repository has no run skill, which is the baseline skill's step 8.
+   Note the URL.
 
 ## Verify a change
 
@@ -61,7 +66,10 @@ agent-browser screenshot <dir>/after.png
 Then **look at the image** with the Read tool. The snapshot tells you the
 button exists; the screenshot tells you it is where it should be, readable,
 and not overlapping something. Check what the change was meant to change,
-and one thing it was not meant to touch. A mobile width (`set viewport
+and one thing it was not meant to touch: pick both from the feature map,
+one row the diff touches and one it does not, follow each row's path and
+check what it says to see. Without a feature map, pick them yourself and
+name them in the report. A mobile width (`set viewport
 390 844`) is a second pass when the change touches layout.
 
 Interact when the state you need is behind a click — open the menu, fill

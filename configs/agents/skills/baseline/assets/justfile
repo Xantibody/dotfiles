@@ -28,3 +28,11 @@ typecheck:
 # Run the whole test suite
 test:
     @echo "test: not set up. Add the stack's test runner from the baseline skill's references/, or delete this recipe and its name in check if the repo has no code to test." >&2; exit 1
+
+# Start the app in the foreground, the way the run skill walks its feature map
+run:
+    @echo "run: not set up. Start the dev server, the CLI on a sample input, or a library's example program, as the baseline skill's step 8 says." >&2; exit 1
+
+# Start the app, drive the smoke rows of the run skill's feature map, stop it. check does not call it.
+smoke:
+    @echo "smoke: not set up. Drive the smoke rows of .claude/skills/<repo>-run/references/features.md against a fresh start and exit non-zero when one breaks, as the baseline skill's step 8 says." >&2; exit 1

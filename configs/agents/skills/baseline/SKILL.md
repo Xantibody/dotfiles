@@ -1,6 +1,6 @@
 ---
 name: baseline
-description: Converges a repository onto the baseline from whatever state it is in — a flake devShell with direnv, `nix fmt` through treefmt-nix, one `just check` with strict lint and type-check defaults and restricted escape hatches, CI running that same recipe, workflow-security and spelling checks, an architecture map, a decision-record template and Renovate for dependency updates — one commit per missing step, absorbing the tools already there. Its Goal is what the goal-review skill measures.
+description: Converges a repository onto the baseline from whatever state it is in — a flake devShell with direnv, `nix fmt` through treefmt-nix, one `just check` with strict lint and type-check defaults and restricted escape hatches, CI running that same recipe, workflow-security and spelling checks, an architecture map, a decision-record template, Renovate for dependency updates, and `just run` / `just smoke` with a per-repository run skill holding the feature map — one commit per missing step, absorbing the tools already there. Its Goal is what the goal-review skill measures.
 when_to_use: Whenever the user asks to set up a repository's development environment or bring one up to the house setup — "環境構築して", "baseline に寄せて", "flake 入れて", "just check 作って", "CI 組んで", "lint 厳しくして", "ADR の置き場作って", "renovate 入れて" — new or existing, empty or half done.
 ---
 
@@ -43,7 +43,7 @@ repository already is.
 they run only on a clean tree (`git status --porcelain` empty); on a dirty
 tree their items are `unknown`.
 
-**Items.** Seven steps. Each holds or not on its own; the numbering is the order
+**Items.** Eight steps. Each holds or not on its own; the numbering is the order
 that works best when building from nothing, not an order a repository must
 have followed. The tests for each, and the shapes that mean "started but not
 holding", are in `references/survey.md`.
@@ -57,6 +57,7 @@ holding", are in `references/survey.md`.
 | 5   | Architecture map   | one map with a codemap and the rules step 3 enforces                                                        |
 | 6   | Decision records   | a decision-record directory with a template                                                                 |
 | 7   | Dependency updates | a Renovate config that updates the language dependencies, the actions and `flake.lock`                      |
+| 8   | Run and smoke      | `just run` starts the app, `just smoke` drives the feature map's smoke rows, and a run skill holds the map  |
 
 A passing `just check` is not yet step 3: compare the lint and type-check
 configuration with the stack's reference in `references/` (`typescript.md`,
@@ -79,13 +80,14 @@ another skill only asked for the state, stop at the table.
 
 1. Load the `goal-review` skill against this skill's Goal, unless its table
    is already in the conversation, and show the table to the user before
-   changing anything. Seven `done` rows: say so and stop.
+   changing anything. Eight `done` rows: say so and stop.
 2. Pick one step that is not `done`. The user's request decides which ("CI
    組んで" is step 4); with no such request, take them in table order, the
    order for building from nothing. The only fixed order is what a step
    needs: 2 and 3 run their tools in the devShell, so they need 1; 4 runs
    `just check` in the devShell, so it needs 1 and 3; 7's update PRs are only
-   worth merging when CI checks them, so it needs 4; 5 and 6 need nothing.
+   worth merging when CI checks them, so it needs 4; 8's recipes run in the
+   devShell from the justfile, so it needs 1 and 3; 5 and 6 need nothing.
    A requested step whose prerequisite is not `done` starts with the
    prerequisite, and the report says why. Do the step as described below and
    in `references/absorb.md` for what the repository already has.
@@ -165,6 +167,31 @@ Renovate updates the language dependencies, the actions and, with its nix
 manager, `flake.lock`, in small grouped PRs that CI checks. Group the stack's
 own dependencies the way `references/repo-wide.md` describes. Installing the
 Renovate app on the repository is outside it and is the user's to do.
+
+**8. Run and smoke.** Tests say the code does what it says; seeing a change
+work means starting the app, and a way to start it that lives only in one
+session's memory is gone by the next. Fill the `run` and `smoke` recipes in
+`assets/justfile`. `run` starts the app in the foreground the way a developer
+looks at it: the dev server, the CLI on a sample input, or, for a library,
+its smallest example program. `smoke` starts it on its own, drives the smoke
+rows of the feature map, stops it, and exits non-zero when a row breaks.
+`check` does not call `smoke`, since starting the app does not fit in tens of
+seconds; the run skill runs it before a commit that changes behaviour, and CI
+may run it as its own job the way it runs `test-slow`.
+
+Then write the repository's run skill from `assets/run-skill.md` as
+`.claude/skills/<repo>-run/SKILL.md`, and the feature map from
+`assets/features.md` as its `references/features.md`, filled from what the
+README, the routes or the commands expose. Link
+`.agents/skills/<repo>-run` to `../../.claude/skills/<repo>-run`, so codex,
+which follows symlinked skill folders, finds the same skill. Name it
+`<repo>-run`, never `run` or `verify`, which are Claude Code's built-in
+skills. The smoke section of the map holds the few rows that break first
+when the app is broken, never the whole map: the cheap checks run first, and
+a smoke that walks everything is the slow suite under another name. The
+architecture map gets one line linking the run skill and nothing more; how
+to reach a feature changes with every feature, and the map keeps only what
+rarely changes.
 
 ## Report
 

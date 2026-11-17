@@ -95,7 +95,7 @@ flowchart LR
   baseline -.->|"必須チェックは /branch-protection を案内"| bp
 ```
 
-`baseline` の言語別の既定 (TypeScript / Go / Rust / Nix) と雛形は skill を分けず、`baseline/references/` と `baseline/assets/` に置く。`docs` skill の ADR の作法も `baseline/references/docs.md` を指す。
+`baseline` の言語別の既定 (TypeScript / Go / Rust / Nix) と雛形は skill を分けず、`baseline/references/` と `baseline/assets/` に置く。`docs` skill の ADR の作法も `baseline/references/docs.md` を指す。repo ごとの起動 skill (`<repo>-run`、feature map 付き) もここでは配らず、`baseline/assets/run-skill.md` を雛形に各 repo の `.claude/skills/` に置き、`.agents/skills/` からリンクする。`browser-verify` と `terminal-verify` はその skill を、なければ `just run` を起動手順として読み、見る行を feature map から選ぶ。
 
 ## skill を作る時
 
