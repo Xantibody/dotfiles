@@ -146,7 +146,10 @@ var wrappers = map[string][]string{
 	"sudo":    {"-u", "-g", "-C", "-D", "-h", "-p", "-r", "-t", "-U"},
 	"time":    {"-f", "-o"},
 	"timeout": {"-k", "-s"},
-	"xargs":   {"-a", "-d", "-E", "-I", "-L", "-n", "-P", "-s"},
+	// verify-gate run [--] <command> (modules/git/verify-gate.sh), which the
+	// check skill puts in front of every check where the commit gate is on
+	"verify-gate": nil,
+	"xargs":       {"-a", "-d", "-E", "-I", "-L", "-n", "-P", "-s"},
 }
 
 var shells = map[string]bool{"bash": true, "dash": true, "ksh": true, "sh": true, "zsh": true}
@@ -189,6 +192,11 @@ func checkCall(args []string) string {
 			if len(args) > 0 && args[0] == "proxy" {
 				args = args[1:]
 			}
+		case "verify-gate":
+			if len(args) == 0 || args[0] != "run" {
+				return ""
+			}
+			args = skipOptions(args[1:], nil)
 		}
 	}
 	return ""

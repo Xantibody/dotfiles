@@ -45,6 +45,7 @@ in
       "emacs"
       "mdsf"
       "git"
+      "verify-gate"
       "ha"
       "claude"
       "agents"
