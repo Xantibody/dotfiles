@@ -20,7 +20,8 @@ repository already is.
   tests, tests over prose. Prose is for what needs judgement.
 - **One command, everywhere.** A developer, an agent and CI run the same
   `just check` inside the same devShell. A check CI runs and `just check` does
-  not is a check nobody runs before pushing.
+  not is a check nobody runs before pushing. The one exception is a recipe
+  CI always runs on its own trigger, such as `audit-rust` or `test-slow`.
 - **An error message is an instruction.** A rule this skill adds says what to
   use instead, in the message the agent reads at the line it broke.
 - **Escape hatches need a reason.** Inline disables, `any`, casts,
@@ -127,6 +128,13 @@ violations, its ratchet. `lint` also runs zizmor on the workflows and typos
 over the tree; `references/repo-wide.md` says what each is for and shows one
 repository's settings as an example. A placeholder recipe from the asset left in place is
 a step not done.
+
+The tests in `check` are the layer that finishes in tens of seconds; a
+property test goes in at its library's default number of cases. End-to-end
+tests, and property tests or fuzzing run for many cases, go in a separate
+`just test-slow` recipe that `check` does not call, the way `audit-rust` stays
+out of it. CI runs `test-slow` as its own job on every `pull_request` and on a
+schedule, so a test too slow for `check` is still never skipped.
 
 **4. CI.** `assets/check.yml`, with the default branch written into
 `on.push.branches`. An existing workflow that already runs the lint and tests
