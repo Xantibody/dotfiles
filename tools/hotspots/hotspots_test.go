@@ -114,8 +114,16 @@ func TestFails(t *testing.T) {
 		{"no file", func(*testing.T) []string { return nil }, 2, "Usage:\n  rat hotspots"},
 		{"two files", func(*testing.T) []string { return []string{"a", "b"} }, 2, "Usage:\n  rat hotspots"},
 		{"bad -n", func(*testing.T) []string { return []string{"-n", "many", "a"} }, 2, "Usage:\n  rat hotspots"},
-		{"missing file", func(t *testing.T) []string { return []string{filepath.Join(t.TempDir(), "none.folded")} }, 1, "no such file"},
-		{"no stacks", func(t *testing.T) []string { return []string{folded(t, "nothing here\n")} }, 1, "no folded stacks found"},
+		{"negative -n", func(t *testing.T) []string { return []string{"-n", "-1", folded(t, "main 1\n")} }, 2, "rat hotspots: -n -1: must be at least 1\nUsage:"},
+		{"zero -n", func(t *testing.T) []string { return []string{"-n", "0", folded(t, "main 1\n")} }, 2, "-n 0: must be at least 1"},
+		{"missing file", func(t *testing.T) []string { return []string{filepath.Join(t.TempDir(), "none.folded")} }, 1, "hotspots: open "},
+		{"no stacks", func(t *testing.T) []string { return []string{folded(t, "nothing here\n")} }, 1, `has no folded stacks; want lines like "main;f;g 12"`},
+		{"a line past the buffer", func(t *testing.T) []string {
+			old := maxLine
+			maxLine = 64
+			t.Cleanup(func() { maxLine = old })
+			return []string{folded(t, "main 1\n"+strings.Repeat("f;", 64)+"g 1\n")}
+		}, 1, "hotspots: read "},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			code, out, errs := run(tc.args(t)...)
