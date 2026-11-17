@@ -1,0 +1,385 @@
+# Rust
+
+Load this when the survey finds a `Cargo.toml`. It fills in the Rust parts
+of steps 1–4. Documentation lints (`missing_docs`, `cargo doc -D warnings`)
+belong to the `rustdoc` skill. Point to it and do not repeat them here.
+
+## Survey
+
+Find these before you change anything. Each one you find is something to
+absorb, not something to replace:
+
+| Found                                                                                 | Means                                                                |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `rust-toolchain.toml` / `rust-toolchain`                                              | toolchain is pinned → use the rust-overlay devShell variant          |
+| `[lints]` / `[workspace.lints]` in Cargo.toml                                         | merge the defaults below into it; never lower a level it sets        |
+| `#![deny(...)]` / `#![warn(...)]` in lib.rs/main.rs                                   | move them into `[lints]` in the same commit, then delete them        |
+| `clippy.toml` / `.clippy.toml`                                                        | merge keys; keep its `disallowed-*` entries                          |
+| `deny.toml` / `.deny.toml` (also under `.cargo/`; `.config/` since cargo-deny 0.21.0) | cargo-deny is already adopted → wire it into `just`                  |
+| `.config/nextest.toml`                                                                | nextest is already adopted → use the nextest test recipe             |
+| `rust-version` in Cargo.toml                                                          | MSRV. Below 1.81, `reason =` and `#[expect]` don't exist (see Lints) |
+| `[workspace]` with `members`                                                          | put lints in `[workspace.lints]`; members inherit them               |
+
+## 1. devShell
+
+Default: the toolchain from nixpkgs. It needs no extra input, comes from the
+binary cache, and is the same `rustc` that `nix fmt` and any Nix build use.
+
+```nix
+devShells.default = pkgs.mkShell {
+  packages = with pkgs; [
+    cargo
+    rustc
+    clippy
+    rustfmt
+    rust-analyzer # wrapper already sets RUST_SRC_PATH to rustPlatform.rustLibSrc
+    just
+    ripgrep # rust-no-inner-allow recipe
+    cargo-deny # only if step "cargo-deny" applies
+    # cargo-nextest  # only if the repo already uses nextest
+  ];
+};
+```
+
+All attributes were checked in the nixpkgs tree on 2026-11-17. `cargo`,
+`clippy`, `rustc` and `rustfmt` come from `rustPackages` (Rust 1.99 in
+`pkgs/top-level/all-packages.nix`). `rust-analyzer`, `cargo-deny`,
+`cargo-nextest`, `cargo-hack`, `cargo-llvm-cov`, `taplo`, `just` and
+`ripgrep` live under `pkgs/by-name`. The `rust-analyzer` wrapper sets
+`RUST_SRC_PATH` itself with `--set-default`
+(`pkgs/by-name/ru/rust-analyzer/package.nix`), so do not export it again.
+
+Use the variant below only when the repo already has a `rust-toolchain.toml`
+(rustup users and CI depend on it), or when the user needs nightly or a
+cross target. Pick **rust-overlay** over fenix. `fromRustupToolchainFile`
+takes the file as it is, while fenix's `fromToolchainFile` needs a `sha256`
+in pure evaluation and that hash has to be bumped on every toolchain change.
+
+```nix
+# flake.nix inputs
+rust-overlay = {
+  url = "github:oxalica/rust-overlay";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
+
+# perSystem (flake-parts): replace pkgs with the overlaid one
+_module.args.pkgs = import inputs.nixpkgs {
+  inherit system;
+  overlays = [ inputs.rust-overlay.overlays.default ];
+};
+# toolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+# devShell packages: [ toolchain pkgs.just ... ]  (no separate cargo/clippy/rustfmt)
+```
+
+```toml
+# rust-toolchain.toml — the components the devShell and rustup users both need
+[toolchain]
+channel = "1.99.0"
+components = ["rustfmt", "clippy", "rust-analyzer", "rust-src"]
+```
+
+## 2. Formatting (treefmt-nix)
+
+```nix
+treefmt.programs.rustfmt = {
+  enable = true;
+  edition = "2024"; # must equal `edition` in Cargo.toml; the module passes --edition
+  # package = toolchain;  # rust-overlay variant only, so fmt and clippy agree
+};
+treefmt.programs.taplo.enable = true; # optional: formats Cargo.toml and deny.toml
+```
+
+`programs.rustfmt` takes `edition` (default `"2024"`) and runs
+`rustfmt --config skip_children=true --edition <edition>` on `*.rs`. The
+`package` option (default `pkgs.rustfmt`) is defined for every program by
+`mkFormatterModule`, which runs `${package}/bin/rustfmt` (the module sets
+`mainProgram = "rustfmt"`). An overlay toolchain therefore works as
+`package` as long as its components include `rustfmt`.
+Keep any existing `rustfmt.toml`, since rustfmt still reads it. Do not also
+put `cargo fmt --check` in `just check`. The shared format check already
+covers Rust, and a second formatter can disagree with the first.
+
+## 3. Lints
+
+### Cargo.toml
+
+Groups get `priority = -1` so that single lints override them. If a group
+and a lint share a priority, clippy's `lint_groups_priority` (correctness)
+fires. Levels follow this split:
+
+- **warn**: style and quality lints. `just check` passes `-D warnings`, so
+  they still fail the gate, but a half-finished Red step still compiles
+  in the editor.
+- **deny / forbid**: escape hatches. You never need one mid-task, and the
+  editor marks them red right away.
+
+Never set `warnings = "deny"` in Cargo.toml. It blocks the Red step of TDD
+on a single unused variable.
+
+```toml
+[lints.rust]
+unsafe_code = "forbid" # forbid: cannot be #[expect]ed away
+rust_2018_idioms = { level = "warn", priority = -1 }
+let_underscore_drop = "warn" # not the `let_underscore` group: it would lower deny-by-default let_underscore_lock
+unused_qualifications = "warn"
+
+[lints.clippy]
+# No `all = "warn"`: the default set is already on, and `all` would lower
+# the deny-by-default `correctness` group to warn.
+pedantic = { level = "warn", priority = -1 }
+# Escape hatches: only #[expect(lint, reason = "...")] survives.
+allow_attributes = "deny" # #[allow] → #[expect]; unfulfilled expect then warns
+allow_attributes_without_reason = "deny" # every allow/expect needs `reason = "..."`
+undocumented_unsafe_blocks = "deny" # matters only if unsafe_code is relaxed to deny
+unwrap_used = "deny" # use `?`, or .expect("<invariant>") which carries its reason
+let_underscore_must_use = "deny" # `let _ = fallible()` silently drops a Result
+as_conversions = "deny" # use From / TryFrom; casts truncate silently
+dbg_macro = "deny"
+todo = "deny"
+unimplemented = "deny"
+panic = "deny" # return an error; tests are exempt via clippy.toml
+# Library crates only (a binary prints by design):
+# print_stdout = "deny"
+# print_stderr = "deny"
+```
+
+In a workspace, write the same tables as `[workspace.lints.rust]` and
+`[workspace.lints.clippy]` in the root manifest, and give every member
+
+```toml
+[lints]
+workspace = true
+```
+
+A member cannot combine `workspace = true` with lints of its own: Cargo
+fails with "cannot override `workspace.lints` in `lints`" (Cargo's
+`tests/testsuite/lints_table.rs`, `workspace_and_package_lints`). Put a
+per-crate difference (for example `print_stdout` only on the library
+crates) in that crate's `lib.rs` as `#![deny(clippy::print_stdout)]`.
+
+Notes on the choices:
+
+- `expect_used` stays off. The message in `.expect("...")` is the reason
+  the philosophy asks for, the same idea as `reason =` on an attribute.
+  `unwrap_used` has no message, so it is denied.
+- `allow_attributes` checks only outer `#[allow]`. It ignores inner
+  `#![allow]` and anything written inside macros. Inner `#![allow]` still has to
+  carry a `reason` (`allow_attributes_without_reason`), and the
+  `rust-no-inner-allow` recipe below closes the rest of the gap.
+- Both `allow_attributes*` lints are gated on MSRV 1.81, when `#[expect]`
+  and `reason =` were stabilized. Below that `rust-version` they silently
+  do nothing. Raise `rust-version`, or tell the user these two lints are
+  inert.
+- If the crate really needs `unsafe`, relax `unsafe_code` to `"deny"` and
+  put `#[expect(unsafe_code, reason = "...")]` on each module that uses it.
+  Keep `undocumented_unsafe_blocks` so every block needs a `// SAFETY:`
+  comment.
+- Pedantic's `missing_errors_doc` and `missing_panics_doc` are part of the
+  doc work. Follow the `rustdoc` skill for them. In a binary-only crate you
+  may set them to `"allow"` in Cargo.toml with a one-line comment. A
+  Cargo.toml line is a reviewed config change, not an inline escape hatch.
+- Leave out `nursery`, `restriction` as a group
+  (`blanket_clippy_restriction_lints` objects to it) and `cargo`. Bans
+  and duplicate versions are cargo-deny's job.
+- Treat these as opt-in, for a crate whose domain calls for them. Clippy
+  (`[lints.clippy]`): `indexing_slicing`, `arithmetic_side_effects`,
+  `wildcard_enum_match_arm`, `exit` (libraries), `missing_assert_message`.
+  rustc (`[lints.rust]`): `unreachable_pub` (libraries),
+  `missing_debug_implementations`.
+
+The required reason format follows the house convention:
+`reason = "HACK(<issue URL>): <what to remove once it is fixed>"` for a
+workaround, or a plain sentence for a permanent decision. The anchors
+audit regex (`\bHACK\(`) matches anywhere on a line, so these attributes
+show up in `go run ~/.claude/skills/anchors/scripts/audit/main.go`.
+
+### clippy.toml
+
+```toml
+# Tests may unwrap/panic/index: a failing test is the desired outcome.
+allow-unwrap-in-tests = true
+allow-panic-in-tests = true
+allow-indexing-slicing-in-tests = true
+# Apps and unpublished crates: let clippy suggest API-changing fixes.
+# Keep the default (true) for a crate published to crates.io.
+avoid-breaking-exported-api = false
+```
+
+Leave `msrv` unset. Clippy reads it from `rust-version`. Keep
+`allow-dbg-in-tests` and `allow-print-in-tests` at their default, `false`.
+
+`disallowed-methods`, `disallowed-types` and `disallowed-macros` hold the
+"the error names the fix" rules. Each entry takes `path`, `reason`,
+`replacement` and `allow-invalid`. Add one only when the repo has a real
+case: an adapter that must be used, or a wrapper that replaces a std call.
+Do not seed them generically.
+
+```toml
+disallowed-methods = [
+  { path = "std::env::var", reason = "config is read once in crate::config so tests can inject it", replacement = "crate::config::Config::from_env" },
+]
+disallowed-types = [
+  { path = "std::collections::HashMap", reason = "output order must be stable", replacement = "indexmap::IndexMap" },
+]
+```
+
+### cargo-deny (optional)
+
+Adopt it when the crate ships a binary or has more than a handful of
+dependencies, or when the repo already has a `deny.toml`. Generate the file
+with `cargo deny init`, then tighten it:
+
+```toml
+[advisories]
+unmaintained = "all" # the default; written out so nobody loosens it silently
+yanked = "deny"
+ignore = [
+  # Every exception carries a reason and an expiry: the escape hatch closes itself.
+  # `expiry` needs cargo-deny >= 0.21.0 (2026-11-16); nixpkgs has 0.20.2 on
+  # 2026-11-17. On an older one, leave `expiry` out and put the date in `reason`.
+  # { id = "RUSTSEC-0000-0000", reason = "HACK(<issue URL>): ...", expiry = "2027-03-01" },
+]
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+
+[licenses]
+allow = ["MIT", "Apache-2.0"] # extend from the first `cargo deny check licenses` run
+confidence-threshold = 0.93
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+```
+
+Split the checks by what can make them fail:
+
+- `bans licenses sources` change only when the code changes. They go in
+  `just check`. cargo-deny loads the advisory database only when the
+  `advisories` check runs. `bans` fetches std-replacement data only if
+  `[bans.std-replacements]` is configured, so leave that table out of
+  `check`'s config or run with `--offline`.
+- `advisories` fetches the RustSec database on every run and can fail a
+  PR that touched nothing. Give it its own `just audit` recipe and run it
+  from a scheduled workflow (and from `pull_request` when Cargo.lock
+  changes). Do not put it in `check`. For an offline run, use the root
+  flag: `cargo deny --offline check`. Since 0.20.0 it replaces
+  `check --disable-fetch` and also disables crate fetching.
+
+## 4. just recipes
+
+```just
+# Type-check and lint every target in every crate. Clippy runs `check`,
+# so no separate `cargo check` is needed.
+rust-lint:
+    cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+
+# Unit, integration and doc tests. No --all-targets here: with it,
+# `cargo test` skips doctests.
+rust-test:
+    cargo test --workspace --all-features --locked
+
+# Inner #![allow] is invisible to clippy::allow_attributes.
+rust-no-inner-allow:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if rg -n --glob '*.rs' '^\s*#!\[allow\(' .; then
+        echo 'error: use #![expect(<lint>, reason = "HACK(<issue URL>): ...")] instead of #![allow]; expect fails once the violation is gone' >&2
+        exit 1
+    fi
+
+# cargo-deny, offline-stable part (only if adopted)
+rust-deny:
+    cargo deny check bans licenses sources
+
+# Advisory DB check; network, not part of `check`
+audit:
+    cargo deny check advisories
+```
+
+Add `rust-lint rust-test rust-no-inner-allow` (and `rust-deny`) as
+dependencies of the shared `check` recipe. Formatting comes from the
+shared format step.
+
+- `--workspace`: when the root manifest is also a package, a bare `cargo`
+  command acts only on that root package.
+- `--all-features`: if features are mutually exclusive, this fails to
+  compile. Then list the feature sets explicitly, or use `cargo hack
+  --each-feature` (`pkgs.cargo-hack`). Don't drop the flag silently.
+- `--locked`: CI must not rewrite Cargo.lock. Commit Cargo.lock for
+  libraries too.
+- `-D warnings` comes after `--`, so it reaches only workspace crates.
+  Setting it through `RUSTFLAGS` would also invalidate the build cache.
+  It does not override `forbid`.
+- nextest, only if the repo already uses it:
+  `cargo nextest run --workspace --all-features --locked`, followed by
+  `cargo test --doc --workspace --all-features --locked`. nextest does not
+  run doctests, and it accepts all of `cargo test`'s options, `--locked`
+  included (https://nexte.st/docs/running/). Since 0.9.85 a run that finds
+  no tests fails by default (`--no-tests=auto`, exit code 4). In a repo with
+  no tests yet, pass `--no-tests=warn` until the first test lands.
+
+## Ratchet: existing violations
+
+Clippy has no baseline file and cannot report only new violations. Run
+`cargo clippy --workspace --all-targets --all-features --message-format=json`
+once and count the hits per lint and per file. The counts decide which
+approach to use:
+
+1. **Fix everything in one commit.** This is the default when the total is
+   small or mostly machine-fixable. First run
+   `cargo clippy --fix --allow-dirty --workspace --all-targets --all-features`,
+   which applies only MachineApplicable suggestions, then fix the rest by
+   hand. Commit it as a structural change on its own (Tidy First), separate
+   from the commit that adds `[lints]`.
+2. **Per-file `#![expect]`.** Use this when there are too many to fix in
+   one commit. At the top of each file that has violations, add one inner
+   attribute that lists that file's lints:
+   `#![expect(clippy::unwrap_used, clippy::as_conversions, reason = "HACK(<issue URL>): pre-baseline violations; remove each lint once this file is clean")]`.
+   This is a real ratchet. New files and clean files get the full rules.
+   Once a listed lint no longer fires in that file,
+   `unfulfilled_lint_expectations` warns, and `-D warnings` fails until
+   the entry is removed. The limit: inside a listed file, new violations
+   of the listed lints are not caught. Open a single tracking issue and
+   use its URL in every attribute. Generate the attributes from the JSON
+   with a throwaway Go program. Group by the primary span's `file_name`
+   and by `message.code.code` where `reason == "compiler-message"`. An
+   expectation that holds in one target or feature set but not another
+   (for example code only under `cfg(test)`) is reported as unfulfilled
+   in the other one. Fix those hits first, or scope the expectation with
+   `#![cfg_attr(not(test), expect(...))]` (UNVERIFIED: reasoned from how
+   `cfg_attr` expands, not tested).
+3. **Per-lint staging.** Use this when a single lint has hundreds of hits
+   across the codebase (typically a pedantic lint). Set that lint to
+   `"allow"` in Cargo.toml with a `# HACK(<issue URL>)` comment. Then turn
+   one lint on per commit: fix its hits and delete the line. Be honest
+   with the user: until a staged lint is flipped, new violations of it
+   are not caught at all. This is the weakest of the three, so prefer 2
+   whenever the hits cluster in a few files.
+
+Never apply `#![allow]` or `"allow"` across the whole crate just to make
+`just check` pass, and never lower an existing level. Report the counts
+and the approach you chose to the user.
+
+## Sources
+
+- Cargo `[lints]`, priority: https://doc.rust-lang.org/cargo/reference/manifest.html#the-lints-section
+- `[workspace.lints]`: https://doc.rust-lang.org/cargo/reference/workspaces.html#the-lints-table
+- `workspace = true` plus own lints is an error: https://github.com/rust-lang/cargo/blob/master/tests/testsuite/lints_table.rs
+- `cargo test --all-targets` excludes doctests: https://doc.rust-lang.org/cargo/commands/cargo-test.html#target-selection
+- rustc lint groups: https://doc.rust-lang.org/rustc/lints/groups.html
+- rustc allowed-by-default lints: https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html
+- Clippy lint list: https://clippy.rust-lang.org/master/index.html
+- Clippy lint names (checked 2026-11-17): https://github.com/rust-lang/rust-clippy/blob/master/clippy_lints/src/declared_lints.rs
+- `allow_attributes*` behavior and MSRV gate: https://github.com/rust-lang/rust-clippy/blob/master/clippy_lints/src/attrs/mod.rs , https://github.com/rust-lang/rust-clippy/blob/master/clippy_lints/src/attrs/allow_attributes.rs , https://github.com/rust-lang/rust-clippy/blob/master/clippy_utils/src/msrvs.rs (`LINT_REASONS_STABILIZATION` = 1.81.0)
+- Clippy group default levels (`correctness` is deny): https://github.com/rust-lang/rust-clippy/blob/master/README.md
+- clippy.toml options: https://doc.rust-lang.org/clippy/lint_configuration.html
+- treefmt-nix rustfmt: https://github.com/numtide/treefmt-nix/blob/main/programs/rustfmt.nix
+- nixpkgs Rust attributes: https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/all-packages.nix , https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/ru/rust-analyzer/package.nix
+- rust-overlay: https://github.com/oxalica/rust-overlay
+- fenix: https://github.com/nix-community/fenix
+- cargo-deny: https://embarkstudios.github.io/cargo-deny/checks/cfg.html , https://embarkstudios.github.io/cargo-deny/checks/advisories/cfg.html , https://embarkstudios.github.io/cargo-deny/cli/check.html
+- cargo-deny `--offline` (root flag, replaced `--disable-fetch` in 0.20.0), `expiry` (0.21.0), config search path: https://github.com/EmbarkStudios/cargo-deny/blob/main/CHANGELOG.md , https://github.com/EmbarkStudios/cargo-deny/pull/881 , https://github.com/EmbarkStudios/cargo-deny/blob/main/src/cargo-deny/check.rs , https://github.com/EmbarkStudios/cargo-deny/blob/main/src/cargo-deny/common.rs
+- nixpkgs cargo-deny version: https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/ca/cargo-deny/package.nix
+- nextest and doctests: https://nexte.st/docs/running/

@@ -27,14 +27,19 @@ The project's front door. It should contain:
 > [!IMPORTANT]
 > README must be scannable in under 30 seconds. If it's longer than 2 screens, move detail into `/docs`.
 
-### `docs/introduction.md` — The Map
+### `docs/architecture.md` — The Map
 
-Technical summary and orientation guide:
+Technical summary and orientation guide, one per repository (the `baseline` skill creates it with this name):
 
-- Architecture overview (use Mermaid diagrams where they clarify structure)
-- Key design decisions and their rationale
+- Architecture overview and codemap (use Mermaid diagrams where they clarify structure)
+- Rules: the boundaries the lint configuration enforces, each with the check that fails when one is crossed
+- A link to `docs/adr/`; the rationale for a decision lives in its record, not here
 - Module index with one-line descriptions linking to detail pages
 - Glossary of domain-specific terms (if applicable)
+
+### `docs/adr/` — The Decisions
+
+One record per architecturally significant decision, written when the decision is made, from `docs/adr/template.md`. The `baseline` skill's `references/docs.md` has the conventions and when a change must write one.
 
 ### `docs/modules/*.md` or `docs/reference/*.md` — The Deep Dives
 
@@ -91,7 +96,7 @@ Based on the audit, determine what needs to be created or updated:
 
 For each documentation change:
 
-- **New module added**: Create `docs/modules/<module-name>.md` and update `docs/introduction.md` index
+- **New module added**: Create `docs/modules/<module-name>.md` and update the `docs/architecture.md` index
 - **Code refactored**: Identify all impacted docs and update them
 - **New feature**: Add inline "why" comments for non-obvious logic, create or update relevant module doc
 - **Structure missing**: Set up the directory structure and populate with initial content
@@ -115,7 +120,7 @@ All documentation must follow:
 
 - All links in docs resolve to existing files or sections
 - Module docs match actual module structure
-- `docs/introduction.md` index is complete and up-to-date
+- `docs/architecture.md` index is complete and up-to-date
 - No orphaned documentation referencing removed code
 
 ## What This Skill Does NOT Do

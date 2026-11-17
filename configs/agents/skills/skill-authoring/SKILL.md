@@ -59,7 +59,7 @@ enough to be worth loading on its own.
   skill that changes things opens with a `## Goal` section — the target,
   each item with the test that decides it, the verdict shape, and when
   the review hands over — and `goal-review` runs those tests without
-  reading the procedure. `reconstruct` works this way:
+  reading the procedure. `reconstruct` and `baseline` work this way:
   `implement` and `pull-request` ask `goal-review` against
   `reconstruct`'s Goal without carrying the rewrite procedure, and the
   judgement hands over to the action by name. Write a Goal instead of a

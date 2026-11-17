@@ -4,7 +4,7 @@
     {
       "id": 0,
       "prompt": "このdotfilesリポジトリにドキュメントを整備して。README.mdも改善して、/docsディレクトリも作りたい",
-      "expected_output": "Improved README.md with value proposition, quick start, and TOC. docs/introduction.md with architecture overview. Proper GFM formatting with callouts.",
+      "expected_output": "Improved README.md with value proposition, quick start, and TOC. docs/architecture.md with codemap and rules. Proper GFM formatting with callouts.",
       "files": [],
       "assertions": [
         {
@@ -23,8 +23,8 @@
           "type": "content_check"
         },
         {
-          "id": "docs-introduction-exists",
-          "description": "docs/introduction.md exists",
+          "id": "docs-architecture-exists",
+          "description": "docs/architecture.md exists",
           "type": "file_exists"
         },
         {

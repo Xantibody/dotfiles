@@ -1,0 +1,28 @@
+set shell := ["bash", "-euo", "pipefail", "-c"]
+
+# List recipes
+default:
+    @just --list
+
+# Everything CI runs. CI calls this recipe and nothing else.
+check: fmt-check lint typecheck test
+
+# Format every file treefmt knows
+fmt:
+    treefmt
+
+# Fail when a file is unformatted. treefmt rewrites it first, so `git diff` shows the fix.
+fmt-check:
+    treefmt --ci
+
+# Static analysis, warnings are errors
+lint:
+    statix check .
+
+# Type check without emitting output
+typecheck:
+    @echo "typecheck: not set up. Add the stack's type checker from the baseline skill's references/, or delete this recipe and its name in check if the stack has none." >&2; exit 1
+
+# Run the whole test suite
+test:
+    @echo "test: not set up. Add the stack's test runner from the baseline skill's references/, or delete this recipe and its name in check if the repo has no code to test." >&2; exit 1

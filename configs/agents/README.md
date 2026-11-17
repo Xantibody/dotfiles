@@ -59,7 +59,7 @@ flowchart TD
   tv --> vhs
 ```
 
-判断と実行は分けるが、判断する skill は `goal-review` 1 つだけにする。何かを変える skill (`reconstruct`) は本文の `## Goal` に「どうなっていれば済みか」と判定方法を書き、`goal-review` はその節だけを読んで判定し、Goal に書かれた条件で持ち主の skill に渡す。新しい実行 skill には、専用の review skill を作らず Goal を書く。
+判断と実行は分けるが、判断する skill は `goal-review` 1 つだけにする。何かを変える skill (`reconstruct`、`baseline`) は本文の `## Goal` に「どうなっていれば済みか」と判定方法を書き、`goal-review` はその節だけを読んで判定し、Goal に書かれた条件で持ち主の skill に渡す。新しい実行 skill には、専用の review skill を作らず Goal を書く。
 
 ## 打って使う skill
 
@@ -91,6 +91,23 @@ flowchart LR
 ```
 
 `rustdoc` は一覧に載る skill で、`*.rs` を触った時にも読み込まれる。
+
+## リポジトリの環境を作る時
+
+```mermaid
+flowchart LR
+  gr["goal-review"]
+  baseline["baseline<br/>足りない段を 1 段ずつ埋める"]
+  commit["commit"]
+  bp["branch-protection"]
+
+  gr -.->|"整えてと頼まれた時"| baseline
+  baseline -->|"最初と各段の後 (baseline の Goal)"| gr
+  baseline -->|"1 段ずつ"| commit
+  baseline -.->|"必須チェックは /branch-protection を案内"| bp
+```
+
+`baseline` の言語別の既定 (TypeScript / Go / Rust / Nix) と雛形は skill を分けず、`baseline/references/` と `baseline/assets/` に置く。`docs` skill の ADR の作法も `baseline/references/docs.md` を指す。
 
 ## skill を作る時
 

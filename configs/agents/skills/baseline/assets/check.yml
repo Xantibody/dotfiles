@@ -1,0 +1,25 @@
+# Runs the same `just check` a developer runs, inside the flake's devShell, so CI and
+# local can only disagree when the lock file does. Keep the job name `check`: it is
+# the required status check, and renaming it silently drops the requirement.
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: DeterminateSystems/nix-installer-action@main
+      - run: nix develop --command just check
