@@ -108,13 +108,26 @@ The checker reads the frontmatter and fails on: a field the live docs
 table does not list, a missing `name` or `description`, a `name` that
 differs from the directory (the house rule that makes `/name` match the
 path), `description` plus `when_to_use` over the documented cap, both
-invocation switches turned off at once, and a body that asks to load a
-sibling skill that does not exist. It fetches the field
+invocation switches turned off at once, a body that asks to load a
+sibling skill that does not exist, and a body that loads ("load the `x`
+skill", "use `x`", "via", "hand over to") a skill with
+`disable-model-invocation: true`, which the model cannot load — hand the
+user `/x` instead. It warns on a `modules/` or `configs/` path in
+backticks that the repository does not have, and on a path or commit
+hash in an `evals/evals.json` prompt that does not exist (a prompt that
+opens with `Working directory:` runs elsewhere and is skipped). It fetches the field
 list from the docs page each run and falls back to the list baked into
 the source when offline; when the two differ it says so, and that
 warning is the signal that the spec moved and the fallback needs
 updating. Run it on every skill you touched, and on all of them when the
-docs changed — a field being removed affects skills nobody opened.
+docs changed — a field being removed affects skills nobody opened. Its
+tests are `go test ./...` in `scripts/validate`.
+
+`checks.skills` (`modules/ai/skills.nix`) runs it in CI over every skill
+with `-offline -strict`, so a warning fails there too, plus `-readme`
+for the map in step 5 and `-known` for the skills a flake input ships.
+The sandbox has no git history, so eval commit hashes are checked only
+when you run it locally.
 
 ## 4. Draft and test with skill-creator
 
@@ -160,7 +173,8 @@ the workspace is scaffolding.
 — plus, when there are any, a list of the skills nothing loads. It is the only place the whole graph is visible,
 so it is redrawn in the same commit as any skill change that adds,
 removes or moves a node or an edge; a map that lags one commit is a map
-nobody trusts.
+nobody trusts. The validator's `-readme` fails when a skill is neither a
+node nor in that list, or a node names no skill; edges it cannot judge.
 
 Derive it from the files, not from memory of the last version:
 

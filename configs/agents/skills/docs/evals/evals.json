@@ -41,18 +41,18 @@
     },
     {
       "id": 1,
-      "prompt": "modules/darwin/以下のNixモジュール群について、docs/modules/darwin.mdを作成して。各.nixファイルが何をしてるかまとめてほしい",
-      "expected_output": "docs/modules/darwin.md with accurate summary of each .nix file, proper formatting, and links.",
+      "prompt": "modules/shell/以下のNixモジュール群について、docs/modules/shell.mdを作成して。各.nixファイルが何をしてるかまとめてほしい",
+      "expected_output": "docs/modules/shell.md with accurate summary of each .nix file, proper formatting, and links.",
       "files": [],
       "assertions": [
         {
-          "id": "darwin-md-exists",
-          "description": "docs/modules/darwin.md exists",
+          "id": "shell-md-exists",
+          "description": "docs/modules/shell.md exists",
           "type": "file_exists"
         },
         {
           "id": "covers-all-nix-files",
-          "description": "All 10 .nix files mentioned",
+          "description": "All 4 .nix files mentioned",
           "type": "content_check"
         },
         {
