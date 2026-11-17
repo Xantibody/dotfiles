@@ -44,6 +44,7 @@ flowchart TD
   pr -.->|"未コミットがある時"| commit
   pr -.->|"before / after を撮る時"| shot
   pr -.->|"やらなかったことを残す時"| issue
+  check -.->|"3 回直しても落ちる時"| osekkai
   issue -->|"本文を書く時"| osekkai
   issue -->|"gh に渡す前"| lbskill
   lbskill --> lint
