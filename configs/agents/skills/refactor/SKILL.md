@@ -86,6 +86,7 @@ Before writing any plan step that changes structure, define what tests protect t
 - **Characterization tests**: Capture what the code actually does today (not what it should do). These are the safety net.
 - **Unit tests**: For isolated logic that can be tested in pure functions.
 - **Integration tests**: For boundaries between components, especially I/O and external services.
+- **Differential tests**: For every stage where the old and the new implementation run side by side (Strangler Fig, a seam with both paths behind it). Feed the same inputs to both — generated ones from the stack's property-test tool (the `baseline` skill's references name it) or recorded real inputs — and compare the outputs. A normalization function strips differences that do not matter (timestamps, generated IDs, ordering of unordered collections) before the comparison, and the differences that are intended live in an approved-differences file checked in beside the test, one entry per difference with why it is accepted. Characterization tests pin the examples someone thought of; this catches the inputs nobody listed, and it is what says the old path can be deleted.
 
 Identify **seams** — places in the code where you can intercept behavior to insert tests without modifying the code under test.
 
@@ -124,6 +125,7 @@ How to confirm this step succeeded without breaking anything.
 
 - Which tests to run
 - What behavior to manually verify
+- For a step that deletes an old implementation: the differential test reports zero differences beyond the approved-differences file
 ```
 
 **Plan design principles:**
