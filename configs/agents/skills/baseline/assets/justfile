@@ -18,6 +18,8 @@ fmt-check:
 # Static analysis, warnings are errors
 lint:
     statix check .
+    zizmor --offline .
+    typos
 
 # Type check without emitting output
 typecheck:

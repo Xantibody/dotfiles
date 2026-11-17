@@ -73,7 +73,7 @@ ignores its exit code.
 
 **Partial**: a justfile without `check`; `check` that skips formatting or lint;
 the placeholder `echo … exit 1` lines from `assets/justfile` still present;
-lint configs below the stack reference's strict defaults; a recipe that needs a
+lint configs below the stack reference's strict defaults or missing what `nix.md` and `repo-wide.md` add (the deadnix guard, zizmor, typos); a recipe that needs a
 step the README tells humans to do first (`npm ci`) instead of depending on it.
 
 ## 4. CI
@@ -125,3 +125,17 @@ records are written when a decision is made, never in advance.
 **Partial**: records without a template; a template without an `Enforced by`
 section (or MADR's equivalent added); file names that break the directory's own
 numbering.
+
+## 7. Dependency updates
+
+Look for `renovate.json`, `renovate.json5`, `.github/renovate.json5`,
+`.renovaterc*`, or a `renovate` key in `package.json`, and for
+`.github/dependabot.yml`.
+
+**Done** when a Renovate config exists, extends `config:recommended`, has the
+nix manager on (`nix: { enabled: true }`) so `flake.lock` is tracked, and sets
+`mode: "full"`.
+
+**Partial**: Renovate without the nix manager (`flake.lock` never moves);
+Dependabot only (it does not update `flake.lock`); Renovate and Dependabot both
+on the same ecosystem (duplicate PRs).

@@ -1,0 +1,56 @@
+{
+  "skill_name": "baseline",
+  "evals": [
+    {
+      "id": 0,
+      "name": "go-library-from-nothing",
+      "prompt": "Working directory: <fixture>. It is a tiny Go library (go.mod, greet.go, greet_test.go, README.md) committed on `main`, with no flake, no justfile, no CI and no docs. There is no remote; treat `main` as the default branch. Do not push.\n\n環境構築して",
+      "expected_output": "A survey table before any change, then one commit per step in table order: a flake-parts devShell with Go tooling and .envrc, treefmt-nix with a Go formatter, a justfile whose check runs a format check, golangci-lint at the strict defaults, a type check and go test, a GitHub Actions workflow running `nix develop --command just check` on pull_request and push to main, docs/architecture.md, docs/adr/template.md with no ADRs written in advance, and a renovate.json5 with the nix manager on. A final table with seven done rows.",
+      "files": [],
+      "assertions": [
+        "Before changing any file, the output shows a table of the seven steps with a state per step, and all seven start as missing.",
+        "The repository ends with a tracked flake.nix and flake.lock defining devShells.default, an .envrc containing `use flake`, and `.direnv/` in .gitignore.",
+        "flake.nix uses treefmt-nix and enables a Go formatter (gofumpt or gofmt) and nixfmt.",
+        "The justfile has a `check` recipe that, through its dependencies, runs a format check, golangci-lint, a type check or build, and `go test`, and no recipe swallows a failure (`|| true`, a leading `-`, `--exit-zero`).",
+        "A .golangci.yml exists with `version: \"2\"` and nolintlint configured to require an explanation and a specific linter.",
+        "The `lint` recipe (or one it depends on) runs `zizmor --offline` on the repository and `typos` over the tree, and both tools come from the devShell.",
+        "A renovate.json5 (or renovate.json) at the root extends config:recommended, sets `mode: \"full\"` and enables the nix manager.",
+        "A workflow under .github/workflows runs `nix develop --command just check` and triggers on pull_request and on push to main, with no path filters.",
+        "docs/architecture.md exists with a codemap and a rules section that names checks from the justfile or .golangci.yml.",
+        "docs/adr/template.md exists and contains an `Enforced by` section; no numbered ADR file was written unless its Context names a real alternative the run chose against.",
+        "`nix develop --command just check` exits 0 at the end of the run, shown in the transcript.",
+        "The git log has one commit per step (seven new commits, give or take a separate formatting commit), each in Conventional Commits form.",
+        "The transcript shows no `git push`, no `direnv allow`, and no two nix commands running at the same time.",
+        "The final report repeats the table with seven done rows and names what is left for the user (installing direnv, requiring the CI check via /branch-protection, installing the Renovate app)."
+      ]
+    },
+    {
+      "id": 1,
+      "name": "converged-repo-is-left-alone",
+      "prompt": "Working directory: <fixture>. Its setup was finished by an earlier run; the tree is clean on `main`. There is no remote; treat `main` as the default branch. Do not push.\n\nbaseline に寄せて",
+      "expected_output": "A survey table with seven done rows, a one-line statement that nothing is left to do, and no new commit or file change.",
+      "files": [],
+      "assertions": [
+        "The output shows a table of the seven steps with every row `done`, each with evidence from a command or file actually checked in this run.",
+        "The output says nothing needs doing and stops.",
+        "`git log` and `git status` are unchanged from before the run: no new commit, no modified or untracked file.",
+        "The transcript shows the survey commands were run (at least `nix develop --command just check` or the treefmt flake check), not only file-existence checks."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "ci-asked-before-check-exists",
+      "prompt": "Working directory: <fixture>. A Go library on `main` that already has a flake devShell (flake.nix with Go only, .envrc, .gitignore) but no treefmt, no justfile, no CI and no docs. There is no remote; treat `main` as the default branch. Do not push.\n\nCI 組んで",
+      "expected_output": "The run sees that CI needs `just check`, which does not exist, so it builds the check recipe first (and the formatter it calls), says why, then adds the workflow. It does not build docs/architecture.md or the ADR template, which were not asked for and are not prerequisites.",
+      "files": [],
+      "assertions": [
+        "The output states that CI (step 4) needs `just check` (step 3) and that it is doing step 3 first for that reason.",
+        "The existing flake.nix keeps its hand-written style (no conversion to flake-parts) and gains the tools the check needs.",
+        "A justfile with a `check` recipe exists, and `nix develop --command just check` exits 0, shown in the transcript.",
+        "A workflow under .github/workflows runs `nix develop --command just check` on pull_request and push to main.",
+        "No docs/architecture.md and no docs/adr/ were created, because they were neither asked for nor prerequisites; the report lists them as not done.",
+        "Each step done is its own commit in Conventional Commits form, and the transcript shows no `git push`."
+      ]
+    }
+  ]
+}

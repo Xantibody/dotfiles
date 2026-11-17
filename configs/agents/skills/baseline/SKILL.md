@@ -1,7 +1,7 @@
 ---
 name: baseline
-description: Converges a repository onto the baseline from whatever state it is in — a flake devShell with direnv, `nix fmt` through treefmt-nix, one `just check` with strict lint and type-check defaults and restricted escape hatches, CI running that same recipe, an architecture map and a decision-record template — one commit per missing step, absorbing the tools already there. Its Goal is what the goal-review skill measures.
-when_to_use: Whenever the user asks to set up a repository's development environment or bring one up to the house setup — "環境構築して", "baseline に寄せて", "flake 入れて", "just check 作って", "CI 組んで", "lint 厳しくして", "ADR の置き場作って" — new or existing, empty or half done.
+description: Converges a repository onto the baseline from whatever state it is in — a flake devShell with direnv, `nix fmt` through treefmt-nix, one `just check` with strict lint and type-check defaults and restricted escape hatches, CI running that same recipe, workflow-security and spelling checks, an architecture map, a decision-record template and Renovate for dependency updates — one commit per missing step, absorbing the tools already there. Its Goal is what the goal-review skill measures.
+when_to_use: Whenever the user asks to set up a repository's development environment or bring one up to the house setup — "環境構築して", "baseline に寄せて", "flake 入れて", "just check 作って", "CI 組んで", "lint 厳しくして", "ADR の置き場作って", "renovate 入れて" — new or existing, empty or half done.
 ---
 
 # Baseline
@@ -37,23 +37,25 @@ repository already is.
 they run only on a clean tree (`git status --porcelain` empty); on a dirty
 tree their items are `unknown`.
 
-**Items.** Six steps. Each holds or not on its own; the numbering is the order
+**Items.** Seven steps. Each holds or not on its own; the numbering is the order
 that works best when building from nothing, not an order a repository must
 have followed. The tests for each, and the shapes that mean "started but not
 holding", are in `references/survey.md`.
 
-| #   | Step              | Holds when                                                                                    |
-| --- | ----------------- | --------------------------------------------------------------------------------------------- |
-| 1   | devShell + direnv | a tracked `flake.nix` / `flake.lock` with a devShell, `.envrc` loads it, `.direnv/` ignored   |
-| 2   | `nix fmt`         | treefmt-nix formats every language the repo has, and the tree is formatted                    |
-| 3   | `just check`      | one recipe runs the format check, lint, type check and tests at the strict defaults           |
-| 4   | CI                | a workflow runs `nix develop --command just check` on pull requests and default-branch pushes |
-| 5   | Architecture map  | one map with a codemap and the rules step 3 enforces                                          |
-| 6   | Decision records  | a decision-record directory with a template                                                   |
+| #   | Step               | Holds when                                                                                                  |
+| --- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| 1   | devShell + direnv  | a tracked `flake.nix` / `flake.lock` with a devShell, `.envrc` loads it, `.direnv/` ignored                 |
+| 2   | `nix fmt`          | treefmt-nix formats every language the repo has, and the tree is formatted                                  |
+| 3   | `just check`       | one recipe runs the format check, lint (with zizmor and typos), type check and tests at the strict defaults |
+| 4   | CI                 | a workflow runs `nix develop --command just check` on pull requests and default-branch pushes               |
+| 5   | Architecture map   | one map with a codemap and the rules step 3 enforces                                                        |
+| 6   | Decision records   | a decision-record directory with a template                                                                 |
+| 7   | Dependency updates | a Renovate config that updates the language dependencies, the actions and `flake.lock`                      |
 
 A passing `just check` is not yet step 3: compare the lint and type-check
 configuration with the stack's reference in `references/` (`typescript.md`,
-`go.md`, `rust.md`, `nix.md`). A rule the reference turns on that the repo
+`go.md`, `rust.md`) and with `references/nix.md` and `references/repo-wide.md`,
+which apply to every repository: each one has a flake and a `.github/`. A rule the reference turns on that the repo
 turns off or leaves out, or an escape hatch the reference restricts that the
 repo allows freely, makes the step partial. A stack with no reference is
 judged on whether its strictest documented mode is on.
@@ -70,12 +72,14 @@ another skill only asked for the state, stop at the table.
 ## Procedure
 
 1. Load the `goal-review` skill against this skill's Goal, unless its table
-   is already in the conversation. Six `done` rows: say so and stop.
+   is already in the conversation, and show the table to the user before
+   changing anything. Seven `done` rows: say so and stop.
 2. Pick one step that is not `done`. The user's request decides which ("CI
    組んで" is step 4); with no such request, take them in table order, the
    order for building from nothing. The only fixed order is what a step
    needs: 2 and 3 run their tools in the devShell, so they need 1; 4 runs
-   `just check` in the devShell, so it needs 1 and 3; 5 and 6 need nothing.
+   `just check` in the devShell, so it needs 1 and 3; 7's update PRs are only
+   worth merging when CI checks them, so it needs 4; 5 and 6 need nothing.
    A requested step whose prerequisite is not `done` starts with the
    prerequisite, and the report says why. Do the step as described below and
    in `references/absorb.md` for what the repository already has.
@@ -89,8 +93,10 @@ another skill only asked for the state, stop at the table.
 
 Detect the stacks before any step: `package.json` / `tsconfig.json` →
 `references/typescript.md`, `go.mod` → `references/go.md`, `Cargo.toml` →
-`references/rust.md`, Nix code of its own → `references/nix.md`. Read only the
-references the repository needs. A repository with several stacks gets one
+`references/rust.md`. Read only the stack references the repository needs;
+`references/nix.md` and `references/repo-wide.md` apply to every repository,
+because step 1 gives each one a flake and step 4 a `.github/`. The survey and
+the steps use this same rule, so a converged repository stays converged. A repository with several stacks gets one
 recipe per stack (`lint-ts`, `lint-go`) under the shared `check`. A stack with
 no reference gets its tools' strictest documented mode, and the report says no
 reference covered it.
@@ -117,7 +123,9 @@ its hash goes into `.git-blame-ignore-revs`.
 `fmt-check`, `lint`, `typecheck` and `test`, and nothing in them swallows a
 failure. Fill each from the stack reference — its strict lint and type-check
 configuration, its escape-hatch rules, and, for a repository that already has
-violations, its ratchet. A placeholder recipe from the asset left in place is
+violations, its ratchet. `lint` also runs zizmor on the workflows and typos
+over the tree; `references/repo-wide.md` says what each is for and shows one
+repository's settings as an example. A placeholder recipe from the asset left in place is
 a step not done.
 
 **4. CI.** `assets/check.yml`, with the default branch written into
@@ -139,10 +147,16 @@ actually made in this repository between real alternatives — kept ESLint
 instead of moving to oxlint, chose a ratchet over a mass fix — each in the
 commit of the step that made the choice.
 
+**7. Dependency updates.** `assets/renovate.json5` at the repository root:
+Renovate updates the language dependencies, the actions and, with its nix
+manager, `flake.lock`, in small grouped PRs that CI checks. Group the stack's
+own dependencies the way `references/repo-wide.md` describes. Installing the
+Renovate app on the repository is outside it and is the user's to do.
+
 ## Report
 
 End with the table from before and after, one line per commit made, and what
 is left: a stack no reference covered, ratchet baselines that still hold
 violations, a required check the user has to switch on with
-`/branch-protection`. Host-side setup — installing direnv or nix-direnv on the
+`/branch-protection`, and the Renovate app to install. Host-side setup — installing direnv or nix-direnv on the
 machine — is the user's and is named, not done.

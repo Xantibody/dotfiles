@@ -123,3 +123,16 @@ Sources: https://github.com/DeterminateSystems/nix-installer-action (v23),
 https://github.com/DeterminateSystems/magic-nix-cache-action,
 https://github.com/cachix/install-nix-action (v31.11.5),
 https://github.com/cachix/cachix-action (v17), https://github.com/actions/checkout (v7.0.1).
+
+## 7. Dependency updates
+
+- An existing Renovate config stays and gains only what is missing: the nix
+  manager, `mode: "full"`, the flake-inputs and actions groups. Its own
+  `packageRules` are kept as they are.
+- Dependabot: ask the user before replacing it. Running both on one ecosystem
+  opens duplicate PRs; leaving Dependabot alone means `flake.lock` needs
+  Renovate anyway.
+- A repository that updates `flake.lock` from its own scheduled workflow
+  (`nix flake update` plus a PR) keeps that workflow and sets
+  `nix: { enabled: false }` with a comment saying the workflow owns it, so the
+  two never race.

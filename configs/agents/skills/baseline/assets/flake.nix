@@ -28,6 +28,8 @@
             inputsFrom = [ config.treefmt.build.devShell ];
             packages = [
               pkgs.just
+              pkgs.typos
+              pkgs.zizmor
             ];
           };
 
