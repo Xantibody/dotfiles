@@ -1,12 +1,31 @@
-package main
+package shot
 
 import (
+	"errors"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
 )
+
+// run executes `rat shot` with args and returns the code rat exits with.
+func run(args []string, stdout, stderr io.Writer) int {
+	cmd := Command()
+	cmd.SetArgs(args)
+	cmd.SetOut(stdout)
+	cmd.SetErr(stderr)
+	err := cmd.Execute()
+	if err == nil {
+		return 0
+	}
+	var coded interface{ ExitCode() int }
+	if !errors.As(err, &coded) {
+		return -1 // an error rat would report without a code of its own
+	}
+	return coded.ExitCode()
+}
 
 // valid returns a shot that passes every check, for a test to change one field.
 func valid() shot {
@@ -129,7 +148,7 @@ func TestTapeRejects(t *testing.T) {
 		{"no command", func(s *shot) { s.command = "" }, "-command is required"},
 		{"no wait", func(s *shot) { s.wait = "" }, "-wait is required"},
 		{"setup without ready", func(s *shot) { s.ready = "" }, "-ready is required"},
-		{"ready without setup", func(s *shot) { s.setup = nil }, "-ready without -setup"},
+		{"ready without setup", func(s *shot) { s.setup = nil }, "--ready without --setup"},
 		{"slash in regex", func(s *shot) { s.wait = "/tmp" }, `\x2f`},
 		{"bad regex", func(s *shot) { s.ready = "(" }, "-ready: regex"},
 		{"all three quotes", func(s *shot) { s.command = "echo \"a\" 'b' `c`" }, "-command:"},
@@ -203,7 +222,7 @@ func TestRun(t *testing.T) {
 				t.Fatal(err)
 			}
 			var stdout, stderr strings.Builder
-			code := run([]string{"-vhs", fakeVHS(t, tc.version, tc.png), "-out", out, "-command", "true", "-wait", "x"}, &stdout, &stderr)
+			code := run([]string{"--vhs", fakeVHS(t, tc.version, tc.png), "--out", out, "--command", "true", "--wait", "x"}, &stdout, &stderr)
 			if code != tc.code || !strings.Contains(stderr.String(), tc.stderr) {
 				t.Fatalf("exit %d, stderr %q; want %d and %q", code, stderr.String(), tc.code, tc.stderr)
 			}
@@ -221,16 +240,29 @@ func TestRun(t *testing.T) {
 
 func TestRunTapeOnly(t *testing.T) {
 	var stdout, stderr strings.Builder
-	code := run([]string{"-tape-only", "-vhs", "/nonexistent", "-out", "/tmp/x/after.png", "-command", "ls", "-wait", "x"}, &stdout, &stderr)
+	code := run([]string{"--tape-only", "--vhs", "/nonexistent", "--out", "/tmp/x/after.png", "--command", "ls", "--wait", "x"}, &stdout, &stderr)
 	if code != 0 || !strings.HasPrefix(stdout.String(), `Output "/tmp/x/after.gif"`) {
 		t.Fatalf("exit %d, stdout %q, stderr %q", code, stdout.String(), stderr.String())
 	}
 }
 
+func TestRunRepeatsSetup(t *testing.T) {
+	var stdout, stderr strings.Builder
+	code := run([]string{"--tape-only", "--out", "/tmp/x/after.png", "--setup", "cd /tmp, then", "--setup", "clear", "--ready", "x", "--command", "ls", "--wait", "x"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("exit %d, stderr %q", code, stderr.String())
+	}
+	if want := "Type \"cd /tmp, then\"\nEnter\nType \"clear\"\nEnter\nWait+Screen /x/"; !strings.Contains(stdout.String(), want) {
+		t.Errorf("tape lacks %q, each --setup in order and unsplit:\n%s", want, stdout.String())
+	}
+}
+
 func TestRunUsageErrors(t *testing.T) {
 	for _, args := range [][]string{
-		{"-out", "/tmp/a.png", "-wait", "x"},
-		{"-out", "/tmp/a.png", "-command", "ls", "-wait", "x", "extra"},
+		{"--out", "/tmp/a.png", "--wait", "x"},
+		{"--out", "/tmp/a.png", "--command", "ls", "--wait", "x", "extra"},
+		{"-out", "/tmp/a.png", "--command", "ls", "--wait", "x"}, // the go-run spelling
+		{"--out", "/tmp/a.png", "--command", "ls", "--wait", "x", "--width", "wide"},
 	} {
 		var stdout, stderr strings.Builder
 		if code := run(args, &stdout, &stderr); code != 2 || stdout.Len() > 0 {

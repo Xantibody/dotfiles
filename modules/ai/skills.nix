@@ -2,20 +2,12 @@
 # 手で回すだけだと、改名で残った参照や隠した skill への hand-off が次に誰かが回すまで見つからない。
 # 全 skill に --offline --strict でかけ、configs/agents/README.md の図が skill の dir と揃っているかも見る。
 # baseline の Goal の判定ファイル一覧と settings.json の permissions.ask が揃っているかも見る。
-# validator 自身の go test は checks.rat (modules/rat.nix) が回す。skill が持つ他の Go スクリプト (terminal-verify の shot、reliability-checklist の checklist) はここで build して test する。
+# validator 自身の go test は checks.rat (modules/rat.nix) が回す。terminal-verify の `rat shot` も同じ。skill が持つ残りの Go スクリプト (reliability-checklist の checklist) はここで build して test する。
 { inputs, self, ... }:
 {
   perSystem =
     { pkgs, self', ... }:
     let
-      # terminal-verify の tape を組む shot。vhs の罠を固定した go test を checkPhase が回す
-      shot = pkgs.buildGoModule {
-        pname = "terminal-verify-shot";
-        version = "0.1.0";
-        src = ../../configs/agents/skills/terminal-verify/scripts/shot;
-        vendorHash = null;
-        meta.mainProgram = "shot";
-      };
       # REVIEW.md を base から読んで diff に当てる checklist。一時 repo を作るテストに git が要る
       checklist = pkgs.buildGoModule {
         pname = "reliability-checklist";
@@ -59,7 +51,6 @@
         fi
         touch $out
       '';
-      checks.terminal-verify-shot = shot;
       checks.reliability-checklist = checklist;
     };
 }
