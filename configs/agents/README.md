@@ -33,7 +33,7 @@ flowchart TD
 
   implement -->|"毎サイクル"| check
   implement -->|"毎サイクル"| commit
-  implement -->|"実装が終わった時 (reconstruct の Goal)"| gr
+  implement -->|"実装が終わった時 (implement、次に reconstruct の Goal)"| gr
   implement -.->|"画面が変わった時"| shot
   gr -->|"rebuild なら"| reconstruct
   reconstruct -->|"1 commit ずつ"| commit
@@ -52,7 +52,7 @@ flowchart TD
   tv --> vhs
 ```
 
-判断と実行は分けるが、判断する skill は `goal-review` 1 つだけにする。何かを変える skill (`reconstruct`、`baseline`) は本文の `## Goal` に「どうなっていれば済みか」と判定方法を書き、`goal-review` はその節だけを読んで判定し、Goal に書かれた条件で持ち主の skill に渡す。新しい実行 skill には、専用の review skill を作らず Goal を書く。
+判断と実行は分けるが、判断する skill は `goal-review` 1 つだけにする。何かを変える skill (`implement`、`reconstruct`、`baseline`) は本文の `## Goal` に「どうなっていれば済みか」と判定方法を書き、`goal-review` はその節だけを読んで判定し、Goal に書かれた条件で持ち主の skill に渡す。`implement` の Goal (check と `just smoke` が通り、画面が変わるなら撮って見た) は、終わった時に `implement` 自身が先に判定させ、done になってから reconstruct の Goal に進む。新しい実行 skill には、専用の review skill を作らず Goal を書く。
 
 ## 打って使う skill
 

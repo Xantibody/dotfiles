@@ -10,6 +10,36 @@ Shape the code by the global instructions' Code Structure and Running Behaviour.
 
 Before starting, run `git branch --show-current`. Whether new work belongs on the default branch or its own branch is a per-repository decision (the repo's CLAUDE.md usually says; a single-maintainer repo often commits straight to the default), so follow that rather than a fixed rule. When it gets its own branch, cut it with `ha new <type>/<slug>` rather than `git switch -c`, and run every command against the `<base>@<branch>` worktree (the `ha` skill has the layout); the base checkout stays on the default branch. What is never fine is beginning on an unrelated non-default branch without asking — the work ends up in someone else's PR.
 
+## Goal
+
+"Every increment green" is the author's memory of the cycles; a change is finished when the project's own checks say so now, the app still starts and does what its smoke rows say, and anything that changes what a screen draws has been looked at. The goal is that state, measured rather than remembered.
+
+**Target.** The change on the current branch: the commits `origin/<default>..HEAD` (the default from `gh repo view --json defaultBranchRef --jq .defaultBranchRef.name`), or the commits made in this conversation when the work went straight onto the default branch. The checks can rewrite files (a formatter fixes before it fails), so items 1 and 2 run only on a clean tree (`git status --porcelain` empty); on a dirty tree they are `unknown`, and the uncommitted files are named.
+
+**Items.**
+
+| #   | Item          | Holds when                                                                                                                                                                                                           |
+| --- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Checks        | the project's check command exits 0: `just check` when `just --summary` lists `check` (through `nix develop --command` outside the devShell), otherwise the command the `check` skill's step 1 picks                 |
+| 2   | Smoke         | `just smoke` exits 0 — `n/a` when `just --summary` does not list `smoke`, with the note that the repository lacks the `baseline` skill's step 8                                                                      |
+| 3   | Screen looked | `n/a` when the change draws nothing new; otherwise this conversation captured an image of it with the `browser-verify` or `terminal-verify` skill after the last commit that touched what it draws, and read it back |
+
+Item 3 is a reading rule. The change draws something when the diff of the target (`git diff --name-only <range>`) touches what a browser or a terminal renders: a page, a component, a stylesheet, a template, a chart, a prompt, a colour scheme, a status line, a TUI. A test or a config nobody sees rendered does not count. The image must exist at the path the conversation captured it to; a path from an earlier conversation, or none in this one, leaves the item `unknown` rather than holding.
+
+**Verdict.**
+
+```markdown
+**Verdict:** done | not done
+**Range:** <the range judged>
+
+| #   | Item | State | Evidence |
+| --- | ---- | ----- | -------- |
+```
+
+State is `holds`, `fails`, `n/a` or `unknown` (with why). The verdict is **done** only when every row is `holds` or `n/a`; an `unknown` row is never counted as holding. Evidence is the command and the last lines of its output, or the image path.
+
+**Hand-over.** This Goal is asked for by this skill's Finishing, so the review returns the table to it rather than loading anything. Finishing says what each verdict leads to. When the user asked for the state directly, stop at the table.
+
 ## Red-Green-Refactor Cycle
 
 ### Red Phase (Write Failing Test)
@@ -80,4 +110,6 @@ Each cycle is: write ONE failing test → make it pass → run the checks (`chec
 
 ## Finishing
 
-The per-cycle commits are checkpoints for you, not the history a reviewer reads — they see one feature, not the cycles and detours that produced it. When the feature is complete (every increment green, checks passing), load the `goal-review` skill once against the `reconstruct` skill's Goal and follow its verdict: on **rebuild**, it hands over to the `reconstruct` skill before anything is pushed; on **pass**, report and stop. Once is the point — not after each cycle, when the answer is always "not yet", and not after the branch is pushed for review, when the history already belongs to the reviewer.
+When the last increment is committed, load the `goal-review` skill against this skill's Goal. On **not done**, go back to the first row that is not `holds` or `n/a`: a failing check or smoke is a new Red, fixed in a cycle as above and under the same three-fixes rule; a screen not looked at goes to the `browser-verify` or `terminal-verify` skill; an `unknown` gets what it lacked (a commit for a dirty tree, a capture in this conversation). Then ask again. Only **done** ends the work; the report carries its table, so the user reads what was run rather than "checks passing".
+
+The per-cycle commits are checkpoints for you, not the history a reviewer reads — they see one feature, not the cycles and detours that produced it. Once this skill's Goal is **done**, load the `goal-review` skill once against the `reconstruct` skill's Goal and follow its verdict: on **rebuild**, it hands over to the `reconstruct` skill before anything is pushed; on **pass**, report and stop. This Goal comes first because a rebuild reproduces the final diff, so it keeps whatever the checks found wrong. Once is the point — not after each cycle, when the answer is always "not yet", and not after the branch is pushed for review, when the history already belongs to the reviewer.
