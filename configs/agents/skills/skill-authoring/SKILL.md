@@ -174,7 +174,7 @@ skill を作る時
 — plus, when there are any, a list of the skills nothing loads. It is the only place the whole graph is visible,
 so it is redrawn in the same commit as any skill change that adds,
 removes or moves a node or an edge; a map that lags one commit is a map
-nobody trusts. The validator's `-readme` fails when a skill is neither a
+nobody trusts. The validator's `--readme` fails when a skill is neither a
 node nor in that list, or a node names no skill; edges it cannot judge.
 
 Derive it from the files, not from memory of the last version:
