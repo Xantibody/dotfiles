@@ -24,7 +24,7 @@ Before starting, run `git branch --show-current`. Whether new work belongs on th
 - Write just enough code to make the test pass - no more
 - Use the simplest solution that could possibly work
 - Do not add extra features or edge case handling yet
-- If the passing code works around something outside the repository, mark it `HACK(<issue URL>)`; if it takes a shape a reader would question, mark it `AIDEV-NOTE`. CLAUDE.md has the exact forms, and a grep for `HACK(` or `AIDEV-NOTE` is how the next session finds them.
+- If the passing code works around something outside the repository, mark it `HACK(<issue URL>)`; if it takes a shape a reader would question, mark it `AIDEV-NOTE`. The global instructions (AGENTS.md / CLAUDE.md) have the exact forms, and a grep for `HACK(` or `AIDEV-NOTE` is how the next session finds them.
 
 ### Refactor Phase (Improve Structure)
 
