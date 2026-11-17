@@ -2,8 +2,8 @@
 # ルールの選定と自前ルールは configs/agents/textlint/ にあり、`lint-body <file>` がそれを読む。
 # osekkai のルールは osekkai 本体 (flake input) が持つ。
 # skill が本文を書いた後に lint-body を回し、`gh pr create` などの --body-file は
-# lint-body-hook (pull-request / issue skill の frontmatter が登録する PreToolUse hook) が
-# もう一度かけて、指摘が残っていればコマンドを止める。
+# `rat hook lint-body` (pull-request / issue skill の frontmatter が登録する PreToolUse hook、
+# modules/rat.nix) が PATH の lint-body でもう一度かけて、指摘が残っていればコマンドを止める。
 #
 # claude feature の一部なので `_` 始まりにして import-tree から外し、claude.nix が imports で読む。
 # host が列挙するのは claude だけで、darwin / nixos への配線も claude.nix 側にある。
@@ -67,24 +67,8 @@ in
 {
   flake.modules.homeManager.textlint =
     { pkgs, ... }:
-    let
-      lintBody = mkLintBody pkgs;
-      hook = pkgs.writeShellApplication {
-        name = "lint-body-hook";
-        runtimeInputs = [
-          pkgs.jq
-          lintBody
-        ];
-        text = builtins.readFile ./textlint-hook.sh;
-      };
-    in
     {
-      # hook は settings.json ではなく pull-request / issue skill の frontmatter が登録する。
-      # skill が呼ばれたセッションだけ効き、無関係な Bash 呼び出しに hook が付いて回らない。
-      home.packages = [
-        lintBody
-        hook
-      ];
+      home.packages = [ (mkLintBody pkgs) ];
     };
 
   # 自前ルールと設定の読み込みを fixture で検査する。
