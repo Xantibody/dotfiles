@@ -9,26 +9,23 @@ import (
 	"github.com/Xantibody/dotfiles/tools/internal/cli"
 )
 
-const usage = "usage: rat shot --out <abs.png> --command <cmd> --wait <regex> [--setup <cmd>]... [--ready <regex>] [--width N] [--height N] [--font-size N] [--wait-timeout D] [--vhs vhs] [--tape-only]"
-
 // Command returns `rat shot`.
 func Command() *cobra.Command {
 	var opts Options
 	cmd := &cobra.Command{
 		Use:   "shot --out <abs.png> --command <cmd> --wait <regex> [flags]",
 		Short: "Capture one terminal screen with vhs from flags instead of a hand-written tape",
-		Args:  cobra.ArbitraryArgs,
-		// Run writes its own messages and exits 2 on a usage error
-		SilenceUsage:  true,
-		SilenceErrors: true,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return cli.Code(Run(opts, args, cmd.OutOrStdout(), cmd.ErrOrStderr()))
+		Args: func(_ *cobra.Command, args []string) error {
+			if len(args) > 0 {
+				return fmt.Errorf("unexpected argument %q; the command goes in --command", args[0])
+			}
+			return nil
+		},
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cli.Code(Run(opts, cmd.OutOrStdout(), cmd.ErrOrStderr()))
 		},
 	}
-	cmd.SetFlagErrorFunc(func(cmd *cobra.Command, err error) error {
-		fmt.Fprintf(cmd.ErrOrStderr(), "shot: %v\n%s\n", err, usage)
-		return &cli.ExitError{Code: 2}
-	})
+	// AIDEV-NOTE: --out, --command and --wait are checked by tape() rather than MarkFlagRequired, whose "required flag(s) not set" drops the hint on what each should hold
 	f := cmd.Flags()
 	f.StringVar(&opts.Out, "out", "", "PNG to write (the .tape and .gif go beside it)")
 	// StringArray, not StringSlice: a command is never split at a comma

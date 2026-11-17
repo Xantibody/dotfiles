@@ -8,7 +8,6 @@ func Command(hooks ...*cobra.Command) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "hook",
 		Short: "Claude Code hooks, each reading the hook JSON on stdin",
-		Args:  cobra.NoArgs,
 	}
 	cmd.AddCommand(hooks...)
 	return cmd

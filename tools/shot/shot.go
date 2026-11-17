@@ -243,12 +243,9 @@ type Options struct {
 }
 
 // Run captures the shot opts describes and returns the exit code: 0 when
-// the PNG was written, 1 when vhs or a check failed, 2 on a usage error.
-func Run(opts Options, args []string, stdout, stderr io.Writer) int {
-	if len(args) > 0 {
-		fmt.Fprintf(stderr, "shot: unexpected argument %q; the command goes in --command\n", args[0])
-		return 2
-	}
+// the PNG was written, 1 when vhs or a check failed, 2 when a flag is
+// missing or does not fit the others.
+func Run(opts Options, stdout, stderr io.Writer) int {
 	s := shot{
 		setup:       opts.Setup,
 		ready:       opts.Ready,

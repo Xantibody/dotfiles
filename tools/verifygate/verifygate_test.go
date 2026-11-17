@@ -2,7 +2,6 @@ package verifygate
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -24,11 +23,9 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-// asRat runs the command the way rat's main does.
+// asRat runs `rat verify-gate <args>` the way rat's main does.
 func asRat(args []string) int {
-	cmd := Command()
-	cmd.SetArgs(args)
-	return cli.Exit(cmd.Execute(), os.Stderr)
+	return cli.Main(cli.Root(Command()), append([]string{"verify-gate"}, args...), os.Stdin, os.Stdout, os.Stderr)
 }
 
 // fresh makes a repository with one commit, with this test binary as the
@@ -254,19 +251,10 @@ func TestGate(t *testing.T) {
 // run hands back the command's exit code and leaves stdout to it.
 func TestRunPassesTheCommand(t *testing.T) {
 	fresh(t, "observe")
-	var out bytes.Buffer
-	cmd := Command()
-	cmd.SetArgs([]string{"run", "sh", "-c", "echo hi; exit 3"})
-	cmd.SetIn(strings.NewReader(""))
-	cmd.SetOut(&out)
-	cmd.SetErr(&bytes.Buffer{})
-	err := cmd.Execute()
-	var coded interface{ ExitCode() int }
-	if !errors.As(err, &coded) || coded.ExitCode() != 3 || err.Error() != "" {
-		t.Errorf("Execute = %v, want a silent error with exit code 3", err)
-	}
-	if out.String() != "hi\n" {
-		t.Errorf("stdout = %q, want the command's", out.String())
+	var out, errs strings.Builder
+	code := cli.Main(cli.Root(Command()), []string{"verify-gate", "run", "sh", "-c", "echo hi; exit 3"}, strings.NewReader(""), &out, &errs)
+	if code != 3 || out.String() != "hi\n" || errs.Len() > 0 {
+		t.Errorf("exit %d, stdout %q, stderr %q; want 3, the command's stdout and nothing else", code, out.String(), errs.String())
 	}
 }
 
@@ -280,11 +268,19 @@ func TestRunOutsideARepositoryRecordsNothing(t *testing.T) {
 }
 
 func TestUsage(t *testing.T) {
-	for _, args := range [][]string{nil, {"bogus"}, {"run"}, {"run", "--"}, {"commit-msg"}} {
-		err := gate(t, args...)
-		var coded interface{ ExitCode() int }
-		if !errors.As(err, &coded) || coded.ExitCode() != 1 || !strings.Contains(err.Error(), "usage:") {
-			t.Errorf("verify-gate %q = %v, want a usage error with exit code 1", args, err)
+	for _, args := range [][]string{{"bogus"}, {"run"}, {"run", "--"}, {"commit-msg"}, {"commit-msg", "a", "b"}} {
+		var stdout, stderr strings.Builder
+		code := cli.Main(cli.Root(Command()), append([]string{"verify-gate"}, args...), strings.NewReader(""), &stdout, &stderr)
+		if code != 2 || stdout.Len() > 0 || !strings.Contains(stderr.String(), "Usage:\n  rat verify-gate") {
+			t.Errorf("verify-gate %q: exit %d, stdout %q, stderr %q; want 2 with the usage on stderr", args, code, stdout.String(), stderr.String())
 		}
+	}
+}
+
+// verify-gate alone lists its subcommands.
+func TestHelp(t *testing.T) {
+	var stdout, stderr strings.Builder
+	if code := cli.Main(cli.Root(Command()), []string{"verify-gate"}, strings.NewReader(""), &stdout, &stderr); code != 0 || !strings.Contains(stdout.String(), "commit-msg") {
+		t.Errorf("exit %d, stdout %q, stderr %q; want 0 and the help", code, stdout.String(), stderr.String())
 	}
 }

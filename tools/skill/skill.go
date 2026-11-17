@@ -8,7 +8,6 @@ func Command(tools ...*cobra.Command) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "skill",
 		Short: "Tools for the agent skills under configs/agents/skills",
-		Args:  cobra.NoArgs,
 	}
 	cmd.AddCommand(tools...)
 	return cmd

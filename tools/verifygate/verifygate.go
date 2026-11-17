@@ -34,11 +34,9 @@ func fail(format string, a ...any) error {
 
 // Run runs the command and, when it passes inside a git working tree, records
 // it against the tree of the working tree as it stands after the run. A
-// failing command's exit code is handed back with nothing recorded.
+// failing command's exit code is handed back with nothing recorded. args
+// holds at least the command.
 func Run(args []string, stdin io.Reader, stdout, stderr io.Writer) error {
-	if len(args) == 0 {
-		return fail("usage: rat verify-gate run [--] <command>...")
-	}
 	c := exec.Command(args[0], args[1:]...)
 	c.Stdin, c.Stdout, c.Stderr = stdin, stdout, stderr
 	if err := c.Run(); err != nil {

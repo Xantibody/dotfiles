@@ -13,11 +13,7 @@ import (
 
 // run executes `rat shot` with args and returns the code rat exits with.
 func run(args []string, stdout, stderr io.Writer) int {
-	cmd := Command()
-	cmd.SetArgs(args)
-	cmd.SetOut(stdout)
-	cmd.SetErr(stderr)
-	return cli.Exit(cmd.Execute(), stderr)
+	return cli.Main(cli.Root(Command()), append([]string{"shot"}, args...), strings.NewReader(""), stdout, stderr)
 }
 
 // valid returns a shot that passes every check, for a test to change one field.

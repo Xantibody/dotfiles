@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/Xantibody/dotfiles/tools/internal/cli"
+	"github.com/Xantibody/dotfiles/tools/skill"
 )
 
 // offlineSpec is the spec the validator uses with --offline.
@@ -20,11 +21,8 @@ func offlineSpec() spec { return loadSpec(true, io.Discard) }
 // usage errors to errOut, and returns the code rat exits with.
 func run(t *testing.T, args []string, out, errOut io.Writer) int {
 	t.Helper()
-	cmd := Command()
-	cmd.SetArgs(args)
-	cmd.SetOut(out)
-	cmd.SetErr(errOut)
-	return cli.Exit(cmd.Execute(), errOut)
+	root := cli.Root(skill.Command(Command()))
+	return cli.Main(root, append([]string{"skill", "validate"}, args...), strings.NewReader(""), out, errOut)
 }
 
 // writeSkill makes dir/<name>/SKILL.md with the given extra frontmatter lines
@@ -319,10 +317,10 @@ func TestRunUsageErrors(t *testing.T) {
 		args []string
 		want string
 	}{
-		{"no skill dir", []string{"--offline"}, "usage: rat skill validate"},
-		{"unknown flag", []string{"--colour", dir}, "unknown flag: --colour"},
-		{"single-dash long flag", []string{"-offline", dir}, "usage: rat skill validate"},
-		{"--known without SKILL.md", []string{"--offline", "--known", t.TempDir(), dir}, "--known "},
+		{"no skill dir", []string{"--offline"}, "Usage:\n  rat skill validate"},
+		{"unknown flag", []string{"--colour", dir}, "rat skill validate: unknown flag: --colour"},
+		{"single-dash long flag", []string{"-offline", dir}, "Usage:\n  rat skill validate"},
+		{"--known without SKILL.md", []string{"--offline", "--known", t.TempDir(), dir}, "skill validate: --known "},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			var out, errOut strings.Builder
