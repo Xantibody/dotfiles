@@ -14,6 +14,8 @@
           [
             vim-startuptime
             just
+            # .claude/settings.json の nix fmt hook を直列にする。macOS には flock が無い
+            flock
           ]
           # NixOSの指紋キャッシュを消すための依存関係
           ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux [
