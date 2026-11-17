@@ -2,22 +2,11 @@
 # 手で回すだけだと、改名で残った参照や隠した skill への hand-off が次に誰かが回すまで見つからない。
 # 全 skill に --offline --strict でかけ、configs/agents/README.md の図が skill の dir と揃っているかも見る。
 # baseline の Goal の判定ファイル一覧と settings.json の permissions.ask が揃っているかも見る。
-# validator 自身の go test は checks.rat (modules/rat.nix) が回す。terminal-verify の `rat shot` も同じ。skill が持つ残りの Go スクリプト (reliability-checklist の checklist) はここで build して test する。
+# validator 自身の go test は checks.rat (modules/rat.nix) が回す。skill が呼ぶ他のコマンド (`rat shot`、`rat checklist`) も同じ。
 { inputs, self, ... }:
 {
   perSystem =
     { pkgs, self', ... }:
-    let
-      # REVIEW.md を base から読んで diff に当てる checklist。一時 repo を作るテストに git が要る
-      checklist = pkgs.buildGoModule {
-        pname = "reliability-checklist";
-        version = "0.1.0";
-        src = ../../configs/agents/skills/reliability-checklist/scripts/checklist;
-        vendorHash = null;
-        nativeCheckInputs = [ pkgs.git ];
-        meta.mainProgram = "checklist";
-      };
-    in
     {
       # sandbox には ~/.claude/skills が無いので、flake input が配る skill は --known で渡す。
       # AIDEV-NOTE: my.skills は home-manager の option で perSystem からは読めないので、input の skill dir を直接並べる。本文が新しい外の skill を読み込んだらここに足す
@@ -51,6 +40,5 @@
         fi
         touch $out
       '';
-      checks.reliability-checklist = checklist;
     };
 }

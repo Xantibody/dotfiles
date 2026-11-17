@@ -1,5 +1,5 @@
-// checklist applies a repository's REVIEW.md to the current change and
-// prints only the rows the change hits.
+// Package checklist applies a repository's REVIEW.md to the current change
+// and prints only the rows the change hits.
 //
 // REVIEW.md is read from the base (git show <base>:REVIEW.md), not from the
 // working tree, so a branch that deletes or loosens a row is still checked
@@ -22,21 +22,17 @@
 // what broke; both are required, since a row nobody can trace back is a row
 // nobody can prune.
 //
-//	go run main.go [-base origin/main]
+//	rat checklist [--base origin/main]
 //
-// Without -base the base is origin/HEAD. stdout carries the rows hit, as a
+// Without --base the base is origin/HEAD. stdout carries the rows hit, as a
 // Markdown table with a Matched column, and nothing when no row is hit;
 // notes go to stderr. A repository with no REVIEW.md on the base exits 0
 // with a note, since the checklist is opt-in per repository.
-//
-// Only the standard library is used, so `go run` works from any checkout or
-// store path.
-package main
+package checklist
 
 import (
 	"bytes"
 	"errors"
-	"flag"
 	"fmt"
 	"io"
 	"io/fs"
@@ -80,24 +76,16 @@ type hit struct {
 	matched []string
 }
 
-func main() {
-	os.Exit(run(".", os.Args[1:], os.Stdout, os.Stderr))
-}
-
-// run is main with its inputs passed in: the directory to run git in, the
-// arguments after the program name, and the two streams.
-func run(dir string, args []string, stdout, stderr io.Writer) int {
-	flags := flag.NewFlagSet("checklist", flag.ContinueOnError)
-	flags.SetOutput(stderr)
-	base := flags.String("base", "", "ref whose REVIEW.md applies and whose merge base starts the change (default: origin/HEAD)")
-	if err := flags.Parse(args); err != nil {
+// Run applies the checklist from the directory to run git in, the --base
+// flag and the positional arguments, and returns the exit code: 0 when the
+// rows were applied, 1 on a broken table or a missing base, 2 on a usage
+// error.
+func Run(dir, base string, args []string, stdout, stderr io.Writer) int {
+	if len(args) > 0 {
+		fmt.Fprintf(stderr, "checklist: unexpected argument %q; the change is always the current repository's\n", args[0])
 		return 2
 	}
-	if flags.NArg() > 0 {
-		fmt.Fprintf(stderr, "checklist: unexpected argument %q; the change is always the current repository's\n", flags.Arg(0))
-		return 2
-	}
-	if err := apply(dir, *base, stdout, stderr); err != nil {
+	if err := apply(dir, base, stdout, stderr); err != nil {
 		fmt.Fprintf(stderr, "checklist: %v\n", err)
 		return 1
 	}
@@ -113,12 +101,12 @@ func apply(dir, base string, stdout, stderr io.Writer) error {
 	if base == "" {
 		head, err := git(top, "symbolic-ref", "--quiet", "--short", "refs/remotes/origin/HEAD")
 		if err != nil {
-			return errors.New("origin/HEAD is not set; run `git remote set-head origin --auto` or pass -base <ref>")
+			return errors.New("origin/HEAD is not set; run `git remote set-head origin --auto` or pass --base <ref>")
 		}
 		base = strings.TrimSpace(head)
 	}
 	if _, err := git(top, "rev-parse", "--verify", "--quiet", base+"^{commit}"); err != nil {
-		return fmt.Errorf("-base %q is not a commit here; fetch it first (git fetch origin)", base)
+		return fmt.Errorf("--base %q is not a commit here; fetch it first (git fetch origin)", base)
 	}
 
 	text, onBase := "", true

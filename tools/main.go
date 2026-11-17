@@ -9,6 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/Xantibody/dotfiles/tools/checklist"
 	"github.com/Xantibody/dotfiles/tools/hook"
 	"github.com/Xantibody/dotfiles/tools/hook/anchors"
 	"github.com/Xantibody/dotfiles/tools/hook/deny"
@@ -37,6 +38,7 @@ func main() {
 		verifygate.Command(),
 		skill.Command(validate.Command()),
 		shot.Command(),
+		checklist.Command(),
 	)
 	if err := root.Execute(); err != nil {
 		// An error that carries its own exit code (a hook blocking with 2, the

@@ -11,7 +11,7 @@ comment beside the code that broke — read only by someone who already
 opened that file. `REVIEW.md` at the repository root turns each lesson
 into a row the diff calls up: a trigger, what to check, and the commit
 whose body tells the incident. Which rows fire is decided by paths and
-regexes, so a script decides it, not you; what to do about a row that
+regexes, so a command decides it, not you; what to do about a row that
 fires is your judgement.
 
 ## Apply it
@@ -19,10 +19,10 @@ fires is your judgement.
 From anywhere inside the repository:
 
 ```bash
-go run ~/.claude/skills/reliability-checklist/scripts/checklist/main.go
+rat checklist
 ```
 
-It reads `REVIEW.md` from the base (`origin/HEAD`; pass `-base <ref>`
+It reads `REVIEW.md` from the base (`origin/HEAD`; pass `--base <ref>`
 when that is unset or another branch is the base), never from the
 working tree, so a branch that drops or loosens a row is still checked
 against the row it dropped. The change is the merge-base diff
