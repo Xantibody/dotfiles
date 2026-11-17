@@ -134,7 +134,8 @@ both happened the first time this was tried:
   the assertions into `eval_metadata.json` next to the prompt, and
   `copy_skill.py` copies `evals/evals.json` along with the skill. An
   executor that reads either answers to the rubric — the baseline for
-  the old `history-review` skill reproduced its exact vocabulary that way.
+  history-review, the skill `goal-review` replaced, reproduced its exact
+  vocabulary that way.
   Paste the prompt into the executor's instructions and delete the
   metadata and `evals/` from the run directory before it starts.
 - **The baseline must not see the skill.** An untracked skill in the
