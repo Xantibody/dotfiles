@@ -16,13 +16,16 @@ This skill is the single entry point for all routine quality checks, handling di
 
 Investigate available commands by checking project files in this priority order:
 
-1. **`flake.nix` / `flake.lock`**: prefer `nix flake check` for analysis+tests and `nix fmt` (treefmt) for formatting. Single command covers multi-language projects. Some flakes wire whole system builds into `checks`, which takes minutes — when that is the case, run `nix fmt` plus the specific check the change touches (`nix build .#checks.<system>.<name>`), and say which ones you skipped.
-2. **`Makefile` / `justfile`**: look for `lint`, `check`, `typecheck`, `test`, `format`, `fmt` targets.
-3. **`package.json`**: check `scripts` for `lint`, `typecheck`, `test`, `format`, plus common tools (`eslint`, `tsc --noEmit`, `vitest`, `jest`, `prettier`, `biome`).
-4. **Language-native fallbacks** (when no project-configured command exists):
+1. **A `check` recipe in the `justfile`** (`just --summary` lists it): run `just check`, the command CI runs in a repository the `baseline` skill set up. Inside the devShell (direnv loaded it, so `$IN_NIX_SHELL` is set) run it as is; otherwise, with a flake, run `nix develop --command just check`. Reach for the other recipes (`fmt`, `test`) only for what `check` leaves out.
+2. **`flake.nix` / `flake.lock`** with no `check` recipe: `nix flake check` for analysis+tests and `nix fmt` (treefmt) for formatting. One command covers a multi-language project, but it is slower than `just check` and may test something else, so it stands in only where no recipe exists.
+3. **`Makefile` / `justfile`** without `check`: look for `lint`, `typecheck`, `test`, `format`, `fmt` targets.
+4. **`package.json`**: check `scripts` for `lint`, `typecheck`, `test`, `format`, plus common tools (`eslint`, `tsc --noEmit`, `vitest`, `jest`, `prettier`, `biome`).
+5. **Language-native fallbacks** (when no project-configured command exists):
    - Go: `go vet ./...`, `golangci-lint run`, `go test ./...`, `gofmt -w .` / `goimports -w .`
    - Rust: `cargo clippy`, `cargo test`, `cargo fmt`
    - Python: `ruff check`, `mypy` / `pyright`, `pytest`, `ruff format` / `black .`
+
+**Heavy checks.** Some flakes wire checks into `checks` that build or evaluate a whole system — a host's `system.build.toplevel`, or an `eval-<host>` check that only writes its `drvPath` but still evaluates the host. One of those takes minutes and gigabytes, and several at once can freeze the machine. Tell them from the check names, the module that defines them, and the repository's CLAUDE.md, which may forbid evaluating a host locally. When the command chosen above would run them — `nix flake check` directly, or a `check` recipe that wraps it — run `nix fmt` plus the specific check the change touches (`nix build .#checks.<system>.<name>`) instead, and report which checks you skipped and that CI runs them.
 
 Prefer project-configured commands over language defaults. If a command fails due to missing dependencies, recommend the appropriate setup (`nix develop`, `npm install`, `go mod download`, etc.) rather than falling back to a different tool.
 
