@@ -2,7 +2,10 @@ module github.com/Xantibody/dotfiles/tools
 
 go 1.24
 
-require github.com/spf13/cobra v1.10.2
+require (
+	github.com/spf13/cobra v1.10.2
+	mvdan.cc/sh/v3 v3.12.0
+)
 
 require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect

@@ -7,6 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/Xantibody/dotfiles/tools/hook"
+	"github.com/Xantibody/dotfiles/tools/hook/deny"
 	"github.com/Xantibody/dotfiles/tools/version"
 )
 
@@ -19,7 +21,10 @@ func main() {
 		Short:        "Agent hooks and helper commands from the dotfiles repository",
 		SilenceUsage: true,
 	}
-	root.AddCommand(version.Command(buildVersion))
+	root.AddCommand(
+		version.Command(buildVersion),
+		hook.Command(deny.Command()),
+	)
 	if err := root.Execute(); err != nil {
 		os.Exit(1)
 	}

@@ -10,7 +10,7 @@
 # $(...) is checked as one command and passes. That keeps the polling form
 # AGENTS.md recommends, `timeout 30 bash -c 'until ...; do sleep 0.5; done'`,
 # allowed, the same as Claude's Bash(sleep *) prefix rule.
-# AIDEV-NOTE: rules, not deny-hook in ~/.codex/hooks.json: a user-layer hook runs only after /hooks trusts its hash, and each nix store path change resets that trust
+# AIDEV-NOTE: rules, not `rat hook deny` in ~/.codex/hooks.json: a user-layer hook runs only after /hooks trusts its hash, and each nix store path change resets that trust
 
 prefix_rule(
     pattern = ["sleep"],
