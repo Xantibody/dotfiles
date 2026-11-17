@@ -1,7 +1,14 @@
+# main への push でも回すのは、main に直接コミットした変更を検査するため。format check
+# はほかのどの workflow でも走らないので、push を darwin / nixos のビルドに任せられない。
+# path フィルタを付けないのは required check にしているため。付けると対象外の PR で
+# check が報告されず、マージできなくなる。
 name: Check
 
 on:
+  workflow_dispatch:
   pull_request:
+  push:
+    branches: [main]
 
 jobs:
   check:
