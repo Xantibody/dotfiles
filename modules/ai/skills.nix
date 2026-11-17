@@ -1,7 +1,7 @@
 # skill の validator (configs/agents/skills/skill-authoring/scripts/validate) を CI で回す check。
 # 手で回すだけだと、改名で残った参照や隠した skill への hand-off が次に誰かが回すまで見つからない。
 # 全 skill に -offline -strict でかけ、configs/agents/README.md の図が skill の dir と揃っているかも見る。
-# validator 自身の go test は buildGoModule の checkPhase が回す。
+# validator 自身の go test は buildGoModule の checkPhase が回す。skill が持つ他の Go スクリプト (terminal-verify の shot) も同じく build して test する。
 { inputs, self, ... }:
 {
   perSystem =
@@ -15,6 +15,14 @@
         # eval の commit hash を引くテストに使う。無ければそのテストは skip になる
         nativeCheckInputs = [ pkgs.git ];
         meta.mainProgram = "validate";
+      };
+      # terminal-verify の tape を組む shot。vhs の罠を固定した go test を checkPhase が回す
+      shot = pkgs.buildGoModule {
+        pname = "terminal-verify-shot";
+        version = "0.1.0";
+        src = ../../configs/agents/skills/terminal-verify/scripts/shot;
+        vendorHash = null;
+        meta.mainProgram = "shot";
       };
     in
     {
@@ -33,5 +41,6 @@
           "''${dirs[@]}"
         touch $out
       '';
+      checks.terminal-verify-shot = shot;
     };
 }
