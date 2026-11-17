@@ -272,7 +272,12 @@ are opted in by name.
     {
       "files": ["**/*.test.ts", "**/*.test.tsx"],
       "plugins": ["vitest"],
-      "rules": {},
+      "rules": {
+        // Named, not left to the correctness category, so a category change
+        // cannot drop them. A skipped or focused test checks nothing.
+        "vitest/no-disabled-tests": "error",
+        "vitest/no-focused-tests": "error",
+      },
     },
   ],
 }
@@ -346,6 +351,9 @@ export default defineConfig(
 
 - `strictTypeChecked` already brings `no-explicit-any`, `no-non-null-assertion`,
   every `no-unsafe-*`, and `ban-ts-comment` (min description 10).
+- Test files: add `@vitest/eslint-plugin` (`eslint-plugin-jest` in a Jest
+  repo) for `**/*.test.ts`, with `vitest/no-disabled-tests` and
+  `vitest/no-focused-tests` at `"error"`, named as in the oxlint config.
 - With `noInlineConfig: true`, ESLint reports each ignored directive as a
   warning ("'…' has no effect because you have 'noInlineConfig' setting in
   your config"), so `--max-warnings 0` turns any inline disable into a failure.
@@ -367,6 +375,8 @@ export default defineConfig(
 | `x!`                                              | Banned (`no-non-null-assertion`); handle the `undefined`                                                                                                                                                                                                                                                                                                                                                      |
 | `// oxlint-disable…`, `// eslint-disable…`        | Only as `// oxlint-disable-next-line <rule> -- HACK(https://…/issues/N): why`. A file-wide `oxlint-disable` / `eslint-disable` (no `-line` / `-next-line`) is never allowed, with or without a link. Enforced by `lint-ts-hatches`; oxlint honours `eslint-disable*` too unless `options.respectEslintDisableDirectives` is `false`; unused ones fail via `--report-unused-disable-directives-severity=error` |
 | `overrides` / `ignorePatterns` that weaken a rule | `// HACK(<issue URL>): why` above the entry                                                                                                                                                                                                                                                                                                                                                                   |
+| `test.skip`, `xit`, `it.only`, `describe.skip`    | Banned (`vitest/no-disabled-tests`, `vitest/no-focused-tests`). A test that cannot run in some environment (an OS, an outside service) takes `// oxlint-disable-next-line vitest/no-disabled-tests -- HACK(https://…/issues/N): <environment>`; a flaky test never does: fix it or delete it                                                                                                                  |
+| `retry` (config, test options), `--retry`         | Banned, no exception: a retry turns a flaky test green. Enforced by `lint-ts-hatches`                                                                                                                                                                                                                                                                                                                         |
 
 oxlint has no `noInlineConfig` equivalent and no rule requiring a reason, but
 it does parse a description after a directive (`-- why`, or a single `-`
@@ -428,7 +438,7 @@ setup-ts:
 lint-ts: setup-ts lint-ts-hatches
     oxlint --type-aware --deny-warnings --report-unused-disable-directives-severity=error
 
-# Every inline disable and @ts-expect-error must name the issue that removes it
+# Every inline disable and @ts-expect-error must name the issue that removes it; no test retries
 lint-ts-hatches:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -444,6 +454,12 @@ lint-ts-hatches:
     if [ -n "$bad" ]; then
         printf '%s\n' "$bad"
         echo 'Fix the code instead. If you cannot: // oxlint-disable-next-line <rule> -- HACK(<issue URL>): <why>'
+        exit 1
+    fi
+    retry=$(git grep -n -E 'retry *:|retryTimes\(|--retry' -- '*.test.*' '*.spec.*' 'vitest.config.*' 'vitest.workspace.*' 'vite.config.*' 'package.json' || true)
+    if [ -n "$retry" ]; then
+        printf '%s\n' "$retry"
+        echo 'Do not retry tests. Reproduce the failure with its seed (vitest run --sequence.shuffle --sequence.seed=<n>) and fix the cause, or delete the test and say why in the commit body.'
         exit 1
     fi
 
@@ -518,6 +534,9 @@ Notes:
   is assumed unchanged from 5.x for the `_tsc-errors` parser; run the recipe
   on a known error before relying on it.
 - UNVERIFIED: `tsc -b --noEmit` with project references on TS 7.
+- UNVERIFIED: whether `vitest/no-disabled-tests` reports `test.skipIf(…)` and
+  `ctx.skip()`; its test cases cover `.skip`, `x*` and `.todo` only. If it
+  does not, a skip written that way needs a review, not the linter.
 - No `nix` command was run; attributes were read from the nixpkgs tree, not
   evaluated.
 

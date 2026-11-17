@@ -46,5 +46,6 @@ If the formatter rewrites files that the current change did not touch, that chur
 - Report results clearly per step: passed / failed / skipped, with failing test names and lint messages.
 - Fix errors before proceeding. Distinguish errors (must fix) from warnings (fix if straightforward).
 - Never skip failing tests. Never disable lint rules to pass.
+- A test that fails and then passes on a rerun is flaky, not passing: never report it as passed. Reproduce the failure with the seed the failing run printed (`go test -shuffle=<seed>`, `vitest run --sequence.shuffle --sequence.seed=<seed>`) or by repeating it (`go test -count=100 -run <name>`), and fix the cause. Never make it green with a skip, a retry or a sleep. If no cause turns up, delete the test and say in the commit body what it checked and why it went.
 - If the same check still fails after three fixes, stop fixing it and hand it to the user: report what you tried, the output that keeps failing, and the cause you suspect through the `osekkai` skill, then stop.
 - If no test framework or formatter is configured, propose adding one appropriate for the project rather than silently skipping.
