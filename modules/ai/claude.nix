@@ -20,17 +20,16 @@ let
     home-manager.sharedModules = [
       hm.claude
       hm.textlint
-      hm.gh-guard
       hm.anchors-hook
     ];
   };
 in
 {
-  # PR / issue 本文の lint、保護を書き換える gh 操作の確認、編集前の anchor 表示。
-  # 同じ feature だがファイルは分ける (どれも perSystem の check まで持つ)
+  # PR / issue 本文の lint と編集前の anchor 表示。
+  # 同じ feature だがファイルは分ける (どれも perSystem の check まで持つ)。
+  # 保護を書き換える gh 操作の確認は rat hook gh-guard (modules/rat.nix) にある
   imports = [
     ./_textlint.nix
-    ./_gh-guard.nix
     ./_anchors-hook.nix
   ];
 
