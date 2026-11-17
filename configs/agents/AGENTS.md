@@ -102,6 +102,34 @@ Close relatives, for vocabulary rather than to adopt wholesale:
 - pnpm workspaces' `apps/` and `packages/`: a dev tool kept out of the
   production image by being a separate package.
 
+# Running Behaviour
+
+A program is run by something else — a shell pipe, a scheduler, CI, a
+container — and should be easy for that runner to trust and to restart.
+
+- stdout carries the result and nothing else; progress, warnings and
+  errors go to stderr, so the output can feed the next command. The exit
+  code says whether it worked. Logs are written to the standard streams as
+  they happen; where they end up is the runner's choice, never a log file
+  the program manages.
+- Fail early and loudly, with a message that says what to fix. No silent
+  fallback to a default nobody chose.
+- The default does the safe thing; deleting, overwriting or sending
+  outward takes an explicit flag. What a command changes is visible from
+  its name and arguments, never a side effect found later.
+- What differs between environments (endpoints, credentials, IDs) comes
+  from outside — flags, the environment, a secret store — never a constant
+  in code. The code is the same everywhere: a local run swaps adapters
+  (`lib/file` for `lib/s3`), not code paths.
+- A process keeps nothing it needs later in memory or on local disk; that
+  goes to the store. It can then be killed and rerun at any point, which
+  is what the done-markers rely on.
+- A one-off or admin task is the same code with another entry (`main.ts`
+  picking a job by name), not a separate script that drifts.
+
+Close relatives: the Unix philosophy and clig.dev for commands, the
+Twelve-Factor App for services.
+
 # Command Usage
 
 - Throwaway scripts are Go (`go run main.go`), not `python3 -c`, `perl -e`
