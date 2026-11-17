@@ -63,7 +63,9 @@ jobs:
           for host in $HOSTS; do
             installables+=(".#$host.config.system.build.toplevel")
           done
-          nix build --no-link --print-out-paths "${installables[@]}"
+          # 1 台が落ちても残りは組み切らせる。既定だと最初の失敗で止まり、他の host は
+          # cancelled と出て、壊れているのがどれか分からない。組めた分は push もされる
+          nix build --keep-going --no-link --print-out-paths "${installables[@]}"
 
   verify:
     needs: build
