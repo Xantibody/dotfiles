@@ -101,7 +101,7 @@ evals in `evals/evals.json`, and the eval workspace is the sibling
 ## 3. Validate
 
 ```bash
-go run ~/.claude/skills/skill-authoring/scripts/validate/main.go <skill-dir>...
+rat skill validate <skill-dir>...
 ```
 
 The checker reads the frontmatter and fails on: a field the live docs
@@ -121,11 +121,11 @@ the source when offline; when the two differ it says so, and that
 warning is the signal that the spec moved and the fallback needs
 updating. Run it on every skill you touched, and on all of them when the
 docs changed — a field being removed affects skills nobody opened. Its
-tests are `go test ./...` in `scripts/validate`.
+source and tests are in `tools/skill/validate`, run by `checks.rat`.
 
 `checks.skills` (`modules/ai/skills.nix`) runs it in CI over every skill
-with `-offline -strict`, so a warning fails there too, plus `-readme`
-for the map in step 5 and `-known` for the skills a flake input ships.
+with `--offline --strict`, so a warning fails there too, plus `--readme`
+for the map in step 5 and `--known` for the skills a flake input ships.
 The sandbox has no git history, so eval commit hashes are checked only
 when you run it locally.
 

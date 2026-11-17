@@ -11,7 +11,7 @@
       "assertions": [
         "Before changing any file, the output shows a table of candidates in which the hidden-skill hand-off (a589d72 / 1c32b5d) and the renamed-skill reference (761b40d / 5524165) appear as one kind of mistake with two pieces of evidence.",
         "The output asks the user which candidates to close, or states that the user's request already picked this one, before editing files.",
-        "The proposed closure is a check in the skill validator (configs/agents/skills/skill-authoring/scripts/validate) or another script, not a sentence added to AGENTS.md or a SKILL.md.",
+        "The proposed closure is a check in the skill validator (tools/skill/validate) or another script, not a sentence added to AGENTS.md or a SKILL.md.",
         "The transcript shows the new check run against the tree of a589d72 or 761b40d (for example through git archive or git worktree) reporting the problem, and against HEAD reporting no problem of that kind.",
         "The new check is wired so that it runs without being remembered: a flake check, a test in an existing check, or CI.",
         "Every commit that adds the check has a trailer block with `Prevents: a589d72` and/or `Prevents: 761b40d`, as shown by `git log --format='%(trailers:key=Prevents)'`.",

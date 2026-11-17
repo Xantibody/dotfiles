@@ -1,31 +1,27 @@
-// validate checks SKILL.md frontmatter against the field list Claude Code
-// documents today, so a skill is never rejected — or silently ignored — for a
-// field that the spec added or removed after some validator froze its list.
-// It also checks what a skill's body and evals point at: a sibling skill the
-// body loads must exist and be visible to the model, and a repository path or
-// commit the body or an eval prompt names must exist.
+// Package validate checks SKILL.md frontmatter against the field list Claude
+// Code documents today, so a skill is never rejected — or silently ignored —
+// for a field that the spec added or removed after some validator froze its
+// list. It also checks what a skill's body and evals point at: a sibling
+// skill the body loads must exist and be visible to the model, and a
+// repository path or commit the body or an eval prompt names must exist.
 //
-//	go run main.go [-offline] [-strict] [-readme README.md] [-known <skill-dir>]... <skill-dir>...
+//	rat skill validate [--offline] [--strict] [--readme README.md] [--known <skill-dir>]... <skill-dir>...
 //
-// -known names a skill that is not validated but may be referred to, such as
-// one a flake input ships (osekkai, ha) that is not beside the others.
-// -readme checks that the skill map names every validated skill and no
-// skill that does not exist. -strict fails on warnings too; CI runs that way.
+// --known names a skill that is not validated but may be referred to, such
+// as one a flake input ships (osekkai, ha) that is not beside the others.
+// --readme checks that the skill map names every validated skill and no
+// skill that does not exist. --strict fails on warnings too; CI runs that way.
 //
 // The allowed fields come from the "Frontmatter reference" table on
 // https://code.claude.com/docs/en/skills.md, fetched on every run. When the
 // fetch fails the baked-in fallback is used and named as such; when the fetch
 // succeeds and differs from the fallback, that difference is printed, because
 // it means the spec moved and fallbackFields below needs updating.
-//
-// Only the standard library is used, so the module has no dependencies and
-// `go run` works from any checkout or store path.
-package main
+package validate
 
 import (
 	"encoding/json"
 	"errors"
-	"flag"
 	"fmt"
 	"io"
 	"net/http"
@@ -100,45 +96,32 @@ type spec struct {
 	bundled    map[string]bool
 }
 
-func main() {
-	os.Exit(run(os.Args[1:], os.Stdout))
+// Options are the flags of `rat skill validate`.
+type Options struct {
+	Offline bool     // skip fetching the docs; use the baked-in field list
+	Strict  bool     // fail on warnings as well as errors
+	Readme  string   // skill map that must name every validated skill
+	Known   []string // skills that may be referred to but are not validated
 }
 
-// dirList collects a repeatable flag.
-type dirList []string
-
-func (d *dirList) String() string     { return strings.Join(*d, ",") }
-func (d *dirList) Set(v string) error { *d = append(*d, v); return nil }
-
-// run validates the skills named in args, writes the report to out and
-// returns the exit code: 0 when everything passed, 1 when something failed,
-// 2 on a usage error.
-func run(args []string, out io.Writer) int {
-	fs := flag.NewFlagSet("validate", flag.ContinueOnError)
-	fs.SetOutput(os.Stderr)
-	offline := fs.Bool("offline", false, "skip fetching the docs; use the baked-in field list")
-	strict := fs.Bool("strict", false, "fail on warnings as well as errors")
-	readme := fs.String("readme", "", "skill map (configs/agents/README.md) that must name every validated skill")
-	var knownDirs dirList
-	fs.Var(&knownDirs, "known", "a skill that may be referred to but is not validated (repeatable)")
-	if err := fs.Parse(args); err != nil {
-		return 2
-	}
-	dirs := fs.Args()
+// Run validates the skills in dirs, writes the report to out and usage
+// errors to errOut, and returns the exit code: 0 when everything passed, 1
+// when something failed, 2 on a usage error.
+func Run(opts Options, dirs []string, out, errOut io.Writer) int {
 	if len(dirs) == 0 {
-		fmt.Fprintln(os.Stderr, "usage: go run main.go [-offline] [-strict] [-readme README.md] [-known <skill-dir>]... <skill-dir>...")
+		fmt.Fprintln(errOut, usage)
 		return 2
 	}
 	known := map[string]string{}
-	for _, d := range knownDirs {
+	for _, d := range opts.Known {
 		if _, err := os.Stat(filepath.Join(d, "SKILL.md")); err != nil {
-			fmt.Fprintf(os.Stderr, "-known %s: %v\n", d, err)
+			fmt.Fprintf(errOut, "--known %s: %v\n", d, err)
 			return 2
 		}
 		known[filepath.Base(mustAbs(d))] = d
 	}
 
-	sp := loadSpec(*offline, out)
+	sp := loadSpec(opts.Offline, out)
 	fmt.Fprintf(out, "field list: %s\n", sp.source)
 
 	failed := false
@@ -147,7 +130,7 @@ func run(args []string, out io.Writer) int {
 		names = append(names, filepath.Base(mustAbs(dir)))
 		problems, warnings, notes := validateSkill(dir, sp, known)
 		status := "OK"
-		if len(problems) > 0 || *strict && len(warnings) > 0 {
+		if len(problems) > 0 || opts.Strict && len(warnings) > 0 {
 			status = "FAIL"
 			failed = true
 		}
@@ -162,14 +145,14 @@ func run(args []string, out io.Writer) int {
 			fmt.Fprintf(out, "  note:  %s\n", n)
 		}
 	}
-	if *readme != "" {
-		problems := checkReadme(*readme, names, known)
+	if opts.Readme != "" {
+		problems := checkReadme(opts.Readme, names, known)
 		status := "OK"
 		if len(problems) > 0 {
 			status = "FAIL"
 			failed = true
 		}
-		fmt.Fprintf(out, "%s: %s\n", filepath.Clean(*readme), status)
+		fmt.Fprintf(out, "%s: %s\n", filepath.Clean(opts.Readme), status)
 		for _, p := range problems {
 			fmt.Fprintf(out, "  error: %s\n", p)
 		}
@@ -201,13 +184,13 @@ func loadSpec(offline bool, out io.Writer) spec {
 	} else {
 		sp.bundled = toSet(names)
 		if added, removed := diffSets(sp.bundled, fb.bundled); len(added) > 0 || len(removed) > 0 {
-			fmt.Fprintf(out, "warn:  bundled command names differ from fallback: added %v, removed %v — update fallbackBundled in main.go\n", added, removed)
+			fmt.Fprintf(out, "warn:  bundled command names differ from fallback: added %v, removed %v — update fallbackBundled in tools/skill/validate/validate.go\n", added, removed)
 		}
 	}
 	added, removed := diffSets(sp.fields, fb.fields)
 	if len(added) > 0 || len(removed) > 0 {
 		fmt.Fprintf(out, "warn:  docs differ from fallback (%s): added %v, removed %v — update fallbackFields in %s\n",
-			fallbackDate, added, removed, "main.go")
+			fallbackDate, added, removed, "tools/skill/validate/validate.go")
 	}
 	if capN != fallbackListingCap {
 		fmt.Fprintf(out, "warn:  docs listing cap is %d, fallback says %d — update fallbackListingCap\n", capN, fallbackListingCap)
@@ -376,7 +359,7 @@ var loadRefRe = regexp.MustCompile("(?i)\\b(?:loads?|loading|uses?|using|via|han
 var pathRefRe = regexp.MustCompile("`((?:modules|configs)/[^`\\s]*)`")
 
 // validateSkill returns the skill's problems (which fail the run), warnings
-// (which fail it under -strict) and notes (checks it could not run here).
+// (which fail it under --strict) and notes (checks it could not run here).
 // known maps a skill name to the directory of a skill that is not validated
 // but may be referred to.
 func validateSkill(dir string, sp spec, known map[string]string) (problems, warnings, notes []string) {
@@ -437,7 +420,7 @@ func validateSkill(dir string, sp spec, known map[string]string) (problems, warn
 		}
 		seen[ref] = true
 		if findSkill(ref, parent, known) == "" {
-			problems = append(problems, fmt.Sprintf("body refers to the `%s` skill but neither %s, %s nor -known has such a skill", ref, parent, installedSkillsDir()))
+			problems = append(problems, fmt.Sprintf("body refers to the `%s` skill but neither %s, %s nor --known has such a skill", ref, parent, installedSkillsDir()))
 		}
 	}
 	loaded := map[string]bool{}
@@ -488,7 +471,7 @@ func validateSkill(dir string, sp spec, known map[string]string) (problems, warn
 // installedSkillsDir is where Claude Code loads skills from. Skills that a
 // flake input ships (osekkai, agent-browser, ha) land there without a
 // directory beside the one being validated; where nothing is installed (CI),
-// -known names them instead.
+// --known names them instead.
 func installedSkillsDir() string {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -633,7 +616,7 @@ var (
 
 // checkReadme compares the skill map with the skills: every validated skill
 // must appear as a node or in the list of skills nothing loads, and every
-// node must be a validated or -known skill. A node marked "(plugin)" names a
+// node must be a validated or --known skill. A node marked "(plugin)" names a
 // skill from a plugin, which has no directory here.
 func checkReadme(path string, skills []string, known map[string]string) []string {
 	raw, err := os.ReadFile(path)
@@ -655,7 +638,7 @@ func checkReadme(path string, skills []string, known map[string]string) []string
 			}
 			named[text] = true
 			if _, ok := known[text]; !exists[text] && !ok {
-				problems = append(problems, fmt.Sprintf("the map has a node for `%s`, but no such skill was validated or given with -known", text))
+				problems = append(problems, fmt.Sprintf("the map has a node for `%s`, but no such skill was validated or given with --known", text))
 			}
 		}
 	}
