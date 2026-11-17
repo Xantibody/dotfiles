@@ -57,17 +57,18 @@ Package manager, decided in this order:
    (phantom) dependency an import error, which is the structural version of a
    lint rule. Add `"packageManager": "pnpm@<version>"` to `package.json`.
 
-| Package    | nixpkgs attribute                                                            | Note                                                                                                                                                                                                                                                                     |
-| ---------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Node       | `nodejs` (= `nodejs_24`); `nodejs_22`, `nodejs_26` exist                     | Match `.nvmrc` / `.node-version` / `engines.node` major; else `nodejs`. Node 26 became Active LTS 2026-10-28 but nixpkgs' default is still 24                                                                                                                            |
-| pnpm       | `pnpm` (= `pnpm_12`); `pnpm_10`, `pnpm_11`                                   | Match the `packageManager` major                                                                                                                                                                                                                                         |
-| bun        | `bun`                                                                        | Only when the repo is a bun repo                                                                                                                                                                                                                                         |
-| npm        | (in `nodejs`)                                                                |                                                                                                                                                                                                                                                                          |
-| yarn       | `yarn` (classic), `yarn-berry`                                               |                                                                                                                                                                                                                                                                          |
-| TypeScript | `typescript` (= `typescript_7`, 7.0.2, binary `tsc`); `typescript_5` (5.9.3) | Omit when `package.json` pins `typescript`; TS 6 is not packaged                                                                                                                                                                                                         |
-| oxlint     | `oxlint`                                                                     | The nixpkgs build wraps `tsgolint` onto its PATH, so `--type-aware` works with no npm package. oxlint looks for the type-aware binary in `$OXLINT_TSGOLINT_PATH`, then `node_modules/.bin`, then `PATH`, so an `oxlint-tsgolint` devDependency wins over the nixpkgs one |
-| oxfmt      | `oxfmt`                                                                      | Comes in through `config.treefmt.build.devShell`; do not list it again                                                                                                                                                                                                   |
-| ripgrep    | `ripgrep`                                                                    | Only if a recipe uses `rg`; the recipes below use `git grep`                                                                                                                                                                                                             |
+| Package             | nixpkgs attribute                                                            | Note                                                                                                                                                                                                                                                                     |
+| ------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Node                | `nodejs` (= `nodejs_24`); `nodejs_22`, `nodejs_26` exist                     | Match `.nvmrc` / `.node-version` / `engines.node` major; else `nodejs`. Node 26 became Active LTS 2026-10-28 but nixpkgs' default is still 24                                                                                                                            |
+| pnpm                | `pnpm` (= `pnpm_12`); `pnpm_10`, `pnpm_11`                                   | Match the `packageManager` major                                                                                                                                                                                                                                         |
+| bun                 | `bun`                                                                        | Only when the repo is a bun repo                                                                                                                                                                                                                                         |
+| npm                 | (in `nodejs`)                                                                |                                                                                                                                                                                                                                                                          |
+| yarn                | `yarn` (classic), `yarn-berry`                                               |                                                                                                                                                                                                                                                                          |
+| TypeScript          | `typescript` (= `typescript_7`, 7.0.2, binary `tsc`); `typescript_5` (5.9.3) | Omit when `package.json` pins `typescript`; TS 6 is not packaged                                                                                                                                                                                                         |
+| oxlint              | `oxlint`                                                                     | The nixpkgs build wraps `tsgolint` onto its PATH, so `--type-aware` works with no npm package. oxlint looks for the type-aware binary in `$OXLINT_TSGOLINT_PATH`, then `node_modules/.bin`, then `PATH`, so an `oxlint-tsgolint` devDependency wins over the nixpkgs one |
+| oxfmt               | `oxfmt`                                                                      | Comes in through `config.treefmt.build.devShell`; do not list it again                                                                                                                                                                                                   |
+| ripgrep             | `ripgrep`                                                                    | Only if a recipe uses `rg`; the recipes below use `git grep`                                                                                                                                                                                                             |
+| Playwright browsers | `playwright-driver.browsers` (1.64.1)                                        | A web app with `test-e2e` only; set through two environment variables, see End-to-end tests below                                                                                                                                                                        |
 
 Verified at https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/top-level/all-packages.nix
 (`nodejs = nodejs_24`, `pnpm = pnpm_12`, `typescript = typescript_7`),
@@ -456,7 +457,7 @@ lint-ts-hatches:
         echo 'Fix the code instead. If you cannot: // oxlint-disable-next-line <rule> -- HACK(<issue URL>): <why>'
         exit 1
     fi
-    retry=$(git grep -n -E 'retry *:|retryTimes\(|--retry' -- '*.test.*' '*.spec.*' 'vitest.config.*' 'vitest.workspace.*' 'vite.config.*' 'package.json' || true)
+    retry=$(git grep -n -E 'retry *:|retries *: *[^0 ]|retryTimes\(|--retry' -- '*.test.*' '*.spec.*' 'vitest.config.*' 'vitest.workspace.*' 'vite.config.*' 'playwright.config.*' 'package.json' || true)
     if [ -n "$retry" ]; then
         printf '%s\n' "$retry"
         echo 'Do not retry tests. Reproduce the failure with its seed (vitest run --sequence.shuffle --sequence.seed=<n>) and fix the cause, or delete the test and say why in the commit body.'
@@ -484,6 +485,95 @@ Property tests: fast-check (`pnpm add -D fast-check`), called as
 and no recipe is added. A failure prints the seed and the shrunk
 counterexample; rerun with `{ seed, path }` in the `fc.assert` options to
 reproduce it, then turn the counterexample into an example test.
+
+### End-to-end tests (`test-e2e`)
+
+Only for a web app, a repository that serves pages a person clicks
+through; a library or a CLI gets none. Playwright Test drives the built
+app in a real browser. It is slow, so `check` never calls it: `test-e2e`
+hangs under `test-slow` (SKILL.md step 3), which CI runs as a job of its
+own.
+
+```just
+# Drive the built app in a real browser; too slow for check
+test-e2e: setup-ts
+    pnpm exec playwright test
+
+# Every test too slow for check; CI runs it on pull_request and on a schedule
+test-slow: test-e2e
+```
+
+- **Version:** `@playwright/test` as a devDependency pinned exactly to
+  `pkgs.playwright-driver.version` (1.64.1 on nixos-unstable, 2026-11-18;
+  upstream 1.65.1). The browsers come from nixpkgs, and Playwright looks
+  for the browser revision its own version expects, so an npm package newer
+  than the driver fails with "Executable doesn't exist". Keep Renovate off
+  it with a `packageRules` entry matching `@playwright/test` and
+  `"enabled": false`, and bump it by hand when `flake.lock` moves the driver.
+- **devShell:** two variables next to `packages`. Chromium only, plus the
+  headless shell Playwright uses for headless runs:
+
+  ```nix
+  PLAYWRIGHT_BROWSERS_PATH = "${pkgs.playwright-driver.browsers.override {
+    withFirefox = false;
+    withWebkit = false;
+  }}";
+  PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
+  ```
+
+- **Layout:** tests in `e2e/*.spec.ts`. Vitest's default `include` also
+  matches `*.spec.ts`, so add `exclude: [...configDefaults.exclude, "e2e/**"]`
+  to the Vitest config, or `test-ts` tries to run them.
+- **Config:** the production build, not the dev server, so the test sees
+  what ships.
+
+  ```ts
+  // playwright.config.ts
+  import { defineConfig, devices } from "@playwright/test";
+
+  export default defineConfig({
+    testDir: "e2e",
+    forbidOnly: true, // test.only fails the run, as vitest/no-focused-tests does
+    use: { baseURL: "http://localhost:4173", trace: "retain-on-failure" },
+    projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+    webServer: { command: "pnpm run build && pnpm run preview", url: "http://localhost:4173" },
+  });
+  ```
+
+  No `retries`: `lint-ts-hatches` fails a non-zero one in
+  `playwright.config.*`, for the same reason it fails Vitest's `retry`.
+
+- **CI:** a `test-slow` job beside `check` in `.github/workflows/check.yml`,
+  and a `schedule` trigger so it runs when nothing is pushed. The trace of a
+  failed test is uploaded, so a CI failure can be read without reproducing
+  it (`pnpm exec playwright show-trace <zip>`):
+
+  ```yaml
+  on:
+    pull_request:
+    push:
+      branches: [main]
+    schedule:
+      - cron: "0 3 * * 1"
+
+  jobs:
+    test-slow:
+      runs-on: ubuntu-latest
+      timeout-minutes: 30
+      steps:
+        - uses: actions/checkout@v7
+        - uses: DeterminateSystems/nix-installer-action@main
+        - run: nix develop --command just test-slow
+        - if: failure()
+          uses: actions/upload-artifact@v7
+          with:
+            name: playwright-traces
+            path: test-results/
+  ```
+
+A flow first walked by hand with the `browser-verify` skill is the usual
+source of a new E2E test: it already names the URL, the steps and what must
+appear.
 
 Ratchet variant of `typecheck-ts`:
 
@@ -543,6 +633,13 @@ Notes:
 - UNVERIFIED: whether `vitest/no-disabled-tests` reports `test.skipIf(…)` and
   `ctx.skip()`; its test cases cover `.skip`, `x*` and `.todo` only. If it
   does not, a skip written that way needs a review, not the linter.
+- UNVERIFIED: whether oxlint's `vitest` or `jest` plugin reports Playwright's
+  `test.skip` in `e2e/*.spec.ts`. Until it is checked, a skip there is the
+  reviewer's to catch; `forbidOnly` covers `test.only`.
+- UNVERIFIED: the `playwright-driver.browsers.override` above on
+  aarch64-darwin and x86_64-linux, and headless runs against the headless
+  shell it keeps. Read from `driver.nix`, not
+  built.
 - No `nix` command was run; attributes were read from the nixpkgs tree, not
   evaluated.
 
@@ -583,4 +680,6 @@ explicit `"error"`.
 - Node release schedule: https://github.com/nodejs/Release/blob/main/schedule.json
 - Vitest: https://registry.npmjs.org/vitest/latest
 - fast-check (replaying a failure with `seed` / `path`): https://fast-check.dev/docs/tutorials/quick-start/read-test-reports/
+- Playwright Test (`forbidOnly`, `retries`, `webServer`, `trace`): https://playwright.dev/docs/test-configuration, https://playwright.dev/docs/test-webserver; releases: https://github.com/microsoft/playwright/releases
+- nixpkgs Playwright (`playwright-driver` 1.64.1, `browsers` and its `withFirefox` / `withWebkit` / `withChromiumHeadlessShell` switches): https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/development/web/playwright/driver.nix
 - nixpkgs: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/ty/typescript_7/package.nix, https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/ox/oxlint/package.nix

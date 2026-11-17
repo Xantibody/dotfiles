@@ -103,3 +103,22 @@ Leave nothing running. Report which URL and viewport were captured, and
 anything that could not be verified — a state you could not reach, a
 server that would not start — rather than a screenshot of the wrong
 thing.
+
+**Propose keeping the flow.** A check made by hand ends with this
+session; the next change gets no such look. When you walked a flow — log
+in, add an item, see it in the list — and it guards something a user
+relies on, propose in the report to keep it as the project's end-to-end
+test, naming the URL, the steps and what must appear at the end. A
+screen only looked at (a colour, a spacing) is not a flow; propose
+nothing. The form:
+
+- **A Playwright test** when the project runs Playwright or can take it —
+  for a TypeScript web app, the `test-e2e` shape in the baseline skill's
+  `references/typescript.md`.
+- **An agent-browser script** otherwise: the same commands under
+  `agent-browser batch --bail`, with a `wait` on each element that must
+  appear, so a missing one fails the run.
+
+Either goes in `just test-slow`, never in `check`, which keeps to the
+tests that finish in tens of seconds. Propose; writing the test is a task
+of its own, not part of this check.
