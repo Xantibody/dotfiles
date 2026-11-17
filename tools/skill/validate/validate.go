@@ -35,7 +35,9 @@ import (
 	"time"
 )
 
-const docsURL = "https://code.claude.com/docs/en/skills.md"
+// docsURL is the page with the Frontmatter reference table; a variable so a
+// test can point it, and commandsURLs, at a local server.
+var docsURL = "https://code.claude.com/docs/en/skills.md"
 
 // commandsURLs are the pages that list Claude Code's bundled skills and
 // built-in commands. A user skill with the same directory name overrides
@@ -195,36 +197,50 @@ func loadSpec(offline bool, out io.Writer) spec {
 }
 
 var (
-	headingRe = regexp.MustCompile(`(?im)^#{1,6}\s+Frontmatter reference\s*$`)
-	rowRe     = regexp.MustCompile("(?m)^\\|\\s*`([^`]+)`\\s*\\|")
-	capRe     = regexp.MustCompile(`truncated at ([\d,]+) characters`)
+	headingRe     = regexp.MustCompile(`(?im)^#{1,6}\s+Frontmatter reference\s*$`)
+	nextHeadingRe = regexp.MustCompile(`(?m)^#{1,6}\s`)
+	rowRe         = regexp.MustCompile("(?m)^\\|\\s*`([^`]+)`\\s*\\|")
+	capRe         = regexp.MustCompile(`truncated at ([\d,]+) characters`)
 )
+
+// fetch returns the body of url, failing on any status but 200.
+func fetch(url string) (string, error) {
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Get(url)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	raw, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("%s: HTTP %d", url, resp.StatusCode)
+	}
+	return string(raw), nil
+}
 
 // fetchDocs returns the field names listed in the Frontmatter reference table
 // and the documented listing cap (0 if the sentence was not found).
 func fetchDocs() ([]string, int, error) {
-	client := &http.Client{Timeout: 10 * time.Second}
-	resp, err := client.Get(docsURL)
+	body, err := fetch(docsURL)
 	if err != nil {
 		return nil, 0, err
 	}
-	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		return nil, 0, fmt.Errorf("HTTP %d", resp.StatusCode)
-	}
-	raw, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, 0, err
-	}
-	body := string(raw)
+	return parseDocs(body)
+}
 
+// parseDocs reads the field names of the Frontmatter reference table in the
+// docs page body and the listing cap (0 if the sentence was not found).
+func parseDocs(body string) ([]string, int, error) {
 	loc := headingRe.FindStringIndex(body)
 	if loc == nil {
 		return nil, 0, fmt.Errorf("no 'Frontmatter reference' heading in page")
 	}
 	section := body[loc[1]:]
 	// The table ends at the next heading of any level.
-	if next := regexp.MustCompile(`(?m)^#{1,6}\s`).FindStringIndex(section); next != nil {
+	if next := nextHeadingRe.FindStringIndex(section); next != nil {
 		section = section[:next[0]]
 	}
 	var fields []string
@@ -251,23 +267,24 @@ var slashRe = regexp.MustCompile("(?m)^\\|\\s*`/([a-z0-9-]+)`")
 // across all commandsURLs. One unreachable page fails the whole fetch so
 // that a partial list never silently hides a collision.
 func fetchBundled() ([]string, error) {
-	client := &http.Client{Timeout: 10 * time.Second}
+	var bodies []string
+	for _, url := range commandsURLs {
+		body, err := fetch(url)
+		if err != nil {
+			return nil, err
+		}
+		bodies = append(bodies, body)
+	}
+	return parseBundled(bodies...)
+}
+
+// parseBundled returns the command and bundled skill names the pages list,
+// sorted and each once.
+func parseBundled(pages ...string) ([]string, error) {
 	seen := map[string]bool{}
 	var names []string
-	for _, url := range commandsURLs {
-		resp, err := client.Get(url)
-		if err != nil {
-			return nil, err
-		}
-		raw, err := io.ReadAll(resp.Body)
-		resp.Body.Close()
-		if err != nil {
-			return nil, err
-		}
-		if resp.StatusCode != http.StatusOK {
-			return nil, fmt.Errorf("%s: HTTP %d", url, resp.StatusCode)
-		}
-		for _, m := range slashRe.FindAllStringSubmatch(string(raw), -1) {
+	for _, page := range pages {
+		for _, m := range slashRe.FindAllStringSubmatch(page, -1) {
 			if !seen[m[1]] {
 				seen[m[1]] = true
 				names = append(names, m[1])
