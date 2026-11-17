@@ -54,7 +54,13 @@ section has nothing to be reviewed against — say so and stop.
 
 ## Report
 
-Use the Goal's verdict shape. When it has none, use:
+Use the Goal's verdict shape and nothing beyond it. Its bold labels
+(`**Verdict:**`, `**Proposed commits:**`) are copied as written, not
+translated, because the owning skill and the user's tools look for them; the
+prose around them follows the user's language. Where the Goal says to stop —
+a precondition that settles the verdict on its own — stop there: no further
+tests, no list of what would have failed otherwise. When the Goal has no
+verdict shape, use:
 
 ```markdown
 **Goal:** <skill> — **Target:** <what was judged>

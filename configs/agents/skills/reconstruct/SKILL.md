@@ -24,7 +24,7 @@ git fetch origin "$BASE"
 git log --stat --format='%h %s' "origin/$BASE..HEAD"
 ```
 
-Compare against `origin/$BASE`, not the local branch — a local default that is ahead of the remote would hide the user's unpushed commits, and those are exactly the ones still cheap to rebuild. A range handed in by the caller or named by the user is used as given; the verdict prints it and says which of these steps were therefore skipped. Then `gh pr view --json number,state --jq '.number' 2>/dev/null`: if a PR exists, the verdict is **pass** with that reason — history a reviewer has read is not rewritten, and responding to review by appending commits is what they expect. The one exception is a reviewer asking for a squash, and that request comes from them.
+Compare against `origin/$BASE`, not the local branch — a local default that is ahead of the remote would hide the user's unpushed commits, and those are exactly the ones still cheap to rebuild. A range handed in by the caller or named by the user is used as given; the verdict prints it and says which of these steps were therefore skipped. Then `gh pr view --json number,state --jq '.number' 2>/dev/null`: if a PR exists, the verdict is **pass** with that reason and the review stops there — no reading of the diffs, no list of commits that would otherwise fail, one or two sentences in all. History a reviewer has read is not rewritten, and responding to review by appending commits is what they expect. The one exception is a reviewer asking for a squash, and that request comes from them.
 
 **Reading rule.** Subjects say what the author meant; only the diff says what the commit did. Read each commit with `git show --stat -p <hash>` and look for the shapes a subject never admits to:
 
@@ -57,7 +57,7 @@ What passes: each commit is one logical change, in dependency order, structure b
 1. <type(scope): subject> — <files>
 ```
 
-The proposed list appears only on **rebuild**, ordered as Step 3 orders groups: dependencies first, structure before behaviour, every intermediate state buildable. An unrelated change that rode along stays its own commit. The list never drops a change: the rebuild reproduces the branch's final diff exactly, so a whitespace-only commit whose unformatted text predates the range becomes its own `style` commit, not a deletion.
+The proposed list appears only on **rebuild**. It folds every commit that ships nothing of its own into the one it corrects and gathers each purpose spread over several commits into one, so it is shorter than the range; split a commit only for a second purpose, never for size. It is ordered as Step 3 orders groups: dependencies first, structure before behaviour, every intermediate state buildable. An unrelated change that rode along stays its own commit. The list never drops a change: the rebuild reproduces the branch's final diff exactly, so a whitespace-only commit whose unformatted text predates the range becomes its own `style` commit, not a deletion.
 
 **Hand-over.** On **rebuild**, load this skill and run the procedure below with the proposed list — no approval first, for the reasons above. On **pass**, say so and return to whatever asked. The review runs **once, before the first push**: detours cost nothing extra, because the rebuild starts from the final diff, so ten wrong turns rebuild the same as none.
 
