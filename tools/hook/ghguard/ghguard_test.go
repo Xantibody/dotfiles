@@ -36,7 +36,7 @@ func TestCheckAsks(t *testing.T) {
 		"gh pr merge --auto --squash",
 		"rtk gh pr merge --auto",
 		"git status; gh pr merge 3 --admin",
-		// beyond the table gh-guard.sh had
+		// added when the shell hook was ported to Go
 		"gh api -X PUT \"repos/$o/$r/contents/x\"",
 		"gh api -X PUT repos/o/r/contents/x 'unterminated",
 		"gh pr merge --admin=true",
@@ -65,7 +65,7 @@ func TestCheckPasses(t *testing.T) {
 		"rtk gh api repos/o/r/contents/x",
 		"git log --grep contents",
 		"echo gh api -X PUT repos/o/r/contents/x",
-		// beyond the table gh-guard.sh had
+		// added when the shell hook was ported to Go
 		"gh api -X HEAD repos/o/r/contents/x",
 	} {
 		if reason := checkCommand(cmd); reason != "" {
