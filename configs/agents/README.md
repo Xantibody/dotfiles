@@ -28,7 +28,6 @@ flowchart TD
     tv["terminal-verify<br/>ターミナル"]
   end
   anchors["anchors<br/>HACK / AIDEV-NOTE の規則と一覧"]
-  testdesign["test-design<br/>何をテストするか"]
   ab[/"agent-browser<br/>headless Chrome の CLI"/]
   vhs[/"vhs<br/>tape から端末を撮る"/]
   lint[/"lint-body<br/>本文の textlint と osekkai lint (hook も同じ検査)"/]
@@ -37,7 +36,6 @@ flowchart TD
   implement -->|"毎サイクル"| commit
   implement -->|"実装が終わった時 (reconstruct の Goal)"| gr
   implement -.->|"画面が変わった時"| shot
-  implement -.->|"何を試すか迷った時"| testdesign
   implement -.->|"HACK / AIDEV-NOTE を残す時"| anchors
   anchors -.->|"閉じた HACK を外す時"| implement
   anchors -.->|"TODO は"| issue
