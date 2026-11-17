@@ -10,7 +10,8 @@
 // succeeds and differs from the fallback, that difference is printed, because
 // it means the spec moved and fallbackFields below needs updating.
 //
-// Only the standard library is used so that `go run` works without a module.
+// Only the standard library is used, so the module has no dependencies and
+// `go run` works from any checkout or store path.
 package main
 
 import (
