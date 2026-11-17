@@ -423,6 +423,51 @@ approach to use:
    are not caught at all. This is the weakest of the three, so prefer 2
    whenever the hits cluster in a few files.
 
+With approach 2, a change can add a lint to a file's `#![expect]`, or a new
+`#![expect]` to a clean file, and clippy passes: the attribute carries a
+HACK URL, which is all the escape-hatch rules ask of it. `lint-rust-expect`
+lists every lint named in an inner `#![expect(...)]` per file, at the base
+the Go ratchet uses (`LINT_BASE` in CI, else the merge-base with
+`origin/<default>`) and in the working tree, and fails on any pair the base
+did not have. Hang it under `lint-rust` once the first `#![expect]` lands;
+`default_branch` is the Go reference's variable, set once at the top of the
+justfile.
+
+```just
+# Per-file #![expect] lists may only shrink against LINT_BASE (CI) or the merge-base (local)
+lint-rust-expect:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    base="${LINT_BASE:-$(git merge-base HEAD origin/{{ default_branch }})}"
+    if ! git cat-file -e "$base^{commit}" 2> /dev/null; then
+        echo "lint-rust-expect: base $base is not in this clone; CI needs actions/checkout with fetch-depth: 0" >&2
+        exit 1
+    fi
+    # stdin: one file; prints "<file> <lint>" for each lint in an inner expect, rustfmt-wrapped or not
+    lints() {
+        tr '\n' ' ' | { grep -oE '#!\[[^]]*expect\([^]]*\]' || true; } \
+            | sed -E 's/.*expect\(//; s/reason *=.*//' \
+            | { grep -oE '[A-Za-z_][A-Za-z0-9_]*(::[A-Za-z_][A-Za-z0-9_]*)*' || true; } \
+            | awk -v f="$1" '{ print f, $0 }'
+    }
+    old=$({ git grep -l -F '#![' "$base" -- '*.rs' || true; } \
+        | while IFS= read -r s; do git show "$s" | lints "${s#*:}"; done | sort)
+    new=$({ git grep -l --untracked -F '#![' -- '*.rs' || true; } \
+        | while IFS= read -r p; do lints "$p" < "$p"; done | sort)
+    added=$(comm -13 <(printf '%s\n' "$old") <(printf '%s\n' "$new") | grep . || true)
+    if [ -n "$added" ]; then
+        printf '%s\n' "$added"
+        echo "These #![expect] entries are new since $base. Fix the new violation instead; a file's #![expect] list only goes down."
+        exit 1
+    fi
+```
+
+A file renamed while it still has an `#![expect]` counts as new under its
+new name: clean it before the rename. The recipe lives in the justfile the
+same change can edit, so it holds only while edits to the justfile are
+reviewed. Approach 3 has no such guard: a new `"allow"` line in Cargo.toml
+is caught only by review.
+
 Never apply `#![allow]` or `"allow"` across the whole crate just to make
 `just check` pass, and never lower an existing level. Report the counts
 and the approach you chose to the user.

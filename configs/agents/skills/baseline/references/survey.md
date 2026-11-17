@@ -92,11 +92,15 @@ f=$(grep -lE 'nix develop.*just check' .github/workflows/*.y*ml)
 grep -qE '^\s*pull_request:' "$f"
 grep -qE '^\s*push:' "$f" && grep -qE "branches:.*\b<default>\b" "$f"
 ! grep -qE 'paths(-ignore)?:' "$f"
+grep -qE 'fetch-depth: *0( |$)' "$f"
+grep -qE '^\s*LINT_BASE:' "$f"
 ```
 
 **Partial**: CI runs `npm test` / `cargo test` / setup-* actions directly
 (a second, drifting copy of step 3); CI runs only `nix flake check` (formatting
 only, unless the flake wires lint and tests into `checks`); only one trigger;
+a shallow checkout or no `LINT_BASE` (a ratchet recipe then has no base to
+compare against: `assets/check.yml` sets both);
 path filters on what is, or will be, a required check (a PR outside the paths
 never reports and can never merge).
 

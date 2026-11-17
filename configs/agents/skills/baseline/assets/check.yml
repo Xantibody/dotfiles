@@ -21,5 +21,11 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
+        with:
+          # A ratchet recipe compares against LINT_BASE, which a shallow clone lacks.
+          fetch-depth: 0
       - uses: DeterminateSystems/nix-installer-action@main
       - run: nix develop --command just check
+        env:
+          # The commit a ratchet may not get worse than: the PR's base, or the previous tip of main.
+          LINT_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
