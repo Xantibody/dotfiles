@@ -14,6 +14,12 @@ The README sells the project; this section orients someone about to change it. -
 
 <What the system does, its inputs and outputs, and where it runs.>
 
+<!-- One line, nothing more: the feature map changes with every feature, so it lives in the
+run skill, not on this page. -->
+
+How to start it and what to look at once it runs: the run skill,
+[`<repo>-run`](../.claude/skills/<repo>-run/SKILL.md).
+
 ## Codemap
 
 <!-- Components and the boundaries between them. One node per top-level module or

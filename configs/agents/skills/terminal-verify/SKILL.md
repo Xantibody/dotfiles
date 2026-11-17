@@ -31,6 +31,14 @@ when the colour, the alignment or the glyphs are the point.
    installed. When the config only exists after a Nix build, build that
    tree's output and point at the store path.
 
+3. **How the program starts, from the repository.** First the
+   repository's run skill (`.claude/skills/<repo>-run/`, or
+   `.agents/skills/<repo>-run/` under codex): its Start section and its
+   feature map in `references/features.md`. Without one, `just run`. With
+   neither, the command from item 2 is the start; when the repository
+   ships a program (a TUI, a CLI), say in the report that it has no run
+   skill, which is the baseline skill's step 8.
+
 ## Write the tape
 
 Keep the tape next to the images in the temp directory that holds the PR
@@ -69,7 +77,9 @@ Four traps, each of which fails without an error:
 `Hide` / `Show` keep the setup out of the frame. Run it with
 `timeout 300 vhs <dir>/after.tape`, then **look at the image** with the
 Read tool: check what the change was meant to change, and one thing it was
-not meant to touch. A screenshot of a shell that never loaded the config
+not meant to touch. With a feature map, pick both from it — one row the
+diff touches and one it does not — and type each row's path into the tape;
+without one, pick them yourself and name them in the report. A screenshot of a shell that never loaded the config
 looks plausible and proves nothing.
 
 A real prompt shows the machine it runs on: an account name, the

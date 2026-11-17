@@ -72,7 +72,8 @@ A hit there is `partial`. In a justfile, a recipe line starting with `-`
 ignores its exit code.
 
 **Partial**: a justfile without `check`; `check` that skips formatting or lint;
-the placeholder `echo … exit 1` lines from `assets/justfile` still present;
+the placeholder `echo … exit 1` lines from `assets/justfile` still present in
+`check` or a recipe it depends on (`run` and `smoke` are step 8's);
 lint configs below the stack reference's strict defaults or missing what `nix.md` and `repo-wide.md` add (the deadnix guard, zizmor, typos); a recipe that needs a
 step the README tells humans to do first (`npm ci`) instead of depending on it.
 
@@ -139,3 +140,33 @@ nix manager on (`nix: { enabled: true }`) so `flake.lock` is tracked, and sets
 **Partial**: Renovate without the nix manager (`flake.lock` never moves);
 Dependabot only (it does not update `flake.lock`); Renovate and Dependabot both
 on the same ecosystem (duplicate PRs).
+
+## 8. Run and smoke
+
+Look for the run skill at `.claude/skills/*-run/SKILL.md`; `<name>` below is
+its directory name.
+
+**Done** when all hold:
+
+```sh
+nix develop --command just --summary | tr ' ' '\n' | grep -qx run
+nix develop --command just --summary | tr ' ' '\n' | grep -qx smoke
+nix develop --command just smoke
+test -f .claude/skills/<name>/references/features.md
+test -f .agents/skills/<name>/SKILL.md
+```
+
+and `just --show smoke` starts the app itself (it does not assume one is
+already running) and drives the rows under the feature map's smoke section,
+which holds a few rows, not the whole map. Do not run `just run` for the
+survey: it stays in the foreground, and `just smoke` passing already shows the
+app starts. A broken smoke row must make `just smoke` exit non-zero, so the
+swallow check of step 3 applies to it too.
+
+**Partial**: `run` or `smoke` still the placeholder from `assets/justfile`;
+a `smoke` that only checks the process started and drives no feature-map row;
+a run skill without `references/features.md`, or a feature map without the
+three columns (feature, how to reach it, what to see); the skill only under
+`.claude/skills/` (codex cannot find it) or only under `.agents/skills/`
+(Claude Code does not read that path); a run skill named `run` or `verify`,
+which the built-in skills of the same name shadow.
