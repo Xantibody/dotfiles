@@ -53,11 +53,12 @@ in
       ++ [ mcp1 ]
       ++ mcp1.optional-dependencies.cli;
 
-    # AIDEV-NOTE: runs on llama.cpp, not MLX. nixpkgs builds mlx without Metal
-    # (the metal compiler is closed source), so the MLX backend would decode on
-    # the CPU; nixpkgs' llama-server has Metal. Without mlx installed the CLI
-    # picks llama.cpp on its own, and mlx-lm 0.32's refusal to load PLaMo 2
-    # checkpoints (upstream pins <0.32) never comes into play.
+    # AIDEV-NOTE: runs on llama.cpp, not MLX. python3Packages.mlx is built
+    # without Metal (the metal compiler is closed source), so the MLX backend
+    # would decode on the CPU; nixpkgs' llama-server has Metal. mlx-bin, the
+    # prebuilt wheel with Metal, would work, but mlx-lm would have to be rebuilt
+    # on it and held below 0.32, whose loader refuses PLaMo 2 checkpoints
+    # (upstream pins <0.32). Without mlx installed the CLI picks llama.cpp itself.
     pythonRemoveDeps = [
       "mlx-lm"
       "numba"
