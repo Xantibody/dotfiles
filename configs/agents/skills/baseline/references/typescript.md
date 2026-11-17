@@ -479,6 +479,12 @@ already on `node:test`; `bun test` for a bun repo; Jest repos keep
 `pnpm exec jest --ci`. `vitest run` fails when it finds no test files: on an
 empty repo write the first real test rather than adding `--passWithNoTests`.
 
+Property tests: fast-check (`pnpm add -D fast-check`), called as
+`fc.assert(fc.property(...))` inside an ordinary test, so `test-ts` runs them
+and no recipe is added. A failure prints the seed and the shrunk
+counterexample; rerun with `{ seed, path }` in the `fc.assert` options to
+reproduce it, then turn the counterexample into an example test.
+
 Ratchet variant of `typecheck-ts`:
 
 ```just
@@ -576,4 +582,5 @@ explicit `"error"`.
 - oxfmt: https://oxc.rs/docs/guide/usage/formatter.html, https://oxc.rs/docs/guide/usage/formatter/config.html; treefmt-nix: https://github.com/numtide/treefmt-nix/blob/main/programs/oxfmt.nix
 - Node release schedule: https://github.com/nodejs/Release/blob/main/schedule.json
 - Vitest: https://registry.npmjs.org/vitest/latest
+- fast-check (replaying a failure with `seed` / `path`): https://fast-check.dev/docs/tutorials/quick-start/read-test-reports/
 - nixpkgs: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/ty/typescript_7/package.nix, https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/ox/oxlint/package.nix

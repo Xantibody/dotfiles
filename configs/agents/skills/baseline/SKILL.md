@@ -17,7 +17,10 @@ repository already is.
 
 - **A constraint goes at the strongest level that can hold it.** Structure
   (the API, the directory boundaries) over types, types over lint, lint over
-  tests, tests over prose. Prose is for what needs judgement.
+  tests, tests over prose. Prose is for what needs judgement. Where state
+  transitions or concurrency are the heart of a part, a model check (TLA+)
+  or a property test that drives the UI can sit beside the tests as an
+  optional layer; the Goal does not ask for one.
 - **One command, everywhere.** A developer, an agent and CI run the same
   `just check` inside the same devShell. A check CI runs and `just check` does
   not is a check nobody runs before pushing. The one exception is a recipe
