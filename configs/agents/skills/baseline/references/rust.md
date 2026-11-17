@@ -312,7 +312,7 @@ Split the checks by what can make them fail:
 ```just
 # Type-check and lint every target in every crate. Clippy runs `check`,
 # so no separate `cargo check` is needed.
-lint-rust: lint-rust-inner-allow
+lint-rust: lint-rust-inner-allow lint-rust-ignore
     cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
 
 # Unit, integration and doc tests. No --all-targets here: with it,
@@ -326,6 +326,15 @@ lint-rust-inner-allow:
     set -euo pipefail
     if rg -n --glob '*.rs' '^\s*#!\[allow\(' .; then
         echo 'error: use #![expect(<lint>, reason = "HACK(<issue URL>): ...")] instead of #![allow]; expect fails once the violation is gone' >&2
+        exit 1
+    fi
+
+# An ignored test names the issue for the environment it cannot run in.
+lint-rust-ignore:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if rg -n --glob '*.rs' '#\[ignore\b' . | rg -v '#\[ignore\s*=\s*"HACK\(https?://[^)\s]+\)'; then
+        echo 'error: a flaky test is fixed or deleted, never ignored. A test the environment cannot run (an OS, an outside service): #[ignore = "HACK(<issue URL>): <environment>"]' >&2
         exit 1
     fi
 
@@ -349,6 +358,11 @@ separate type check: clippy compiles every target, so a Rust-only
 repository drops `typecheck` from `check`. Formatting comes from the
 shared format step.
 
+- `lint-rust-ignore`: `#[ignore]` takes a free-text reason, so nothing else
+  stops a flaky test from being ignored. Only an environment the test cannot
+  run in earns the HACK form. A slow test leaves `check` as its own test
+  target (`[[test]] name = "slow"` with `test = false`, run by `test-slow`
+  as `cargo test --test slow`), not through `#[ignore]`.
 - `--workspace`: when the root manifest is also a package, a bare `cargo`
   command acts only on that root package.
 - `--all-features`: if features are mutually exclusive, this fails to

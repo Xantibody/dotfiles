@@ -294,17 +294,22 @@ Choices an agent may be asked about:
 
 ## Escape hatches
 
-| Hatch                                | Rule                                                                                                                                                                 |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `//nolint:<linter>`                  | Allowed only as `//nolint:errcheck // HACK(https://…/issues/N): why`. nolintlint rejects a bare `//nolint`, `//nolint:all`, a missing reason and an unused directive |
-| `//revive:disable`                   | Same form (`//revive:disable-next-line:<rule> HACK(…): why`); revive's `specify-disable-rule` and `specify-disable-reason` reject it without a rule or a reason      |
-| `#nosec`                             | Ignored (`gosec.config.global.nosec: true`); use `//nolint:gosec // HACK(…)`                                                                                         |
-| `//lint:ignore`                      | staticcheck-only syntax; not honored by golangci-lint (https://github.com/golangci/golangci-lint/issues/1658, open). Forbid                                          |
-| `linters.exclusions.rules` / `paths` | Comment `# HACK(<issue URL>)` above each; `warn-unused` reports stale ones                                                                                           |
+| Hatch                                | Rule                                                                                                                                                                                                                                        |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `//nolint:<linter>`                  | Allowed only as `//nolint:errcheck // HACK(https://…/issues/N): why`. nolintlint rejects a bare `//nolint`, `//nolint:all`, a missing reason and an unused directive                                                                        |
+| `//revive:disable`                   | Same form (`//revive:disable-next-line:<rule> HACK(…): why`); revive's `specify-disable-rule` and `specify-disable-reason` reject it without a rule or a reason                                                                             |
+| `#nosec`                             | Ignored (`gosec.config.global.nosec: true`); use `//nolint:gosec // HACK(…)`                                                                                                                                                                |
+| `//lint:ignore`                      | staticcheck-only syntax; not honored by golangci-lint (https://github.com/golangci/golangci-lint/issues/1658, open). Forbid                                                                                                                 |
+| `linters.exclusions.rules` / `paths` | Comment `# HACK(<issue URL>)` above each; `warn-unused` reports stale ones                                                                                                                                                                  |
+| `t.Skip(`, `t.Skipf(`, `t.SkipNow(`  | Only with `// HACK(https://…/issues/N): <environment>` on the line directly above, and only for a test the environment cannot run (an OS, an outside service). A flaky test is fixed or deleted, never skipped. Enforced by `lint-go-tests` |
+| `time.Sleep(` in `_test.go`          | Same HACK rule, also `lint-go-tests`. Wait on a channel or a condition, or use `testing/synctest` for code that waits on timers                                                                                                             |
 
 nolintlint only demands _a_ reason. The HACK URL is enforced by
 `lint-go-suppressions` below, which looks only at added lines when ratcheting,
 so old `//nolint`s in a mature repo do not fail the build until touched.
+`lint-go-tests` does the same for skips and sleeps in tests. A slow test leaves
+`check` through a build tag (`//go:build slow`, run by `test-slow` with
+`-tags slow`), not through `t.Skip`.
 
 ## Ratchet (mature repo)
 
@@ -341,8 +346,8 @@ include the Go ones.
 ```just
 default_branch := "main"
 
-# Lint Go: golangci-lint plus the HACK rule for suppressions
-lint-go: lint-go-suppressions
+# Lint Go: golangci-lint plus the HACK rule for suppressions and test markers
+lint-go: lint-go-suppressions lint-go-tests
     golangci-lint config verify
     golangci-lint run ./...
 
@@ -356,6 +361,25 @@ lint-go-suppressions:
     if [ -n "$bad" ]; then
         printf '%s\n' "$bad"
         echo 'Fix the code instead. If you cannot, write //nolint:<linter> // HACK(<issue URL>): <why>'
+        exit 1
+    fi
+
+# t.Skip and time.Sleep in tests need a HACK(<issue URL>) on the line above
+lint-go-tests:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # Diffing against the empty tree checks every line of every tracked test file.
+    base=$(git hash-object -t tree /dev/null)
+    bad=$(git diff -U1 "$base" -- '*_test.go' | awk '
+        /^\+\+\+ / { file = substr($0, 7); next }
+        /^@@/ { prev = ""; next }
+        /^-/ { next }
+        { line = substr($0, 2) }
+        /^\+/ && line ~ /\.Skip(f|Now)?\(|time\.Sleep\(/ && prev !~ /HACK\(https?:\/\/[^)]+\)/ { print file ": " line }
+        { prev = line }')
+    if [ -n "$bad" ]; then
+        printf '%s\n' "$bad"
+        echo 'A flaky test is fixed or deleted, never skipped or slept on. Wait on a channel or use testing/synctest instead of time.Sleep. A test the environment cannot run: // HACK(<issue URL>): <environment> on the line above.'
         exit 1
     fi
 
@@ -374,11 +398,14 @@ cover-go:
     go tool cover -func=coverage.out | tail -n 1
 ```
 
-Ratchet variant (replace `lint-go` and `lint-go-suppressions`):
+Ratchet variant (replace `lint-go` and `lint-go-suppressions`, and in
+`lint-go-tests` replace the `base=` line with the `base=` line below so it
+looks only at added lines; the `-U1` context still shows the line above an
+added one):
 
 ```just
 # Lint only what changed since LINT_BASE (CI) or the merge-base (local)
-lint-go:
+lint-go: lint-go-tests
     #!/usr/bin/env bash
     set -euo pipefail
     base="${LINT_BASE:-$(git merge-base HEAD origin/{{ default_branch }})}"

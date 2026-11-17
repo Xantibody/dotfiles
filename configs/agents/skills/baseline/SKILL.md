@@ -26,7 +26,9 @@ repository already is.
   use instead, in the message the agent reads at the line it broke.
 - **Escape hatches need a reason.** Inline disables, `any`, casts,
   `@ts-ignore`, `#[allow]`, `//nolint` are forbidden or allowed only with a
-  `HACK(<issue URL>)` that names what they wait for.
+  `HACK(<issue URL>)` that names what they wait for. A skipped or ignored
+  test is one too, and earns the HACK only when the environment cannot run
+  it; a retry never does.
 - **Existing debt is ratcheted, not mass-fixed.** A rule raised on a mature
   repository fails only on new violations, so adopting it does not block work.
   Formatting is the exception: it is mechanical, so it is one commit.
