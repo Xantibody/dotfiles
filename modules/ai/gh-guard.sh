@@ -92,7 +92,7 @@ check_segment() {
 }
 
 # 区切り記号で切った断片ごとに見る。quote は外すだけで解釈しない。
-# AIDEV-NOTE: 確認を挟む hook なので構文解析はせず、取りこぼすより余計に聞く方へ倒す。deny 専用の deny-hook には ask を混ぜない
+# AIDEV-NOTE: 確認を挟む hook なので構文解析はせず、取りこぼすより余計に聞く方へ倒す。deny 専用の rat hook deny には ask を混ぜない
 reason=""
 while IFS= read -r seg; do
   seg=${seg//[\'\"]/}

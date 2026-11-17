@@ -82,7 +82,7 @@
           },
           {
             "type": "command",
-            "command": "deny-hook"
+            "command": "rat hook deny"
           },
           {
             "type": "command",

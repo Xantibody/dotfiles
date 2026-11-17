@@ -1,19 +1,21 @@
-// deny-hook is a PreToolUse hook for Claude Code's Bash tool: it reads
-// {"tool_input":{"command":...}} on stdin and writes a hookSpecificOutput
-// permissionDecision "deny" on stdout. codex uses codex-rules/deny.rules
-// instead (see agents.nix).
+// Package deny is `rat hook deny`, a PreToolUse hook for Claude Code's Bash
+// tool: it reads {"tool_input":{"command":...}} on stdin and writes a
+// hookSpecificOutput permissionDecision "deny" on stdout. codex uses
+// modules/ai/codex-rules/deny.rules instead.
 //
 // It refuses git push and rm with both -r and -f, in any spelling the
 // permission rules' prefix match misses: git -C <dir> push, rm -fr, rm -r -f,
 // a wrapper such as env or rtk in front, or the call inside bash -c, $(...)
 // or a pipeline. Anything else passes with no output.
-package main
+//
+// AIDEV-NOTE: not listed in codex's ~/.codex/hooks.json: a user-layer hook runs only after /hooks trusts its hash, and every store path change drops that trust (#137)
+// AIDEV-NOTE: permissions.deny matches by prefix and let git -C <dir> push and rm -fr through (#127); adding more deny patterns was rejected because it grows with every wrapper and bash -c form
+package deny
 
 import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"os"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -22,16 +24,9 @@ import (
 )
 
 const (
-	pushReason = "deny-hook: git push is left to the user. Commit, then report the commit and let the user push."
-	rmReason   = "deny-hook: rm with both -r and -f is refused. Remove the specific files by name, or ask the user to delete the directory."
+	pushReason = "rat hook deny: git push is left to the user. Commit, then report the commit and let the user push."
+	rmReason   = "rat hook deny: rm with both -r and -f is refused. Remove the specific files by name, or ask the user to delete the directory."
 )
-
-func main() {
-	if err := run(os.Stdin, os.Stdout); err != nil {
-		fmt.Fprintln(os.Stderr, "deny-hook:", err)
-		os.Exit(1)
-	}
-}
 
 func run(stdin io.Reader, stdout io.Writer) error {
 	var in struct {

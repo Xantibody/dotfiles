@@ -4,19 +4,6 @@
 { inputs, config, ... }:
 let
   hm = config.flake.modules.homeManager;
-  # Bash の git push と rm -rf を、語順や前置きの wrapper に関係なく止める PreToolUse hook。
-  # Claude は settings.json が名前で呼ぶ。codex 側の sleep・rm -rf・git push は codex-rules/deny.rules が止める
-  # AIDEV-NOTE: codex の ~/.codex/hooks.json には並べない。user 層の hook は /hooks で hash を信頼するまで動かず、store パスが変わるたびに信頼が外れる (#137)
-  # AIDEV-NOTE: permissions.deny は先頭一致で git -C <dir> push と rm -fr を通した (#127)。deny に形を足す案は wrapper や bash -c の数だけ増えるので採らない
-  mkDenyHook =
-    pkgs:
-    pkgs.buildGoModule {
-      pname = "deny-hook";
-      version = "0.1.0";
-      src = ./deny-hook;
-      vendorHash = "sha256-96W+NipSuAERDcT5peWDkU96OmH4C1a5Yd38YaV/+8E=";
-      meta.mainProgram = "deny-hook";
-    };
   share =
     { pkgs, ... }:
     {
@@ -61,7 +48,6 @@ in
         llm-agents.rtk # Bash 出力を圧縮する proxy。Claude では PreToolUse hook が前置する
         llm-agents.ck # 意味検索の grep。`ck --sem`、MCP は `ck --serve`
         llm-agents.codegraph # コードのシンボルと呼び出しのグラフ。MCP は `codegraph serve --mcp`
-        (mkDenyHook pkgs) # git push と rm -rf を止める hook。Claude は settings.json が登録する
       ];
 
       home.file = {
@@ -105,13 +91,6 @@ in
           desc = "承認を auto_review に委ねる。sandbox は workspace-write 固定";
         };
       };
-    };
-
-  # go test は buildGoModule の checkPhase が回す
-  perSystem =
-    { pkgs, ... }:
-    {
-      checks.deny-hook = mkDenyHook pkgs;
     };
 
   flake.modules.darwin.agents = share;
