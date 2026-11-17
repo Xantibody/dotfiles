@@ -14,7 +14,7 @@ check that runs on the result before it reaches GitHub.
 
 A body is linted before `gh` sees it, and the lint is the gate, not the
 prose rules: the `pull-request` and `issue` skills register a PreToolUse
-hook (`lint-body-hook`, from their frontmatter) that runs the same check
+hook (`rat hook lint-body`, from their frontmatter) that runs the same check
 on the `--body-file` of `gh pr create` / `gh pr edit` / `gh issue create`
 / `gh issue comment`, prints the findings, and refuses the command while
 any remain. It stays registered for the rest of the session once either

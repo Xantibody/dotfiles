@@ -7,7 +7,7 @@ hooks:
     - matcher: Bash
       hooks:
         - type: command
-          command: lint-body-hook
+          command: rat hook lint-body
 ---
 
 # Pull requests

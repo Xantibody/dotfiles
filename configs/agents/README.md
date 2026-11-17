@@ -8,7 +8,7 @@ skill も同じ 2 経路で配る。各 feature が `my.skills` に載せた dir
 
 `rtk` / `ck` / `codegraph` も skill ではなく `modules/ai/agents.nix` が入れるツールで、Claude には `settings.json` の hook と `mcp-defaults` が、codex には `/etc/codex/config.toml` と `~/.codex/hooks.json` が配線する。
 
-`textlint/` は skill ではなく、PR / issue 本文にかける textlint の設定と自前ルール。`modules/ai/_textlint.nix` (claude feature の一部) がこれを `lint-body` と `lint-body-hook` の 2 コマンドに焼き込む。`lint-body` は textlint のあとに同じファイルを `osekkai lint` にかけ、箇条や節の構造は osekkai のルールが見る。hook は pull-request と issue の frontmatter が skill を呼んだときに登録し、`gh pr create` などの `--body-file` に指摘が残っていればコマンドを止める。
+`textlint/` は skill ではなく、PR / issue 本文にかける textlint の設定と自前ルール。`modules/ai/_textlint.nix` (claude feature の一部) がこれを `lint-body` コマンドに焼き込む。`lint-body` は textlint のあとに同じファイルを `osekkai lint` にかけ、箇条や節の構造は osekkai のルールが見る。hook `rat hook lint-body` は pull-request と issue の frontmatter が skill を呼んだときに登録し、PATH の `lint-body` で `gh pr create` などの `--body-file` に指摘が残っていればコマンドを止める。
 
 ## 実装から PR まで
 
