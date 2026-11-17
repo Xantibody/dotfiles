@@ -57,7 +57,7 @@ flowchart TD
   tv --> vhs
 ```
 
-判断と実行は分けるが、判断する skill は `goal-review` 1 つだけにする。何かを変える skill (`implement`、`reconstruct`、`baseline`) は本文の `## Goal` に「どうなっていれば済みか」と判定方法を書き、`goal-review` はその節だけを読んで判定し、Goal に書かれた条件で持ち主の skill に渡す。`implement` の Goal (check と `just smoke` が通り、画面が変わるなら撮って見た) は、終わった時に `implement` 自身が先に判定させ、done になってから reconstruct の Goal に進む。新しい実行 skill には、専用の review skill を作らず Goal を書く。
+判断と実行は分けるが、判断する skill は `goal-review` 1 つだけにする。何かを変える skill (`implement`、`reconstruct`、`baseline`、`guardrail`) は本文の `## Goal` に「どうなっていれば済みか」と判定方法を書き、`goal-review` はその節だけを読んで判定し、Goal に書かれた条件で持ち主の skill に渡す。`implement` の Goal (check と `just smoke` が通り、画面が変わるなら撮って見た) は、終わった時に `implement` 自身が先に判定させ、done になってから reconstruct の Goal に進む。新しい実行 skill には、専用の review skill を作らず Goal を書く。
 
 変更が自分を裁くチェックを同じ変更で緩めないよう、判定ファイル (justfile、`.github/workflows/`、lint・型の設定、suppression、`.claude/settings*.json`) は 2 層で守る。一覧は `baseline` の Goal の Judge files にあり、`settings.json` の `permissions.ask` が同じ一覧を `Edit(**/<pattern>)` で並べるので、編集のたびに確認が出る (`checks.judge-files` が 2 つの一覧のずれを落とす)。`implement` の終わりと `pull-request` の pre-flight は、range が判定ファイルに当たったら `baseline` の Goal を step 3・4 に限って判定させる。基準は skill と一緒に配られた references なので、変更からは届かない。
 
@@ -105,6 +105,23 @@ flowchart LR
 ```
 
 `baseline` の言語別の既定 (TypeScript / Go / Rust / Nix) と雛形は skill を分けず、`baseline/references/` と `baseline/assets/` に置く。`docs` skill の ADR の作法も `baseline/references/docs.md` を指す。repo ごとの起動 skill (`<repo>-run`、feature map 付き) もここでは配らず、`baseline/assets/run-skill.md` を雛形に各 repo の `.claude/skills/` に置き、`.agents/skills/` からリンクする。`browser-verify` と `terminal-verify` はその skill を、なければ `just run` を起動手順として読み、見る行を feature map から選ぶ。
+
+## 失敗を check に変える時
+
+```mermaid
+flowchart LR
+  gr["goal-review"]
+  guardrail["guardrail<br/>2 回起きた失敗を check で塞ぎ、要らない規則を刈る"]
+  commit["commit"]
+  rc["reliability-checklist"]
+
+  gr -.->|"塞いでと頼まれた時"| guardrail
+  guardrail -->|"最初と最後 (guardrail の Goal)"| gr
+  guardrail -->|"塞ぐ・刈るごとに Prevents: 付きで"| commit
+  guardrail -.->|"REVIEW.md の行で塞ぐ時"| rc
+```
+
+`guardrail` も判断を持たない。塞げていない失敗、事故で鳴らない check、刈り込む規則、done/ に移していない plan は `guardrail` の Goal に書き、`goal-review` が判定する。塞ぎ方は設計、型、lint・hook・deny、テスト、`REVIEW.md` の行、Goal の項目、文章の順に上から試し、新しい check は警告だけで入れてから落とすようにする。`.ai/` は CI から見えないので、plan の移し忘れは CI の check でなく Goal の項目にしている。
 
 ## skill を作る時
 

@@ -168,8 +168,9 @@ the workspace is scaffolding.
 
 ## 5. Redraw the skill map
 
-`configs/agents/README.md` maps every skill in four mermaid flowcharts —
-実装から PR まで, 打って使う skill, リポジトリの環境を作る時, skill を作る時
+`configs/agents/README.md` maps every skill in five mermaid flowcharts —
+実装から PR まで, 打って使う skill, リポジトリの環境を作る時, 失敗を check に変える時,
+skill を作る時
 — plus, when there are any, a list of the skills nothing loads. It is the only place the whole graph is visible,
 so it is redrawn in the same commit as any skill change that adds,
 removes or moves a node or an edge; a map that lags one commit is a map

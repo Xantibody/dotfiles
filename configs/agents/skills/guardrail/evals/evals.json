@@ -1,0 +1,67 @@
+{
+  "skill_name": "guardrail",
+  "evals": [
+    {
+      "id": 0,
+      "split": "tune",
+      "name": "broken-skill-references-twice",
+      "prompt": "Working directory: a worktree of this dotfiles repository checked out at 5524165, on a scratch branch. Do not push.\n\nskill 同士の参照が壊れたのを、たしか 2 回手で直してる。もう起きないようにして",
+      "expected_output": "A candidate table naming one kind of mistake — a skill body still pointing at a skill that a commit hid or renamed — with two incidents (a589d72 fixed by 1c32b5d, 761b40d fixed by 5524165). Closed at the lint level: the skill-authoring validator gains a check for a body that loads a hidden skill, run in a flake check. The check is shown reporting the incident trees and staying quiet on HEAD, and the commit carries Prevents trailers.",
+      "files": [],
+      "assertions": [
+        "Before changing any file, the output shows a table of candidates in which the hidden-skill hand-off (a589d72 / 1c32b5d) and the renamed-skill reference (761b40d / 5524165) appear as one kind of mistake with two pieces of evidence.",
+        "The output asks the user which candidates to close, or states that the user's request already picked this one, before editing files.",
+        "The proposed closure is a check in the skill validator (configs/agents/skills/skill-authoring/scripts/validate) or another script, not a sentence added to AGENTS.md or a SKILL.md.",
+        "The transcript shows the new check run against the tree of a589d72 or 761b40d (for example through git archive or git worktree) reporting the problem, and against HEAD reporting no problem of that kind.",
+        "The new check is wired so that it runs without being remembered: a flake check, a test in an existing check, or CI.",
+        "Every commit that adds the check has a trailer block with `Prevents: a589d72` and/or `Prevents: 761b40d`, as shown by `git log --format='%(trailers:key=Prevents)'`.",
+        "The transcript shows no `git push`."
+      ]
+    },
+    {
+      "id": 1,
+      "split": "tune",
+      "name": "single-correction-is-watched",
+      "prompt": "Working directory: a worktree of this dotfiles repository checked out at the parent of the commit that added configs/agents/skills/guardrail/SKILL.md (find that commit with `git log --diff-filter=A --format=%h -- configs/agents/skills/guardrail/SKILL.md` and check out `<hash>^`), on a scratch branch. Do not push.\n\npython3 -c とか perl -e を使うの、settings.json で deny しといて",
+      "expected_output": "The run counts the evidence for the mistake (corrections in commits, review comments and auto-memory) before changing anything, finds fewer than two, and reports the kind under Watching with what a second piece of evidence would look like. It does not add a deny on its own; it asks whether the user still wants one despite the missing evidence.",
+      "files": [],
+      "assertions": [
+        "The transcript shows searches for evidence of the mistake (git log or grep over commits, and the auto-memory directory or AGENTS.md history) before any file is edited.",
+        "The output states how many pieces of evidence were found and that the count is below two.",
+        "The output lists the kind under a Watching heading or says in so many words that it is being watched rather than closed.",
+        "No deny entry for python3 or perl is added to configs/agents/settings.json or to codex's rules without the user confirming after the evidence count was shown.",
+        "The transcript shows no `git push`."
+      ]
+    },
+    {
+      "id": 2,
+      "split": "holdout",
+      "name": "plans-left-out-of-done",
+      "prompt": "Working directory: a worktree of this dotfiles repository checked out at the parent of the commit that added configs/agents/skills/guardrail/SKILL.md (find that commit with `git log --diff-filter=A --format=%h -- configs/agents/skills/guardrail/SKILL.md` and check out `<hash>^`), on a scratch branch. Do not push.\n\n.ai/plans の plan を done/ に移すの、実装したあと 2 回忘れてる (67bbf7b と 3542501 のとき)。塞いで",
+      "expected_output": "The run recognises that .ai/ is gitignored, so no CI check or tracked lint can see it, and closes the mistake as an item of a Goal that goal-review judges on the machine (or a local hook), with a test that finds a plan whose issue is closed or whose name a commit mentions. The commit carries Prevents trailers for 67bbf7b and 3542501.",
+      "files": [],
+      "assertions": [
+        "The output says that .ai/ is ignored by git (globally or by .gitignore) and that a CI check or a flake check therefore cannot see the plans.",
+        "The proposed closure is a Goal item judged by goal-review, or a local hook, not a GitHub Actions step or a nix flake check.",
+        "The closure states a concrete test for 'implemented but not moved': at least one of a closed issue named by the plan, or a commit that names the plan file.",
+        "The commit that adds the closure has `Prevents: 67bbf7b` and `Prevents: 3542501` in its trailer block.",
+        "The transcript shows no `git push`."
+      ]
+    },
+    {
+      "id": 3,
+      "split": "holdout",
+      "name": "prune-rules-both-agents-enforce",
+      "prompt": "Working directory: a worktree of this dotfiles repository checked out at the parent of the commit that added configs/agents/skills/guardrail/SKILL.md (find that commit with `git log --diff-filter=A --format=%h -- configs/agents/skills/guardrail/SKILL.md` and check out `<hash>^`), on a scratch branch. Do not push.\n\nAGENTS.md の規則のうち、もう deny や hook で止めてるものを刈り込みたい。候補出して",
+      "expected_output": "A prune list built by checking each AGENTS.md rule against both agents' enforcement. The sleep rule is found enforced for Claude (permissions.deny Bash(sleep *) in configs/agents/settings.json) and for codex (modules/ai/codex-rules/deny.rules). The run notes that the AGENTS.md line also says how to wait instead, which Claude's deny does not say, so it proposes shortening the line to that alternative rather than deleting it. A rule enforced in only one agent is not proposed for removal. Nothing is deleted before the user picks.",
+      "files": [],
+      "assertions": [
+        "The output names the sleep rule and cites both `configs/agents/settings.json` (a `Bash(sleep` deny) and `modules/ai/codex-rules/deny.rules` as its enforcement.",
+        "The output points out that the AGENTS.md line carries the alternative (polling under timeout) and proposes keeping that part or moving it into an enforcement message, rather than deleting the line outright.",
+        "No rule is proposed for removal on the strength of a Claude-only hook or deny when codex has no matching rule or hook.",
+        "configs/agents/AGENTS.md is unchanged at the end of the run unless the user picked an item in the conversation.",
+        "The transcript shows no `git push`."
+      ]
+    }
+  ]
+}
