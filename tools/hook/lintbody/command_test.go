@@ -2,9 +2,11 @@ package lintbody
 
 import (
 	"bytes"
-	"errors"
+	"io"
 	"strings"
 	"testing"
+
+	"github.com/Xantibody/dotfiles/tools/internal/cli"
 )
 
 func execute(t *testing.T, stdin string) (string, error) {
@@ -24,9 +26,8 @@ func execute(t *testing.T, stdin string) (string, error) {
 func TestCommandExitsTwoOnFindings(t *testing.T) {
 	cwd := setup(t)
 	out, err := execute(t, `{"cwd":"`+cwd+`","tool_input":{"command":"gh pr create --body-file ng.md"}}`)
-	var coded interface{ ExitCode() int }
-	if !errors.As(err, &coded) || coded.ExitCode() != 2 {
-		t.Errorf("Execute = %v, want an error with exit code 2", err)
+	if code := cli.Exit(err, io.Discard); code != 2 {
+		t.Errorf("Execute = %v, rat exits %d, want 2", err, code)
 	}
 	if out != "" {
 		t.Errorf("stdout = %q, want none", out)

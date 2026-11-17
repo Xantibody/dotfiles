@@ -3,8 +3,6 @@
 package main
 
 import (
-	"errors"
-	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -16,6 +14,7 @@ import (
 	"github.com/Xantibody/dotfiles/tools/hook/ghguard"
 	"github.com/Xantibody/dotfiles/tools/hook/lintbody"
 	"github.com/Xantibody/dotfiles/tools/hotspots"
+	"github.com/Xantibody/dotfiles/tools/internal/cli"
 	"github.com/Xantibody/dotfiles/tools/shot"
 	"github.com/Xantibody/dotfiles/tools/skill"
 	"github.com/Xantibody/dotfiles/tools/skill/validate"
@@ -42,19 +41,5 @@ func main() {
 		checklist.Command(),
 		hotspots.Command(),
 	)
-	if err := root.Execute(); err != nil {
-		// An error that carries its own exit code (a hook blocking with 2, the
-		// exit code of the command verify-gate ran) is written as it is, for
-		// whoever reads stderr, when it has a message; any other is reported
-		// the way cobra does and exits 1.
-		var coded interface{ ExitCode() int }
-		if errors.As(err, &coded) {
-			if msg := err.Error(); msg != "" {
-				fmt.Fprintln(os.Stderr, msg)
-			}
-			os.Exit(coded.ExitCode())
-		}
-		fmt.Fprintln(os.Stderr, "Error:", err)
-		os.Exit(1)
-	}
+	os.Exit(cli.Exit(root.Execute(), os.Stderr))
 }

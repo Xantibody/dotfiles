@@ -1,13 +1,14 @@
 package shot
 
 import (
-	"errors"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Xantibody/dotfiles/tools/internal/cli"
 )
 
 // run executes `rat shot` with args and returns the code rat exits with.
@@ -16,15 +17,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 	cmd.SetArgs(args)
 	cmd.SetOut(stdout)
 	cmd.SetErr(stderr)
-	err := cmd.Execute()
-	if err == nil {
-		return 0
-	}
-	var coded interface{ ExitCode() int }
-	if !errors.As(err, &coded) {
-		return -1 // an error rat would report without a code of its own
-	}
-	return coded.ExitCode()
+	return cli.Exit(cmd.Execute(), stderr)
 }
 
 // valid returns a shot that passes every check, for a test to change one field.
