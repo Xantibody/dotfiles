@@ -1,4 +1,12 @@
 {
+  "permissions": {
+    "deny": [
+      "Bash(nix flake check*)",
+      "Bash(darwin-rebuild build*)",
+      "Bash(nix eval .#*Configurations*)",
+      "Bash(nix build .#checks*eval-*)"
+    ]
+  },
   "hooks": {
     "PostToolUse": [
       {
@@ -6,7 +14,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "nix fmt"
+            "command": "if command -v flock >/dev/null; then exec flock \"${TMPDIR:-/tmp}/dotfiles-nix-fmt.lock\" nix fmt; else echo 'nix fmt hook: flock is not on PATH (devShell not loaded), formatting without the lock' >&2; exec nix fmt; fi"
           }
         ]
       }
