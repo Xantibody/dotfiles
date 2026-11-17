@@ -50,8 +50,8 @@ jq -c "${before[@]}" \
        else empty end),
       (if ($nourl + $todo) != [] then
         (["Comment warnings (not blocking):"]
-         + [$nourl[] | "- \($hack) without an issue URL: \(.)\n  Write \($hack)<issue URL>): <what to remove once the issue is fixed>, or \($note): <the decision and the rejected alternative> for a choice that stays."]
-         + [$todo[] | "- TODO/FIXME added: \(.)\n  A bare TODO is not an anchor. Track it in an issue and write \($hack)<issue URL>), or record a choice that stays as \($note)."])
+         + [$nourl[] | "- \($hack) without an issue URL: \(.)\n  Write \($hack)<issue URL>): <what to remove once the issue is fixed>, or \($note): <the constraint or the rejected alternative> for a constraint from outside the code or an alternative tried and dropped; a workaround a type, lint rule or another API could remove is removed instead."]
+         + [$todo[] | "- TODO/FIXME added: \(.)\n  A bare TODO is not an anchor. Track it in an issue and write \($hack)<issue URL>), or, for a constraint from outside the code, \($note)."])
         | join("\n")
        else empty end)
     ] as $ctx

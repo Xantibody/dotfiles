@@ -53,11 +53,11 @@ Detailed technical documentation per component:
 
 ## Inline Code Comments
 
-Comments explain **why not** — the decision that isn't visible in the code. t-wada's split: code says how, tests say what, the commit log says why, comments say why not. The comment is for the alternative that was rejected, the constraint that forces the odd shape, the workaround that looks wrong on purpose. A future reader about to "fix" it is the audience.
+Comments explain **why not** — the decision that isn't visible in the code. t-wada's split: code says how, tests say what, the commit log says why, comments say why not. The comment is for the alternative that was rejected and the constraint from outside the code (an API, a platform, a business rule) that forces the odd shape. A future reader about to "fix" it is the audience.
 
 ### Rules
 
-- **Why-not comments**: Explain rejected approaches, workarounds, constraints, and business rules that make the obvious refactor wrong
+- **Why-not comments**: Explain a rejected approach, or a constraint from outside the code that makes the obvious refactor wrong. A workaround the code itself could remove — with a type, a lint rule, a different API — is removed rather than explained; a comment over it leaves the trap in place
 - **No narration**: Do not restate what the code does (`// increment counter` on `counter++`)
 - **Link to docs**: For complex business logic, add a brief inline comment and reference the relevant doc (`// See docs/modules/billing.md for rate calculation details`)
 - **Anchors**: A why-not that a later session must find takes the `HACK(<issue URL>)` or `AIDEV-NOTE` shape the global instructions define. A bare `TODO`/`FIXME` is not written — sort it with the `issue` skill's deferred-work table
