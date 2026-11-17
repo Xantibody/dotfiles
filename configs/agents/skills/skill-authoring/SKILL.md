@@ -75,8 +75,8 @@ enough to be worth loading on its own.
   undoes is not that; `reconstruct` runs on its own because nothing
   leaves the machine until the user pushes. The same switch fits a
   skill that starts only when the user asks for it by name and that the
-  transcripts show the model never loading (`profile`, `refactor`,
-  `docs`): its description would otherwise cost every session's listing
+  transcripts show the model rarely or never loading (`profile` never,
+  `refactor` and `docs` at most twice): its description would otherwise cost every session's listing
   for nothing. Count the loads before hiding one. That hides the skill
   from the model completely — description and all — so the skill that
   decides has to hand the user `/name` to type. Background knowledge
@@ -154,9 +154,9 @@ the workspace is scaffolding.
 
 ## 5. Redraw the skill map
 
-`configs/agents/README.md` maps every skill in three mermaid flowcharts —
-実装から PR まで, 打って使う skill, skill を作る時 — plus a list of the
-skills nothing loads. It is the only place the whole graph is visible,
+`configs/agents/README.md` maps every skill in four mermaid flowcharts —
+実装から PR まで, 打って使う skill, リポジトリの環境を作る時, skill を作る時
+— plus, when there are any, a list of the skills nothing loads. It is the only place the whole graph is visible,
 so it is redrawn in the same commit as any skill change that adds,
 removes or moves a node or an edge; a map that lags one commit is a map
 nobody trusts.

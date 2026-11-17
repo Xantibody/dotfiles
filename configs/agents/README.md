@@ -2,7 +2,7 @@
 
 `skills/` の skill は、どう届くかで 2 種類に分かれる。「毎回回る」skill はモデルが一覧から読み込む。「打って使う」skill は `disable-model-invocation: true` で一覧から隠しており、ユーザーが `/name` (codex は `$name`) と打った時だけ動くので、毎セッションの一覧に description が載らない。隠した skill は他の skill からも読み込めない。そのため、そこへ向かう線は「/name を案内」と書き、ユーザーが打つまで止まる。図では実線が「その手順で必ず読み込む」、点線が「条件が合った時だけ読み込む」。
 
-`AGENTS.md` は Claude だけの指示書ではない。`modules/ai/claude.nix` が `~/.claude/CLAUDE.md` に、`modules/ai/agents.nix` が `~/.codex/AGENTS.md` に、同じファイルを配る。毎セッション両 agent が読むので、規則の本文は skill 側に置き、AGENTS.md は「いつ何を読むか」と skill 名だけを持つ。
+`AGENTS.md` は Claude だけの指示書ではない。`modules/ai/claude.nix` が `~/.claude/CLAUDE.md` に、`modules/ai/agents.nix` が `~/.codex/AGENTS.md` に、同じファイルを配る。毎セッション両 agent が読むので、AGENTS.md に置くのは、モデルが自分では再現しない家の規則のうち毎回効いてほしいもの (コードの切り方、動かし方、アンカーの書き方) と「いつ何を読むか」だけにする。1 つの作業の間だけ要る手順は skill 側に置く。
 
 skill も同じ 2 経路で配る。各 feature が `my.skills` に載せた dir を、claude.nix が `~/.claude/skills/` に、agents.nix が codex 用の `~/.agents/skills/` に並べる (Claude Code は `~/.agents/` を読まない)。`~/.claude/skills/ha`、`~/.claude/skills/agent-browser`、`~/.claude/skills/osekkai` がここに無いのはそのためで、ha は flake input `kawarimidoll/ha` 同梱の skill を `modules/git/ha.nix` が、agent-browser は llm-agents.nix の `agent-browser` 同梱の skill を、osekkai は flake input `Xantibody/osekkai` 同梱の skill を `modules/ai/claude.nix` が `my.skills` に載せている。`mcp-defaults` と `tsgo-lsp` は SKILL.md を持たない Claude plugin なので `~/.claude/skills/` にだけ置く。codex は frontmatter の `name` と `description` しか見ないので、`when_to_use` のトリガー語や `disable-model-invocation`、`hooks` は codex では効かず、隠す skill には `agents/openai.yaml` で同じことを書く。
 
