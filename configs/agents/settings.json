@@ -46,6 +46,10 @@
           {
             "type": "command",
             "command": "rtk hook claude"
+          },
+          {
+            "type": "command",
+            "command": "deny-hook"
           }
         ]
       },
