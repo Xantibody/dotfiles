@@ -62,7 +62,7 @@ Rules:
 When fixing a defect:
 
 1. First write an API-level failing test
-2. Then write the smallest possible test that replicates the problem
+2. Then write the smallest possible test that replicates the problem, in the kind that matches the defect's shape: when it breaks on a property of the input (an invariant that fails for a class of values), a property test over generated inputs instead of one minimal example, since another input would bring it back; when it breaks on execution order or concurrency, a test that fails under a fixed seed (Go: `-shuffle=<seed>` with `-race`; other stacks' flags are in the `baseline` skill's references), since an example alone may pass by luck
 3. Get both tests to pass
 
 ## Feature Implementation Workflow
