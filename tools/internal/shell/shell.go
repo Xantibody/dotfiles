@@ -15,8 +15,8 @@ import (
 )
 
 // Commands lists every simple command in cmd as the words it runs, wrappers
-// stripped and nested ones included. A word that is not a plain literal ($x,
-// $(...)) becomes "", which matches no rule.
+// stripped and nested ones included. Quotes are removed; an expansion ($x,
+// $(...)) is kept as written.
 func Commands(cmd string) [][]string {
 	var out [][]string
 	for _, args := range calls(cmd) {
@@ -29,14 +29,20 @@ func Commands(cmd string) [][]string {
 func calls(cmd string) [][]string {
 	file, err := syntax.NewParser().Parse(strings.NewReader(cmd), "")
 	if err != nil {
-		// AIDEV-NOTE: a parse error falls back to splitting on separators rather than allowing, so broken quoting cannot hide a push
+		// AIDEV-NOTE: a parse error falls back to splitting on separators rather than allowing, so broken quoting cannot hide a command from a hook
 		var out [][]string
 		for _, seg := range strings.FieldsFunc(cmd, func(r rune) bool { return strings.ContainsRune(";&|()\n`", r) }) {
 			if f := strings.Fields(seg); len(f) > 0 {
 				for i := range f {
 					f[i] = strings.Trim(f[i], `'"`)
 				}
-				out = append(out, f)
+				// leading assignments, as the parser would have taken them
+				for len(f) > 0 && strings.Contains(f[0], "=") {
+					f = f[1:]
+				}
+				if len(f) > 0 {
+					out = append(out, f)
+				}
 			}
 		}
 		return out
@@ -55,6 +61,10 @@ func calls(cmd string) [][]string {
 	return out
 }
 
+// literal is the word with its quotes removed. A part that is not a plain
+// literal ($x, $(...)) keeps its source text, so a rule matching a path
+// such as repos/$o/r/contents still sees it.
+// AIDEV-NOTE: an expansion keeps its source rather than becoming "", which let env FOO=$x git push through and hid repos/$o/... from gh-guard
 func literal(w *syntax.Word) string {
 	var b strings.Builder
 	for _, part := range w.Parts {
@@ -65,17 +75,21 @@ func literal(w *syntax.Word) string {
 			b.WriteString(p.Value)
 		case *syntax.DblQuoted:
 			for _, q := range p.Parts {
-				lit, ok := q.(*syntax.Lit)
-				if !ok {
-					return ""
+				if lit, ok := q.(*syntax.Lit); ok {
+					b.WriteString(lit.Value)
+				} else {
+					source(&b, q)
 				}
-				b.WriteString(lit.Value)
 			}
 		default:
-			return ""
+			source(&b, part)
 		}
 	}
 	return b.String()
+}
+
+func source(b *strings.Builder, node syntax.Node) {
+	_ = syntax.NewPrinter().Print(b, node) // a strings.Builder does not fail
 }
 
 func unescape(s string) string {

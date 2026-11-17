@@ -58,6 +58,8 @@ func TestCheckDenies(t *testing.T) {
 		"git -C /nonexistent push; rm -fr x",
 		"git -C x 'push'",
 		"rm \"-fr\" dir",
+		"env FOO=$x git push",
+		"\"$HOME/bin/git\" push",
 	} {
 		if checkCommand(cmd) == "" {
 			t.Errorf("checkCommand(%q) allowed, want denied", cmd)
@@ -102,6 +104,7 @@ func TestCheckFallsBackOnParseError(t *testing.T) {
 	for _, cmd := range []string{
 		"git -C x push 'unterminated",
 		"echo ok; rm -fr dir 'unterminated",
+		"FOO=1 git push 'unterminated",
 	} {
 		if checkCommand(cmd) == "" {
 			t.Errorf("checkCommand(%q) allowed, want denied", cmd)
