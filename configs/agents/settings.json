@@ -95,7 +95,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "anchors-hook"
+            "command": "rat hook anchors"
           }
         ]
       }

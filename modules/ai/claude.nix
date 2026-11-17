@@ -20,17 +20,15 @@ let
     home-manager.sharedModules = [
       hm.claude
       hm.textlint
-      hm.anchors-hook
     ];
   };
 in
 {
-  # PR / issue 本文の lint と編集前の anchor 表示。
-  # 同じ feature だがファイルは分ける (どれも perSystem の check まで持つ)。
-  # 保護を書き換える gh 操作の確認は rat hook gh-guard (modules/rat.nix) にある
+  # PR / issue 本文の lint。同じ feature だが perSystem の check まで持つのでファイルを分ける。
+  # 保護を書き換える gh 操作の確認と編集前の anchor 表示は
+  # rat hook gh-guard / rat hook anchors (modules/rat.nix) にある
   imports = [
     ./_textlint.nix
-    ./_anchors-hook.nix
   ];
 
   flake.modules.homeManager.claude =
