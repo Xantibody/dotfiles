@@ -69,6 +69,55 @@ turns off or leaves out, or an escape hatch the reference restricts that the
 repo allows freely, makes the step partial. A stack with no reference is
 judged on whether its strictest documented mode is on.
 
+**Judge files.** Steps 3 and 4 are decided by files the repository holds, so
+a change that edits one can loosen the check that judges the change. These
+patterns (gitignore syntax) name them; the Claude Code settings shipped with
+these skills put the same list under `permissions.ask` as `Edit(<pattern>)`,
+so an edit to one waits for the user, and the `implement` and
+`pull-request` skills ask for steps 3 and 4 of this Goal when their range
+touches one. The comparison is against `references/`, which the change
+cannot reach.
+
+```gitignore
+**/justfile
+**/Justfile
+**/.justfile
+**/*.just
+**/.github/workflows/**
+**/.github/zizmor.yml
+**/.claude/settings*.json
+**/tsconfig*.json
+**/eslint.config.*
+**/.eslintrc*
+**/eslint-suppressions.json
+**/.oxlintrc.json
+**/oxlint.config.*
+**/oxlint-suppressions.json
+**/biome.json
+**/biome.jsonc
+**/.tsc-baseline
+**/vitest.config.*
+**/vitest.workspace.*
+**/playwright.config.*
+**/.golangci.*
+**/clippy.toml
+**/.clippy.toml
+**/deny.toml
+**/rustfmt.toml
+**/.rustfmt.toml
+**/.config/nextest.toml
+**/statix.toml
+**/typos.toml
+**/_typos.toml
+**/.typos.toml
+```
+
+The manifests that also carry lint or format settings — `flake.nix`
+(treefmt), `package.json`, `Cargo.toml` (`[lints]`) — are left out of the
+ask because every dependency change edits them and a prompt on each would
+be approved without reading; a range that touches one still asks for steps
+3 and 4.
+
 **Verdict.** One row per step: `done`, `partial`, `missing`, or `unknown`
 (a test that could not run, with why), and the evidence — the file, command
 and output that decided it. Above the table, the stacks found; below it, the

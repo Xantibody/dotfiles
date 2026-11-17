@@ -62,20 +62,33 @@ longer and wastes the reviewer's time. Brevity is courtesy, not laziness.
 
 4. **The repository's checklist:** load the `reliability-checklist` skill
    and work through every row it prints for the range. A row whose check
-   finds the problem is fixed and committed before step 5 reads the
+   finds the problem is fixed and committed before step 6 reads the
    history. Rerun it even when implement's Finishing already did: the base
    may have gained rows since.
 
-5. **Read the history as the reviewer will:** the title and なぜやるか below
+5. **Judge files:** list the range's files with
+   `git diff --name-only "origin/$BASE...HEAD"`. When one matches a pattern
+   under Judge files in the `baseline` skill's Goal, or is one of the
+   manifests named there, load the `goal-review` skill against the
+   `baseline` skill's Goal, steps 3 and 4 only. Its references are
+   installed with the skill, out of the change's reach, so the review
+   cannot be loosened by the PR it reviews. A row that is not `done`
+   because this range turned a rule off or widened a hatch
+   (`git diff "origin/$BASE...HEAD" -- <file>`) is put back and committed
+   before step 6; a gap that predates the range is not this PR's. When
+   the loosening is the point of the PR, keep it and say so in なぜやるか,
+   so the reviewer decides with it in front of them.
+
+6. **Read the history as the reviewer will:** the title and なぜやるか below
    are built from these commits, so a history that needs rebuilding yields
    a body that needs rewriting — and the rebuild is cheap only before the
-   push. This step comes after 4 because a rebuild reproduces the final
-   diff, so it folds in the fix commits it made. Load the `goal-review`
-   skill against the `reconstruct` skill's Goal. On **rebuild**, it hands
-   over to the `reconstruct` skill before anything is drafted; come back to
-   this step once the history is rebuilt and read the new range. Skip this
-   step when a PR already exists — its reviewer has read the history that
-   is there.
+   push. This step comes after 4 and 5 because a rebuild reproduces the
+   final diff, so it folds in the fix commits they made. Load the
+   `goal-review` skill against the `reconstruct` skill's Goal. On
+   **rebuild**, it hands over to the `reconstruct` skill before anything is
+   drafted; come back to this step once the history is rebuilt and read the
+   new range. Skip this step when a PR already exists — its reviewer has
+   read the history that is there.
 
 Check for an existing PR with `gh pr view`; if one exists, use `gh pr edit`
 instead of `gh pr create`.
