@@ -49,6 +49,7 @@ in
       "ha"
       "claude"
       "agents"
+      "rat"
       "comma"
       "skk"
       "firefox"

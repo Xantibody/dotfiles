@@ -44,6 +44,7 @@ in
         "ha"
         "claude"
         "agents"
+        "rat"
         "user"
         "nixpkgs"
         "home-manager"
