@@ -1,6 +1,8 @@
 package hotspots
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 
 	"github.com/Xantibody/dotfiles/tools/internal/cli"
@@ -14,6 +16,9 @@ func Command() *cobra.Command {
 		Short: "Rank the frames of a folded-stacks file, self and total, as text",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if n < 1 {
+				return cli.Usage(cmd, fmt.Errorf("-n %d: must be at least 1", n))
+			}
 			return cli.Code(Run(n, args[0], cmd.OutOrStdout(), cmd.ErrOrStderr()))
 		},
 	}

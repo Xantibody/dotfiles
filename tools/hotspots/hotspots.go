@@ -19,13 +19,16 @@ import (
 	"strings"
 )
 
+// maxLine is the longest folded line read; a deep stack makes a long one.
+var maxLine = 1 << 26
+
 // Run ranks the frames of the file at path, listing n per table, and
 // returns the exit code: 0 when it printed, 1 when the file could not be
 // read or held no stacks.
 func Run(n int, path string, stdout, stderr io.Writer) int {
 	f, err := os.Open(path)
 	if err != nil {
-		fmt.Fprintln(stderr, err)
+		fmt.Fprintf(stderr, "hotspots: %v\n", err)
 		return 1
 	}
 	defer f.Close()
@@ -34,7 +37,7 @@ func Run(n int, path string, stdout, stderr io.Writer) int {
 	total := map[string]float64{}
 	var samples float64
 	sc := bufio.NewScanner(f)
-	sc.Buffer(make([]byte, 0, 1<<20), 1<<26)
+	sc.Buffer(make([]byte, 0, min(1<<20, maxLine)), maxLine)
 	for sc.Scan() {
 		line := strings.TrimSpace(sc.Text())
 		sp := strings.LastIndexByte(line, ' ')
@@ -56,8 +59,14 @@ func Run(n int, path string, stdout, stderr io.Writer) int {
 			}
 		}
 	}
+	// a read error or a line past the buffer stops Scan early; ranking the
+	// part read would pass a truncated profile off as a whole one
+	if err := sc.Err(); err != nil {
+		fmt.Fprintf(stderr, "hotspots: read %s: %v\n", path, err)
+		return 1
+	}
 	if samples == 0 {
-		fmt.Fprintln(stderr, "no folded stacks found")
+		fmt.Fprintf(stderr, "hotspots: %s has no folded stacks; want lines like \"main;f;g 12\" (the output of a stackcollapse script)\n", path)
 		return 1
 	}
 
