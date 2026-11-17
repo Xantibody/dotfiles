@@ -258,6 +258,17 @@ func TestRunPassesTheCommand(t *testing.T) {
 	}
 }
 
+// A command killed by a signal exits 128 + the signal, as a shell reports it,
+// and is not recorded.
+func TestRunReportsAKilledCommandAsAShellDoes(t *testing.T) {
+	fresh(t, "observe")
+	var out, errs strings.Builder
+	code := cli.Main(cli.Root(Command()), []string{"verify-gate", "run", "--", "sh", "-c", "kill -TERM $$"}, strings.NewReader(""), &out, &errs)
+	if code != 143 || errs.Len() > 0 {
+		t.Errorf("exit %d, stderr %q; want 143 and nothing recorded", code, errs.String())
+	}
+}
+
 func TestRunOutsideARepositoryRecordsNothing(t *testing.T) {
 	dir := t.TempDir()
 	t.Setenv("GIT_CEILING_DIRECTORIES", filepath.Dir(dir))
