@@ -1,35 +1,36 @@
-// hotspots ranks the frames of a folded-stacks file so the hot spots of a
-// flame graph can be read from a terminal transcript. The SVG stays the
+// Package hotspots ranks the frames of a folded-stacks file so the hot spots
+// of a flame graph can be read from a terminal transcript. The SVG stays the
 // artifact for the user; this is the same data as text.
 //
-//	go run <skill-dir>/scripts/hotspots/main.go [-n 15] <file.folded>
+//	rat hotspots [-n 15] <file.folded>
 //
 // Self width is the share of samples where the frame is the leaf, i.e. where
 // the CPU actually was. Total width includes children, which is what the
 // flame graph draws. A folded line is "frame;frame;frame count".
-package main
+package hotspots
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
+	"io"
 	"os"
 	"sort"
 	"strconv"
 	"strings"
 )
 
-func main() {
-	n := flag.Int("n", 15, "number of frames to list per table")
-	flag.Parse()
-	if flag.NArg() != 1 {
-		fmt.Fprintln(os.Stderr, "usage: hotspots [-n N] <file.folded>")
-		os.Exit(2)
+// Run ranks the frames of the one file in args, listing n per table, and
+// returns the exit code: 0 when it printed, 1 when the file could not be
+// read or held no stacks, 2 on a usage error.
+func Run(n int, args []string, stdout, stderr io.Writer) int {
+	if len(args) != 1 {
+		fmt.Fprintln(stderr, usage)
+		return 2
 	}
-	f, err := os.Open(flag.Arg(0))
+	f, err := os.Open(args[0])
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		fmt.Fprintln(stderr, err)
+		return 1
 	}
 	defer f.Close()
 
@@ -60,19 +61,21 @@ func main() {
 		}
 	}
 	if samples == 0 {
-		fmt.Fprintln(os.Stderr, "no folded stacks found")
-		os.Exit(1)
+		fmt.Fprintln(stderr, "no folded stacks found")
+		return 1
 	}
 
-	fmt.Printf("samples: %.0f\n\n", samples)
-	fmt.Println("self (where the CPU is):")
-	print(self, samples, *n)
-	fmt.Println()
-	fmt.Println("total (frame plus its children):")
-	print(total, samples, *n)
+	fmt.Fprintf(stdout, "samples: %.0f\n\n", samples)
+	fmt.Fprintln(stdout, "self (where the CPU is):")
+	table(stdout, self, samples, n)
+	fmt.Fprintln(stdout)
+	fmt.Fprintln(stdout, "total (frame plus its children):")
+	table(stdout, total, samples, n)
+	return 0
 }
 
-func print(m map[string]float64, samples float64, n int) {
+// table writes the n widest frames of m as percentages of samples.
+func table(w io.Writer, m map[string]float64, samples float64, n int) {
 	type kv struct {
 		frame string
 		count float64
@@ -91,6 +94,6 @@ func print(m map[string]float64, samples float64, n int) {
 		rows = rows[:n]
 	}
 	for _, r := range rows {
-		fmt.Printf("%6.1f%%  %s\n", 100*r.count/samples, r.frame)
+		fmt.Fprintf(w, "%6.1f%%  %s\n", 100*r.count/samples, r.frame)
 	}
 }

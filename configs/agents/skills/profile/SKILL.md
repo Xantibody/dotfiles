@@ -61,7 +61,7 @@ Write the verdict into the report's **Workload** line ("CPU-bound: user+sys 1.9 
 
 ### 3. Choose the Instrument
 
-Pick the row from step 2, then the language-native tool where one exists — it handles symbol resolution and build flags. Every stack-sampling path ends in a **folded stacks file** (`frame;frame;frame count` per line), which is what `flamegraph.pl`, `difffolded.pl`, and the hotspots script all read, so always keep it.
+Pick the row from step 2, then the language-native tool where one exists — it handles symbol resolution and build flags. Every stack-sampling path ends in a **folded stacks file** (`frame;frame;frame count` per line), which is what `flamegraph.pl`, `difffolded.pl`, and `rat hotspots` all read, so always keep it.
 
 **CPU (on-CPU flame graph)**
 
@@ -128,7 +128,7 @@ Sampling at 99 Hz avoids lockstep with periodic work; raise it only for very sho
 The SVG is the user's artifact — interactive in a browser (click to zoom, Ctrl+F to search). You cannot see it, so read the same data as text:
 
 ```bash
-go run ~/.claude/skills/profile/scripts/hotspots/main.go .ai/profiles/<label>-before.folded
+rat hotspots .ai/profiles/<label>-before.folded
 ```
 
 It prints the widest frames twice: **self** (the frame is the leaf — where the time actually is) and **total** (frame plus children — what the flame graph draws as width). Thread and loader frames (`Thread_…`, `dyld`) at the top of the total table are scaffolding; the first frame from your own code below them is the story.
@@ -146,7 +146,7 @@ Repeat steps 2 and 4 with the exact same workload, flags, and machine conditions
 ### 7. Compare and Report
 
 - **Wall-clock**: `hyperfine` both commands in one invocation for a statistical comparison, or for Go: `benchstat .ai/profiles/<label>-before.txt .ai/profiles/<label>-after.txt` (shows delta with p-value)
-- **Differential flame graph**: `difffolded.pl .ai/profiles/<label>-before.folded .ai/profiles/<label>-after.folded | flamegraph.pl > .ai/profiles/<label>-diff.svg` — red = grew, blue = shrank. Run the hotspots script on both folded files to put the same delta in the table.
+- **Differential flame graph**: `difffolded.pl .ai/profiles/<label>-before.folded .ai/profiles/<label>-after.folded | flamegraph.pl > .ai/profiles/<label>-diff.svg` — red = grew, blue = shrank. Run `rat hotspots` on both folded files to put the same delta in the table.
 
 Report using this structure:
 

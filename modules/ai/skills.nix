@@ -2,7 +2,7 @@
 # 手で回すだけだと、改名で残った参照や隠した skill への hand-off が次に誰かが回すまで見つからない。
 # 全 skill に --offline --strict でかけ、configs/agents/README.md の図が skill の dir と揃っているかも見る。
 # baseline の Goal の判定ファイル一覧と settings.json の permissions.ask が揃っているかも見る。
-# validator 自身の go test は checks.rat (modules/rat.nix) が回す。skill が呼ぶ他のコマンド (`rat shot`、`rat checklist`) も同じ。
+# validator 自身の go test は checks.rat (modules/rat.nix) が回す。skill が呼ぶ他のコマンド (`rat shot`、`rat checklist`、`rat hotspots`) も同じ。
 { inputs, self, ... }:
 {
   perSystem =
