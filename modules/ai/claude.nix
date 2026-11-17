@@ -21,15 +21,17 @@ let
       hm.claude
       hm.textlint
       hm.gh-guard
+      hm.anchors-hook
     ];
   };
 in
 {
-  # PR / issue 本文の lint と、保護を書き換える gh 操作の確認。同じ feature だがファイルは分ける
-  # (どちらも perSystem の check まで持つ)
+  # PR / issue 本文の lint、保護を書き換える gh 操作の確認、編集前の anchor 表示。
+  # 同じ feature だがファイルは分ける (どれも perSystem の check まで持つ)
   imports = [
     ./_textlint.nix
     ./_gh-guard.nix
+    ./_anchors-hook.nix
   ];
 
   flake.modules.homeManager.claude =
@@ -61,15 +63,6 @@ in
           pkgs.llm-agents.agent-browser
           # skill の手順が osekkai steps / state show を直接呼ぶ。lint-body の runtimeInputs だけでは PATH に出ない
           pkgs.osekkai
-          # 編集前に anchor を見せる PreToolUse hook。settings.json が Edit / Write に登録する
-          (pkgs.writeShellApplication {
-            name = "anchors-hook";
-            runtimeInputs = [
-              pkgs.jq
-              pkgs.ripgrep
-            ];
-            text = builtins.readFile ./anchors-hook.sh;
-          })
         ];
 
         my.skills = lib.mapAttrs (name: _: skillsDir + "/${name}") skills // {
