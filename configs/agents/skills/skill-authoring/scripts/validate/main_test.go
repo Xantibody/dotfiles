@@ -1,6 +1,8 @@
 package main
 
 import (
+	"archive/tar"
+	"bytes"
 	"io"
 	"os"
 	"os/exec"
@@ -293,6 +295,108 @@ func TestRunStrictFailsOnWarnings(t *testing.T) {
 	out.Reset()
 	if code := run([]string{"-offline", "-strict", dir}, &out); code != 1 {
 		t.Fatalf("-strict exits %d on a warning, want 1:\n%s", code, out.String())
+	}
+}
+
+// archiveSkills extracts configs/agents/skills at rev from the repository
+// this test runs in and returns the extracted skills directory. It skips
+// when there is no history to read: the nix sandbox builds from a store path
+// without .git, and a shallow clone may lack rev.
+func archiveSkills(t *testing.T, rev string) string {
+	t.Helper()
+	git, err := exec.LookPath("git")
+	if err != nil {
+		t.Skip("git not on PATH")
+	}
+	top, err := exec.Command(git, "rev-parse", "--show-toplevel").Output()
+	if err != nil {
+		t.Skip("not inside a git checkout")
+	}
+	repo := strings.TrimSpace(string(top))
+	if exec.Command(git, "-C", repo, "cat-file", "-e", rev+"^{commit}").Run() != nil {
+		t.Skipf("commit %s not in this clone", rev)
+	}
+	archive, err := exec.Command(git, "-C", repo, "archive", rev, "configs/agents/skills").Output()
+	if err != nil {
+		t.Fatalf("git archive %s: %v", rev, err)
+	}
+	dest := t.TempDir()
+	tr := tar.NewReader(bytes.NewReader(archive))
+	for {
+		h, err := tr.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		p := filepath.Join(dest, h.Name)
+		switch h.Typeflag {
+		case tar.TypeDir:
+			err = os.MkdirAll(p, 0o755)
+		case tar.TypeReg:
+			var data []byte
+			if data, err = io.ReadAll(tr); err == nil {
+				err = os.WriteFile(p, data, 0o644)
+			}
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	return filepath.Join(dest, "configs/agents/skills")
+}
+
+// problemsAt validates every skill in dir, with the skills that flake inputs
+// ship (checks.skills passes them with -known) stubbed in.
+func problemsAt(t *testing.T, dir string) []string {
+	t.Helper()
+	stubs := t.TempDir()
+	known := map[string]string{}
+	for _, name := range []string{"osekkai", "ha"} {
+		known[name] = writeSkill(t, stubs, name, "", "body\n")
+	}
+	skills, err := filepath.Glob(filepath.Join(dir, "*", "SKILL.md"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var all []string
+	for _, s := range skills {
+		problems, _, _ := validateSkill(filepath.Dir(s), offlineSpec(), known)
+		for _, p := range problems {
+			all = append(all, filepath.Base(filepath.Dir(s))+": "+p)
+		}
+	}
+	return all
+}
+
+// The two kinds of broken skill reference that happened twice each: a body
+// that still loads a skill the commit hid, and one that names a skill the
+// commit renamed. Each check must fire on the commit that caused the
+// incident and stay quiet on HEAD, so it neither misses the incident nor
+// fails a clean tree.
+func TestSkillReferenceIncidents(t *testing.T) {
+	for _, tc := range []struct {
+		name, incident, class, want string
+	}{
+		{"a589d72 hid design, implement still loaded it", "a589d72", "so the model cannot load it", "implement: body loads the `design` skill"},
+		{"761b40d renamed history-review, skill-authoring still named it", "761b40d", "body refers to the", "skill-authoring: body refers to the `history-review` skill"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Setenv("HOME", t.TempDir())
+			if got := problemsAt(t, archiveSkills(t, tc.incident)); !hasMatch(got, tc.want) {
+				t.Errorf("at %s want a problem %q, got %v", tc.incident, tc.want, got)
+			}
+			var atHead []string
+			for _, p := range problemsAt(t, archiveSkills(t, "HEAD")) {
+				if strings.Contains(p, tc.class) {
+					atHead = append(atHead, p)
+				}
+			}
+			if len(atHead) > 0 {
+				t.Errorf("at HEAD want no %q problem, got %v", tc.class, atHead)
+			}
+		})
 	}
 }
 
