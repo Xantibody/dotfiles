@@ -138,7 +138,13 @@ For each group, repeat:
 
 2. **Check the staged set** against the group with `git diff --cached --stat`.
 
-3. **Create the commit** using the `commit` skill to follow Conventional Commits format.
+3. **Create the commit** using the `commit` skill to follow Conventional Commits format. The messages are new, but the references the original commits carried are not yours to drop: list them with
+
+   ```bash
+   git log --format='%h %s%n%b' <base>..<original-HEAD> | grep -E '^[0-9a-f]{7,} |^Prevents: [0-9a-f]|^(Closes|Fixes|Refs):? #'
+   ```
+
+   and carry each `Prevents:` line into the rebuilt commit that holds the check it names (the `guardrail` skill's Goal counts a closure only through that trailer), and each `Closes` / `Fixes` / `Refs` line into the rebuilt commit that holds its change — a `Closes` on the last one for that issue. Never copy `Verified-by:`: the commit-msg hook writes it for the tree being committed, and only the last rebuilt commit can match a tree that was verified.
 
 4. **Check remaining changes** with `git status`, and repeat until all changes are committed.
 
