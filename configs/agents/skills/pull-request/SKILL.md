@@ -60,13 +60,22 @@ longer and wastes the reviewer's time. Brevity is courtesy, not laziness.
    means step 1 went wrong. Unfamiliar commits are the user's unpushed work —
    don't silently include them, don't silently drop them; ask.
 
-4. **Read the history as the reviewer will:** the title and なぜやるか below
+4. **The repository's checklist:** load the `reliability-checklist` skill
+   and work through every row it prints for the range. A row whose check
+   finds the problem is fixed and committed before step 5 reads the
+   history. Rerun it even when implement's Finishing already did: the base
+   may have gained rows since.
+
+5. **Read the history as the reviewer will:** the title and なぜやるか below
    are built from these commits, so a history that needs rebuilding yields
    a body that needs rewriting — and the rebuild is cheap only before the
-   push. Load the `goal-review` skill against the `reconstruct` skill's Goal. On **rebuild**, it hands over to
-   the `reconstruct` skill before anything is drafted; come back to this
-   step once the history is rebuilt and read the new range. Skip this step when a PR already exists — its
-   reviewer has read the history that is there.
+   push. This step comes after 4 because a rebuild reproduces the final
+   diff, so it folds in the fix commits it made. Load the `goal-review`
+   skill against the `reconstruct` skill's Goal. On **rebuild**, it hands
+   over to the `reconstruct` skill before anything is drafted; come back to
+   this step once the history is rebuilt and read the new range. Skip this
+   step when a PR already exists — its reviewer has read the history that
+   is there.
 
 Check for an existing PR with `gh pr view`; if one exists, use `gh pr edit`
 instead of `gh pr create`.

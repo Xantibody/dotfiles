@@ -1,7 +1,7 @@
 # skill の validator (configs/agents/skills/skill-authoring/scripts/validate) を CI で回す check。
 # 手で回すだけだと、改名で残った参照や隠した skill への hand-off が次に誰かが回すまで見つからない。
 # 全 skill に -offline -strict でかけ、configs/agents/README.md の図が skill の dir と揃っているかも見る。
-# validator 自身の go test は buildGoModule の checkPhase が回す。skill が持つ他の Go スクリプト (terminal-verify の shot) も同じく build して test する。
+# validator 自身の go test は buildGoModule の checkPhase が回す。skill が持つ他の Go スクリプト (terminal-verify の shot、reliability-checklist の checklist) も同じく build して test する。
 { inputs, self, ... }:
 {
   perSystem =
@@ -24,6 +24,15 @@
         vendorHash = null;
         meta.mainProgram = "shot";
       };
+      # REVIEW.md を base から読んで diff に当てる checklist。一時 repo を作るテストに git が要る
+      checklist = pkgs.buildGoModule {
+        pname = "reliability-checklist";
+        version = "0.1.0";
+        src = ../../configs/agents/skills/reliability-checklist/scripts/checklist;
+        vendorHash = null;
+        nativeCheckInputs = [ pkgs.git ];
+        meta.mainProgram = "checklist";
+      };
     in
     {
       # sandbox には ~/.claude/skills が無いので、flake input が配る skill は -known で渡す。
@@ -42,5 +51,6 @@
         touch $out
       '';
       checks.terminal-verify-shot = shot;
+      checks.reliability-checklist = checklist;
     };
 }

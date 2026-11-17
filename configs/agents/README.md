@@ -18,6 +18,7 @@ flowchart TD
   check["check<br/>lint / test / fmt"]
   commit["commit<br/>Conventional Commits"]
   gr["goal-review<br/>skill の Goal に照らして判定する"]
+  rc["reliability-checklist<br/>diff に当たる REVIEW.md の行を出す"]
   reconstruct["reconstruct<br/>最終 diff から積み直す"]
   pr["pull-request<br/>PR 本文を書く"]
   issue["issue<br/>issue を立てる"]
@@ -33,11 +34,13 @@ flowchart TD
 
   implement -->|"毎サイクル"| check
   implement -->|"毎サイクル"| commit
+  implement -->|"実装が終わった時 (最初に)"| rc
   implement -->|"実装が終わった時 (implement、次に reconstruct の Goal)"| gr
   implement -.->|"画面が変わった時"| shot
   gr -->|"rebuild なら"| reconstruct
   reconstruct -->|"1 commit ずつ"| commit
   pr -->|"pre-flight (reconstruct の Goal)"| gr
+  pr -->|"pre-flight"| rc
   pr -->|"push 前"| check
   pr -->|"本文を書く時"| osekkai
   pr -->|"gh に渡す前"| lbskill
@@ -53,6 +56,8 @@ flowchart TD
 ```
 
 判断と実行は分けるが、判断する skill は `goal-review` 1 つだけにする。何かを変える skill (`implement`、`reconstruct`、`baseline`) は本文の `## Goal` に「どうなっていれば済みか」と判定方法を書き、`goal-review` はその節だけを読んで判定し、Goal に書かれた条件で持ち主の skill に渡す。`implement` の Goal (check と `just smoke` が通り、画面が変わるなら撮って見た) は、終わった時に `implement` 自身が先に判定させ、done になってから reconstruct の Goal に進む。新しい実行 skill には、専用の review skill を作らず Goal を書く。
+
+`reliability-checklist` は判定する skill ではない。repo の `REVIEW.md` を base 側から読み、diff に当たった行を同梱のスクリプトで出すだけで、各行の確認は呼んだ `implement` と `pull-request` が行う。
 
 ## 打って使う skill
 
