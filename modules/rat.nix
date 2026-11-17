@@ -17,8 +17,9 @@ let
         "-w"
         "-X main.buildVersion=${version}"
       ];
-      # rat verify-gate's tests commit in temporary repositories; rat skill
-      # validate's eval commit-hash test reads one (and skips without git)
+      # rat verify-gate's and rat checklist's tests commit in temporary
+      # repositories; rat skill validate's eval commit-hash test reads one
+      # (and skips without git)
       nativeCheckInputs = [ pkgs.git ];
       # AIDEV-NOTE: go names the binary after the module's last path element (tools); renamed here rather than moving main.go to tools/cmd/rat, so the root package stays the entry point
       postInstall = ''

@@ -1,7 +1,8 @@
-package main
+package checklist
 
 import (
 	"bytes"
+	"errors"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -196,9 +197,21 @@ func gitT(t *testing.T, dir string, args ...string) {
 	}
 }
 
+// runT executes `rat checklist` with args against the repository at dir and
+// returns the code rat exits with and the two streams.
 func runT(dir string, args ...string) (code int, stdout, stderr string) {
 	var o, e bytes.Buffer
-	code = run(dir, args, &o, &e)
+	cmd := command(dir)
+	cmd.SetArgs(args)
+	cmd.SetOut(&o)
+	cmd.SetErr(&e)
+	if err := cmd.Execute(); err != nil {
+		var coded interface{ ExitCode() int }
+		if !errors.As(err, &coded) {
+			return -1, o.String(), e.String() + err.Error()
+		}
+		code = coded.ExitCode()
+	}
 	return code, o.String(), e.String()
 }
 
@@ -208,7 +221,7 @@ func TestRunPrintsTheRowsACommittedChangeHits(t *testing.T) {
 	gitT(t, dir, "add", "-A")
 	gitT(t, dir, "commit", "-q", "-m", "touch darwin")
 
-	code, out, errs := runT(dir, "-base", "main")
+	code, out, errs := runT(dir, "--base", "main")
 	if code != 0 {
 		t.Fatalf("exit %d: %s", code, errs)
 	}
@@ -228,7 +241,7 @@ func TestRunSeesStagedUnstagedAndUntrackedChanges(t *testing.T) {
 	write(t, dir, "a.txt", "checks.eval-new\n") // unstaged edit, hit by the regex
 	write(t, dir, "flake.lock", "{}\n")         // untracked, hit by the glob
 
-	code, out, errs := runT(dir, "-base", "main")
+	code, out, errs := runT(dir, "--base", "main")
 	if code != 0 {
 		t.Fatalf("exit %d: %s", code, errs)
 	}
@@ -245,7 +258,7 @@ func TestRunReadsTheChecklistFromTheBase(t *testing.T) {
 	write(t, dir, file, strings.Replace(checklist, "The darwin build still runs", "", 1))
 	write(t, dir, ".github/workflows/darwin.yml", "on: push\n")
 
-	code, out, errs := runT(dir, "-base", "main")
+	code, out, errs := runT(dir, "--base", "main")
 	if code != 0 {
 		t.Fatalf("exit %d: %s", code, errs)
 	}
@@ -261,7 +274,7 @@ func TestRunWithoutAChecklistOnTheBaseIsANote(t *testing.T) {
 	dir := repo(t, "")
 	write(t, dir, file, checklist) // added on the branch only
 
-	code, out, errs := runT(dir, "-base", "main")
+	code, out, errs := runT(dir, "--base", "main")
 	if code != 0 || out != "" {
 		t.Fatalf("exit %d, stdout %q; want 0 and nothing", code, out)
 	}
@@ -273,16 +286,29 @@ func TestRunWithoutAChecklistOnTheBaseIsANote(t *testing.T) {
 func TestRunFailsLoudlyOnAMissingBase(t *testing.T) {
 	dir := repo(t, checklist)
 	if code, _, errs := runT(dir); code != 1 || !strings.Contains(errs, "origin/HEAD is not set") {
-		t.Errorf("no -base: exit %d, stderr %s", code, errs)
+		t.Errorf("no --base: exit %d, stderr %s", code, errs)
 	}
-	if code, _, errs := runT(dir, "-base", "nope"); code != 1 || !strings.Contains(errs, `-base "nope" is not a commit`) {
-		t.Errorf("bad -base: exit %d, stderr %s", code, errs)
+	if code, _, errs := runT(dir, "--base", "nope"); code != 1 || !strings.Contains(errs, `--base "nope" is not a commit`) {
+		t.Errorf("bad --base: exit %d, stderr %s", code, errs)
+	}
+}
+
+func TestRunUsageErrors(t *testing.T) {
+	dir := repo(t, checklist)
+	for _, args := range [][]string{
+		{"--base", "main", "extra"},
+		{"-base", "main"}, // the go-run spelling
+		{"--bsae", "main"},
+	} {
+		if code, out, _ := runT(dir, args...); code != 2 || out != "" {
+			t.Errorf("%v: exit %d, stdout %q; want 2 and nothing on stdout", args, code, out)
+		}
 	}
 }
 
 func TestRunFailsOnABrokenChecklist(t *testing.T) {
 	dir := repo(t, "| Trigger | Check | Incident |\n| - | - | - |\n| `a.txt` | look |  |\n")
-	if code, _, errs := runT(dir, "-base", "main"); code != 1 || !strings.Contains(errs, "Incident is empty") {
+	if code, _, errs := runT(dir, "--base", "main"); code != 1 || !strings.Contains(errs, "Incident is empty") {
 		t.Errorf("exit %d, stderr %s", code, errs)
 	}
 }
