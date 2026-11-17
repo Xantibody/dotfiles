@@ -63,7 +63,7 @@ longer and wastes the reviewer's time. Brevity is courtesy, not laziness.
 4. **Read the history as the reviewer will:** the title and なぜやるか below
    are built from these commits, so a history that needs rebuilding yields
    a body that needs rewriting — and the rebuild is cheap only before the
-   push. Load the `history-review` skill. On **rebuild**, it hands over to
+   push. Load the `goal-review` skill against the `reconstruct` skill's Goal. On **rebuild**, it hands over to
    the `reconstruct` skill before anything is drafted; come back to this
    step once the history is rebuilt and read the new range. Skip this step when a PR already exists — its
    reviewer has read the history that is there.

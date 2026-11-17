@@ -1,7 +1,7 @@
 ---
 name: reconstruct
 description: Reconstruct git commit history on a development branch. Resets messy unpushed commits back to a clean diff against the base branch, then rebuilds logically coherent, minimal commits one by one. A more controllable alternative to interactive rebase. Runs without asking — nothing reaches the remote until the user pushes.
-when_to_use: Whenever the history-review skill returns rebuild — load this right after it, without handing the user a command. Also when the user wants to clean up commits, reorganize history, split commits, squash and recommit, or tidy up before a PR — "コミット整理して", "履歴作り直して", "squash して", "コミット分けて".
+when_to_use: Whenever the goal-review skill, run against this skill's Goal, returns rebuild — load this right after it, without handing the user a command. Also when the user wants to clean up commits, reorganize history, split commits, squash and recommit, or tidy up before a PR — "コミット整理して", "履歴作り直して", "squash して", "コミット分けて".
 ---
 
 # Git History Reconstruction
@@ -10,13 +10,62 @@ Reset messy development branch history and rebuild it as logically coherent, min
 
 Since `git rebase -i` requires interactive input and cannot be used in Claude Code, this skill achieves equivalent or better results using `git reset --soft` combined with incremental `git add`.
 
-Whether a history needs this at all is the `history-review` skill's call; it is what the `implement` and `pull-request` skills run, and on **rebuild** this skill follows it directly. The reset runs without asking because it is local and recoverable: the original HEAD is recorded before it and stays reachable through `git reflog`, and the remote changes only on a push, which stays with the user (`git push` is deny-listed). What it never does is rewrite history someone else has read — see Step 1.
+Whether a history needs this at all is judged by the `goal-review` skill against the Goal below; it is what the `implement` and `pull-request` skills run, and on **rebuild** this skill follows it directly. The reset runs without asking because it is local and recoverable: the original HEAD is recorded before it and stays reachable through `git reflog`, and the remote changes only on a push, which stays with the user (`git push` is deny-listed). What it never does is rewrite history someone else has read — see Step 1.
+
+## Goal
+
+The commits made while working are checkpoints for the author — one per TDD cycle, one per detour, one per "oh, that broke". A reviewer reads history by logical change, and `git bisect` lands on whichever commit is there. The goal is a history that reads that way.
+
+**Target.** The unpushed commits of the current branch:
+
+```bash
+BASE=$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)
+git fetch origin "$BASE"
+git log --stat --format='%h %s' "origin/$BASE..HEAD"
+```
+
+Compare against `origin/$BASE`, not the local branch — a local default that is ahead of the remote would hide the user's unpushed commits, and those are exactly the ones still cheap to rebuild. A range handed in by the caller or named by the user is used as given; the verdict prints it and says which of these steps were therefore skipped. Then `gh pr view --json number,state --jq '.number' 2>/dev/null`: if a PR exists, the verdict is **pass** with that reason — history a reviewer has read is not rewritten, and responding to review by appending commits is what they expect. The one exception is a reviewer asking for a squash, and that request comes from them.
+
+**Reading rule.** Subjects say what the author meant; only the diff says what the commit did. Read each commit with `git show --stat -p <hash>` and look for the shapes a subject never admits to:
+
+- **A reversal** — a line an earlier commit in the range added is deleted by a later one.
+- **A dead edit** — a file edited by one commit and deleted by a later one in the range (`git diff --name-status origin/$BASE..HEAD` lists the deletions).
+- **A whitespace-only commit** — `git show -w --stat <hash>` prints no files.
+
+**Items.** The history needs rebuilding when any of these holds:
+
+- **A commit ships nothing of its own.** A typo fix for the previous commit, a test the previous commit broke, a formatter run, a reversal, a dead edit, "wip", "fix review", "fix fmt". The tell is a subject that cannot take a Conventional Commits type, because there is no change to type.
+- **One purpose is spread over several commits.** The same file touched three or more times for one feature, or a test and the code that makes it pass in separate commits. TDD produces exactly this shape on purpose, and the reviewer wants the feature, not the cycles.
+- **One commit carries two purposes.** A structural and a behavioural change together, or a subject that needs an "and". Tidy First puts the structural commit first, on its own.
+- **An intermediate commit does not build or pass on its own.** When the checks cannot run at each commit, a later "fix build" or "fix test" commit is the evidence.
+
+What passes: each commit is one logical change, in dependency order, structure before behaviour. A single commit passes. Two unrelated but individually clean commits pass too; whether they should be two PRs is the `pull-request` skill's question. Don't fail a clean log to make history look busier.
+
+**Verdict.**
+
+```markdown
+**Verdict:** pass | rebuild
+**Range:** <the range reviewed> (<N> commits)
+**Skipped:** <only when the range was handed in — the fetch or PR check not run>
+
+<pass — one or two sentences on why the commits read cleanly, or that a PR already exists>
+
+<rebuild — one bullet per offending commit: hash, subject, which item it breaks>
+
+**Proposed commits:**
+
+1. <type(scope): subject> — <files>
+```
+
+The proposed list appears only on **rebuild**, ordered as Step 3 orders groups: dependencies first, structure before behaviour, every intermediate state buildable. An unrelated change that rode along stays its own commit. The list never drops a change: the rebuild reproduces the branch's final diff exactly, so a whitespace-only commit whose unformatted text predates the range becomes its own `style` commit, not a deletion.
+
+**Hand-over.** On **rebuild**, load this skill and run the procedure below with the proposed list — no approval first, for the reasons above. On **pass**, say so and return to whatever asked. The review runs **once, before the first push**: detours cost nothing extra, because the rebuild starts from the final diff, so ten wrong turns rebuild the same as none.
 
 ## Procedure
 
 ### Step 1: Identify the base branch
 
-Do not assume the base branch is `main`. When `history-review` handed over a range, use its base. Otherwise:
+Do not assume the base branch is `main`. When a `goal-review` verdict handed over a range, use its base. Otherwise:
 
 1. Check if there is an open PR for the current branch:
    ```bash
@@ -44,7 +93,7 @@ If there are uncommitted changes, ask whether they belong in the reconstruction 
 
 ### Step 3: Analyze and group
 
-If a `history-review` verdict with a **Proposed commits** list is already in the conversation, use that list rather than re-deriving it — the user has seen it, and re-grouping from scratch gives them two proposals to reconcile. Otherwise, classify the changed files into logical commit groups. Criteria:
+If a `goal-review` verdict with a **Proposed commits** list is already in the conversation, use that list rather than re-deriving it — the user has seen it, and re-grouping from scratch gives them two proposals to reconcile. Otherwise, classify the changed files into logical commit groups. Criteria:
 
 | Perspective  | Examples                                             |
 | ------------ | ---------------------------------------------------- |
@@ -85,7 +134,7 @@ For each group, repeat:
    git add <file1> <file2> ...
    ```
 
-   If only part of a file belongs to this group, `git add -p` is interactive and unavailable. Write the group's hunks of `git diff <file>` to a patch in the scratchpad and stage them with `git apply --cached <patch>`; the rest of the file stays unstaged for a later group. Write the patch from Bash (a heredoc), not with Write: when `history-review` ran earlier in the same turn, its `disallowed-tools` still holds Edit and Write until the user's next message.
+   If only part of a file belongs to this group, `git add -p` is interactive and unavailable. Write the group's hunks of `git diff <file>` to a patch in the scratchpad and stage them with `git apply --cached <patch>`; the rest of the file stays unstaged for a later group.
 
 2. **Check the staged set** against the group with `git diff --cached --stat`.
 

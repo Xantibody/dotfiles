@@ -17,7 +17,7 @@ flowchart TD
   implement["implement<br/>TDD で実装する"]
   check["check<br/>lint / test / fmt"]
   commit["commit<br/>Conventional Commits"]
-  hr["history-review<br/>pass か rebuild を返す"]
+  gr["goal-review<br/>skill の Goal に照らして判定する"]
   reconstruct["reconstruct<br/>最終 diff から積み直す"]
   pr["pull-request<br/>PR 本文を書く"]
   issue["issue<br/>issue を立てる"]
@@ -36,16 +36,16 @@ flowchart TD
 
   implement -->|"毎サイクル"| check
   implement -->|"毎サイクル"| commit
-  implement -->|"実装が終わった時"| hr
+  implement -->|"実装が終わった時 (reconstruct の Goal)"| gr
   implement -.->|"画面が変わった時"| shot
   implement -.->|"設計に迷った時"| design
   implement -.->|"何を試すか迷った時"| testdesign
   implement -.->|"HACK / AIDEV-NOTE を残す時"| anchors
   anchors -.->|"閉じた HACK を外す時"| implement
   anchors -.->|"TODO は"| issue
-  hr -->|"rebuild なら"| reconstruct
+  gr -->|"rebuild なら"| reconstruct
   reconstruct -->|"1 commit ずつ"| commit
-  pr -->|"pre-flight"| hr
+  pr -->|"pre-flight (reconstruct の Goal)"| gr
   pr -->|"push 前"| check
   pr -->|"本文を書く時"| osekkai
   pr -->|"gh に渡す前"| lbskill
@@ -58,6 +58,8 @@ flowchart TD
   bv --> ab
   tv --> vhs
 ```
+
+判断と実行は分けるが、判断する skill は `goal-review` 1 つだけにする。何かを変える skill (`reconstruct`) は本文の `## Goal` に「どうなっていれば済みか」と判定方法を書き、`goal-review` はその節だけを読んで判定し、Goal に書かれた条件で持ち主の skill に渡す。新しい実行 skill には、専用の review skill を作らず Goal を書く。
 
 ## 打って使う skill
 

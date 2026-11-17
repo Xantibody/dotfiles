@@ -55,11 +55,17 @@ skill" and the model does. The Skill tool is the only composition
 mechanism the docs describe, and it works only if each piece is small
 enough to be worth loading on its own.
 
-- **Judgement and action are two skills.** `history-review` decides
-  whether a branch needs rebuilding; `reconstruct` rebuilds it. The
-  judgement can then run from `implement` and `pull-request` without
-  either of them carrying the rewrite procedure, and the judgement hands
-  over to the action by name.
+- **The action skill declares its Goal; `goal-review` judges it.** A
+  skill that changes things opens with a `## Goal` section — the target,
+  each item with the test that decides it, the verdict shape, and when
+  the review hands over — and `goal-review` runs those tests without
+  reading the procedure. `reconstruct` works this way:
+  `implement` and `pull-request` ask `goal-review` against
+  `reconstruct`'s Goal without carrying the rewrite procedure, and the
+  judgement hands over to the action by name. Write a Goal instead of a
+  second, skill-specific review skill; there is one judge for every Goal.
+  Topics inside one job (a language, a template) go in that skill's
+  `references/` and `assets/`, not in skills of their own.
 - **A rule two skills share is a third skill.** `lint-body` holds the
   body check and its house rules that `pull-request` and `issue` both
   load. Copying it into both is how the copies drift.
@@ -71,7 +77,10 @@ enough to be worth loading on its own.
   from the model completely — description and all — so the skill that
   decides has to hand the user `/name` to type. Background knowledge
   nobody would type as a command: `user-invocable: false`. A skill that
-  only reads and reports: `disallowed-tools: Edit, Write, NotebookEdit`.
+  only reads and reports: `disallowed-tools: Edit, Write, NotebookEdit` —
+  unless it hands over to an editing skill in the same turn, as
+  `goal-review` does: the removal lasts until the user's next message, so
+  there the rule goes in the body instead.
   Trigger phrases: `when_to_use`, which the listing appends to
   `description` under one shared 1,536-character cap. codex ignores
   `when_to_use` and lists every skill's `description` under one budget of
@@ -121,7 +130,7 @@ both happened the first time this was tried:
   the assertions into `eval_metadata.json` next to the prompt, and
   `copy_skill.py` copies `evals/evals.json` along with the skill. An
   executor that reads either answers to the rubric — the baseline for
-  `history-review` reproduced the skill's exact vocabulary that way.
+  the old `history-review` skill reproduced its exact vocabulary that way.
   Paste the prompt into the executor's instructions and delete the
   metadata and `evals/` from the run directory before it starts.
 - **The baseline must not see the skill.** An untracked skill in the
