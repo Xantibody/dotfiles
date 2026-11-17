@@ -66,7 +66,7 @@ Comments explain **why not** — the decision that isn't visible in the code. t-
 
 - **Go**: Follow standard Go doc comment conventions (`// FunctionName does X`)
 - **TypeScript/JavaScript**: Use JSDoc for public APIs, plain `//` for internal comments
-- **Rust**: `///` on items and `//!` on modules — hand the user `/rustdoc`
+- **Rust**: `///` on items and `//!` on modules, the first line a sentence that stands alone in the module index
 - **Other languages**: Follow the language's idiomatic comment style
 
 ## Workflow
@@ -126,4 +126,4 @@ All documentation must follow:
 ## What This Skill Does NOT Do
 
 - **Rewrite code for readability**: Improving code itself is `/refactor`'s job. This skill adds comments and docs around existing code.
-- **Generate API docs from code**: Use language-specific tools (godoc, typedoc) for that — for Rust, hand the user `/rustdoc`, which also covers the lints and CI that keep those docs honest. This skill writes conceptual and architectural documentation.
+- **Generate API docs from code**: Use language-specific tools (godoc, typedoc, rustdoc) for that; the lints that keep Rust docs honest are in the `baseline` skill's Rust reference. This skill writes conceptual and architectural documentation.

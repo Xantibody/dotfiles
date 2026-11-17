@@ -1,8 +1,7 @@
 # Rust
 
 Load this when the survey finds a `Cargo.toml`. It fills in the Rust parts
-of steps 1–4. Documentation lints (`missing_docs`, `cargo doc -D warnings`)
-belong to the `rustdoc` skill. Point to it and do not repeat them here.
+of steps 1–4.
 
 ## Survey
 
@@ -19,6 +18,7 @@ absorb, not something to replace:
 | `.config/nextest.toml`                                                                | nextest is already adopted → use the nextest test recipe             |
 | `rust-version` in Cargo.toml                                                          | MSRV. Below 1.81, `reason =` and `#[expect]` don't exist (see Lints) |
 | `[workspace]` with `members`                                                          | put lints in `[workspace.lints]`; members inherit them               |
+| `[lints.rustdoc]` / `missing_docs` / `[package.metadata.docs.rs]`                     | the crate documents itself → doc lints and `rust-doc` apply          |
 
 ## 1. devShell
 
@@ -174,10 +174,12 @@ Notes on the choices:
   put `#[expect(unsafe_code, reason = "...")]` on each module that uses it.
   Keep `undocumented_unsafe_blocks` so every block needs a `// SAFETY:`
   comment.
-- Pedantic's `missing_errors_doc` and `missing_panics_doc` are part of the
-  doc work. Follow the `rustdoc` skill for them. In a binary-only crate you
-  may set them to `"allow"` in Cargo.toml with a one-line comment. A
-  Cargo.toml line is a reviewed config change, not an inline escape hatch.
+- Pedantic's `missing_errors_doc` and `missing_panics_doc` fire only on
+  items that already have a doc comment, so they start applying with the
+  first one: write the `# Errors` / `# Panics` sections in the same change.
+  In a binary-only crate you may set them to `"allow"` in Cargo.toml with a
+  one-line comment. A Cargo.toml line is a reviewed config change, not an
+  inline escape hatch.
 - Leave out `nursery`, `restriction` as a group
   (`blanket_clippy_restriction_lints` objects to it) and `cargo`. Bans
   and duplicate versions are cargo-deny's job.
@@ -186,6 +188,42 @@ Notes on the choices:
   `wildcard_enum_match_arm`, `exit` (libraries), `missing_assert_message`.
   rustc (`[lints.rust]`): `unreachable_pub` (libraries),
   `missing_debug_implementations`.
+
+Doc lints are opt-in as well: for a library, a crate published to docs.rs,
+or a repo the survey found already documenting itself. Their absence in
+any other crate is not a gap. The set is the one tokio, ripgrep and
+rust-lang/cargo deny:
+
+```toml
+[lints.rust]
+missing_docs = "deny"
+
+[lints.rustdoc]
+broken_intra_doc_links = "deny"
+private_intra_doc_links = "deny"
+missing_crate_level_docs = "deny"
+private_doc_tests = "deny"
+invalid_codeblock_attributes = "deny"
+invalid_html_tags = "deny"
+invalid_rust_codeblocks = "deny"
+bare_urls = "deny"
+unescaped_backticks = "deny"
+redundant_explicit_links = "deny"
+
+[package.metadata.docs.rs]
+all-features = true
+```
+
+- `missing_docs` is a rustc lint, so `rust-lint` already catches it.
+  `[lints.rustdoc]` fires only while docs build, which is what the
+  `rust-doc` recipe is for.
+- Count the gap before denying `missing_docs`:
+  `touch src/lib.rs && cargo rustc --lib --all-features -- -W missing_docs 2>&1 | grep -c 'missing documentation'`
+  (a cached build prints nothing). Land the docs first and the `deny` in
+  its own commit; a commit that adds both cannot be reviewed, and every
+  commit before it is red.
+- Never add `missing_doc_code_examples`. It is nightly-only and fails a
+  stable build.
 
 The required reason format follows the house convention:
 `reason = "HACK(<issue URL>): <what to remove once it is fixed>"` for a
@@ -289,6 +327,11 @@ rust-no-inner-allow:
         exit 1
     fi
 
+# Docs build, only with the doc lints. Private items too: that is where
+# broken intra-doc links hide.
+rust-doc:
+    RUSTDOCFLAGS="-D warnings" cargo doc --workspace --no-deps --all-features --locked --document-private-items
+
 # cargo-deny, offline-stable part (only if adopted)
 rust-deny:
     cargo deny check bans licenses sources
@@ -298,8 +341,8 @@ audit:
     cargo deny check advisories
 ```
 
-Add `rust-lint rust-test rust-no-inner-allow` (and `rust-deny`) as
-dependencies of the shared `check` recipe. Formatting comes from the
+Add `rust-lint rust-test rust-no-inner-allow` (and `rust-deny`, and
+`rust-doc` with the doc lints) as dependencies of the shared `check` recipe. Formatting comes from the
 shared format step.
 
 - `--workspace`: when the root manifest is also a package, a bare `cargo`

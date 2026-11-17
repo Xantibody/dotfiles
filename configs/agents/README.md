@@ -71,22 +71,18 @@ flowchart LR
   osekkai["osekkai"]
   anchors["anchors"]
   issue["issue"]
-  rustdoc["rustdoc<br/>Rust の doc"]
 
   user --> version & bp & docs & refactor
   version -->|"tag 前"| check
   version -->|"報告の URL"| osekkai
   version -.->|"tag 後は /branch-protection を案内"| bp
   bp -->|"報告の URL"| osekkai
-  docs -.->|"Rust は /rustdoc を案内"| rustdoc
   docs -.->|"コードを直すなら /refactor を案内"| refactor
   docs -.->|"why-not を残す時"| anchors
   docs -.->|"TODO は"| issue
   refactor -.->|"計画を実行する時"| check
   refactor -.->|"計画を実行する時"| commit
 ```
-
-`rustdoc` は一覧に載る skill で、`*.rs` を触った時にも読み込まれる。
 
 ## リポジトリの環境を作る時
 
