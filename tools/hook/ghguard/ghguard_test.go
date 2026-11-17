@@ -40,6 +40,15 @@ func TestCheckAsks(t *testing.T) {
 		"gh api -X PUT \"repos/$o/$r/contents/x\"",
 		"gh api -X PUT repos/o/r/contents/x 'unterminated",
 		"gh pr merge --admin=true",
+		// a wrapper's long value option, or a command behind a wrapper that is
+		// not one rat knows, as gh-guard.sh asked about
+		"sudo --user root gh api -X PUT repos/o/r/contents/x",
+		"timeout --signal KILL 10 gh api -X PUT repos/o/r/contents/x",
+		"xargs --max-args 1 gh pr merge --admin",
+		"nice --adjustment 5 gh pr merge --admin",
+		"timeout 30 ionice -c3 gh pr merge --admin",
+		"sudo -E caffeinate gh pr merge --admin",
+		"bash script.sh gh pr merge --admin",
 	} {
 		if checkCommand(cmd) == "" {
 			t.Errorf("checkCommand(%q) passed, want ask", cmd)
@@ -67,6 +76,8 @@ func TestCheckPasses(t *testing.T) {
 		"echo gh api -X PUT repos/o/r/contents/x",
 		// added when the shell hook was ported to Go
 		"gh api -X HEAD repos/o/r/contents/x",
+		// a gh word after a command that is no wrapper is an argument
+		"git commit -m 'gh pr merge --admin'",
 	} {
 		if reason := checkCommand(cmd); reason != "" {
 			t.Errorf("checkCommand(%q) asked with %q, want pass", cmd, reason)

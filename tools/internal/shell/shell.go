@@ -19,8 +19,29 @@ import (
 // $(...)) is kept as written.
 func Commands(cmd string) [][]string {
 	var out [][]string
+	for _, c := range Calls(cmd) {
+		out = append(out, c.Args)
+	}
+	return out
+}
+
+// Call is one command of Calls.
+type Call struct {
+	// Args are the words it runs, wrappers stripped.
+	Args []string
+	// Wrapped is true when a wrapper was stripped in front of Args, or Args
+	// is a shell running a script file. Args[0] may then be a wrapper this
+	// package does not know (ionice, caffeinate) or the value of an option it
+	// does not know, and the command it runs is further on.
+	Wrapped bool
+}
+
+// Calls is Commands with each command marked whether it sat behind a
+// wrapper, for a hook that would rather look further than miss a command.
+func Calls(cmd string) []Call {
+	var out []Call
 	for _, args := range calls(cmd) {
-		out = append(out, unwrap(args)...)
+		out = append(out, unwrap(args, false)...)
 	}
 	return out
 }
@@ -105,51 +126,55 @@ func unescape(s string) string {
 
 // wrappers run the command after their own options. The value lists the
 // options that take a separate argument, so that argument is not mistaken
-// for the command.
+// for the command. An option whose argument is optional (xargs --eof,
+// --replace, --max-lines) takes it only after =, so it is not listed.
 var wrappers = map[string][]string{
 	"builtin": nil,
 	"command": nil,
 	"doas":    {"-u", "-C"},
 	"env":     {"-u", "-C", "--unset", "--chdir"},
 	"exec":    {"-a"},
-	"nice":    {"-n"},
+	"nice":    {"-n", "--adjustment"},
 	"nohup":   nil,
 	// rat verify-gate run [--] <command> (tools/verifygate), which the check
 	// skill puts in front of every check where the commit gate is on; rat's
 	// other subcommands are commands of their own
-	"rat":     nil,
-	"rtk":     nil,
-	"sudo":    {"-u", "-g", "-C", "-D", "-h", "-p", "-r", "-t", "-U"},
-	"time":    {"-f", "-o"},
-	"timeout": {"-k", "-s"},
-	"xargs":   {"-a", "-d", "-E", "-I", "-L", "-n", "-P", "-s"},
+	"rat": nil,
+	"rtk": nil,
+	"sudo": {"-u", "-g", "-C", "-D", "-h", "-p", "-r", "-t", "-U",
+		"--user", "--group", "--close-from", "--chdir", "--host", "--prompt", "--role", "--type", "--other-user"},
+	"time":    {"-f", "-o", "--format", "--output"},
+	"timeout": {"-k", "-s", "--kill-after", "--signal"},
+	"xargs": {"-a", "-d", "-E", "-I", "-L", "-n", "-P", "-s",
+		"--arg-file", "--delimiter", "--max-args", "--max-procs", "--max-chars", "--process-slot-var"},
 }
 
 var shells = map[string]bool{"bash": true, "dash": true, "ksh": true, "sh": true, "zsh": true}
 
 // unwrap strips the wrappers in front of args and returns the command they
-// run; eval, sh -c and env -S expand to the commands of their script. A shell
-// running a script file, or rat with a subcommand other than verify-gate run,
-// is returned as it is.
-func unwrap(args []string) [][]string {
+// run, marked wrapped when one was stripped; eval, sh -c and env -S expand to
+// the commands of their script. A shell running a script file, or rat with a
+// subcommand other than verify-gate run, is returned as it is.
+func unwrap(args []string, wrapped bool) []Call {
 	for len(args) > 0 {
 		name := filepath.Base(args[0])
 		switch {
 		case name == "eval":
-			return Commands(strings.Join(args[1:], " "))
+			return Calls(strings.Join(args[1:], " "))
 		case shells[name]:
 			if script, ok := shellScript(args[1:]); ok {
-				return Commands(script)
+				return Calls(script)
 			}
-			return [][]string{args}
+			// the script may run the arguments it is given
+			return []Call{{Args: args, Wrapped: true}}
 		case name == "env":
 			if cmd, ok := envSplitString(args[1:]); ok {
-				return Commands(cmd)
+				return Calls(cmd)
 			}
 		}
 		withArg, ok := wrappers[name]
 		if !ok {
-			return [][]string{args}
+			return []Call{{Args: args, Wrapped: wrapped}}
 		}
 		rest := SkipOptions(args[1:], withArg)
 		switch name {
@@ -167,11 +192,11 @@ func unwrap(args []string) [][]string {
 			}
 		case "rat":
 			if len(rest) < 2 || rest[0] != "verify-gate" || rest[1] != "run" {
-				return [][]string{args}
+				return []Call{{Args: args, Wrapped: wrapped}}
 			}
 			rest = SkipOptions(rest[2:], nil)
 		}
-		args = rest
+		args, wrapped = rest, true
 	}
 	return nil
 }
