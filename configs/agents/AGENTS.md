@@ -30,9 +30,14 @@ for a feature or a fix; the `check` skill runs a project's verification.
 - Code comments, anchors included, are English whatever the repository's
   language, unless the file around them is already written in another.
 - Code says how, tests what, commit bodies why, comments why not. The "why
-  not" comments are `HACK(<issue URL>): …` and `AIDEV-NOTE: …`; read a
-  file's anchors before editing it. The `anchors` skill has the rules and
-  the audit.
+  not" comments are anchors, one line each: `HACK(<issue URL>): <what to
+  remove once upstream fixes it>` for a workaround (no upstream issue yet:
+  file one, or it is an `AIDEV-NOTE`), and `AIDEV-NOTE: <the decision and
+  the rejected alternative>` for a choice that stays. Read a file's anchors
+  before editing it and update the one above code you change; never delete
+  one unasked, except a HACK whose issue closed and whose workaround leaves
+  in the same change. A bare `TODO` is not an anchor: sort it with the
+  `issue` skill's deferred-work table.
 
 # Code Structure
 

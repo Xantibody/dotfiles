@@ -147,8 +147,8 @@ grows the backlog. Most left-out items have a better home than an issue:
 | none of the above — no condition can be written  | nothing; if it matters it will come back           |
 
 An issue that only wraps an upstream issue goes stale: it never learns that
-upstream closed, and its paths rot as the code moves. The `anchors` audit
-watches a HACK's upstream issue instead.
+upstream closed, and its paths rot as the code moves. A HACK sits on the
+code it excuses, so whoever edits that code next meets it and its link.
 
 The default for an item at the end of a PR or a task is not to file. The
 reason it was skipped is freshest right then and is lost by the next

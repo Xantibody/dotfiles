@@ -60,7 +60,7 @@ Comments explain **why not** — the decision that isn't visible in the code. t-
 - **Why-not comments**: Explain rejected approaches, workarounds, constraints, and business rules that make the obvious refactor wrong
 - **No narration**: Do not restate what the code does (`// increment counter` on `counter++`)
 - **Link to docs**: For complex business logic, add a brief inline comment and reference the relevant doc (`// See docs/modules/billing.md for rate calculation details`)
-- **Anchors**: A why-not that a later session must find takes the `HACK(<issue URL>)` or `AIDEV-NOTE` shape from the `anchors` skill. A bare `TODO`/`FIXME` is not written — file it with the `issue` skill
+- **Anchors**: A why-not that a later session must find takes the `HACK(<issue URL>)` or `AIDEV-NOTE` shape the global instructions define. A bare `TODO`/`FIXME` is not written — file it with the `issue` skill
 
 ### Format by Language
 

@@ -27,7 +27,6 @@ flowchart TD
     bv["browser-verify<br/>ブラウザ"]
     tv["terminal-verify<br/>ターミナル"]
   end
-  anchors["anchors<br/>HACK / AIDEV-NOTE の規則と一覧"]
   ab[/"agent-browser<br/>headless Chrome の CLI"/]
   vhs[/"vhs<br/>tape から端末を撮る"/]
   lint[/"lint-body<br/>本文の textlint と osekkai lint (hook も同じ検査)"/]
@@ -36,9 +35,6 @@ flowchart TD
   implement -->|"毎サイクル"| commit
   implement -->|"実装が終わった時 (reconstruct の Goal)"| gr
   implement -.->|"画面が変わった時"| shot
-  implement -.->|"HACK / AIDEV-NOTE を残す時"| anchors
-  anchors -.->|"閉じた HACK を外す時"| implement
-  anchors -.->|"TODO は"| issue
   gr -->|"rebuild なら"| reconstruct
   reconstruct -->|"1 commit ずつ"| commit
   pr -->|"pre-flight (reconstruct の Goal)"| gr
@@ -70,7 +66,6 @@ flowchart LR
   check["check"]
   commit["commit"]
   osekkai["osekkai"]
-  anchors["anchors"]
   issue["issue"]
 
   user --> version & bp & docs & refactor & profile
@@ -79,7 +74,6 @@ flowchart LR
   version -.->|"tag 後は /branch-protection を案内"| bp
   bp -->|"報告の URL"| osekkai
   docs -.->|"コードを直すなら /refactor を案内"| refactor
-  docs -.->|"why-not を残す時"| anchors
   docs -.->|"TODO は"| issue
   refactor -.->|"計画を実行する時"| check
   refactor -.->|"計画を実行する時"| commit

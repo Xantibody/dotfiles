@@ -227,9 +227,9 @@ all-features = true
 
 The required reason format follows the house convention:
 `reason = "HACK(<issue URL>): <what to remove once it is fixed>"` for a
-workaround, or a plain sentence for a permanent decision. The anchors
-audit regex (`\bHACK\(`) matches anywhere on a line, so these attributes
-show up in `go run ~/.claude/skills/anchors/scripts/audit/main.go`.
+workaround, or a plain sentence for a permanent decision. A grep for
+`HACK\(` matches anywhere on a line, so these attributes turn up with every
+other anchor.
 
 ### clippy.toml
 
