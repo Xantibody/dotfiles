@@ -1,0 +1,55 @@
+# codex execpolicy rules for the commands configs/agents/settings.json denies
+# Claude: sleep, rm -rf and git push are forbidden here. curl is not listed;
+# the workspace-write sandbox cuts the network, so it already needs approval.
+# Installed as /etc/codex/rules/deny.rules, so they load from the system
+# config layer with no hook trust to grant.
+#
+# A rule matches a command's leading tokens. codex splits a `zsh -lc` script
+# into its commands when it holds only plain words joined by && || ; |, so
+# `cd x && sleep 5` is caught, while a script with a loop, redirection or
+# $(...) is checked as one command and passes. That keeps the polling form
+# AGENTS.md recommends, `timeout 30 bash -c 'until ...; do sleep 0.5; done'`,
+# allowed, the same as Claude's Bash(sleep *) prefix rule.
+# AIDEV-NOTE: rules, not deny-hook in ~/.codex/hooks.json: a user-layer hook runs only after /hooks trusts its hash, and each nix store path change resets that trust
+
+prefix_rule(
+    pattern = ["sleep"],
+    decision = "forbidden",
+    justification = "Wait by polling under timeout instead, e.g. `timeout 30 bash -c 'until <check>; do sleep 0.5; done'`, or a command's own --watch.",
+    match = ["sleep 5", "sleep"],
+    not_match = ["timeout 30 bash -c 'until test -f x; do sleep 0.5; done'"],
+)
+
+prefix_rule(
+    pattern = ["rm", ["-rf", "-fr", "-Rf", "-fR"]],
+    decision = "forbidden",
+    justification = "Remove the specific files by name, or ask the user to delete the directory.",
+    match = ["rm -rf build", "rm -fr build", "rm -Rf build"],
+    not_match = ["rm -f build.log", "rm -r build"],
+)
+
+prefix_rule(
+    pattern = ["rm", ["-r", "-R", "--recursive"], ["-f", "--force"]],
+    decision = "forbidden",
+    justification = "Remove the specific files by name, or ask the user to delete the directory.",
+    match = ["rm -r -f build", "rm --recursive --force build"],
+    not_match = ["rm -r build"],
+)
+
+prefix_rule(
+    pattern = ["rm", ["-f", "--force"], ["-r", "-R", "--recursive"]],
+    decision = "forbidden",
+    justification = "Remove the specific files by name, or ask the user to delete the directory.",
+    match = ["rm -f -r build", "rm --force --recursive build"],
+    not_match = ["rm -f build.log"],
+)
+
+# The sandbox already asks before git push reaches the network; forbidden
+# refuses it even when the session runs with network access or full access.
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "forbidden",
+    justification = "git push is left to the user. Commit, then report the commit and let the user push.",
+    match = ["git push", "git push -u origin x"],
+    not_match = ["git status", "git commit -m push"],
+)

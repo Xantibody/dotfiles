@@ -5,7 +5,8 @@
 let
   hm = config.flake.modules.homeManager;
   # Bash の git push と rm -rf を、語順や前置きの wrapper に関係なく止める PreToolUse hook。
-  # 入出力が Claude と codex で同形なので 1 本を両方に当てる。Claude は settings.json が名前で呼ぶ
+  # Claude は settings.json が名前で呼ぶ。codex 側の sleep・rm -rf・git push は codex-rules/deny.rules が止める
+  # AIDEV-NOTE: codex の ~/.codex/hooks.json には並べない。user 層の hook は /hooks で hash を信頼するまで動かず、store パスが変わるたびに信頼が外れる (#137)
   # AIDEV-NOTE: permissions.deny は先頭一致で git -C <dir> push と rm -fr を通した (#127)。deny に形を足す案は wrapper や bash -c の数だけ増えるので採らない
   mkDenyHook =
     pkgs:
@@ -39,6 +40,9 @@ let
         command = "${pkgs.llm-agents.codegraph}/bin/codegraph"
         args = ["serve", "--mcp"]
       '';
+      # Claude の permissions.deny に当たる sleep・rm -rf・git push の拒否。codex は各層の rules/*.rules を
+      # execpolicy として読み、forbidden は承認方針や sandbox の設定より先に効く
+      environment.etc."codex/rules/deny.rules".source = ./codex-rules/deny.rules;
     };
 in
 {

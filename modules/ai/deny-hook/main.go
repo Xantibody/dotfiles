@@ -1,6 +1,7 @@
-// deny-hook is a PreToolUse hook for the Bash tool, shared by Claude Code and
-// codex: both send {"tool_input":{"command":...}} on stdin and both accept a
-// hookSpecificOutput permissionDecision "deny" on stdout.
+// deny-hook is a PreToolUse hook for Claude Code's Bash tool: it reads
+// {"tool_input":{"command":...}} on stdin and writes a hookSpecificOutput
+// permissionDecision "deny" on stdout. codex uses codex-rules/deny.rules
+// instead (see agents.nix).
 //
 // It refuses git push and rm with both -r and -f, in any spelling the
 // permission rules' prefix match misses: git -C <dir> push, rm -fr, rm -r -f,
