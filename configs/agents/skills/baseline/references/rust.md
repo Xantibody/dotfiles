@@ -189,26 +189,28 @@ Notes on the choices:
   rustc (`[lints.rust]`): `unreachable_pub` (libraries),
   `missing_debug_implementations`.
 
-Doc lints are opt-in as well: for a library, a crate published to docs.rs,
-or a repo the survey found already documenting itself. Their absence in
-any other crate is not a gap. The set is the one tokio, ripgrep and
-rust-lang/cargo deny:
+Doc lints are opt-in as well: for a crate published to docs.rs, a repo
+the survey found already documenting itself, or when the user asks. A
+plain library without either is offered them, not marked partial. The
+set is the one tokio, ripgrep and rust-lang/cargo turn on, at `warn` like
+every quality lint (the `-D warnings` in `rust-lint` and `rust-doc` fails
+the gate):
 
 ```toml
 [lints.rust]
-missing_docs = "deny"
+missing_docs = "warn"
 
 [lints.rustdoc]
-broken_intra_doc_links = "deny"
-private_intra_doc_links = "deny"
-missing_crate_level_docs = "deny"
-private_doc_tests = "deny"
-invalid_codeblock_attributes = "deny"
-invalid_html_tags = "deny"
-invalid_rust_codeblocks = "deny"
-bare_urls = "deny"
-unescaped_backticks = "deny"
-redundant_explicit_links = "deny"
+broken_intra_doc_links = "warn"
+private_intra_doc_links = "warn"
+missing_crate_level_docs = "warn"
+private_doc_tests = "warn"
+invalid_codeblock_attributes = "warn"
+invalid_html_tags = "warn"
+invalid_rust_codeblocks = "warn"
+bare_urls = "warn"
+unescaped_backticks = "warn"
+redundant_explicit_links = "warn"
 
 [package.metadata.docs.rs]
 all-features = true
@@ -217,11 +219,11 @@ all-features = true
 - `missing_docs` is a rustc lint, so `rust-lint` already catches it.
   `[lints.rustdoc]` fires only while docs build, which is what the
   `rust-doc` recipe is for.
-- Count the gap before denying `missing_docs`:
-  `touch src/lib.rs && cargo rustc --lib --all-features -- -W missing_docs 2>&1 | grep -c 'missing documentation'`
-  (a cached build prints nothing). Land the docs first and the `deny` in
-  its own commit; a commit that adds both cannot be reviewed, and every
-  commit before it is red.
+- Count the gap before turning `missing_docs` on, once per library crate:
+  `touch <crate>/src/lib.rs && cargo rustc -p <crate> --lib --all-features -- -W missing_docs 2>&1 | grep -c 'missing documentation'`
+  (a cached build prints nothing). Land the docs first and the lint in
+  its own commit: a commit that adds both cannot be reviewed, and a lint
+  landed before the docs leaves every commit until they land red.
 - Never add `missing_doc_code_examples`. It is nightly-only and fails a
   stable build.
 
