@@ -15,6 +15,7 @@ import (
 	"github.com/Xantibody/dotfiles/tools/hook/deny"
 	"github.com/Xantibody/dotfiles/tools/hook/ghguard"
 	"github.com/Xantibody/dotfiles/tools/hook/lintbody"
+	"github.com/Xantibody/dotfiles/tools/hotspots"
 	"github.com/Xantibody/dotfiles/tools/shot"
 	"github.com/Xantibody/dotfiles/tools/skill"
 	"github.com/Xantibody/dotfiles/tools/skill/validate"
@@ -39,6 +40,7 @@ func main() {
 		skill.Command(validate.Command()),
 		shot.Command(),
 		checklist.Command(),
+		hotspots.Command(),
 	)
 	if err := root.Execute(); err != nil {
 		// An error that carries its own exit code (a hook blocking with 2, the
