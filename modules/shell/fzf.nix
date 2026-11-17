@@ -12,14 +12,13 @@ in
     let
       # fd は TTY に直接吐くときしか着色しないので、パイプで受ける fzf 向けには
       # --color=always が要る。受け手の --ansi は defaultOptions 側に置いてある
-      # AIDEV-NOTE: 変数名を fd にすると with pkgs の pkgs.fd を隠す (let が with に勝つ)
       fdCmd = "fd --hidden --exclude .git --color=always";
     in
     {
-      home.packages = with pkgs; [
-        bat
-        eza
-        fd
+      home.packages = [
+        pkgs.bat
+        pkgs.eza
+        pkgs.fd
       ];
 
       programs.fzf = {
