@@ -107,7 +107,7 @@ type Options struct {
 }
 
 // Run validates the skills in dirs, writes the report to out and usage
-// errors to errOut, and returns the exit code: 0 when everything passed, 1
+// errors and notes on the validator itself to errOut, and returns the exit code: 0 when everything passed, 1
 // when something failed, 2 when a --known directory holds no skill.
 func Run(opts Options, dirs []string, out, errOut io.Writer) int {
 	known := map[string]string{}
@@ -119,7 +119,7 @@ func Run(opts Options, dirs []string, out, errOut io.Writer) int {
 		known[filepath.Base(mustAbs(d))] = d
 	}
 
-	sp := loadSpec(opts.Offline, out)
+	sp := loadSpec(opts.Offline, errOut)
 	fmt.Fprintf(out, "field list: %s\n", sp.source)
 
 	failed := false
@@ -161,16 +161,17 @@ func Run(opts Options, dirs []string, out, errOut io.Writer) int {
 	return 0
 }
 
-// loadSpec fetches the live field list, falling back to the baked-in one and
-// reporting any drift between them.
-func loadSpec(offline bool, out io.Writer) spec {
+// loadSpec fetches the live field list, falling back to the baked-in one,
+// and writes to errOut why it fell back or how the docs drifted from it:
+// notes on the validator itself, not results for the skills.
+func loadSpec(offline bool, errOut io.Writer) spec {
 	fb := spec{fields: toSet(fallbackFields), listingCap: fallbackListingCap, source: "fallback (" + fallbackDate + ")", bundled: toSet(fallbackBundled)}
 	if offline {
 		return fb
 	}
 	live, capN, err := fetchDocs()
 	if err != nil {
-		fmt.Fprintf(out, "warn:  could not fetch %s (%v); using %s\n", docsURL, err, fb.source)
+		fmt.Fprintf(errOut, "skill validate: warn: could not fetch %s (%v); using %s\n", docsURL, err, fb.source)
 		return fb
 	}
 	if capN == 0 {
@@ -178,20 +179,20 @@ func loadSpec(offline bool, out io.Writer) spec {
 	}
 	sp := spec{fields: toSet(live), listingCap: capN, source: "docs (" + docsURL + ")", bundled: fb.bundled}
 	if names, err := fetchBundled(); err != nil {
-		fmt.Fprintf(out, "warn:  could not fetch the command pages (%v); using the fallback bundled-name list\n", err)
+		fmt.Fprintf(errOut, "skill validate: warn: could not fetch the command pages (%v); using the fallback bundled-name list\n", err)
 	} else {
 		sp.bundled = toSet(names)
 		if added, removed := diffSets(sp.bundled, fb.bundled); len(added) > 0 || len(removed) > 0 {
-			fmt.Fprintf(out, "warn:  bundled command names differ from fallback: added %v, removed %v — update fallbackBundled in tools/skill/validate/validate.go\n", added, removed)
+			fmt.Fprintf(errOut, "skill validate: warn: bundled command names differ from fallback: added %v, removed %v — update fallbackBundled in tools/skill/validate/validate.go\n", added, removed)
 		}
 	}
 	added, removed := diffSets(sp.fields, fb.fields)
 	if len(added) > 0 || len(removed) > 0 {
-		fmt.Fprintf(out, "warn:  docs differ from fallback (%s): added %v, removed %v — update fallbackFields in %s\n",
+		fmt.Fprintf(errOut, "skill validate: warn: docs differ from fallback (%s): added %v, removed %v — update fallbackFields in %s\n",
 			fallbackDate, added, removed, "tools/skill/validate/validate.go")
 	}
 	if capN != fallbackListingCap {
-		fmt.Fprintf(out, "warn:  docs listing cap is %d, fallback says %d — update fallbackListingCap\n", capN, fallbackListingCap)
+		fmt.Fprintf(errOut, "skill validate: warn: docs listing cap is %d, fallback says %d — update fallbackListingCap\n", capN, fallbackListingCap)
 	}
 	return sp
 }
