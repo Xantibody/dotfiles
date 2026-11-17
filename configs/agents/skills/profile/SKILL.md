@@ -2,6 +2,7 @@
 name: profile
 description: Measure and quantify performance. Decides what is being measured first — CPU, waiting, memory, or a pipeline — and picks the instrument from that. Covers on-CPU and off-CPU flame graphs (perf, sample, py-spy, cargo flamegraph, go pprof), allocation profiles, hyperfine, and differential flame graphs for before/after comparison.
 when_to_use: Whenever the user wants to profile code, find hot spots or bottlenecks, generate a flame graph, benchmark code, or measure whether an optimization actually helped — including when they just say something is "slow" / "遅い" and want to know why, or say "プロファイル取って", "ボトルネック探して", "ベンチ取って", "フレームグラフ出して".
+disable-model-invocation: true
 ---
 
 # Profile

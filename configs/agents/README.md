@@ -66,13 +66,14 @@ flowchart LR
   bp["branch-protection<br/>main を保護する"]
   docs["docs<br/>ドキュメント"]
   refactor["refactor<br/>整理の計画"]
+  profile["profile<br/>計測"]
   check["check"]
   commit["commit"]
   osekkai["osekkai"]
   anchors["anchors"]
   issue["issue"]
 
-  user --> version & bp & docs & refactor
+  user --> version & bp & docs & refactor & profile
   version -->|"tag 前"| check
   version -->|"報告の URL"| osekkai
   version -.->|"tag 後は /branch-protection を案内"| bp
@@ -112,7 +113,3 @@ flowchart LR
   sa -->|"草稿と eval"| sc
   sa -->|"skill を変えた commit で"| readme
 ```
-
-どこからも読み込まれず、ユーザーの依頼で直接呼ばれる skill:
-
-- `profile` — 計測

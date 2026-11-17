@@ -73,7 +73,11 @@ enough to be worth loading on its own.
   taken back from this machine — a tag, a ruleset, anything published:
   `disable-model-invocation: true`. A local rewrite that `git reflog`
   undoes is not that; `reconstruct` runs on its own because nothing
-  leaves the machine until the user pushes. That hides the skill
+  leaves the machine until the user pushes. The same switch fits a
+  skill that starts only when the user asks for it by name and that the
+  transcripts show the model never loading (`profile`, `refactor`,
+  `docs`): its description would otherwise cost every session's listing
+  for nothing. Count the loads before hiding one. That hides the skill
   from the model completely — description and all — so the skill that
   decides has to hand the user `/name` to type. Background knowledge
   nobody would type as a command: `user-invocable: false`. A skill that
