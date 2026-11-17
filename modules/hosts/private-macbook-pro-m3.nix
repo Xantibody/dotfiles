@@ -18,6 +18,7 @@ in
       "k8s"
       "dev-cli"
       "apps"
+      "media"
       "profiling"
       "emacs"
       "skk"

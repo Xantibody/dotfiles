@@ -66,6 +66,17 @@
     };
     date = "2025-11-02";
   };
+  plamo-translate = {
+    pname = "plamo-translate";
+    version = "1.2.0";
+    src = fetchFromGitHub {
+      owner = "pfnet";
+      repo = "plamo-translate-cli";
+      rev = "1.2.0";
+      fetchSubmodules = false;
+      sha256 = "sha256-d8DXxRqb6YiHC4+BGKOmNZ7DgceTan6tpaEWJlhN9a8=";
+    };
+  };
   skkeleton = {
     pname = "skkeleton";
     version = "42f460d13159068b2773e816b1fa98a9f5b0da22";

@@ -104,6 +104,27 @@
     },
     "version": "37850581fdaec153ce84af677d43bf8fce60813a"
   },
+  "plamo-translate": {
+    "cargoLock": null,
+    "date": null,
+    "extract": null,
+    "name": "plamo-translate",
+    "passthru": null,
+    "pinned": false,
+    "src": {
+      "deepClone": false,
+      "fetchSubmodules": false,
+      "leaveDotGit": false,
+      "name": null,
+      "owner": "pfnet",
+      "repo": "plamo-translate-cli",
+      "rev": "1.2.0",
+      "sha256": "sha256-d8DXxRqb6YiHC4+BGKOmNZ7DgceTan6tpaEWJlhN9a8=",
+      "sparseCheckout": [],
+      "type": "github"
+    },
+    "version": "1.2.0"
+  },
   "skkeleton": {
     "cargoLock": null,
     "date": "2026-11-14",

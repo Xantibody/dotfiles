@@ -52,3 +52,7 @@ fetch.github = "rachartier/tiny-glimmer.nvim"
 src.git = "https://github.com/arto-app/arto.vim.git"
 src.branch = "main"
 fetch.github = "arto-app/arto.vim"
+
+[plamo-translate]
+src.github = "pfnet/plamo-translate-cli"
+fetch.github = "pfnet/plamo-translate-cli"
