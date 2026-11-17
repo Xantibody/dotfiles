@@ -9,6 +9,7 @@ import (
 
 	"github.com/Xantibody/dotfiles/tools/hook"
 	"github.com/Xantibody/dotfiles/tools/hook/deny"
+	"github.com/Xantibody/dotfiles/tools/hook/ghguard"
 	"github.com/Xantibody/dotfiles/tools/version"
 )
 
@@ -23,7 +24,7 @@ func main() {
 	}
 	root.AddCommand(
 		version.Command(buildVersion),
-		hook.Command(deny.Command()),
+		hook.Command(deny.Command(), ghguard.Command()),
 	)
 	if err := root.Execute(); err != nil {
 		os.Exit(1)

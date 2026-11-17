@@ -4,9 +4,9 @@
 # 外れた行をすべて出してから落ちる。
 #
 #   mkHookCheck pkgs {
-#     name = "gh-guard";
-#     hook = ghGuard;
-#     cases = [ { name = "..."; input.tool_input.command = "..."; expect = ". == null"; } ];
+#     name = "anchors-hook";
+#     hook = mkAnchorsHook pkgs;
+#     cases = [ { name = "..."; input.tool_input.file_path = "..."; expect = ". == null"; } ];
 #   }
 pkgs:
 {

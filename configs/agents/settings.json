@@ -86,7 +86,7 @@
           },
           {
             "type": "command",
-            "command": "gh-guard"
+            "command": "rat hook gh-guard"
           }
         ]
       },
