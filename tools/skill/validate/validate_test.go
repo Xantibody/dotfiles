@@ -3,13 +3,14 @@ package validate
 import (
 	"archive/tar"
 	"bytes"
-	"errors"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/Xantibody/dotfiles/tools/internal/cli"
 )
 
 // offlineSpec is the spec the validator uses with --offline.
@@ -23,15 +24,7 @@ func run(t *testing.T, args []string, out, errOut io.Writer) int {
 	cmd.SetArgs(args)
 	cmd.SetOut(out)
 	cmd.SetErr(errOut)
-	err := cmd.Execute()
-	if err == nil {
-		return 0
-	}
-	var coded interface{ ExitCode() int }
-	if !errors.As(err, &coded) {
-		t.Fatalf("Execute returned %v, which carries no exit code", err)
-	}
-	return coded.ExitCode()
+	return cli.Exit(cmd.Execute(), errOut)
 }
 
 // writeSkill makes dir/<name>/SKILL.md with the given extra frontmatter lines

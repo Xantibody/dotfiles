@@ -5,17 +5,11 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
+
+	"github.com/Xantibody/dotfiles/tools/internal/cli"
 )
 
 const usage = "usage: rat shot --out <abs.png> --command <cmd> --wait <regex> [--setup <cmd>]... [--ready <regex>] [--width N] [--height N] [--font-size N] [--wait-timeout D] [--vhs vhs] [--tape-only]"
-
-// exitError makes rat exit with code; Run has already written the message,
-// so it carries none of its own.
-type exitError struct{ code int }
-
-func (e *exitError) Error() string { return "" }
-
-func (e *exitError) ExitCode() int { return e.code }
 
 // Command returns `rat shot`.
 func Command() *cobra.Command {
@@ -28,15 +22,12 @@ func Command() *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if code := Run(opts, args, cmd.OutOrStdout(), cmd.ErrOrStderr()); code != 0 {
-				return &exitError{code: code}
-			}
-			return nil
+			return cli.Code(Run(opts, args, cmd.OutOrStdout(), cmd.ErrOrStderr()))
 		},
 	}
 	cmd.SetFlagErrorFunc(func(cmd *cobra.Command, err error) error {
 		fmt.Fprintf(cmd.ErrOrStderr(), "shot: %v\n%s\n", err, usage)
-		return &exitError{code: 2}
+		return &cli.ExitError{Code: 2}
 	})
 	f := cmd.Flags()
 	f.StringVar(&opts.Out, "out", "", "PNG to write (the .tape and .gif go beside it)")

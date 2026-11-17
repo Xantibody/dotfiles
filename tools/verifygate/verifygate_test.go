@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/Xantibody/dotfiles/tools/internal/cli"
 )
 
 // hookEnv makes the test binary act as `rat verify-gate`, so git can run it
@@ -22,23 +24,11 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-// asRat runs the command the way rat's main does: an error is printed to
-// stderr and exits with its code, 1 when it carries none.
+// asRat runs the command the way rat's main does.
 func asRat(args []string) int {
 	cmd := Command()
 	cmd.SetArgs(args)
-	err := cmd.Execute()
-	if err == nil {
-		return 0
-	}
-	if msg := err.Error(); msg != "" {
-		fmt.Fprintln(os.Stderr, msg)
-	}
-	var coded interface{ ExitCode() int }
-	if errors.As(err, &coded) {
-		return coded.ExitCode()
-	}
-	return 1
+	return cli.Exit(cmd.Execute(), os.Stderr)
 }
 
 // fresh makes a repository with one commit, with this test binary as the

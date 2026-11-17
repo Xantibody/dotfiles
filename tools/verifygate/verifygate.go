@@ -24,20 +24,12 @@ import (
 	"slices"
 	"strings"
 	"syscall"
+
+	"github.com/Xantibody/dotfiles/tools/internal/cli"
 )
 
-// exitError makes rat exit with code, printing msg to stderr when there is one.
-type exitError struct {
-	code int
-	msg  string
-}
-
-func (e *exitError) Error() string { return e.msg }
-
-func (e *exitError) ExitCode() int { return e.code }
-
 func fail(format string, a ...any) error {
-	return &exitError{code: 1, msg: "verify-gate: " + fmt.Sprintf(format, a...)}
+	return &cli.ExitError{Code: 1, Msg: "verify-gate: " + fmt.Sprintf(format, a...)}
 }
 
 // Run runs the command and, when it passes inside a git working tree, records
@@ -52,9 +44,9 @@ func Run(args []string, stdin io.Reader, stdout, stderr io.Writer) error {
 	if err := c.Run(); err != nil {
 		var exit *exec.ExitError
 		if errors.As(err, &exit) {
-			return &exitError{code: exitCode(exit)}
+			return &cli.ExitError{Code: exitCode(exit)}
 		}
-		return &exitError{code: 127, msg: "verify-gate: " + err.Error()}
+		return &cli.ExitError{Code: 127, Msg: "verify-gate: " + err.Error()}
 	}
 	if inside, err := git(nil, nil, "rev-parse", "--is-inside-work-tree"); err != nil || inside != "true" {
 		return nil

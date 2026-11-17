@@ -1,13 +1,14 @@
 package hotspots
 
 import (
-	"errors"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+
+	"github.com/Xantibody/dotfiles/tools/internal/cli"
 )
 
 // folded writes text to a .folded file and returns its path.
@@ -28,13 +29,7 @@ func run(args ...string) (code int, stdout, stderr string) {
 	cmd.SetArgs(args)
 	cmd.SetOut(&o)
 	cmd.SetErr(&e)
-	if err := cmd.Execute(); err != nil {
-		var coded interface{ ExitCode() int }
-		if !errors.As(err, &coded) {
-			return -1, o.String(), e.String() + err.Error()
-		}
-		code = coded.ExitCode()
-	}
+	code = cli.Exit(cmd.Execute(), &e)
 	return code, o.String(), e.String()
 }
 

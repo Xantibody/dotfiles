@@ -2,13 +2,14 @@ package checklist
 
 import (
 	"bytes"
-	"errors"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/Xantibody/dotfiles/tools/internal/cli"
 )
 
 func TestGlob(t *testing.T) {
@@ -205,13 +206,7 @@ func runT(dir string, args ...string) (code int, stdout, stderr string) {
 	cmd.SetArgs(args)
 	cmd.SetOut(&o)
 	cmd.SetErr(&e)
-	if err := cmd.Execute(); err != nil {
-		var coded interface{ ExitCode() int }
-		if !errors.As(err, &coded) {
-			return -1, o.String(), e.String() + err.Error()
-		}
-		code = coded.ExitCode()
-	}
+	code = cli.Exit(cmd.Execute(), &e)
 	return code, o.String(), e.String()
 }
 

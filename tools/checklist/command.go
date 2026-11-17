@@ -4,17 +4,11 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+
+	"github.com/Xantibody/dotfiles/tools/internal/cli"
 )
 
 const usage = "usage: rat checklist [--base <ref>]"
-
-// exitError makes rat exit with code; Run has already written the message,
-// so it carries none of its own.
-type exitError struct{ code int }
-
-func (e *exitError) Error() string { return "" }
-
-func (e *exitError) ExitCode() int { return e.code }
 
 // Command returns `rat checklist`, applied to the repository the working
 // directory is in.
@@ -31,15 +25,12 @@ func command(dir string) *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if code := Run(dir, base, args, cmd.OutOrStdout(), cmd.ErrOrStderr()); code != 0 {
-				return &exitError{code: code}
-			}
-			return nil
+			return cli.Code(Run(dir, base, args, cmd.OutOrStdout(), cmd.ErrOrStderr()))
 		},
 	}
 	cmd.SetFlagErrorFunc(func(cmd *cobra.Command, err error) error {
 		fmt.Fprintf(cmd.ErrOrStderr(), "checklist: %v\n%s\n", err, usage)
-		return &exitError{code: 2}
+		return &cli.ExitError{Code: 2}
 	})
 	cmd.Flags().StringVar(&base, "base", "", "ref whose REVIEW.md applies and whose merge base starts the change (default: origin/HEAD)")
 	return cmd
