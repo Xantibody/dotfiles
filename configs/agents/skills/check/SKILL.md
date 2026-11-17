@@ -21,7 +21,7 @@ Investigate available commands by checking project files in this priority order:
 3. **`Makefile` / `justfile`** without `check`: look for `lint`, `typecheck`, `test`, `format`, `fmt` targets.
 4. **`package.json`**: check `scripts` for `lint`, `typecheck`, `test`, `format`, plus common tools (`eslint`, `tsc --noEmit`, `vitest`, `jest`, `prettier`, `biome`).
 5. **Language-native fallbacks** (when no project-configured command exists):
-   - Go: `go vet ./...`, `golangci-lint run`, `go test ./...`, `gofmt -w .` / `goimports -w .`
+   - Go: `go vet ./...`, `golangci-lint run`, `go test -race -shuffle=on ./...` (a failure prints its seed; rerun with `-shuffle=<seed>` to reproduce it), `gofmt -w .` / `goimports -w .`
    - Rust: `cargo clippy`, `cargo test`, `cargo fmt`
    - Python: `ruff check`, `mypy` / `pyright`, `pytest`, `ruff format` / `black .`
 
