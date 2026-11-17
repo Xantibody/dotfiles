@@ -48,6 +48,9 @@ type Worktree struct {
 	// disposable means removing the worktree and its branch loses nothing.
 	// done adds the grace period on top; rm and the remove hook ask only this.
 	disposable bool
+	// moved means HEAD has been somewhere other than where it started, which
+	// tells merged work from a worktree nobody has written to yet.
+	moved bool
 }
 
 type judgeOpts struct {
@@ -155,8 +158,28 @@ func inspect(e *env, o judgeOpts, main string, line []string, it entry) Worktree
 		w.PR = lookupPR(e, main, w.Branch)
 	}
 
-	judge(&w, m, line[len(line)-1], e.now(), time.Duration(o.staleDays)*24*time.Hour)
+	w.moved = hasMoved(it, m)
+	judge(&w, line[len(line)-1], e.now(), time.Duration(o.staleDays)*24*time.Hour)
 	return w
+}
+
+// hasMoved compares HEAD with the commit eda recorded at creation. A
+// worktree eda did not create has no record, so its HEAD reflog answers
+// instead: more than one distinct commit there means work was done.
+func hasMoved(it entry, m meta) bool {
+	if m.Base != "" {
+		return m.Base != it.head
+	}
+	out, err := git(it.path, "reflog", "show", "--format=%H", "HEAD")
+	if err != nil {
+		return false
+	}
+	for _, sha := range strings.Split(out, "\n") {
+		if sha != "" && sha != it.head {
+			return true
+		}
+	}
+	return false
 }
 
 func count(dir string, args ...string) int {
@@ -188,7 +211,7 @@ func lookupPR(e *env, main, branch string) *PR {
 	return &prs[0]
 }
 
-func judge(w *Worktree, m meta, defaultBranch string, now time.Time, staleAfter time.Duration) {
+func judge(w *Worktree, defaultBranch string, now time.Time, staleAfter time.Duration) {
 	mergedPR := w.PR != nil && w.PR.State == "MERGED" && w.PR.Head == w.Head
 	w.disposable = w.Dirty == 0 && (w.Ahead == 0 || mergedPR)
 
@@ -196,7 +219,7 @@ func judge(w *Worktree, m meta, defaultBranch string, now time.Time, staleAfter 
 		switch {
 		case mergedPR:
 			w.Verdict, w.Reason = "done", fmt.Sprintf("PR #%d merged", w.PR.Number)
-		case m.Base != "" && m.Base != w.Head:
+		case w.moved:
 			w.Verdict, w.Reason = "done", "merged into "+defaultBranch
 		case now.Sub(w.Created) >= grace:
 			w.Verdict, w.Reason = "done", "nothing that is not in "+defaultBranch+", made "+ago(now.Sub(w.Created))+" ago"
