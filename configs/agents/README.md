@@ -36,10 +36,12 @@ flowchart TD
   implement -->|"毎サイクル"| commit
   implement -->|"実装が終わった時 (最初に)"| rc
   implement -->|"実装が終わった時 (implement、次に reconstruct の Goal)"| gr
+  implement -.->|"判定ファイルに当たった時 (baseline の Goal の 3・4)"| gr
   implement -.->|"画面が変わった時"| shot
   gr -->|"rebuild なら"| reconstruct
   reconstruct -->|"1 commit ずつ"| commit
   pr -->|"pre-flight (reconstruct の Goal)"| gr
+  pr -.->|"判定ファイルに当たった時 (baseline の Goal の 3・4)"| gr
   pr -->|"pre-flight"| rc
   pr -->|"push 前"| check
   pr -->|"本文を書く時"| osekkai
@@ -56,6 +58,8 @@ flowchart TD
 ```
 
 判断と実行は分けるが、判断する skill は `goal-review` 1 つだけにする。何かを変える skill (`implement`、`reconstruct`、`baseline`) は本文の `## Goal` に「どうなっていれば済みか」と判定方法を書き、`goal-review` はその節だけを読んで判定し、Goal に書かれた条件で持ち主の skill に渡す。`implement` の Goal (check と `just smoke` が通り、画面が変わるなら撮って見た) は、終わった時に `implement` 自身が先に判定させ、done になってから reconstruct の Goal に進む。新しい実行 skill には、専用の review skill を作らず Goal を書く。
+
+変更が自分を裁くチェックを同じ変更で緩めないよう、判定ファイル (justfile、`.github/workflows/`、lint・型の設定、suppression、`.claude/settings*.json`) は 2 層で守る。一覧は `baseline` の Goal の Judge files にあり、`settings.json` の `permissions.ask` が同じ一覧を `Edit(**/<pattern>)` で並べるので、編集のたびに確認が出る (`checks.judge-files` が 2 つの一覧のずれを落とす)。`implement` の終わりと `pull-request` の pre-flight は、range が判定ファイルに当たったら `baseline` の Goal を step 3・4 に限って判定させる。基準は skill と一緒に配られた references なので、変更からは届かない。
 
 `reliability-checklist` は判定する skill ではない。repo の `REVIEW.md` を base 側から読み、diff に当たった行を同梱のスクリプトで出すだけで、各行の確認は呼んだ `implement` と `pull-request` が行う。
 

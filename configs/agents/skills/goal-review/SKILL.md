@@ -1,7 +1,7 @@
 ---
 name: goal-review
 description: Judges where something stands against the Goal another skill declares — a repository against `baseline`'s, a branch's unpushed history against `reconstruct`'s, a finished change against `implement`'s — and returns that Goal's verdict. It reads the Goal and runs its tests, never the owning skill's procedure; the owning skill does the work.
-when_to_use: Whenever the user asks whether something is already in the state a skill aims for — "環境どこまでできてる?", "baseline 見て", "履歴見て", "コミット整理した方がいい?", "commit きれい?", "このまま PR 出せる?", "実装終わった?", "完了でいい?" — whenever the implement skill finishes a feature (against its own Goal, then reconstruct's), whenever the pull-request skill confirms its range (against reconstruct's Goal), and whenever the baseline skill starts (against its own Goal).
+when_to_use: Whenever the user asks whether something is already in the state a skill aims for — "環境どこまでできてる?", "baseline 見て", "履歴見て", "コミット整理した方がいい?", "commit きれい?", "このまま PR 出せる?", "実装終わった?", "完了でいい?" — whenever the implement skill finishes a feature (against its own Goal, then reconstruct's), whenever the pull-request skill confirms its range (against reconstruct's Goal), whenever either one's range touches a judge file (against baseline's steps 3 and 4), and whenever the baseline skill starts (against its own Goal).
 ---
 
 # Goal review
@@ -26,6 +26,10 @@ for Claude Code, `~/.agents/skills` for codex): its `## Goal` section, and the
 files that section names, and nothing below it. The procedure is for the
 owning skill; reading it here invites doing it. A skill without a `## Goal`
 section has nothing to be reviewed against — say so and stop.
+
+The caller can also name items (`baseline`'s steps 3 and 4). Run only
+those items' tests and report only their rows, saying under the table which
+items were not judged; a row left out is not `done`, it was not asked.
 
 ## What a Goal declares
 
