@@ -56,6 +56,7 @@ in
             "gh api graphql -f query='mutation { createCommitOnBranch(input: {}) { commit { oid } } }'"
             "rtk gh api -X PUT repos/o/r/contents/x"
             "rtk proxy gh api -X PUT repos/o/r/contents/x"
+            "verify-gate run -- gh api -X PUT repos/o/r/contents/x"
             "GH_TOKEN=t gh api -X PUT repos/o/r/contents/x"
             "env GH_HOST=github.com gh api -X PUT repos/o/r/contents/x"
             "/opt/homebrew/bin/gh api -X PUT repos/o/r/contents/x"

@@ -8,8 +8,9 @@ set -euo pipefail
 input=$(cat)
 cmd=$(jq -r '.tool_input.command // empty' <<<"$input")
 
-# 前置きの wrapper と sh -c。rtk hook が gh を rtk gh に書き換えるので rtk もここに入る
-wrappers=" rtk env command builtin exec nohup sudo doas nice time timeout xargs eval bash sh zsh dash ksh "
+# 前置きの wrapper と sh -c。rtk hook が gh を rtk gh に書き換えるので rtk もここに入る。
+# verify-gate は check skill が検査の前に置く `verify-gate run --`
+wrappers=" rtk env command builtin exec nohup sudo doas nice time timeout xargs eval bash sh zsh dash ksh verify-gate "
 
 # 書き込みを確認したい REST の endpoint。repos/<o>/<r>/ や orgs/<o>/ の後ろに来る
 endpoint_re='(^|/)(rulesets|protection|contents|merges|git/refs|pulls/[^/]+/merge)(/|\?|$)'

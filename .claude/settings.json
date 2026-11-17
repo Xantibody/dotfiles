@@ -4,7 +4,11 @@
       "Bash(nix flake check*)",
       "Bash(darwin-rebuild build*)",
       "Bash(nix eval .#*Configurations*)",
-      "Bash(nix build .#checks*eval-*)"
+      "Bash(nix build .#checks*eval-*)",
+      "Bash(verify-gate run *nix flake check*)",
+      "Bash(verify-gate run *darwin-rebuild build*)",
+      "Bash(verify-gate run *nix eval .#*Configurations*)",
+      "Bash(verify-gate run *nix build .#checks*eval-*)"
     ]
   },
   "hooks": {

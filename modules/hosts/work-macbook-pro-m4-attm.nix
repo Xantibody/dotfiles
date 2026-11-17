@@ -40,6 +40,7 @@ in
         "arto"
         "mdsf"
         "git"
+        "verify-gate"
         "ha"
         "claude"
         "agents"

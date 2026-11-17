@@ -51,6 +51,13 @@ changed; say in the report that host evaluation is left to CI.
 `.claude/settings.json` denies those commands and `nix build .#checks…eval-…`,
 so the rule holds without anyone remembering it.
 
+This repository is the first one under the commit gate in observe mode
+(`modules/git/verify-gate.nix`): when `git config verify.gate` prints
+`observe`, run the local checks above as `verify-gate run -- <command>` after
+the last edit, so the commit's `Verified-by:` trailer names them instead of
+`none`. The gate only records; a commit without verification still goes
+through.
+
 `just snapshot` and `just eval-profile` are for a module-layout refactor and
 run only when the user asks for them. When nix does run, it runs one at a
 time: one uncached host evaluation peaks above 2 GB, and overlapping two or

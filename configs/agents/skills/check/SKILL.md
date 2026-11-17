@@ -39,6 +39,8 @@ Run in this order, fixing issues before moving to the next step:
 
 Rationale: lint/type errors often surface issues that would otherwise cause confusing test failures; running the formatter last avoids reformatting code that you are about to fix.
 
+**Commit gate.** When `git config verify.gate` prints a value, the repository records verification in each commit: run every check command as `verify-gate run -- <command>`. On success it stores the command against the working tree as it stands, and the `commit-msg` hook writes it as a `Verified-by:` trailer when the committed tree matches, `Verified-by: none` otherwise. So run the checks after the last edit and stage everything they saw; never write that trailer by hand. With the setting absent, run the commands as they are.
+
 If the formatter rewrites files that the current change did not touch, that churn is a structural change — commit it separately (Tidy First) rather than folding it into the behavioral commit, where it hides the real diff from the reviewer.
 
 ### 3. Report and Fix
