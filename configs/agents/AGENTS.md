@@ -33,7 +33,10 @@ for a feature or a fix; the `check` skill runs a project's verification.
   not" comments are anchors, one line each: `HACK(<issue URL>): <what to
   remove once the issue is fixed>` for a workaround or debt an issue tracks
   (no issue yet: file one, or it is an `AIDEV-NOTE`), and `AIDEV-NOTE: <the
-  decision and the rejected alternative>` for a choice that stays. Read a
+  constraint or the rejected alternative>` for a choice that stays, only
+  when it is forced from outside the code (an API, a tool, a platform) or
+  is an alternative tried and dropped. A workaround the code could remove
+  with a type, a lint rule or another API is removed, not annotated. Read a
   file's anchors before editing it and update the one above code you
   change; never delete one unasked, except a HACK that leaves in the same
   change as the workaround it explains. A bare `TODO` is not an anchor:

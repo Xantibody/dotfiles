@@ -54,7 +54,7 @@ State is `holds`, `fails`, `n/a` or `unknown` (with why). The verdict is **done*
 - Write just enough code to make the test pass - no more
 - Use the simplest solution that could possibly work
 - Do not add extra features or edge case handling yet
-- If the passing code works around something outside the repository, mark it `HACK(<issue URL>)`; if it takes a shape a reader would question, mark it `AIDEV-NOTE`. The global instructions (AGENTS.md / CLAUDE.md) have the exact forms, and a grep for `HACK(` or `AIDEV-NOTE` is how the next session finds them.
+- Before writing an anchor over a workaround, ask whether a type, a lint rule or a different API would make the workaround unnecessary, and when one would, use it instead: a comment that explains a trap leaves the trap for the next reader. What stays gets an anchor: a workaround for something outside the repository is `HACK(<issue URL>)`; a constraint forced from outside the code, or an alternative tried and dropped, is `AIDEV-NOTE`. The global instructions (AGENTS.md / CLAUDE.md) have the exact forms, and a grep for `HACK(` or `AIDEV-NOTE` is how the next session finds them.
 
 ### Refactor Phase (Improve Structure)
 
