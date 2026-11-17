@@ -1,6 +1,6 @@
 # Checks every repository gets
 
-Whatever the stack, two checks run in `just check` next to the stack's own
+Whatever the stack, three checks run in `just check` next to the stack's own
 lint. Each section says what the check is for first; the configuration under
 it is an example of one repository's answer, not a value to copy. Keep the
 purpose, then fit the settings to the repository in front of you.
@@ -74,6 +74,52 @@ extend-exclude = ["*.lock", "pnpm-lock.yaml", "*.svg"]
 # Slite is a product name
 Slite = "Slite"
 ```
+
+## Comments on added lines: lint-comments
+
+**Purpose.** A comment is the cheapest way to get past a problem: instead of
+removing a trap, an agent writes a note that explains it, and the note reads
+like care. The house rule (the global instructions' anchors) keeps an
+`AIDEV-NOTE` for a constraint from outside the code or a rejected
+alternative, keeps `HACK(` for debt an issue tracks, and has no place for a
+bare `TODO`. Old comments are not the problem; the line a change adds is,
+because that is where the question "would a type, a lint rule or another API
+remove this?" can still be answered by changing the change.
+
+**How.** One recipe, called once per stack with that stack's line-comment
+marker and file globs, from the stack's lint recipe (each stack reference
+shows the call; `noglob` keeps the shell from expanding the globs before git
+sees them). It reads only the lines the change adds since `LINT_BASE`, the
+same base the ratchets use, so it needs no ratchet of its own:
+
+```just
+# Warn about anchors and TODOs the change adds. Warn-only: see below
+lint-comments marker +globs:
+    #!/usr/bin/env bash
+    set -euo pipefail -o noglob
+    base="${LINT_BASE:-$(git merge-base HEAD origin/{{ default_branch }})}"
+    git diff -U0 "$base" -- {{ globs }} | awk -v m='{{ marker }}' '
+        /^\+\+\+ / { file = substr($0, 7); next }
+        !/^\+/ { next }
+        { line = substr($0, 2); i = index(line, m); why = "" }
+        i == 0 { next }
+        { c = substr(line, i + length(m)) }
+        c ~ /AIDEV-NOTE/ { why = "new AIDEV-NOTE: would a type, a lint rule or another API remove what it explains? Keep it only for a constraint from outside the code or a rejected alternative" }
+        c ~ /HACK\(/ && c !~ /HACK\(https?:\/\// { why = "HACK( without an issue URL: HACK(<issue URL>): <what to remove once it is fixed>" }
+        c ~ /(^|[^A-Za-z])(TODO|FIXME)([^A-Za-z]|$)/ { why = "a TODO/FIXME is not an anchor: file an issue, or write HACK(<issue URL>)" }
+        why != "" { printf "warn: %s: %s\n  %s\n", file, line, why > "/dev/stderr" }'
+```
+
+`default_branch` is the Go reference's variable, set once at the top of the
+justfile. The marker is matched as plain text, so a `//` inside a string
+literal can start a false "comment"; that is one reason the recipe only
+warns.
+
+**Exceptions.** None yet, because it does not fail: a new check goes in as a
+warning and is made to fail only once it has run on real changes without a
+false alarm. When that holds, end the recipe so it exits non-zero when it
+printed anything, and from then on judge step 3 on it like any other rule.
+Until then a repository without it is not `partial` on step 3 for that alone.
 
 ## Dependency updates: Renovate
 

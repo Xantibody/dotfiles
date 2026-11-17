@@ -347,7 +347,7 @@ include the Go ones.
 default_branch := "main"
 
 # Lint Go: golangci-lint plus the HACK rule for suppressions and test markers
-lint-go: lint-go-suppressions lint-go-tests
+lint-go: lint-go-suppressions lint-go-tests (lint-comments "//" "*.go")
     golangci-lint config verify
     golangci-lint run ./...
 
@@ -405,7 +405,7 @@ added one):
 
 ```just
 # Lint only what changed since LINT_BASE (CI) or the merge-base (local)
-lint-go: lint-go-tests
+lint-go: lint-go-tests (lint-comments "//" "*.go")
     #!/usr/bin/env bash
     set -euo pipefail
     base="${LINT_BASE:-$(git merge-base HEAD origin/{{ default_branch }})}"

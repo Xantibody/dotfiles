@@ -312,7 +312,7 @@ Split the checks by what can make them fail:
 ```just
 # Type-check and lint every target in every crate. Clippy runs `check`,
 # so no separate `cargo check` is needed.
-lint-rust: lint-rust-inner-allow lint-rust-ignore
+lint-rust: lint-rust-inner-allow lint-rust-ignore (lint-comments "//" "*.rs")
     cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
 
 # Unit, integration and doc tests. No --all-targets here: with it,
