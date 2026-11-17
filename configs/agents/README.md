@@ -4,7 +4,7 @@
 
 `AGENTS.md` は Claude だけの指示書ではない。`modules/ai/claude.nix` が `~/.claude/CLAUDE.md` に、`modules/ai/agents.nix` が `~/.codex/AGENTS.md` に、同じファイルを配る。毎セッション両 agent が読むので、AGENTS.md に置くのは、モデルが自分では再現しない家の規則のうち毎回効いてほしいもの (コードの切り方、動かし方、アンカーの書き方) と「いつ何を読むか」だけにする。1 つの作業の間だけ要る手順は skill 側に置く。
 
-skill も同じ 2 経路で配る。各 feature が `my.skills` に載せた dir を、claude.nix が `~/.claude/skills/` に、agents.nix が codex 用の `~/.agents/skills/` に並べる (Claude Code は `~/.agents/` を読まない)。`~/.claude/skills/ha`、`~/.claude/skills/agent-browser`、`~/.claude/skills/osekkai` がここに無いのはそのためで、ha は flake input `kawarimidoll/ha` 同梱の skill を `modules/git/ha.nix` が、agent-browser は llm-agents.nix の `agent-browser` 同梱の skill を、osekkai は flake input `Xantibody/osekkai` 同梱の skill を `modules/ai/claude.nix` が `my.skills` に載せている。`mcp-defaults` と `tsgo-lsp` は SKILL.md を持たない Claude plugin なので `~/.claude/skills/` にだけ置く。codex は frontmatter の `name` と `description` しか見ないので、`when_to_use` のトリガー語や `disable-model-invocation`、`hooks` は codex では効かず、隠す skill には `agents/openai.yaml` で同じことを書く。
+skill も同じ 2 経路で配る。各 feature が `my.skills` に載せた dir を、claude.nix が `~/.claude/skills/` に、agents.nix が codex 用の `~/.agents/skills/` に並べる (Claude Code は `~/.agents/` を読まない)。`~/.claude/skills/ha`、`~/.claude/skills/agent-browser`、`~/.claude/skills/osekkai` がここに無いのはそのためで、ha は flake input `kawarimidoll/ha` 同梱の skill を `modules/git/ha.nix` が、agent-browser は llm-agents.nix の `agent-browser` 同梱の skill を、osekkai は flake input `Xantibody/osekkai` 同梱の skill を `modules/ai/claude.nix` が `my.skills` に載せている。字幕を訳す `subtitles` は `configs/media/skills/subtitles` にあり、`modules/media.nix` が `subtitles` コマンドと一緒に載せるので、media を入れた Mac にだけ届く。`mcp-defaults` と `tsgo-lsp` は SKILL.md を持たない Claude plugin なので `~/.claude/skills/` にだけ置く。codex は frontmatter の `name` と `description` しか見ないので、`when_to_use` のトリガー語や `disable-model-invocation`、`hooks` は codex では効かず、隠す skill には `agents/openai.yaml` で同じことを書く。
 
 `rtk` / `ck` / `codegraph` も skill ではなく `modules/ai/agents.nix` が入れるツールで、Claude には `settings.json` の hook と `mcp-defaults` が、codex には `/etc/codex/config.toml` と `~/.codex/hooks.json` が配線する。
 
@@ -107,3 +107,7 @@ flowchart LR
   sa -->|"草稿と eval"| sc
   sa -->|"skill を変えた commit で"| readme
 ```
+
+どこからも読み込まれず、ユーザーの依頼で直接呼ばれる skill:
+
+- `subtitles` — 動画の字幕をローカルで訳す (media を入れたホストだけ)
