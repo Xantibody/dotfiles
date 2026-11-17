@@ -17,6 +17,8 @@ let
         "-w"
         "-X main.buildVersion=${version}"
       ];
+      # rat verify-gate's tests commit in temporary repositories
+      nativeCheckInputs = [ pkgs.git ];
       # AIDEV-NOTE: go names the binary after the module's last path element (tools); renamed here rather than moving main.go to tools/cmd/rat, so the root package stays the entry point
       postInstall = ''
         mv $out/bin/tools $out/bin/rat
@@ -29,9 +31,23 @@ let
 in
 {
   flake.modules.homeManager.rat =
-    { pkgs, ... }:
     {
-      home.packages = [ (mkRat pkgs) ];
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      options.my.rat.package = lib.mkOption {
+        type = lib.types.package;
+        readOnly = true;
+        description = "The rat build on PATH, for a feature that calls it by store path (verify-gate's git hook)";
+      };
+
+      config = {
+        my.rat.package = mkRat pkgs;
+        home.packages = [ config.my.rat.package ];
+      };
     };
 
   # go test is run by buildGoModule's checkPhase

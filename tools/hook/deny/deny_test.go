@@ -40,8 +40,8 @@ func TestCheckDenies(t *testing.T) {
 		"env -S'git push'",
 		"env --split-string='git push'",
 		"env -S git push",
-		"verify-gate run -- git push",
-		"verify-gate run rm -rf dir",
+		"rat verify-gate run -- git push",
+		"rat verify-gate run rm -rf dir",
 		"rm -rf dir",
 		"rm -fr dir",
 		"rm -Rf dir",
@@ -89,8 +89,8 @@ func TestCheckAllows(t *testing.T) {
 		"bash --norc -c 'git status'",
 		"env -S 'git status'",
 		"env -u PATH git status",
-		"verify-gate run -- nix fmt",
-		"verify-gate commit-msg .git/COMMIT_EDITMSG",
+		"rat verify-gate run -- nix fmt",
+		"rat verify-gate commit-msg .git/COMMIT_EDITMSG",
 	} {
 		if reason := checkCommand(cmd); reason != "" {
 			t.Errorf("checkCommand(%q) denied with %q, want allowed", cmd, reason)
