@@ -1,8 +1,9 @@
-package main
+package validate
 
 import (
 	"archive/tar"
 	"bytes"
+	"errors"
 	"io"
 	"os"
 	"os/exec"
@@ -11,8 +12,27 @@ import (
 	"testing"
 )
 
-// offlineSpec is the spec the validator uses with -offline.
+// offlineSpec is the spec the validator uses with --offline.
 func offlineSpec() spec { return loadSpec(true, io.Discard) }
+
+// run executes `rat skill validate` with args, writing the report to out and
+// usage errors to errOut, and returns the code rat exits with.
+func run(t *testing.T, args []string, out, errOut io.Writer) int {
+	t.Helper()
+	cmd := Command()
+	cmd.SetArgs(args)
+	cmd.SetOut(out)
+	cmd.SetErr(errOut)
+	err := cmd.Execute()
+	if err == nil {
+		return 0
+	}
+	var coded interface{ ExitCode() int }
+	if !errors.As(err, &coded) {
+		t.Fatalf("Execute returned %v, which carries no exit code", err)
+	}
+	return coded.ExitCode()
+}
 
 // writeSkill makes dir/<name>/SKILL.md with the given extra frontmatter lines
 // and body, and returns the skill directory.
@@ -289,12 +309,40 @@ func TestRunStrictFailsOnWarnings(t *testing.T) {
 	root := makeRepo(t)
 	dir := writeSkill(t, filepath.Join(root, "configs/agents/skills"), "s", "", "See `modules/gone.nix`.\n")
 	var out strings.Builder
-	if code := run([]string{"-offline", dir}, &out); code != 0 {
+	if code := run(t, []string{"--offline", dir}, &out, io.Discard); code != 0 {
 		t.Fatalf("a warning alone exits %d, want 0:\n%s", code, out.String())
 	}
 	out.Reset()
-	if code := run([]string{"-offline", "-strict", dir}, &out); code != 1 {
-		t.Fatalf("-strict exits %d on a warning, want 1:\n%s", code, out.String())
+	if code := run(t, []string{"--offline", "--strict", dir}, &out, io.Discard); code != 1 {
+		t.Fatalf("--strict exits %d on a warning, want 1:\n%s", code, out.String())
+	}
+}
+
+func TestRunUsageErrors(t *testing.T) {
+	t.Setenv("HOME", t.TempDir())
+	dir := writeSkill(t, t.TempDir(), "s", "", "body\n")
+	for _, tc := range []struct {
+		name string
+		args []string
+		want string
+	}{
+		{"no skill dir", []string{"--offline"}, "usage: rat skill validate"},
+		{"unknown flag", []string{"--colour", dir}, "unknown flag: --colour"},
+		{"single-dash long flag", []string{"-offline", dir}, "usage: rat skill validate"},
+		{"--known without SKILL.md", []string{"--offline", "--known", t.TempDir(), dir}, "--known "},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var out, errOut strings.Builder
+			if code := run(t, tc.args, &out, &errOut); code != 2 {
+				t.Fatalf("exit %d, want 2:\nstdout:\n%s\nstderr:\n%s", code, out.String(), errOut.String())
+			}
+			if out.Len() > 0 {
+				t.Errorf("a usage error writes nothing on stdout, got %q", out.String())
+			}
+			if !strings.Contains(errOut.String(), tc.want) {
+				t.Errorf("stderr %q does not contain %q", errOut.String(), tc.want)
+			}
+		})
 	}
 }
 
@@ -348,7 +396,7 @@ func archiveSkills(t *testing.T, rev string) string {
 }
 
 // problemsAt validates every skill in dir, with the skills that flake inputs
-// ship (checks.skills passes them with -known) stubbed in.
+// ship (checks.skills passes them with --known) stubbed in.
 func problemsAt(t *testing.T, dir string) []string {
 	t.Helper()
 	stubs := t.TempDir()
@@ -407,11 +455,23 @@ func TestRunReadmeAndKnown(t *testing.T) {
 	outside := writeSkill(t, t.TempDir(), "outside", "", "body\n")
 	readme := writeReadme(t, "```mermaid\nflowchart TD\n  a[\"alpha\"]\n  o[\"outside\"]\n```\n")
 	var out strings.Builder
-	if code := run([]string{"-offline", "-readme", readme, "-known", outside, alpha}, &out); code != 0 {
+	if code := run(t, []string{"--offline", "--readme", readme, "--known", outside, alpha}, &out, io.Discard); code != 0 {
 		t.Fatalf("exit %d:\n%s", code, out.String())
 	}
 	out.Reset()
-	if code := run([]string{"-offline", "-readme", readme, alpha}, &out); code != 1 {
-		t.Fatalf("without -known the reference and the README node are unknown; exit %d:\n%s", code, out.String())
+	if code := run(t, []string{"--offline", "--readme", readme, alpha}, &out, io.Discard); code != 1 {
+		t.Fatalf("without --known the reference and the README node are unknown; exit %d:\n%s", code, out.String())
+	}
+}
+
+func TestRunKnownRepeats(t *testing.T) {
+	t.Setenv("HOME", t.TempDir())
+	elsewhere := t.TempDir()
+	one := writeSkill(t, elsewhere, "one", "", "body\n")
+	two := writeSkill(t, elsewhere, "two", "", "body\n")
+	caller := writeSkill(t, t.TempDir(), "caller", "", "Load the `one` skill, then the `two` skill.\n")
+	var out strings.Builder
+	if code := run(t, []string{"--offline", "--known", one, "--known", two, caller}, &out, io.Discard); code != 0 {
+		t.Fatalf("each --known adds a skill; exit %d:\n%s", code, out.String())
 	}
 }

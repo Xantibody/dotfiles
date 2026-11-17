@@ -14,6 +14,8 @@ import (
 	"github.com/Xantibody/dotfiles/tools/hook/deny"
 	"github.com/Xantibody/dotfiles/tools/hook/ghguard"
 	"github.com/Xantibody/dotfiles/tools/hook/lintbody"
+	"github.com/Xantibody/dotfiles/tools/skill"
+	"github.com/Xantibody/dotfiles/tools/skill/validate"
 	"github.com/Xantibody/dotfiles/tools/verifygate"
 	"github.com/Xantibody/dotfiles/tools/version"
 )
@@ -32,6 +34,7 @@ func main() {
 		version.Command(buildVersion),
 		hook.Command(deny.Command(), ghguard.Command(), anchors.Command(), lintbody.Command()),
 		verifygate.Command(),
+		skill.Command(validate.Command()),
 	)
 	if err := root.Execute(); err != nil {
 		// An error that carries its own exit code (a hook blocking with 2, the
