@@ -3,6 +3,7 @@ module github.com/Xantibody/dotfiles/tools
 go 1.24
 
 require (
+	github.com/google/go-cmp v0.7.0
 	github.com/spf13/cobra v1.10.2
 	mvdan.cc/sh/v3 v3.12.0
 )

@@ -11,7 +11,7 @@ let
       pname = "rat";
       version = "0.1.0";
       src = ../tools;
-      vendorHash = "sha256-qgqprKFpIr8NUooQWZfDoPVx+PrZfDfxICyNQXA81ew=";
+      vendorHash = "sha256-d67yjSG/bSX+y8VDgEqdH++JerjFWHcsKqTWOcF+cnI=";
       ldflags = [
         "-s"
         "-w"
