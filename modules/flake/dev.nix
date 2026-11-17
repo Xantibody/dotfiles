@@ -14,7 +14,8 @@
           [
             vim-startuptime
             just
-            # .claude/settings.json の nix fmt hook を直列にする。macOS には flock が無い
+            # .claude/settings.json の nix fmt hook を直列にする。macOS には flock が無い。
+            # hook は devShell の外で起動した Claude でも動くよう、flock が無ければ lock 無しで nix fmt を回す
             flock
           ]
           # NixOSの指紋キャッシュを消すための依存関係

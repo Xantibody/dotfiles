@@ -48,6 +48,8 @@ Do not evaluate or build a whole host locally to verify a change: no
 ten minutes from this machine. Verify locally with `nix fmt`, a search for
 references the change should have removed, and the tests of the thing that
 changed; say in the report that host evaluation is left to CI.
+`.claude/settings.json` denies those commands and `nix build .#checks…eval-…`,
+so the rule holds without anyone remembering it.
 
 `just snapshot` and `just eval-profile` are for a module-layout refactor and
 run only when the user asks for them. When nix does run, it runs one at a
