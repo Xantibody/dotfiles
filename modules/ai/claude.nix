@@ -20,12 +20,17 @@ let
     home-manager.sharedModules = [
       hm.claude
       hm.textlint
+      hm.gh-guard
     ];
   };
 in
 {
-  # PR / issue 本文の lint。同じ feature だがファイルは分ける (perSystem の check まで持つ)
-  imports = [ ./_textlint.nix ];
+  # PR / issue 本文の lint と、保護を書き換える gh 操作の確認。同じ feature だがファイルは分ける
+  # (どちらも perSystem の check まで持つ)
+  imports = [
+    ./_textlint.nix
+    ./_gh-guard.nix
+  ];
 
   flake.modules.homeManager.claude =
     {
