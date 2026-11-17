@@ -1,4 +1,4 @@
-name: Update vim plugins
+name: Update nvfetcher sources
 
 on:
   schedule:
@@ -14,8 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: DeterminateSystems/nix-installer-action@main
+      # src.github entries ask the GitHub API for the latest release; unauthenticated,
+      # a shared runner IP can already be over its 60 requests an hour.
       - name: Run nvfetcher
         run: nix run nixpkgs#nvfetcher
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Format generated sources
         run: nix fmt _sources/
 
@@ -34,10 +38,10 @@ jobs:
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ steps.app-token.outputs.token }}
-          commit-message: "chore(deps): update vim-plugins"
-          title: "chore(deps): update vim-plugins"
-          body: "Automated vim plugin update via nvfetcher."
-          branch: nvfetcher/vim-plugins
+          commit-message: "chore(deps): update nvfetcher sources"
+          title: "chore(deps): update nvfetcher sources"
+          body: "Automated update of the sources in nvfetcher.toml."
+          branch: nvfetcher/sources
           labels: automerge
 
       - name: Enable auto-merge
