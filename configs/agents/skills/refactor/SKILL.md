@@ -52,6 +52,8 @@ Present findings to the user as a prioritized list with reasoning.
 
 ### 3. Choose Design Strategy (with the user)
 
+Start from the global instructions' Code Structure and Running Behaviour. Their principles — three kinds of place, imports pointing one way, one entry per use case, no default for anything an environment decides — are the target and are not reopened. How this repository spells them (what each place is called, how far to split, the example's names or others) is a choice like the ones below: propose a layout in the language's idiom with its tradeoffs and decide it with the user.
+
 Different parts of the codebase may need different approaches. Present options and tradeoffs — don't prescribe a single methodology.
 
 **Structural patterns to consider:**
@@ -149,5 +151,5 @@ Revise based on feedback until the user is satisfied.
 ## What This Skill Does NOT Do
 
 - **Execute changes**: This skill produces plans. Execute them in a later session with `/goal`, committing each step with the `commit` skill after `check` passes, then moving that step's plan file to `.ai/plans/done/` so `.ai/plans/` stays the open backlog.
-- **Make autonomous design decisions**: Design choices are always presented to the user with tradeoffs.
+- **Make autonomous design decisions**: Beyond the principles in the global instructions, design choices — the layout and its names included — are always presented to the user with tradeoffs.
 - **Force a single methodology**: DDD, Transaction Script, FCIS — the right answer depends on the context.

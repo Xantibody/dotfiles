@@ -44,49 +44,129 @@ for a feature or a fix; the `check` skill runs a project's verification.
 
 # Code Structure
 
-Split code by role, in the Ports & Adapters sense, so that a new feature
-is a new file rather than an edit across the old ones.
+Split code by role, so that a new feature is a new file rather than an
+edit across the old ones, and a path alone says what a file holds. The
+principles below hold in every repository; the directory and file names
+are the repository's own, and the example after the list is one way to
+spell them, not a template to copy.
 
-- An adapter (`lib/`) talks to one outside service, is named after it
-  (`lib/s3`, not `lib/state`), and holds no application state. A use case
-  (a job, a handler) only says what it calls and in what order.
-- When the service is a means rather than the point (where state is kept,
-  unlike where a message is posted), the use cases own an interface named
-  by role (`state.ts`), and the adapter fulfils it.
+A repository's first architecture — where the use cases, the code that
+talks to the outside and the rest go, and what each place is called — is
+decided with the user before the first feature is written. Propose a
+layout that follows these principles in the language's own idiom, with
+the tradeoffs that are real for this repository, wait for the answer, and
+record it in `docs/architecture.md`.
+
+- Code falls into three kinds of place, with no loose file beside them
+  and no catch-all (`lib/`, `common/`) that holds a mix:
+  - use cases, each named after how it is run (a job, a handler, a
+    command), which only say what they call and in what order;
+  - code that talks to one outside service, named after that service,
+    never after the role it plays for us (`slack`, not `notifier`);
+  - processing that knows no outside service.
+- Imports point one way: processing uses only the standard library and
+  other processing, service code may use processing, a use case may use
+  both. Nothing imports a use case.
+- No domain layer until two use cases share real business rules; until
+  then the use case is where the business lives.
+- Each use case has its own entry: a plain top-to-bottom script that
+  builds only what it uses, runs the steps and prints the result. No
+  registry of jobs, no shared entry that picks one by name, no runner or
+  wrapper every job passes through — a job that posts nowhere needs no
+  Slack setting. Shared plumbing is extracted only after the same lines
+  stand in two entries; a few repeated lines are not a reason for a
+  framework.
+- A service's own settings (token, base URL) are read beside the code
+  that talks to it. A use case's settings (which channel, which list) are
+  read in its entry.
+- Service code only communicates. Processing that is not the service's
+  own (encryption, throttling, message text) is a separate function,
+  applied where the thing that needs it is made: the state store encrypts
+  what it keeps, the S3 client never does. That also leaves no way to
+  forget it.
+- Do not add a file or a layer whose only content is joining two others.
+  Write that line in the caller, or inside the function that needs it.
+- A helper does not take a callback for what service code already does.
+  To report a failure to Slack the entry calls the Slack code itself; the
+  helper keeps only the decision (throttle) and the text.
 - Decisions belong to the use case: whether something was already done,
-  and any special case, as a plain `if` there. How the state is stored
-  (bucket, encryption, key format) stays in an adapter. No generic hook
-  before the first real special case.
+  and any special case, as a plain `if` there. No generic hook before the
+  first real special case.
 - Each side effect gets its own done-marker, written right after it
   succeeds, so one failing step is retried alone and never repeats the
   others.
-- `src/` holds only code that runs in production, and production code
-  never imports a mock. A dev tool such as a mock server is its own package
-  or directory, helpers used only by tests go in `test/`, and test files
-  sit beside what they test.
+- Production code holds only what runs in production: no mock, no adapter
+  that exists for local runs (a JSON-file store beside the S3 one) and no
+  generated file. A dev tool such as a mock server is its own package or
+  directory, helpers used only by tests sit apart from production code,
+  test files sit beside what they test, and a generated file sits beside
+  its source.
+- A file's name says what it is without opening it. One that needs
+  explaining (an OpenAPI dump among the services) is in the wrong place or
+  under the wrong name.
+- A general problem (HTTP calls with a time limit, retries, argument
+  parsing) is first looked up, not written: a maintained library whose
+  defaults are known is a fine dependency, and the one that makes the
+  calling code read cleanly wins. A helper of our own is for what no
+  library covers.
+- Nothing is built for a case that does not exist yet: no compatibility
+  shim for something not yet in production, no second implementation "for
+  later". The wiring in an entry is not unit-tested; it is written so that
+  a missing setting stops the run with that setting's name.
 
-Example: scheduled jobs that read freee and post to Slack and ClickUp.
+Example, one way to spell the above in TypeScript: scheduled jobs that read
+freee and post to Slack and ClickUp. Here the three places are `jobs/`,
+`services/` and `utils/`; another repository or language names them in its
+own idiom (Go, for instance, would give each service its own package).
 
 ```
-freee-notify/
+it-tools/
   src/
-    main.ts             # picks one job by name; error reporting for all jobs
-    state.ts            # has / mark, the store the jobs ask for
-    jobs/hr-status/     # one directory per job: the steps, its messages, its config
-    lib/freee/          # auth, API, generated types
-    lib/slack/
-    lib/clickup/
-    lib/s3/             # S3 and encryption, fulfilling state.ts
-    lib/file/           # a JSON file fulfilling state.ts, for local runs
-  test/                 # fakes and fixtures used only by tests, an in-memory store
+    jobs/hr-status/
+      main.ts           # the entry: builds what this job uses, runs the steps
+      steps.ts          # the steps and their messages
+    services/           # talks to the outside, one file per service
+      freee.ts          # auth and API
+      slack.ts
+      clickup.ts
+      s3.ts             # get / put, nothing else
+    utils/              # knows no outside service
+      state.ts          # has / mark; encrypts what it stores
+      encrypt.ts
+      env.ts            # requireEnv: a missing setting stops the run
+      log.ts
+      error.ts          # when to report a failure, and its text
+  spec/                 # the vendored API spec and the types generated from it
+  test/                 # fakes and fixtures used only by tests
 dev/mock/               # mock server for local runs and tests, its own image
 ```
 
 ```ts
-export const hrStatus: Job = async ({ freee, slack, clickup, state }) => {
+// src/jobs/hr-status/main.ts
+const env = process.env;
+const state = createState(s3FromEnv(env), requireEnv(env, "STATE_ENCRYPTION_KEY"));
+const slack = slackFromEnv(env);
+const channel = requireEnv(env, "HR_STATUS_SLACK_CHANNEL_ID");
+const errorChannel = requireEnv(env, "SLACK_ERROR_CHANNEL_ID");
+
+try {
+  const freee = freeeFromEnv(env, state);
+  const clickup = clickupFromEnv(env, state);
+  console.log(await hrStatus({ freee, slack, clickup, state, channel }));
+} catch (error) {
+  if (await shouldReport(state, "hr-status")) {
+    await slack.post(errorChannel, errorText("hr-status", error));
+  }
+  throw error;
+}
+```
+
+```ts
+// src/jobs/hr-status/steps.ts
+export async function hrStatus({ freee, slack, clickup, state, channel }: Deps) {
   for await (const req of freee.approvedRequests({ forms: HR_FORMS })) {
     if (!(await state.has(`slack:${req.id}`))) {
-      await slack.post(HR_CHANNEL, hrMessage(req));
+      await slack.post(channel, hrMessage(req));
       await state.mark(`slack:${req.id}`);
     }
     if (!(await state.has(`clickup:${req.id}`))) {
@@ -94,15 +174,16 @@ export const hrStatus: Job = async ({ freee, slack, clickup, state }) => {
       await state.mark(`clickup:${req.id}`);
     }
   }
-};
+}
 ```
 
 Close relatives, for vocabulary rather than to adopt wholesale:
 
-- Ports & Adapters (Hexagonal) and Clean Architecture: adapters at the
-  edge, use cases in the middle, dependencies pointing inward.
-- Rails / Laravel thin jobs: `app/jobs` lists the steps, `lib/` or
-  service objects do the work.
+- Ports & Adapters (Hexagonal) and Clean Architecture: service code is the
+  adapters at the edge, use cases are in the middle, dependencies point
+  inward.
+- Rails / Laravel thin jobs: `app/jobs` lists the steps, service objects
+  do the work.
 - Temporal workflows and activities: the workflow is the steps only, an
   activity is each call to the outside.
 - Idempotency keys and the Inbox pattern: the per-step done-marker that
@@ -121,19 +202,25 @@ container — and should be easy for that runner to trust and to restart.
   they happen; where they end up is the runner's choice, never a log file
   the program manages.
 - Fail early and loudly, with a message that says what to fix. No silent
-  fallback to a default nobody chose.
+  fallback to a default nobody chose. A failure is told by the exit code;
+  a notification on top of it is something the entry sends, not a wrapper
+  around every job.
 - The default does the safe thing; deleting, overwriting or sending
   outward takes an explicit flag. What a command changes is visible from
   its name and arguments, never a side effect found later.
 - What differs between environments (endpoints, credentials, IDs) comes
   from outside — flags, the environment, a secret store — never a constant
-  in code. The code is the same everywhere: a local run swaps adapters
-  (`lib/file` for `lib/s3`), not code paths.
+  in code, and never a default in code either: a base URL that is not set
+  stops the run instead of reaching the real service.
+- Every connection to the outside can be pointed at a mock or a local
+  stand-in by a setting, so the whole program starts on a laptop with
+  nothing real behind it. The code is the same everywhere: a local run
+  changes settings, never adapters or code paths.
 - A process keeps nothing it needs later in memory or on local disk; that
   goes to the store. It can then be killed and rerun at any point, which
   is what the done-markers rely on.
-- A one-off or admin task is the same code with another entry (`main.ts`
-  picking a job by name), not a separate script that drifts.
+- A one-off or admin task is another entry built from the same service
+  code and processing, not a separate script that drifts.
 
 Close relatives: the Unix philosophy and clig.dev for commands, the
 Twelve-Factor App for services.

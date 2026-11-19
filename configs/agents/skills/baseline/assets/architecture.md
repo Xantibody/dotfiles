@@ -30,17 +30,20 @@ examples; replace them. Keep "<" and ">" out of labels, which mermaid reads as H
 ```mermaid
 flowchart LR
   subgraph core [Use cases]
-    usecase["src/jobs"]
-    port["src/state.ts (port)"]
+    entry["src/jobs/hr-status/main.ts"]
+    steps["src/jobs/hr-status/steps.ts"]
   end
-  subgraph edge [Adapters]
-    adapterA["src/lib/s3"]
-    adapterB["src/lib/slack"]
+  subgraph edge [Outside]
+    serviceA["src/services/s3.ts"]
+    serviceB["src/services/slack.ts"]
   end
-  entry["src/main.ts"] --> usecase
-  usecase --> port
-  usecase --> adapterB
-  adapterA -. implements .-> port
+  utils["src/utils"]
+  entry --> steps
+  entry --> serviceA
+  entry --> serviceB
+  entry --> utils
+  serviceA --> utils
+  serviceB --> utils
 ```
 
 <!-- One line per module. Name code paths in backticks instead of linking them (links to
@@ -55,10 +58,10 @@ code go stale; symbol search does not). Link a docs/modules/ page when one exist
 Each row names the check that enforces it and what its error tells you to do instead.
 A rule nothing enforces says "prose only"; that is a candidate for a lint or a test. -->
 
-| Rule                               | Enforced by                   | Instead, do                   | Decided in                     |
-| ---------------------------------- | ----------------------------- | ----------------------------- | ------------------------------ |
-| <`core/` never imports `lib/`>     | <`just check`: tool and rule> | <depend on the port in core/> | [<NNNN>](adr/<NNNN>-<slug>.md) |
-| <Lint suppressions carry a reason> | <`just check`: tool and rule> | <`HACK(<issue URL>): <why>`>  | [<NNNN>](adr/<NNNN>-<slug>.md) |
+| Rule                                 | Enforced by                   | Instead, do                  | Decided in                     |
+| ------------------------------------ | ----------------------------- | ---------------------------- | ------------------------------ |
+| <`utils/` never imports `services/`> | <`just check`: tool and rule> | <take it as an argument>     | [<NNNN>](adr/<NNNN>-<slug>.md) |
+| <Lint suppressions carry a reason>   | <`just check`: tool and rule> | <`HACK(<issue URL>): <why>`> | [<NNNN>](adr/<NNNN>-<slug>.md) |
 
 ## Cross-cutting concerns
 

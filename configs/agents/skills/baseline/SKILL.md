@@ -205,7 +205,10 @@ the devShell or the recipe, never in a CI-only step.
 **5. Architecture map.** `assets/architecture.md` as `docs/architecture.md`,
 filled from the code: the codemap from the real top-level components and their
 dependencies, and one Rules row per boundary step 3 enforces. An existing map
-keeps its path and gains only the missing sections.
+keeps its path and gains only the missing sections. A repository with too
+little code to draw the codemap from gets its first layout from the user:
+propose one that follows the global instructions' Code Structure in the
+stack's idiom, decide it together, and write the decision into the map.
 
 **6. Decision records.** `assets/adr-template.md` as `docs/adr/template.md`.
 Write no records in advance: an ADR exists because a decision was made. The

@@ -251,7 +251,7 @@ linters:
         #   files: ["**/internal/jobs/**"]
         #   deny:
         #     - pkg: "github.com/aws/aws-sdk-go-v2"
-        #       desc: jobs call the port in internal/state.go; S3 code lives in internal/lib/s3
+        #       desc: jobs take the state from internal/utils; S3 code lives in internal/services/s3.go
 
   exclusions:
     generated: strict

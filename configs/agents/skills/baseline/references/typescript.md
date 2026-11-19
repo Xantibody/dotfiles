@@ -253,9 +253,25 @@ are opted in by name.
     "capitalized-comments": "off",
   },
   "overrides": [
-    // Boundary template (Ports & Adapters): edit to the repo's layout or delete.
+    // Boundary template, named after the global Code Structure's example: rename to the repo's layout or delete.
     {
-      "files": ["src/lib/**"],
+      "files": ["src/utils/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["**/services/**", "**/jobs/**"],
+                "message": "utils/ knows no outside service and no use case. Take what it needs as an argument.",
+              },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      "files": ["src/services/**"],
       "rules": {
         "no-restricted-imports": [
           "error",
@@ -263,7 +279,7 @@ are opted in by name.
             "patterns": [
               {
                 "group": ["**/jobs/**"],
-                "message": "lib/ is an adapter and must not import use cases. Move the shared type to the port (src/state.ts).",
+                "message": "services/ talks to the outside and must not import a use case. Read the use case's setting in its entry (jobs/<name>/main.ts).",
               },
             ],
           },
