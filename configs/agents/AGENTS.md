@@ -57,18 +57,45 @@ layout that follows these principles in the language's own idiom, with
 the tradeoffs that are real for this repository, wait for the answer, and
 record it in `docs/architecture.md`.
 
-- Code falls into three kinds of place, with no loose file beside them
-  and no catch-all (`lib/`, `common/`) that holds a mix:
+- A repository that ships several programs splits first by what runs
+  (`frontend/`, `backend/`, `cli/`, `worker/`), each laid out with the
+  places below; rules they share go in a library beside them, which is
+  their domain.
+- Code falls into three kinds of place, four once a domain exists
+  (below), with no loose file beside them and no catch-all (`lib/`,
+  `common/`) that holds a mix:
   - use cases, each named after how it is run (a job, a handler, a
     command), which only say what they call and in what order;
-  - code that talks to one outside service, named after that service,
-    never after the role it plays for us (`slack`, not `notifier`);
-  - processing that knows no outside service.
+  - code that talks to one outside service — a remote API, but also the
+    local file system or the operating system — named after that
+    service, never after the role it plays for us (`slack`, not
+    `notifier`; `files`, not `store`);
+  - processing: code that knows no outside service and nothing of this
+    application, so it could go to another project unchanged. An
+    application rule with no I/O (a file format, an ID, an ordering)
+    lives in the use case, or in the domain once there is one.
 - Imports point one way: processing uses only the standard library and
-  other processing, service code may use processing, a use case may use
-  both. Nothing imports a use case.
+  other processing, service code may use processing, the domain may use
+  both, a use case may use all three. Only use cases import the domain;
+  nothing imports a use case.
 - No domain layer until two use cases share real business rules; until
-  then the use case is where the business lives.
+  then the use case is where the business lives. Once they do — an app, a
+  CLI and an MCP server over one core library — the domain holds this
+  application's rules and the operations that apply them. An operation is
+  a sequence of service calls and rules that two use cases would
+  otherwise repeat; one only a single use case needs stays in it. Code
+  that calls a service sits in a separate file from code that does not,
+  and an operation receives its services as parameters, so a test passes
+  a fake instead of mocking a module.
+- When two placements are otherwise equal, the one that is easier to
+  test wins.
+- Inside a UI program, places split by product noun (`note`, `search`):
+  `note/` holds the note's components, its state and its UI-only rules,
+  apart from each other and imported in that order (rules, state,
+  components); a rule another program needs stays in the domain. What no
+  noun owns is shared: the components that belong to none, the services,
+  the processing. A screen is the UI's entry and builds only what it
+  uses.
 - Each use case has its own entry: a plain top-to-bottom script that
   builds only what it uses, runs the steps and prints the result. No
   registry of jobs, no shared entry that picks one by name, no runner or
@@ -104,6 +131,17 @@ record it in `docs/architecture.md`.
 - A file's name says what it is without opening it. One that needs
   explaining (an OpenAPI dump among the services) is in the wrong place or
   under the wrong name.
+- Inside a place, names come from the product's own words — its docs,
+  its UI strings, its command and tool names — and siblings stay at one
+  level: the first level names product nouns (`note`, `search`, `sync`),
+  never an operation (`tag_count`), and the next an aspect of the noun
+  (`note/title`, `sync/diff`). The same thing keeps the same word wherever
+  it appears, across places and across the languages of one repository
+  (`note/title.rs` beside `note/title.ts`). A file of operations is named
+  after the product's action (`edit`, `commit`), not a service's verb
+  (`read`, `write`); implementation words (`manager`, `helper`,
+  `repository`, `engine`) name nothing. Service code keeps the service's
+  name.
 - A general problem (HTTP calls with a time limit, retries, argument
   parsing) is first looked up, not written: a maintained library whose
   defaults are known is a fine dependency, and the one that makes the
@@ -181,7 +219,8 @@ Close relatives, for vocabulary rather than to adopt wholesale:
 
 - Ports & Adapters (Hexagonal) and Clean Architecture: service code is the
   adapters at the edge, use cases are in the middle, dependencies point
-  inward.
+  inward. Here a domain operation takes the service itself as a parameter
+  instead of declaring a port for it.
 - Rails / Laravel thin jobs: `app/jobs` lists the steps, service objects
   do the work.
 - Temporal workflows and activities: the workflow is the steps only, an
@@ -190,6 +229,8 @@ Close relatives, for vocabulary rather than to adopt wholesale:
   makes an at-least-once run safe to repeat.
 - pnpm workspaces' `apps/` and `packages/`: a dev tool kept out of the
   production image by being a separate package.
+- Feature-Sliced Design and Bulletproof React's `features/`: a UI split
+  by thing first, each thing holding its own components and state.
 
 # Running Behaviour
 
@@ -217,8 +258,9 @@ container — and should be easy for that runner to trust and to restart.
   nothing real behind it. The code is the same everywhere: a local run
   changes settings, never adapters or code paths.
 - A process keeps nothing it needs later in memory or on local disk; that
-  goes to the store. It can then be killed and rerun at any point, which
-  is what the done-markers rely on.
+  goes to the store (for a local-first app, the file system service is
+  the store). It can then be killed and rerun at any point, which is what
+  the done-markers rely on.
 - A one-off or admin task is another entry built from the same service
   code and processing, not a separate script that drifts.
 

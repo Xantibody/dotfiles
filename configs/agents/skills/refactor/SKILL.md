@@ -52,13 +52,19 @@ Present findings to the user as a prioritized list with reasoning.
 
 ### 3. Choose Design Strategy (with the user)
 
-Start from the global instructions' Code Structure and Running Behaviour. Their principles — three kinds of place, imports pointing one way, one entry per use case, no default for anything an environment decides — are the target and are not reopened. How this repository spells them (what each place is called, how far to split, the example's names or others) is a choice like the ones below: propose a layout in the language's idiom with its tradeoffs and decide it with the user.
+Start from the global instructions' Code Structure and Running Behaviour. Their principles — three kinds of place (four once a domain exists), imports pointing one way, one entry per use case, no default for anything an environment decides — are the target and are not reopened. How this repository spells them (what each place is called, how far to split, the example's names or others) is a choice like the ones below: propose a layout in the language's idiom with its tradeoffs and decide it with the user.
+
+Decide the layout from the outside in, one level per exchange with the user: first the top level by what runs (each program, and the library they share), then the places inside each, then the things inside each place. A level the user has settled is not reopened by the next one.
+
+Then map every file in the areas chosen in step 2 before writing a plan: a table of current path → place → name, with where each name's word comes from (the docs, the UI strings, the command and tool names). Hand the table to separate agents (subagents where the harness has them) who see only the table, the code and the principles — one doubting the names (siblings at one level of abstraction, product words rather than implementation words, the same word for the same thing across the repository), one doubting the places (does processing know the application, does service code do more than talk, would any import point the wrong way) — and fold their findings in. Then present the reviewed table, flagging each name the readers disputed or where more than one product word fits, with the alternatives. Correcting names one at a time in conversation is the slow path.
+
+Judge a layout by what the code holds — which product noun each component belongs to, how many outside services there are, what each file imports — not by how files changed together in the history: co-change counts measure the current layout and so argue for it.
 
 Different parts of the codebase may need different approaches. Present options and tradeoffs — don't prescribe a single methodology.
 
 **Structural patterns to consider:**
 
-- **Three-layer (Presentation / Domain / Data)**: When responsibilities are mixed across layers. Apply Dependency Inversion to keep the domain independent.
+- **Three-layer (Presentation / Domain / Data)**: When responsibilities are mixed across layers. Keep the domain's rules free of I/O; its operations take services as parameters.
 - **DDD (Entities, Value Objects, Bounded Contexts)**: When complex business logic is scattered and needs a clear model. Worth the cost only for genuinely complex domains.
 - **Transaction Script**: When a flow is simple and sequential. Resist the urge to over-engineer — a plain function is fine.
 - **Functional Core, Imperative Shell**: When testability is the main goal. Push logic into pure functions, keep I/O at the edges.
@@ -100,7 +106,7 @@ Write plan files to `.ai/plans/` with numbered prefixes:
 .ai/plans/
 ├── 01-add-characterization-tests.md
 ├── 02-extract-domain-logic.md
-├── 03-introduce-repository-pattern.md
+├── 03-pass-services-to-operations.md
 └── 04-restructure-directory-layout.md
 ```
 
@@ -111,7 +117,7 @@ Each plan file should contain:
 
 ## Goal
 
-What this step achieves and why it comes at this point in the sequence.
+What this step achieves, why it comes at this point in the sequence, and what it makes easier to test.
 
 ## Prerequisites
 
@@ -119,7 +125,7 @@ Which previous steps must be complete. What tests must be passing.
 
 ## Tasks
 
-Concrete implementation tasks with enough detail to execute.
+Concrete implementation tasks with enough detail to execute, each one commit, marked structural, behavioral or test-only; a step holds no behavioral task beside a structural one.
 
 ## Verification
 
@@ -127,8 +133,11 @@ How to confirm this step succeeded without breaking anything.
 
 - Which tests to run
 - What behavior to manually verify
+- Which tests can now be written that could not before, or got simpler
 - For a step that deletes an old implementation: the differential test reports zero differences beyond the approved-differences file
 ```
+
+A decision the user let stand on your recommendation without confirming it is listed at the top of the plan that depends on it, so the executor asks before acting on it.
 
 **Plan design principles:**
 
