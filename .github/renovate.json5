@@ -8,4 +8,9 @@
   nix: {
     enabled: false,
   },
+  // go.sum に古い版の行を残さない。
+  postUpdateOptions: ["gomodTidy"],
+  // .github/workflows/rat-vendor-hash.yml が Go の PR に vendorHash を追いコミットする。
+  // その author を無視しないと、Renovate は branch を人が触ったものとみなして rebase をやめる。
+  gitIgnoredAuthors: ["41898282+github-actions[bot]@users.noreply.github.com"],
 }

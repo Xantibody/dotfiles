@@ -1,0 +1,53 @@
+# Renovate bumps tools/go.mod and go.sum but cannot recompute rat's vendorHash in
+# modules/rat.nix, so its Go PRs fail Check on a hash mismatch. This job runs
+# nix-update on those PRs and pushes the new hash to the same branch.
+#
+# AIDEV-NOTE: the hosted Renovate app runs no postUpgradeTasks, and a committed
+# vendor/ (which Renovate refreshes itself) was rejected to keep generated code
+# out of the repository.
+name: Update rat vendorHash
+
+on:
+  pull_request:
+    paths:
+      - tools/go.mod
+      - tools/go.sum
+
+permissions:
+  contents: read
+
+jobs:
+  vendor-hash:
+    if: github.event.pull_request.user.login == 'renovate[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      # A push made with GITHUB_TOKEN starts no workflow, so Check would never
+      # report on the new commit; the App token's push does start it.
+      - id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ steps.app-token.outputs.token }}
+
+      - uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Recompute vendorHash
+        run: nix run --inputs-from . nixpkgs#nix-update -- --flake --version=skip rat
+
+      # The author is the one listed in renovate.json5's gitIgnoredAuthors, so
+      # Renovate keeps rebasing the branch after this commit.
+      - name: Push the new hash
+        run: |
+          if git diff --quiet; then
+            echo "vendorHash is already current" >&2
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -am 'fix(rat): update vendorHash for the new Go modules'
+          git push
