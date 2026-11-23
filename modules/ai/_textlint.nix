@@ -36,6 +36,7 @@ let
       # 日本語の文は textlint、箇条と節の構造は osekkai が見る。fix できるのは textlint だけなので
       # 先に回し、直った後のファイルを osekkai にかける。どちらかが鳴れば exit 1。
       # osekkai lint はファイルと --format しか取らないので、textlint 向けの他のオプションは落とす。
+      # 本文はどれも osekkai skill を通して書くので、読み手のステートの宣言がない本文も止める (--require-state)。
       text = ''
         files=()
         osekkai_args=()
@@ -58,7 +59,7 @@ let
           --rulesdir ${../../configs/agents/textlint/rules} \
           "''${args[@]}" || status=1
         if ((''${#files[@]})); then
-          osekkai lint "''${osekkai_args[@]}" "''${files[@]}" || status=1
+          osekkai lint --require-state "''${osekkai_args[@]}" "''${files[@]}" || status=1
         fi
         exit "$status"
       '';
@@ -84,6 +85,8 @@ in
         # osekkai のルール。dotfiles 側の同名ルールは消したので、これが鳴れば osekkai まで回っている
         "no-list-item-separator"
         "no-empty-section"
+        # 宣言のない ng.md で鳴れば、osekkai に --require-state が渡っている
+        "state-first"
         "ja-spacing/ja-space-between-half-and-full-width"
         "ja-hiraku"
         "@textlint-ja/ai-writing/no-ai-list-formatting"

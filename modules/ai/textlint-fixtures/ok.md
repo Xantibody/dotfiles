@@ -1,3 +1,5 @@
+<!-- osekkai: history=unknown -->
+
 ## なぜやるか
 
 Claude が書く PR 本文は 80 桁で折り返され、GitHub がその改行をそのまま描画するので日本語の文が途中で切れていた。
