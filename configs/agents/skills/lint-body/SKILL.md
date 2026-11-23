@@ -33,8 +33,12 @@ path into `--body-file`, not `$BODY`, and never pass `--body` inline.
 
 ## The house rules
 
-`lint-body` runs textlint and then `osekkai lint` on the same file, and
-fails if either reports anything; `--fix` only fixes textlint's findings.
+`lint-body` runs textlint and then `osekkai lint --require-state` on the
+same file, and fails if either reports anything; `--fix` only fixes
+textlint's findings. `--require-state` means a body with no reader-state
+declaration (`<!-- osekkai: history=known -->` at the least, as the
+first block) fails too, since every body is written through the
+`osekkai` skill.
 The textlint rules are the Japanese technical-writing preset plus a few
 that are house rules rather than textlint's, so know them before drafting
 instead of learning them from the findings (the structure rules are
@@ -53,4 +57,13 @@ osekkai's, and its skill has them):
 - **Space between Japanese and Latin, including around inline code.**
   「`rm` が終わる前に」, not 「`rm`が終わる前に」.
 - **Open the kanji the rule opens.** 事 → こと, 時 → とき, 為 → ため,
-  下さい → ください; the finding names the reading.
+  下さい → ください; the finding names the reading. The ones that keep
+  coming back in the author's records are the positional nouns 上, 中
+  and 後で (「設定の上で」, 「フェンスの中」, 「後で直す」) and the adverb
+  既に. Reword rather than swap one 上 phrasing for another; one PR hit
+  the rule twice that way.
+- **One particle once per sentence.** `no-doubled-joshi` fires on a
+  repeated に, で, も or が in one sentence (「ウィンドウに戻るたびに」).
+  Change one of them (「ウィンドウへ戻るたびに」) or split the sentence;
+  in a bullet, split into child bullets, since a 「。」 inside a bullet
+  fails osekkai.
