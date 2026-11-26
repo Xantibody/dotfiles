@@ -25,6 +25,15 @@ in
         launchd.keepAlive = false;
       };
 
+      # バーの見た目は 0.8.0 から shell/shell.toml の profile が settings.toml より優先する。
+      # AIDEV-NOTE: symlink にするのは shell.toml だけ。shell/default/ は OmniWM が
+      # リリースごとに書き換え、shell/ 直下にも GUI が style を入れる。settings.toml と
+      # 同じく store を指すので、GUI の Use Style やパレットの変更は保存できず、この TOML に書き戻す
+      xdg.configFile."omniwm/shell/shell.toml" = {
+        source = ../../../configs/omniwm/shell.toml;
+        force = true;
+      };
+
       # openCommandPalette の Control+Option+Space は macOS の「入力メニューで
       # 次のソースを選択」(symbolic hotkey 61) と同じキー。入力の切り替えは
       # macSKK の Ctrl+J で足りるので、macOS 側を無効にする。

@@ -1,0 +1,9 @@
+# OmniShell (OmniWM 0.8.0 以降のバー) の選択と上書き。default/ は OmniWM が
+# リリースごとに書き換えるので、変えたい値はここに profiles.<name> で書く。
+profile = "default"
+
+# 全幅バーを belowMenuBar 以外に置くと、OmniWM が macOS の「メニューバーを
+# 自動的に隠す」を「常に」にする。Default の見た目はそのままに、
+# macOS のメニューバーを残すため、バーをその下に置く。
+[profiles.default.workspaceBar]
+position = "belowMenuBar"
