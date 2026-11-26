@@ -127,15 +127,15 @@
   };
   tiny-inline-diagnostic = {
     pname = "tiny-inline-diagnostic";
-    version = "43ff39303869f3aa0fcdeb625872ba89eab68e69";
+    version = "6e8ced487784ddc1e2dabf58a379b3d84b333b16";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-inline-diagnostic.nvim";
-      rev = "43ff39303869f3aa0fcdeb625872ba89eab68e69";
+      rev = "6e8ced487784ddc1e2dabf58a379b3d84b333b16";
       fetchSubmodules = false;
-      sha256 = "sha256-pZjpil448++6WoFKP+Xo7eZk7PZTNF0s7LjdTowrMmA=";
+      sha256 = "sha256-c1EMkGk5jYh6WHhkzzm9w3Ebh4EEE4YxjZNDF9TxdJg=";
     };
-    date = "2026-11-24";
+    date = "2026-11-25";
   };
   vim-qfreplace = {
     pname = "vim-qfreplace";

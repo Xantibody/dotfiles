@@ -211,7 +211,7 @@
   },
   "tiny-inline-diagnostic": {
     "cargoLock": null,
-    "date": "2026-11-24",
+    "date": "2026-11-25",
     "extract": null,
     "name": "tiny-inline-diagnostic",
     "passthru": null,
@@ -223,12 +223,12 @@
       "name": null,
       "owner": "rachartier",
       "repo": "tiny-inline-diagnostic.nvim",
-      "rev": "43ff39303869f3aa0fcdeb625872ba89eab68e69",
-      "sha256": "sha256-pZjpil448++6WoFKP+Xo7eZk7PZTNF0s7LjdTowrMmA=",
+      "rev": "6e8ced487784ddc1e2dabf58a379b3d84b333b16",
+      "sha256": "sha256-c1EMkGk5jYh6WHhkzzm9w3Ebh4EEE4YxjZNDF9TxdJg=",
       "sparseCheckout": [],
       "type": "github"
     },
-    "version": "43ff39303869f3aa0fcdeb625872ba89eab68e69"
+    "version": "6e8ced487784ddc1e2dabf58a379b3d84b333b16"
   },
   "vim-qfreplace": {
     "cargoLock": null,
